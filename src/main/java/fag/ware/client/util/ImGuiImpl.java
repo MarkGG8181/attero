@@ -6,6 +6,7 @@ package fag.ware.client.util;
 
 import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import fag.ware.client.Fagware;
 import imgui.*;
 import imgui.extension.implot.ImPlot;
 import imgui.flag.ImGuiConfigFlags;
@@ -15,49 +16,54 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlBackend;
 import net.minecraft.client.texture.GlTexture;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ImGuiImpl {
     private final static ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
     private final static ImGuiImplGl3 imGuiImplGl3 = new ImGuiImplGl3();
 
-    public static void create(final long handle) {
+    public static ImFont defaultFont;
+
+    public static void create(final long handle) throws IOException {
         ImGui.createContext();
         ImPlot.createContext();
 
         final ImGuiIO data = ImGui.getIO();
-        data.setIniFilename("modid.ini"); // TODO; Change this to your modid
+        data.setIniFilename(Fagware.MOD_ID + File.separator + Fagware.MOD_ID + ".ini");
         data.setFontGlobalScale(1F);
 
-        // If you want to have custom fonts, you can use the following code here
+        List<ImFont> generatedFonts;
+        {
+            final ImFontAtlas fonts = data.getFonts();
+            final ImFontGlyphRangesBuilder rangesBuilder = new ImFontGlyphRangesBuilder();
 
-//        {
-//            final ImFontAtlas fonts = data.getFonts();
-//            final ImFontGlyphRangesBuilder rangesBuilder = new ImFontGlyphRangesBuilder();
-//
-//            rangesBuilder.addRanges(data.getFonts().getGlyphRangesDefault());
-//            rangesBuilder.addRanges(data.getFonts().getGlyphRangesCyrillic());
-//            rangesBuilder.addRanges(data.getFonts().getGlyphRangesJapanese());
-//
-//            final short[] glyphRanges = rangesBuilder.buildRanges();
-//
-//            final ImFontConfig basicConfig = new ImFontConfig();
-//            basicConfig.setGlyphRanges(data.getFonts().getGlyphRangesCyrillic());
-//
-//            final List<ImFont> generatedFonts = new ArrayList<>();
-//            for (int i = 5 /* MINIMUM_FONT_SIZE */; i < 50 /* MAXIMUM_FONT_SIZE */; i++) {
-//                basicConfig.setName("<Font Name> " + i + "px");
-//                generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("<File Path>"))), i, basicConfig, glyphRanges));
-//            }
-//            fonts.build();
-//            basicConfig.destroy();
-//        }
+            rangesBuilder.addRanges(data.getFonts().getGlyphRangesDefault());
+            rangesBuilder.addRanges(data.getFonts().getGlyphRangesCyrillic());
+            rangesBuilder.addRanges(data.getFonts().getGlyphRangesJapanese());
 
-        // The "generatedFonts" list now contains an ImFont for each scale from 5 to 50, you should save the font scales you want as global fields here to use them later:
-        // For example:
-        // defaultFont = generatedFonts.get(30); // Font scale is 30
-        // How you can apply the font then, you can see in ExampleMixin
+            final short[] glyphRanges = rangesBuilder.buildRanges();
+
+            final ImFontConfig basicConfig = new ImFontConfig();
+            basicConfig.setGlyphRanges(data.getFonts().getGlyphRangesCyrillic());
+
+            generatedFonts = new ArrayList<>();
+            for (int i = 5 /* MINIMUM_FONT_SIZE */; i < 50 /* MAXIMUM_FONT_SIZE */; i++) {
+                basicConfig.setName("RobotoSlab-Regular " + i + "px");
+                generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/RobotoSlab-Regular.ttf"))), i, basicConfig, glyphRanges));
+            }
+            fonts.build();
+            basicConfig.destroy();
+        }
+
+        defaultFont = generatedFonts.get(19);
 
         data.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 

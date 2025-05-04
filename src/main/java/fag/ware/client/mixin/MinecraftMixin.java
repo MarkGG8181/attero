@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.io.IOException;
+
 @Mixin(MinecraftClient.class)
 public class MinecraftMixin {
     @Shadow
@@ -33,7 +35,11 @@ public class MinecraftMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void initImGui(RunArgs args, CallbackInfo ci) {
-        ImGuiImpl.create(window.getHandle());
+        try {
+            ImGuiImpl.create(window.getHandle());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Inject(method = "close", at = @At("RETURN"))
