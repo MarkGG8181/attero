@@ -31,4 +31,11 @@ public class ModuleTracker extends Tracker<Module> {
             }
         });
     }
+
+    public Module getByName(String module) {
+        return getSet().stream()
+                .filter(m -> m.getInfo().name().equalsIgnoreCase(module))
+                .findFirst()
+                .orElse(null);
+    }
 }

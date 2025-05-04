@@ -15,4 +15,11 @@ public abstract class Tracker<T> {
     public List<T> toList() {
         return getSet().stream().toList();
     }
+
+    public T getByClass(Class<?> clazz) {
+        return getSet().stream()
+                .filter(t -> t.getClass().equals(clazz))
+                .findFirst()
+                .orElse(null);
+    }
 }
