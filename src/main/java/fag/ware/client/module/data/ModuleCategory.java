@@ -11,9 +11,9 @@ public enum ModuleCategory {
     WORLD("World"),
     MISC("Misc");
 
-    private final String string;
+    private final String name;
 
-    ModuleCategory(String string) {
-        this.string = string;
+    ModuleCategory(String name) {
+        this.name = name;
     }
 }
