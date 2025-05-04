@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class KeyEvent extends CancellableEvent {
-    private final int key, scancode, action, modifiers;
+    private final int key, scancode, modifiers;
     //GLFW_PRESS   = 1
     //GLFW_RELEASE = 0
     //GLFW_REPEAT  = 2

@@ -16,7 +16,7 @@ public class KeyboardMixin {
         if (window != MinecraftClient.getInstance().getWindow().getHandle()) return;
         if (action != GLFW.GLFW_PRESS) return;
 
-        KeyEvent keyEvent = new KeyEvent(key, scancode, action, modifiers);
+        KeyEvent keyEvent = new KeyEvent(key, scancode, modifiers);
         keyEvent.post();
 
         if (keyEvent.isCancelled()) {
