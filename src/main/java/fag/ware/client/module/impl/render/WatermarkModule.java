@@ -15,7 +15,6 @@ public class WatermarkModule extends Module {
         event.getDrawContext().drawText(mc.textRenderer, "Fag", 5, 5, Color.WHITE.getRGB(), false);
     }
 
-
     @Override
     public void onEnable() {
 
