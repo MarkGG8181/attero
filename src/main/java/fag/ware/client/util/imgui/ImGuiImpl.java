@@ -63,7 +63,7 @@ public class ImGuiImpl {
             basicConfig.destroy();
         }
 
-        defaultFont = generatedFonts.get(19);
+        defaultFont = generatedFonts.get(17);
 
         data.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 
