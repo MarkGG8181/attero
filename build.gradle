@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version "1.10-SNAPSHOT"
+	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -31,6 +31,14 @@ dependencies {
 
 	testCompileOnly("org.projectlombok:lombok:1.18.38")
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+
+	// From https://github.com/FlorianMichael/fabric-imgui-example-mod
+	include implementation("io.github.spair:imgui-java-binding:${project.imgui_version}")
+	include implementation("io.github.spair:imgui-java-lwjgl3:${project.imgui_version}")
+
+	include implementation("io.github.spair:imgui-java-natives-windows:${project.imgui_version}")
+	include implementation("io.github.spair:imgui-java-natives-linux:${project.imgui_version}")
+	include implementation("io.github.spair:imgui-java-natives-macos:${project.imgui_version}")
 }
 
 processResources {
