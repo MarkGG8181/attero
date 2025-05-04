@@ -2,7 +2,7 @@ package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.TickEvent;
-import fag.ware.client.util.ImGuiImpl;
+import fag.ware.client.util.imgui.ImGuiImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;
