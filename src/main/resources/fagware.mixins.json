@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "package": "fag.ware.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LoadWorldMixin",
+    "ModStatusMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "ClientPlayerMixin",
+    "InGameHudMixin",
+    "InGameOverlayRendererMixin",
+    "KeyboardMixin",
+    "MinecraftMixin",
+    "ToastManagerMixin"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "fagware",
+  "version": "1.0.0",
+  "name": "Fagware",
+  "description": "Faggy waggy",
+  "authors": [
+    "Mark"
+  ],
+  "contact": {
+    "homepage": "https://wonderland.codeberg.page/"
+  },
+  "icon": "assets/fagware/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "fag.ware.client.Fagware"
+    ]
+  },
+  "mixins": [
+    "fagware.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.5",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "v14.0.0-rc.2",
+    "sodium": "0.6.13"
+  }
+}
