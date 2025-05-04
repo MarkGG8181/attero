@@ -56,8 +56,8 @@ public class ImGuiImpl {
 
             generatedFonts = new ArrayList<>();
             for (int i = 5 /* MINIMUM_FONT_SIZE */; i < 50 /* MAXIMUM_FONT_SIZE */; i++) {
-                basicConfig.setName("RobotoSlab-Regular " + i + "px");
-                generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/RobotoSlab-Regular.ttf"))), i, basicConfig, glyphRanges));
+                basicConfig.setName("Inter_28pt-Regular " + i + "px");
+                generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Inter_28pt-Regular.ttf"))), i, basicConfig, glyphRanges));
             }
             fonts.build();
             basicConfig.destroy();
