@@ -2,9 +2,11 @@ package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.TickEvent;
+import fag.ware.client.util.ImGuiImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.util.Window;
 import net.minecraft.network.message.ChatVisibility;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,11 +18,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftMixin {
-    @Shadow @Final public GameOptions options;
+    @Shadow
+    @Final
+    public GameOptions options;
+
+    @Shadow
+    @Final
+    private Window window;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void onInit(RunArgs args, CallbackInfo ci) {
         Fagware.INSTANCE.onStartup();
+    }
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    public void initImGui(RunArgs args, CallbackInfo ci) {
+        ImGuiImpl.create(window.getHandle());
+    }
+
+    @Inject(method = "close", at = @At("RETURN"))
+    public void closeImGui(CallbackInfo ci) {
+        ImGuiImpl.dispose();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
