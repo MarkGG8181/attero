@@ -41,6 +41,6 @@ public class RotationUtil implements IMinecraft {
         float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        return new float[]{yaw, pitch};
+        return new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
     }
 }
