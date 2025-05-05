@@ -15,7 +15,7 @@ public class SpeedModule extends Module {
     public void onMotion(MotionEvent event) {
         mc.options.jumpKey.setPressed(true);
         mc.options.sprintKey.setPressed(true);
-        
+
         if (event.isPre()) {
             if (event.isOnGround()) {
                 MovementUtil.setSpeed(0.20);
