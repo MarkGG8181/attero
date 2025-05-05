@@ -5,11 +5,13 @@ import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.Setting;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
+import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.imgui.ImGuiImpl;
 import imgui.ImGui;
 import imgui.ImVec2;
+import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
@@ -18,6 +20,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,6 +89,29 @@ public class ClickScreen extends Screen {
                                     if (ImGui.checkbox(setting.getName(), value)) {
                                         bS.setValue(value.get());
                                     }
+                                } else if (setting instanceof ColorSetting cS) {
+                                    float[] value = {
+                                            cS.getRed() / 255f,
+                                            cS.getGreen() / 255f,
+                                            cS.getBlue() / 255f,
+                                            cS.getAlpha() / 255f
+                                    };
+
+                                    int flags = ImGuiColorEditFlags.PickerHueBar
+                                            | ImGuiColorEditFlags.AlphaBar
+                                            | ImGuiColorEditFlags.NoSidePreview
+                                            | ImGuiColorEditFlags.Float
+                                            | ImGuiColorEditFlags.NoInputs;
+
+                                    ImGui.text(cS.getName());
+                                    ImGui.sameLine();
+                                    if (ImGui.colorPicker4("##" + cS.getName(), value, flags)) {
+                                        int r = clamp(Math.round(value[0] * 255), 0, 255);
+                                        int g = clamp(Math.round(value[1] * 255), 0, 255);
+                                        int b = clamp(Math.round(value[2] * 255), 0, 255);
+                                        int a = clamp(Math.round(value[3] * 255), 0, 255);
+                                        cS.setValue(new Color(r, g, b, a));
+                                    }
                                 }
                             }
                         }
@@ -97,5 +123,9 @@ public class ClickScreen extends Screen {
                 ImGui.popFont();
             }
         });
+    }
+
+    private int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
     }
 }
