@@ -6,6 +6,7 @@ import fag.ware.client.event.impl.KeyEvent;
 import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.impl.combat.KillAuraModule;
+import fag.ware.client.module.impl.movement.SpeedModule;
 import fag.ware.client.module.impl.movement.SprintModule;
 import fag.ware.client.module.impl.render.AntiBlindModule;
 import fag.ware.client.module.impl.render.WatermarkModule;
@@ -25,6 +26,7 @@ public class ModuleTracker extends Tracker<Module> {
         getSet().add(new KillAuraModule());
         getSet().add(new AntiBlindModule());
         getSet().add(new WatermarkModule());
+        getSet().add(new SpeedModule());
 
         getSet().forEach(Module::onInit);
     }
