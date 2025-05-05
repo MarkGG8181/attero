@@ -10,7 +10,10 @@ import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.imgui.ImGuiImpl;
 import imgui.ImGui;
+import imgui.ImGuiStyle;
 import imgui.ImVec2;
+import imgui.ImVec4;
+import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
@@ -49,6 +52,8 @@ public class ClickScreen extends Screen {
         }
 
         ImGuiImpl.draw(io -> {
+            ImGuiImpl.applyTheme();
+
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
 
