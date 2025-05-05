@@ -4,13 +4,16 @@ import fag.ware.client.Fagware;
 import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
+import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.imgui.ImGuiImpl;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
+import imgui.type.ImInt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -20,7 +23,7 @@ import java.util.Map;
 
 public class ClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
-    private final ImVec2 size = new ImVec2(205, 0);
+    private final ImVec2 size = new ImVec2(230, 0);
 
     public ClickScreen() {
         super(Text.of("ClickScreen"));
@@ -68,17 +71,21 @@ public class ClickScreen extends Screen {
                                 if (setting instanceof NumberSetting nS) {
                                     float[] value = {nS.toFloat()};
 
-                                    ImGui.text(nS.getName());
-                                    ImGui.sameLine();
-
-                                    float fullWidth = ImGui.getContentRegionAvailX();
-                                    ImGui.pushItemWidth(fullWidth + 4);
-
-                                    if (ImGui.sliderFloat("##" + nS.getName(), value, nS.getMin().floatValue(), nS.getMax().floatValue())) {
+                                    if (ImGui.sliderFloat(nS.getName(), value, nS.getMin().floatValue(), nS.getMax().floatValue())) {
                                         nS.setValue(value[0]);
                                     }
+                                } else if (setting instanceof StringSetting sS) {
+                                    ImInt index = new ImInt(sS.getIndex());
 
-                                    ImGui.popItemWidth();
+                                    if (ImGui.combo(sS.getName(), index, sS.getValues())) {
+                                        sS.setIndex(index.get());
+                                    }
+                                } else if (setting instanceof BooleanSetting bS) {
+                                    ImBoolean value = new ImBoolean(bS.getValue());
+
+                                    if (ImGui.checkbox(setting.getName(), value)) {
+                                        bS.setValue(value.get());
+                                    }
                                 }
                             }
                         }
