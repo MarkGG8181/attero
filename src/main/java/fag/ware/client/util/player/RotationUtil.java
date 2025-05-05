@@ -6,9 +6,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class RotationUtil implements IMinecraft {
-    private static double entityX, entityZ;
-    private static double lastEntityX, lastEntityZ;
-
     private static final FastNoiseLite noise = new FastNoiseLite();
     private static final FastNoiseLite noiseX = new FastNoiseLite();
     private static final FastNoiseLite noiseY = new FastNoiseLite();
@@ -33,8 +30,8 @@ public class RotationUtil implements IMinecraft {
         float noiseValueY = noiseY.GetNoise(time, 100.0f) * 0.5f;
         float noiseValueZ = noiseZ.GetNoise(time, 200.0f) * 0.5f;
 
-        double x = noiseValueX + entityX + (entityX - lastEntityX) - mc.player.getPos().x;
-        double z = noiseValueZ + entityZ + (entityZ - lastEntityZ) - mc.player.getPos().z;
+        double x = noiseValueX + entity.getPos().x + (entity.getPos().x - entity.lastX) - mc.player.getPos().x;
+        double z = noiseValueZ + entity.getPos().z + (entity.getPos().z - entity.lastZ) - mc.player.getPos().z;
         double y = noiseValueY + (entity.getPos().y + entity.getHeight() - 0.5f) - (mc.player.getPos().y + mc.player.getStandingEyeHeight());
 
         double theta = Math.hypot(x, z);

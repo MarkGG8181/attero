@@ -35,8 +35,8 @@ public class KillAuraModule extends Module {
                 Fagware.INSTANCE.combatTracker.target.setGlowing(true);
                 float[] rots = RotationUtil.toRotation(Fagware.INSTANCE.combatTracker.target);
 
-                mc.player.setYaw(rots[0]);
-                mc.player.setPitch(rots[1]);
+                event.setYaw(rots[0]);
+                event.setPitch(rots[1]);
             }
         }
     }
