@@ -33,6 +33,13 @@ public abstract class Module implements IMinecraft {
         return info.name();
     }
 
+    public boolean isExpanded() {
+        if (getSettings().isEmpty())
+            return false;
+
+        return expanded;
+    }
+
     public void toggle() {
         setEnabled(!isEnabled());
     }

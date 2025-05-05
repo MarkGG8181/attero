@@ -3,11 +3,14 @@ package fag.ware.client.screen;
 import fag.ware.client.Fagware;
 import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
+import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.util.imgui.ImGuiImpl;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImBoolean;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -17,7 +20,7 @@ import java.util.Map;
 
 public class ClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
-    private final ImVec2 size = new ImVec2(200, 0);
+    private final ImVec2 size = new ImVec2(205, 0);
 
     public ClickScreen() {
         super(Text.of("ClickScreen"));
@@ -34,7 +37,6 @@ public class ClickScreen extends Screen {
             int x = 20;
             for (ModuleCategory category : ModuleCategory.values()) {
                 positions.put(category, new ImVec2(x, 20));
-                System.out.println(positions.get(category).x);
                 x += (int) (size.x + 12);
             }
             initialised = true;
@@ -46,16 +48,41 @@ public class ClickScreen extends Screen {
 
                 ImGui.pushFont(ImGuiImpl.defaultFont);
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
-                ImGui.setNextWindowSize(size, ImGuiCond.Once);
+                ImGui.setNextWindowSize(size);
 
                 if (ImGui.begin(category.getName(), ImGuiWindowFlags.NoDocking)) {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
                     for (Module module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
-                        if (ImGui.button(module.toString())) {
-
+                        ImGui.pushID(module.toString());
+                        ImBoolean enabledMod = new ImBoolean(module.isEnabled());
+                        if (ImGui.checkbox("##Enabled", enabledMod)) {
+                            module.setEnabled(enabledMod.get());
                         }
+                        ImGui.sameLine();
+                        boolean open = ImGui.collapsingHeader(module.toString());
+
+                        if (open) {
+                            for (Setting<?> setting : module.getSettings()) {
+                                if (setting instanceof NumberSetting nS) {
+                                    float[] value = {nS.toFloat()};
+
+                                    ImGui.text(nS.getName());
+                                    ImGui.sameLine();
+
+                                    float fullWidth = ImGui.getContentRegionAvailX();
+                                    ImGui.pushItemWidth(fullWidth + 4);
+
+                                    if (ImGui.sliderFloat("##" + nS.getName(), value, nS.getMin().floatValue(), nS.getMax().floatValue())) {
+                                        nS.setValue(value[0]);
+                                    }
+
+                                    ImGui.popItemWidth();
+                                }
+                            }
+                        }
+                        ImGui.popID();
                     }
                 }
 
