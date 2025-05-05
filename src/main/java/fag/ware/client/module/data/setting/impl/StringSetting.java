@@ -22,7 +22,7 @@ public class StringSetting extends Setting<String> {
 
     @Override
     public String toString() {
-        return super.getValue();
+        return getValue();
     }
 
     public int find(String value) {

@@ -13,7 +13,7 @@ public class BooleanSetting extends Setting<Boolean> {
     }
 
     public boolean toBoolean() {
-        return super.getValue();
+        return getValue();
     }
 
     public String toString() {

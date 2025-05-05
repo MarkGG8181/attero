@@ -19,15 +19,15 @@ public class NumberSetting extends Setting<Number> {
     }
 
     public float toFloat() {
-        return super.getValue().floatValue();
+        return getValue().floatValue();
     }
 
     public double toDouble() {
-        return super.getValue().doubleValue();
+        return getValue().doubleValue();
     }
 
     public int toInt() {
-        return super.getValue().intValue();
+        return getValue().intValue();
     }
 
     public String toString() {
