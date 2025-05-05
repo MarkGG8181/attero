@@ -11,11 +11,12 @@ import fag.ware.client.module.impl.render.AntiBlindModule;
 import fag.ware.client.module.impl.render.WatermarkModule;
 import fag.ware.client.tracker.Tracker;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ModuleTracker extends Tracker<Module> {
+    public Module lastModule;
+
     @Override
     public void initialize() {
         Fagware.BUS.register(this);
