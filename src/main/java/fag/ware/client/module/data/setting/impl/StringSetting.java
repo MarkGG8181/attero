@@ -1,12 +1,16 @@
 package fag.ware.client.module.data.setting.impl;
 
 import fag.ware.client.module.data.setting.Setting;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class StringSetting extends Setting<String> {
     private final String[] values;
     private int index;
 
-    public StringSetting(String name, String value, String[] values) {
+    public StringSetting(String name, String value, String... values) {
         super(name, value);
         this.values = values;
         this.index = find(value);
