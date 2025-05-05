@@ -33,4 +33,8 @@ public class ColorSetting extends Setting<Color> {
     public int toInt() {
         return getValue().getRGB();
     }
+
+    public int toImGuiColor() {
+        return (getAlpha() << 24) | (getBlue() << 16) | (getGreen() << 8) | getRed();
+    }
 }
