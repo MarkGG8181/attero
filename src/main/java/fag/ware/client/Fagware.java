@@ -1,8 +1,7 @@
 package fag.ware.client;
 
 import fag.ware.client.event.data.EventBus;
-import fag.ware.client.tracker.impl.ModuleTracker;
-import fag.ware.client.tracker.impl.ScreenTracker;
+import fag.ware.client.tracker.impl.*;
 import fag.ware.client.util.FileUtil;
 import net.fabricmc.api.ModInitializer;
 

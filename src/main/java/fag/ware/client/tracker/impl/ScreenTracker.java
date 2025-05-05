@@ -3,7 +3,7 @@ package fag.ware.client.tracker.impl;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.KeyEvent;
-import fag.ware.client.screen.impl.ClickScreen;
+import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.tracker.Tracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;

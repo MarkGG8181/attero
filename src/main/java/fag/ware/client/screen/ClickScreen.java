@@ -1,5 +1,7 @@
-package fag.ware.client.screen.impl;
+package fag.ware.client.screen;
 
+import fag.ware.client.Fagware;
+import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.util.imgui.ImGuiImpl;
 import imgui.ImGui;
@@ -49,6 +51,12 @@ public class ClickScreen extends Screen {
                 if (ImGui.begin(category.getName(), ImGuiWindowFlags.NoDocking)) {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
+
+                    for (Module module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
+                        if (ImGui.button(module.toString())) {
+
+                        }
+                    }
                 }
 
                 ImGui.end();
