@@ -1,16 +1,123 @@
 package fag.ware.client.mixin;
 
+import com.mojang.authlib.GameProfile;
+import fag.ware.client.event.impl.MotionEvent;
 import fag.ware.client.event.impl.UpdateEvent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.math.MathHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
-public class ClientPlayerMixin {
+public abstract class ClientPlayerMixin extends AbstractClientPlayerEntity {
+    public ClientPlayerMixin(ClientWorld world, GameProfile profile) {
+        super(world, profile);
+    }
+
+    @Shadow
+    protected abstract void sendSprintingPacket();
+
+    @Shadow
+    protected abstract boolean isCamera();
+
+    @Shadow
+    private int ticksSinceLastPositionPacketSent;
+
+    @Shadow
+    private double lastXClient;
+
+    @Shadow
+    private double lastYClient;
+
+    @Shadow
+    private double lastZClient;
+
+    @Shadow
+    private float lastYawClient;
+
+    @Shadow
+    private float lastPitchClient;
+
+    @Shadow
+    @Final
+    public ClientPlayNetworkHandler networkHandler;
+
+    @Shadow
+    private boolean lastOnGround;
+
+    @Shadow
+    private boolean lastHorizontalCollision;
+
+    @Shadow
+    private boolean autoJumpEnabled;
+
+    @Shadow
+    @Final
+    protected MinecraftClient client;
+
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isLoaded()Z", shift = At.Shift.AFTER))
     public void onUpdate(CallbackInfo ci) {
         new UpdateEvent().post();
+    }
+
+    @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
+    private void sendMovementPackets(CallbackInfo ci) {
+        ci.cancel();
+
+        MotionEvent motionEvent = new MotionEvent(getX(), getY(), getZ(), getYaw(), getPitch(), isOnGround());
+        motionEvent.setState(MotionEvent.State.PRE);
+        motionEvent.post();
+
+        this.sendSprintingPacket();
+
+        if (this.isCamera()) {
+            double d = motionEvent.getX() - this.lastXClient;
+            double e = motionEvent.getY() - this.lastYClient;
+            double f = motionEvent.getZ() - this.lastZClient;
+            double g = motionEvent.getYaw() - this.lastYawClient;
+            double h = motionEvent.getPitch() - this.lastPitchClient;
+            this.ticksSinceLastPositionPacketSent++;
+
+            boolean bl = MathHelper.squaredMagnitude(d, e, f) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20;
+            boolean bl2 = g != 0.0 || h != 0.0;
+
+            if (bl && bl2) {
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(motionEvent.getPos(), motionEvent.getYaw(), motionEvent.getPitch(), motionEvent.isOnGround(), this.horizontalCollision));
+            } else if (bl) {
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(motionEvent.getPos(), motionEvent.isOnGround(), this.horizontalCollision));
+            } else if (bl2) {
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(motionEvent.getYaw(), motionEvent.getPitch(), motionEvent.isOnGround(), this.horizontalCollision));
+            } else if (this.lastOnGround != motionEvent.isOnGround() || this.lastHorizontalCollision != this.horizontalCollision) {
+                this.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(motionEvent.isOnGround(), this.horizontalCollision));
+            }
+
+            if (bl) {
+                this.lastXClient = motionEvent.getX();
+                this.lastYClient = motionEvent.getY();
+                this.lastZClient = motionEvent.getZ();
+                this.ticksSinceLastPositionPacketSent = 0;
+            }
+
+            if (bl2) {
+                this.lastYawClient = motionEvent.getYaw();
+                this.lastPitchClient = motionEvent.getPitch();
+            }
+
+            this.lastOnGround = motionEvent.isOnGround();
+            this.lastHorizontalCollision = this.horizontalCollision;
+            this.autoJumpEnabled = this.client.options.getAutoJump().getValue();
+        }
+
+        motionEvent.setState(MotionEvent.State.POST);
+        motionEvent.post();
     }
 }
