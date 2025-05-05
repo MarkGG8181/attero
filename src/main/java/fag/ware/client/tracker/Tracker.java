@@ -15,8 +15,8 @@ public abstract class Tracker<T> {
         return getSet().stream().toList();
     }
 
-    public T getByClass(Class<?> clazz) {
-        return getSet().stream()
+    public <T> T getByClass(Class<T> clazz) {
+        return (T) getSet().stream()
                 .filter(t -> t.getClass().equals(clazz))
                 .findFirst()
                 .orElse(null);
