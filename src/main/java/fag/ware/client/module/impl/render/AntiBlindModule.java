@@ -13,7 +13,6 @@ public class AntiBlindModule extends Module {
     private final BooleanSetting waterOverlay = new BooleanSetting("Water overlay", true);
     private final BooleanSetting wallOverlay = new BooleanSetting("Wall overlay", true);
     private final BooleanSetting portalOverlay = new BooleanSetting("Portal overlay", true);
-    private final BooleanSetting vignetteOverlay = new BooleanSetting("Vignette overlay", true);
     private final BooleanSetting nauseaOverlay = new BooleanSetting("Nausea overlay", true);
 
     @Subscribe
@@ -34,11 +33,6 @@ public class AntiBlindModule extends Module {
     @Subscribe
     public void onRenderPortalOverlay(RenderPortalOverlayEvent event) {
         event.setCancelled(portalOverlay.getValue());
-    }
-
-    @Subscribe
-    public void onRenderVignetteOverlay(RenderVignetteOverlayEvent event) {
-        event.setCancelled(vignetteOverlay.getValue());
     }
 
     @Subscribe

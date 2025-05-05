@@ -3,7 +3,6 @@ package fag.ware.client.mixin;
 import fag.ware.client.event.impl.render.Render2DEvent;
 import fag.ware.client.event.impl.render.RenderNauseaOverlayEvent;
 import fag.ware.client.event.impl.render.RenderPortalOverlayEvent;
-import fag.ware.client.event.impl.render.RenderVignetteOverlayEvent;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
@@ -23,12 +22,7 @@ public class InGameHudMixin {
 
     @Inject(method = "renderVignetteOverlay", at = @At("HEAD"), cancellable = true)
     private void renderVignetteOverlay(DrawContext context, Entity entity, CallbackInfo ci) {
-        RenderVignetteOverlayEvent vignetteOverlayEvent = new RenderVignetteOverlayEvent();
-        vignetteOverlayEvent.post();
-
-        if (vignetteOverlayEvent.isCancelled()) {
-            ci.cancel();
-        }
+        ci.cancel();
     }
 
     @Inject(method = "renderNauseaOverlay", at = @At("HEAD"), cancellable = true)
