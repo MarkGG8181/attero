@@ -66,11 +66,14 @@ public class ClickScreen extends Screen {
                     position.set(newPosition);
 
                     for (Module module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
+
                         ImGui.pushID(module.toString());
                         ImBoolean enabledMod = new ImBoolean(module.isEnabled());
+
                         if (ImGui.checkbox("##Enabled", enabledMod)) {
                             module.setEnabled(enabledMod.get());
                         }
+
                         ImGui.sameLine();
                         boolean open = ImGui.collapsingHeader(module.toString());
 

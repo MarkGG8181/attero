@@ -26,7 +26,7 @@ public class KillAuraModule extends Module {
     public final BooleanSetting monsters = new BooleanSetting("Monsters", false);
     public final BooleanSetting invisibles = new BooleanSetting("Invisibles", false);
 
-    @Subscribe
+    @Subscribe(priority = 10)
     public void onMotion(MotionEvent event) {
         if (mc.player == null || mc.world == null) return;
 
@@ -38,6 +38,16 @@ public class KillAuraModule extends Module {
                 event.setYaw(rots[0]);
                 event.setPitch(rots[1]);
             }
+        }
+    }
+
+
+    @Subscribe
+    public void onTick(TickEvent event) {
+        if (mc.player == null || mc.world == null) return;
+
+        if (Fagware.INSTANCE.combatTracker.target != null) {
+            mc.interactionManager.attackEntity(mc.player, Fagware.INSTANCE.combatTracker.target);
         }
     }
 

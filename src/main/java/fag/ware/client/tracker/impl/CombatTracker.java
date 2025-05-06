@@ -34,6 +34,8 @@ public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
         List<Entity> entitiesToConsider = new ArrayList<>();
 
         for (Entity entity : mc.world.getEntities()) {
+            if (entity.equals(mc.player)) continue;
+
             if (entity instanceof LivingEntity livingEnt && livingEnt.isAlive() && livingEnt.isAttackable()) {
                 if (!getSet().contains(livingEnt) && shouldIncludeEntity(livingEnt)) {
                     if (isWithinRange(entity, killAuraModule.searchRange.toDouble())) {
@@ -64,7 +66,6 @@ public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
         } else {
             target = null;
         }
-
     }
 
     private boolean isWithinRange(Entity entity, double range) {
