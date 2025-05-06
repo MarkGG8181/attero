@@ -21,7 +21,7 @@ public class EventBus {
                 Class<?> eventClass = params[0];
                 Subscribe sub = method.getAnnotation(Subscribe.class);
 
-                RegisteredListener listener = new RegisteredListener(obj, method, sub.priority().level);
+                RegisteredListener listener = new RegisteredListener(obj, method, sub.priority());
 
                 listeners.computeIfAbsent(eventClass, c -> new ArrayList<>()).add(listener);
                 listeners.get(eventClass).sort(Comparator.comparingInt(l -> -l.priority));
