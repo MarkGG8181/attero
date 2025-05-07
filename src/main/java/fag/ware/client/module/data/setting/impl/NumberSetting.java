@@ -13,6 +13,12 @@ public class NumberSetting extends Setting<Number> {
         this.max = max;
     }
 
+    public NumberSetting(String name, Number value, Number min, Number max, boolean noParent) {
+        super(name, value, noParent);
+        this.min = min;
+        this.max = max;
+    }
+
     @Override
     public Number getValue() {
         return super.getValue();

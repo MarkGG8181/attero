@@ -12,14 +12,20 @@ public abstract class Setting<T> {
     private T value;
     private final T defaultValue;
 
-    private final Module parent;
+    private Module parent = null;
 
     public Setting(String name, T value) {
+        this(name, value, false);
+    }
+
+    public Setting(String name, T value, boolean noParent) {
         this.name = name;
         this.value = value;
         this.defaultValue = value;
 
-        this.parent = Fagware.INSTANCE.moduleTracker.lastModule;
-        this.parent.getSettings().add(this);
+        if (!noParent) {
+            this.parent = Fagware.INSTANCE.moduleTracker.lastModule;
+            this.parent.getSettings().add(this);
+        }
     }
 }

@@ -7,6 +7,10 @@ public class BooleanSetting extends Setting<Boolean> {
         super(name, value);
     }
 
+    public BooleanSetting(String name, boolean value, boolean noParent) {
+        super(name, value, noParent);
+    }
+
     @Override
     public Boolean getValue() {
         return super.getValue();

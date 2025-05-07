@@ -16,6 +16,12 @@ public class StringSetting extends Setting<String> {
         this.index = find(value);
     }
 
+    public StringSetting(String name, String value,  boolean noParent, String... values) {
+        super(name, value, noParent);
+        this.values = values;
+        this.index = find(value);
+    }
+
     public boolean is(String value) {
         return getValue().equals(value);
     }
