@@ -31,6 +31,12 @@ public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
     public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
+        if (!killAuraModule.isEnabled()) {
+            target = null;
+            getSet().clear();
+            return;
+        }
+
         List<Entity> entitiesToConsider = new ArrayList<>();
 
         for (Entity entity : mc.world.getEntities()) {
@@ -61,10 +67,12 @@ public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
         }
 
         LivingEntity localTarget = getSet().stream().findFirst().orElse(null);
-        if (isWithinRange(localTarget, killAuraModule.aimRange.toDouble())) {
-            target = localTarget;
-        } else {
-            target = null;
+        if (localTarget != null) {
+            if (isWithinRange(localTarget, killAuraModule.aimRange.toDouble())) {
+                target = localTarget;
+            } else {
+                target = null;
+            }
         }
     }
 
