@@ -14,6 +14,7 @@
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
     "KeyboardMixin",
+    "LivingEntityRendererMixin",
     "MinecraftMixin",
     "ToastManagerMixin"
   ]

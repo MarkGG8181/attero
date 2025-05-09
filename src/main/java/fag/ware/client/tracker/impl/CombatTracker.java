@@ -18,7 +18,9 @@ import java.util.List;
 
 public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
     private KillAuraModule killAuraModule;
-
+    public float yaw, pitch;
+    public float bodyYaw, prevBodyYaw;
+    public float prevYaw, prevPitch;
     public LivingEntity target;
 
     @Override
