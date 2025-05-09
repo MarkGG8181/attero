@@ -11,6 +11,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -68,6 +69,11 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayerEntity {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isLoaded()Z", shift = At.Shift.AFTER))
     public void onUpdate(CallbackInfo ci) {
         new UpdateEvent().post();
+    }
+
+    @Override
+    public Vec3d getRotationVector() {
+        return this.getRotationVec(1.0f);
     }
 
     @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
