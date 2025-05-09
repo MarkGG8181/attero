@@ -8,15 +8,25 @@ import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
-import fag.ware.client.module.data.setting.impl.GroupSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
+import fag.ware.client.module.data.setting.impl.RangeNumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
+import fag.ware.client.tracker.impl.CombatTracker;
+import fag.ware.client.util.math.Timer;
 import fag.ware.client.util.player.RotationUtil;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Hand;
 import org.lwjgl.glfw.GLFW;
 
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends Module {
     public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks");
+    private final StringSetting delayMode = new StringSetting("Delay mode", "1.9", "1.9", "CPS");
+
+    private final RangeNumberSetting cps = (RangeNumberSetting) new RangeNumberSetting(
+            "CPS", 9, 11, 1, 20
+    ).hide(() -> delayMode.is("1.9"));
 
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     public final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 6);
@@ -27,14 +37,7 @@ public class KillAuraModule extends Module {
     public final BooleanSetting monsters = new BooleanSetting("Monsters", false);
     public final BooleanSetting invisibles = new BooleanSetting("Invisibles", false);
 
-    private final GroupSetting rotationGroup = new GroupSetting("Rotations");
-
-    public KillAuraModule() {
-        super();
-
-        rotationGroup.addChild(new NumberSetting("MinYaw", 0f, -180f, 180f, true));
-        rotationGroup.addChild(new NumberSetting("MaxYaw", 180f, -180f, 180f, true));
-    }
+    private final Timer attackTimer = new Timer();
 
     @Subscribe(priority = 10)
     public void onMotion(MotionEvent event) {
@@ -48,27 +51,66 @@ public class KillAuraModule extends Module {
         }
     }
 
-
     @Subscribe
     public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (Fagware.INSTANCE.combatTracker.target != null) {
+        if (Fagware.INSTANCE.combatTracker.target != null && CombatTracker.isWithinRange(Fagware.INSTANCE.combatTracker.target, attackRange.toDouble())) {
+            switch (delayMode.getValue()) {
+                case "1.9" -> {
+                    if (mc.player.getAttackCooldownProgress(0) >= 1)
+                        attackEntity(Fagware.INSTANCE.combatTracker.target);
+                }
+                case "CPS" -> {
+                    if (attackTimer.hasElapsed(calculateAttackDelay(), true)) {
+                        attackEntity(Fagware.INSTANCE.combatTracker.target);
+                    }
+                }
+            }
+        }
+    }
+
+    private void attackEntity(LivingEntity entity) {
+        if (entity != null && entity.isAlive()) {
+            mc.interactionManager.attackEntity(MinecraftClient.getInstance().player, entity);
+            mc.player.swingHand(Hand.MAIN_HAND);
         }
     }
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
         Fagware.INSTANCE.combatTracker.target = null;
+        mc.options.attackKey.setPressed(false);
     }
 
     @Override
     public void onInit() {
         setKeybind(GLFW.GLFW_KEY_R);
+    }
+
+    private double currentCPS = 10.0;
+    private double targetCPS = 10.0;
+    private long lastCpsUpdateTime = System.currentTimeMillis();
+
+    private long calculateAttackDelay() {
+        long now = System.currentTimeMillis();
+
+        long cpsChangeInterval = 2000;
+        if (now - lastCpsUpdateTime > cpsChangeInterval) {
+            lastCpsUpdateTime = now;
+
+            double min = cps.getMinAsDouble();
+            double max = cps.getMaxAsDouble();
+            targetCPS = min + Math.random() * (max - min);
+        }
+
+        double smoothingFactor = 0.05;
+        currentCPS += (targetCPS - currentCPS) * smoothingFactor;
+
+        return (long) (1000.0 / currentCPS);
     }
 }
