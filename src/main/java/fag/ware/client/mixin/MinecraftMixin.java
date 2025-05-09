@@ -54,7 +54,7 @@ public class MinecraftMixin {
 
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
     public void setTitle(CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("fagware :3");
+        cir.setReturnValue("fagware :3 - running on 1.21.5 fabric");
     }
 
     @Inject(method = "isDemo", at = @At("HEAD"), cancellable = true)
