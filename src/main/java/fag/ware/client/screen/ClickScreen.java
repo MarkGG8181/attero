@@ -26,17 +26,16 @@ public class ClickScreen extends Screen {
     private final ImVec2 size = new ImVec2(230, 0);
 
     public ClickScreen() {
-        super(Text.of("ClickScreen"));
+        super(Text.of("Classic Dropdown"));
     }
 
     private boolean initialised;
 
-    //TODO: Make Sigma style popup window for settings, and order categories in a grid
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         super.render(context, mouseX, mouseY, deltaTicks);
 
-        if (!initialised) { //shit breaks if moved into init method or constructor wtff
+        if (!initialised) {
             positions.clear();
             int x = 20;
             for (ModuleCategory category : ModuleCategory.values()) {
@@ -47,12 +46,12 @@ public class ClickScreen extends Screen {
         }
 
         ImGuiImpl.draw(io -> {
-            ImGuiImpl.applyTheme();
+            ImGuiImpl.applyMarineTheme();
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
 
-                ImGui.pushFont(ImGuiImpl.defaultFont);
+                ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
                 ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
 
@@ -77,7 +76,7 @@ public class ClickScreen extends Screen {
                                 if (setting.getHidden().getAsBoolean()) {
                                     continue;
                                 }
-                                
+
                                 SettingRenderer.render(setting);
                             }
                         }

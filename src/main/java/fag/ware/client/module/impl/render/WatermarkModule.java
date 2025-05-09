@@ -25,7 +25,7 @@ public class WatermarkModule extends Module {
         }
 
         ImGuiImpl.draw(io -> {
-            ImGui.pushFont(ImGuiImpl.defaultFont);
+            ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
             ImDrawList drawList = ImGui.getForegroundDrawList();
 
             String watermarkText = "Fagware";
