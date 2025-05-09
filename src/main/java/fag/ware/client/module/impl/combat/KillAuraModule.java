@@ -8,6 +8,7 @@ import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
+import fag.ware.client.module.data.setting.impl.GroupSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.player.RotationUtil;
@@ -26,18 +27,24 @@ public class KillAuraModule extends Module {
     public final BooleanSetting monsters = new BooleanSetting("Monsters", false);
     public final BooleanSetting invisibles = new BooleanSetting("Invisibles", false);
 
+    private final GroupSetting rotationGroup = new GroupSetting("Rotations");
+
+    public KillAuraModule() {
+        super();
+
+        rotationGroup.addChild(new NumberSetting("MinYaw", 0f, -180f, 180f, true));
+        rotationGroup.addChild(new NumberSetting("MaxYaw", 180f, -180f, 180f, true));
+    }
+
     @Subscribe(priority = 10)
     public void onMotion(MotionEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (event.isPre()) {
-            if (Fagware.INSTANCE.combatTracker.target != null) {
-                Fagware.INSTANCE.combatTracker.target.setGlowing(true);
-                float[] rots = RotationUtil.toRotation(Fagware.INSTANCE.combatTracker.target);
+        if (Fagware.INSTANCE.combatTracker.target != null) {
+            float[] rots = RotationUtil.toRotation(Fagware.INSTANCE.combatTracker.target);
 
-                event.setYaw(rots[0]);
-                event.setPitch(rots[1]);
-            }
+            event.setYaw(rots[0]);
+            event.setPitch(rots[1]);
         }
     }
 
@@ -47,7 +54,6 @@ public class KillAuraModule extends Module {
         if (mc.player == null || mc.world == null) return;
 
         if (Fagware.INSTANCE.combatTracker.target != null) {
-            mc.interactionManager.attackEntity(mc.player, Fagware.INSTANCE.combatTracker.target);
         }
     }
 
