@@ -17,9 +17,7 @@ public class SpeedModule extends Module {
         mc.options.sprintKey.setPressed(true);
 
         if (event.isPre()) {
-            if (event.isOnGround()) {
-                MovementUtil.setSpeed(0.20);
-            }
+            MovementUtil.setSpeed(0.27);
         }
     }
 
