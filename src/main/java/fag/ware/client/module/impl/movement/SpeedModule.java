@@ -8,7 +8,7 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.util.player.MovementUtil;
 
-@ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you always sprint")
+@ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you fast")
 public class SpeedModule extends Module {
 
     @Subscribe
