@@ -39,46 +39,42 @@ public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
             return;
         }
 
-        List<Entity> entitiesToConsider = new ArrayList<>();
+        if (target != null && (!target.isAlive() || !isWithinRange(target, killAuraModule.aimRange.toDouble()))) {
+            target = null;
+            getSet().clear();
+        }
 
-        for (Entity entity : mc.world.getEntities()) {
-            if (entity.equals(mc.player)) continue;
+        if (target == null) {
+            double range = killAuraModule.searchRange.toDouble();
 
-            if (entity instanceof LivingEntity livingEnt && livingEnt.isAlive() && livingEnt.isAttackable()) {
-                if (!getSet().contains(livingEnt) && shouldIncludeEntity(livingEnt)) {
-                    if (isWithinRange(entity, killAuraModule.searchRange.toDouble())) {
-                        entitiesToConsider.add(entity);
-                    }
-                }
+            List<LivingEntity> entitiesToConsider = mc.world.getEntitiesByClass(
+                    LivingEntity.class,
+                    mc.player.getBoundingBox().expand(range),
+                    entity -> !entity.equals(mc.player)
+                            && entity.isAlive()
+                            && entity.isAttackable()
+                            && shouldIncludeEntity(entity)
+                            && isWithinRange(entity, range)
+            );
+
+            switch (killAuraModule.sortBy.getValue()) {
+                case "Health" -> entitiesToConsider.sort(Comparator.comparingDouble(LivingEntity::getHealth));
+                case "Armor" -> entitiesToConsider.sort(Comparator.comparingDouble(LivingEntity::getArmor));
+                case "Hurt-ticks" -> entitiesToConsider.sort(Comparator.comparingInt(e -> e.hurtTime));
+                case "Range" -> entitiesToConsider.sort(Comparator.comparingDouble(entity -> mc.player.squaredDistanceTo(entity)));
             }
-        }
 
-        switch (killAuraModule.sortBy.toString()) {
-            case "Health" ->
-                    entitiesToConsider.sort(Comparator.comparingDouble(entity -> ((LivingEntity) entity).getHealth()));
-            case "Armor" ->
-                    entitiesToConsider.sort(Comparator.comparingDouble(entity -> ((LivingEntity) entity).getArmor()));
-            case "Hurt-ticks" ->
-                    entitiesToConsider.sort(Comparator.comparingInt(entity -> ((LivingEntity) entity).hurtTime));
-            case "Range" ->
-                    entitiesToConsider.sort(Comparator.comparingDouble(entity -> mc.player.squaredDistanceTo(entity)));
-        }
+            getSet().clear();
+            getSet().addAll(entitiesToConsider);
 
-        for (Entity entity : entitiesToConsider) {
-            getSet().add((LivingEntity) entity);
-        }
-
-        LivingEntity localTarget = getSet().stream().findFirst().orElse(null);
-        if (localTarget != null) {
-            if (isWithinRange(localTarget, killAuraModule.aimRange.toDouble())) {
+            LivingEntity localTarget = getSet().stream().findFirst().orElse(null);
+            if (localTarget != null && isWithinRange(localTarget, killAuraModule.aimRange.toDouble())) {
                 target = localTarget;
-            } else {
-                target = null;
             }
         }
     }
 
-    private boolean isWithinRange(Entity entity, double range) {
+    public static boolean isWithinRange(Entity entity, double range) {
         double distanceSquared = mc.player.squaredDistanceTo(entity);
 
         double playerReachSquared = range * range;

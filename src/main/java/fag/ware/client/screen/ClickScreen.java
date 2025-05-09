@@ -74,6 +74,10 @@ public class ClickScreen extends Screen {
 
                         if (open) {
                             for (Setting<?> setting : module.getSettings()) {
+                                if (setting.getHidden().getAsBoolean()) {
+                                    continue;
+                                }
+                                
                                 SettingRenderer.render(setting);
                             }
                         }
@@ -100,6 +104,32 @@ public class ClickScreen extends Screen {
                     if (ImGui.sliderFloat("##" + nS.getName(), value, nS.getMin().floatValue(), nS.getMax().floatValue())) {
                         nS.setValue(value[0]);
                     }
+                    ImGui.setWindowFontScale(1f);
+                }
+                case RangeNumberSetting rns -> {
+                    float[] minVal = {rns.getMinAsFloat()};
+                    float[] maxVal = {rns.getMaxAsFloat()};
+
+                    ImGui.setWindowFontScale(0.8f);
+                    ImGui.text(rns.getName() + " (MIN-MAX)");
+
+                    float fullWidth = ImGui.getContentRegionAvailX() - 8;
+
+                    float absMin = rns.getAbsoluteMin().floatValue();
+                    float absMax = rns.getAbsoluteMax().floatValue();
+
+                    ImGui.setNextItemWidth(fullWidth / 2f);
+                    boolean minChanged = ImGui.sliderFloat("##" + rns.getName() + "_min", minVal, absMin, absMax);
+
+                    ImGui.sameLine();
+
+                    ImGui.setNextItemWidth(fullWidth / 2f);
+                    boolean maxChanged = ImGui.sliderFloat("##" + rns.getName() + "_max", maxVal, absMin, absMax);
+
+                    if (minChanged || maxChanged) {
+                        rns.setRange(minVal[0], maxVal[0]);
+                    }
+
                     ImGui.setWindowFontScale(1f);
                 }
                 case BooleanSetting bS -> {

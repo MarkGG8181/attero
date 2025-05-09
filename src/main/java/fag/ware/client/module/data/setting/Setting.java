@@ -5,12 +5,16 @@ import fag.ware.client.module.Module;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.function.BooleanSupplier;
+
 @Getter
 @Setter
 public abstract class Setting<T> {
     private final String name;
     private T value;
     private final T defaultValue;
+
+    private BooleanSupplier hidden = () -> false;
 
     private Module parent = null;
 
@@ -27,5 +31,10 @@ public abstract class Setting<T> {
             this.parent = Fagware.INSTANCE.moduleTracker.lastModule;
             this.parent.getSettings().add(this);
         }
+    }
+
+    public Setting<T> hide(BooleanSupplier hidden) {
+        this.hidden = hidden;
+        return this;
     }
 }

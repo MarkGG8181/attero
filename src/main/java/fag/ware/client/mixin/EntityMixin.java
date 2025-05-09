@@ -29,6 +29,13 @@ public abstract class EntityMixin {
         return getRotationVector(getPitch(), getYaw());
     }
 
+    /**
+     * Turns the pitch and yaw into an instance of Vec3d (rotation vector)
+     *
+     * @param pitch the vector target pitch
+     * @param yaw the vector target yaw
+     * @return a Vec3d rotation vector constructed from the pitch and yaw
+     */
     @Unique
     private Vec3d getRotationVector(float pitch, float yaw) {
         float f = pitch * (float) (Math.PI / 180.0);
