@@ -2,10 +2,16 @@ package fag.ware.client.util.player;
 
 import fag.ware.client.util.IMinecraft;
 
+// Warnings pmo sm icl
+@SuppressWarnings("ALL")
 public class MovementUtil implements IMinecraft {
 
     public static float getSpeed() {
         return mc.player != null ? mc.player.speed : 0.0f;
+    }
+    // idk if this is good - graph
+    public static boolean isMoving() {
+        return mc.options.leftKey.isPressed() || mc.options.rightKey.isPressed() || mc.options.backKey.isPressed() || mc.options.forwardKey.isPressed();
     }
 
     public static void setSpeed(double moveSpeed) {
@@ -32,5 +38,17 @@ public class MovementUtil implements IMinecraft {
         mc.player.setVelocity(x, mc.player.getVelocity().y, z);
     }
 
-
+    /**
+     * @Author Graph
+     * Horrid code.
+     */
+    public static void setMotionX(double motionX) {
+        mc.player.setVelocity(motionX, mc.player.getVelocity().y, mc.player.getVelocity().z);
+    }
+    public static void setMotionY(double motionY) {
+        mc.player.setVelocity(mc.player.getVelocity().x, motionY, mc.player.getVelocity().z);
+    }
+    public static void setMotionZ(double motionZ) {
+        mc.player.setVelocity(mc.player.getVelocity().x, mc.player.getVelocity().y, motionZ);
+    }
 }

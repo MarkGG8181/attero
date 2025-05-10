@@ -17,6 +17,7 @@ public class Fagware implements ModInitializer {
     public final ModuleTracker moduleTracker = new ModuleTracker();
     public final ScreenTracker screenTracker = new ScreenTracker();
     public final CombatTracker combatTracker = new CombatTracker();
+    public final PlayerTracker playerTracker = new PlayerTracker();
 
     @Override
     public void onInitialize() {
@@ -29,5 +30,6 @@ public class Fagware implements ModInitializer {
         moduleTracker.initialize();
         screenTracker.initialize();
         combatTracker.initialize();
+        playerTracker.initialize();
     }
 }
