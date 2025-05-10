@@ -6,7 +6,6 @@ import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.StringSetting;
-import fag.ware.client.tracker.impl.PlayerTracker;
 import fag.ware.client.util.player.MovementUtil;
 
 @ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you fast")

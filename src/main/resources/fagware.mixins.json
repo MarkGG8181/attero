@@ -17,6 +17,7 @@
     "KeyboardMixin",
     "LivingEntityRendererMixin",
     "MinecraftMixin",
-    "ToastManagerMixin"
+    "ToastManagerMixin",
+    "ParticleMixin"
   ]
 }
