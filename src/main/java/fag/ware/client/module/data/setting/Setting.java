@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ public abstract class Setting<T> {
     private final T defaultValue;
 
     private BooleanSupplier hidden = () -> false;
+    private Consumer<T> onChange = null;
 
     private Module parent = null;
 
@@ -36,5 +38,15 @@ public abstract class Setting<T> {
     public Setting<T> hide(BooleanSupplier hidden) {
         this.hidden = hidden;
         return this;
+    }
+
+    public Setting<T> onChange(Consumer<T> onChange) {
+        this.onChange = onChange;
+        return this;
+    }
+
+    public void setValue(T newValue) {
+        this.value = newValue;
+        if (onChange != null) onChange.accept(newValue);
     }
 }
