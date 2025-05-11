@@ -22,7 +22,7 @@ import org.lwjgl.glfw.GLFW;
 
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends Module {
-    private ClickDelayCalculator delayCalculator = new ClickDelayCalculator(9, 11);
+    private final ClickDelayCalculator delayCalculator = new ClickDelayCalculator(9, 11);
 
     public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks");
     private final StringSetting delayMode = new StringSetting("Delay mode", "1.9", "1.9", "CPS");
@@ -32,10 +32,10 @@ public class KillAuraModule extends Module {
     )
             .hide(() -> delayMode.is("1.9"))
             .onChange(newValue -> {
-                delayCalculator.setMinCPS(newValue[0].doubleValue());
-                delayCalculator.setMaxCPS(newValue[1].doubleValue());
-            }
-    );
+                        delayCalculator.setMinCPS(newValue[0].doubleValue());
+                        delayCalculator.setMaxCPS(newValue[1].doubleValue());
+                    }
+            );
 
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     public final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 6);
