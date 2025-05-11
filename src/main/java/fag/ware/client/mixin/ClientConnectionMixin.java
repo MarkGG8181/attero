@@ -1,9 +1,12 @@
 package fag.ware.client.mixin;
 
 import fag.ware.client.event.impl.ReceivePacketEvent;
+import fag.ware.client.event.impl.SendPacketEvent;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,5 +24,13 @@ public class ClientConnectionMixin {
         }
     }
 
+    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V", at = @At("HEAD"), cancellable = true)
+    private void channelRead0(Packet<?> packet, @Nullable PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
+        SendPacketEvent sendPacketEvent = new SendPacketEvent(packet);
+        sendPacketEvent.post();
 
+        if (sendPacketEvent.isCancelled()) {
+            ci.cancel();
+        }
+    }
 }
