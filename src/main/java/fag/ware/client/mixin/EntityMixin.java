@@ -2,6 +2,8 @@ package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.UpdateVelocityEvent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -50,7 +52,7 @@ public abstract class EntityMixin {
      */
     @Overwrite
     public final Vec3d getRotationVec(float tickProgress) {
-        if ((Object) this instanceof ClientPlayerEntity) {
+        if ((Object) this instanceof ClientPlayerEntity && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
             return getRotationVector(Fagware.INSTANCE.combatTracker.pitch, Fagware.INSTANCE.combatTracker.yaw);
         }
 

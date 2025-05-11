@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
-
     @Inject(method = "renderCrosshair", at = @At("HEAD"))
     private void renderCrosshair(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         new Render2DEvent(context).post();

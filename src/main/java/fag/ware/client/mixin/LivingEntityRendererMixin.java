@@ -2,6 +2,7 @@ package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -24,15 +25,16 @@ public class LivingEntityRendererMixin {
             )
     )
     private float replaceYawLerp(float delta, float lastYaw, float yaw, LivingEntity livingEntity) {
-        if (livingEntity == MinecraftClient.getInstance().player) {
+        if (livingEntity == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
             return MathHelper.lerpAngleDegrees(delta, Fagware.INSTANCE.combatTracker.prevYaw, Fagware.INSTANCE.combatTracker.yaw);
         }
+
         return MathHelper.lerpAngleDegrees(delta, lastYaw, yaw);
     }
 
     @Inject(method = "clampBodyYaw", at = @At("HEAD"), cancellable = true)
     private static void clampBodyYawReplace(LivingEntity entity, float degrees, float tickProgress, CallbackInfoReturnable<Float> cir) {
-        if (entity == MinecraftClient.getInstance().player) {
+        if (entity == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
             float fakeBodyYaw = MathHelper.lerpAngleDegrees(tickProgress, Fagware.INSTANCE.combatTracker.prevBodyYaw, Fagware.INSTANCE.combatTracker.bodyYaw);
             float h = MathHelper.clamp(MathHelper.wrapDegrees(degrees - fakeBodyYaw), -85.0F, 85.0F);
             float clamped = degrees - h;
@@ -51,7 +53,7 @@ public class LivingEntityRendererMixin {
             )
     )
     private float replaceYawLerp(LivingEntity instance, float tickProgress) {
-        if (instance == MinecraftClient.getInstance().player) {
+        if (instance == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
             return tickProgress == 1.0F ? Fagware.INSTANCE.combatTracker.pitch : MathHelper.lerp(tickProgress, Fagware.INSTANCE.combatTracker.prevPitch, Fagware.INSTANCE.combatTracker.pitch);
         }
         return tickProgress == 1.0F ? instance.getPitch() : MathHelper.lerp(tickProgress, instance.lastPitch, instance.getPitch());
