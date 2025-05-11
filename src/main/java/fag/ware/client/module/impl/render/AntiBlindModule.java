@@ -14,8 +14,8 @@ public class AntiBlindModule extends Module {
     private final BooleanSetting wallOverlay = new BooleanSetting("Wall overlay", true);
     private final BooleanSetting portalOverlay = new BooleanSetting("Portal overlay", true);
     private final BooleanSetting nauseaOverlay = new BooleanSetting("Nausea overlay", true);
-    private final BooleanSetting blockBreakParticles = new BooleanSetting("Block Break Particles", true);
-    private final BooleanSetting blockBreakingParticles = new BooleanSetting("Block Breaking Particles", true);
+    private final BooleanSetting blockBreakParticles = new BooleanSetting("Block break particles", true);
+    private final BooleanSetting blockBreakingParticles = new BooleanSetting("Block breaking particles", true);
 
 
     @Subscribe

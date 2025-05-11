@@ -15,6 +15,8 @@ import fag.ware.client.tracker.Tracker;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static fag.ware.client.util.IMinecraft.mc;
+
 public class ModuleTracker extends Tracker<Module> {
     public Module lastModule;
 
@@ -33,6 +35,7 @@ public class ModuleTracker extends Tracker<Module> {
 
     @Subscribe
     public void onKey(KeyEvent event) {
+        if (mc.player != null && mc.world != null && mc.currentScreen == null)
         getSet().forEach(m -> {
             if (event.getKey() == m.getKeybind()) {
                 m.toggle();
