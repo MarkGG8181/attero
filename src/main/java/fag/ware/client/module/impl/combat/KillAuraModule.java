@@ -12,6 +12,7 @@ import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.RangeNumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.tracker.impl.CombatTracker;
+import fag.ware.client.util.math.ClickDelayCalculator;
 import fag.ware.client.util.math.Timer;
 import fag.ware.client.util.player.RotationUtil;
 import net.minecraft.client.MinecraftClient;
@@ -21,12 +22,20 @@ import org.lwjgl.glfw.GLFW;
 
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends Module {
+    private ClickDelayCalculator delayCalculator = new ClickDelayCalculator(9, 11);
+
     public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks");
     private final StringSetting delayMode = new StringSetting("Delay mode", "1.9", "1.9", "CPS");
 
     private final RangeNumberSetting cps = (RangeNumberSetting) new RangeNumberSetting(
             "CPS", 9, 11, 1, 20
-    ).hide(() -> delayMode.is("1.9"));
+    )
+            .hide(() -> delayMode.is("1.9"))
+            .onChange(newValue -> {
+                delayCalculator.setMinCPS(newValue[0].doubleValue());
+                delayCalculator.setMaxCPS(newValue[1].doubleValue());
+            }
+    );
 
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     public final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 6);
@@ -62,7 +71,7 @@ public class KillAuraModule extends Module {
                         attackEntity(Fagware.INSTANCE.combatTracker.target);
                 }
                 case "CPS" -> {
-                    if (attackTimer.hasElapsed(calculateAttackDelay(), true)) {
+                    if (attackTimer.hasElapsed(delayCalculator.getClickDelay(), true)) {
                         attackEntity(Fagware.INSTANCE.combatTracker.target);
                     }
                 }
@@ -90,27 +99,5 @@ public class KillAuraModule extends Module {
     @Override
     public void onInit() {
         setKeybind(GLFW.GLFW_KEY_R);
-    }
-
-    private double currentCPS = 10.0;
-    private double targetCPS = 10.0;
-    private long lastCpsUpdateTime = System.currentTimeMillis();
-
-    private long calculateAttackDelay() {
-        long now = System.currentTimeMillis();
-
-        long cpsChangeInterval = 2000;
-        if (now - lastCpsUpdateTime > cpsChangeInterval) {
-            lastCpsUpdateTime = now;
-
-            double min = cps.getMinAsDouble();
-            double max = cps.getMaxAsDouble();
-            targetCPS = min + Math.random() * (max - min);
-        }
-
-        double smoothingFactor = 0.05;
-        currentCPS += (targetCPS - currentCPS) * smoothingFactor;
-
-        return (long) (1000.0 / currentCPS);
     }
 }
