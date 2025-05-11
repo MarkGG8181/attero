@@ -1,6 +1,7 @@
 package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
+import fag.ware.client.event.impl.UpdateVelocityEvent;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -9,15 +10,39 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * @author markuss
  */
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-    @Shadow public abstract float getYaw();
+    @Shadow
+    public abstract float getYaw();
 
-    @Shadow public abstract float getPitch();
+    @Shadow
+    public abstract float getPitch();
+
+    @Shadow
+    public abstract void setVelocity(Vec3d velocity);
+
+    @Shadow
+    public abstract Vec3d getVelocity();
+
+    @Unique
+    private static Vec3d movementInputToVelocity(Vec3d movementInput, float speed, float yaw) {
+        double d = movementInput.lengthSquared();
+        if (d < 1.0E-7) {
+            return Vec3d.ZERO;
+        } else {
+            Vec3d vec3d = (d > 1.0 ? movementInput.normalize() : movementInput).multiply(speed);
+            float f = MathHelper.sin(yaw * (float) (Math.PI / 180.0));
+            float g = MathHelper.cos(yaw * (float) (Math.PI / 180.0));
+            return new Vec3d(vec3d.x * g - vec3d.z * f, vec3d.y, vec3d.z * g + vec3d.x * f);
+        }
+    }
 
     /**
      * @author markuss
@@ -36,7 +61,7 @@ public abstract class EntityMixin {
      * Turns the pitch and yaw into an instance of Vec3d (rotation vector)
      *
      * @param pitch the vector target pitch
-     * @param yaw the vector target yaw
+     * @param yaw   the vector target yaw
      * @return a Vec3d rotation vector constructed from the pitch and yaw
      */
     @Unique
@@ -48,5 +73,26 @@ public abstract class EntityMixin {
         float j = MathHelper.cos(f);
         float k = MathHelper.sin(f);
         return new Vec3d(i * j, -k, h * j);
+    }
+
+    @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    private void updateVelocity(float speed, Vec3d movementInput, CallbackInfo ci) {
+        ci.cancel();
+
+        if ((Object) this instanceof ClientPlayerEntity) {
+            UpdateVelocityEvent updateVeloEvent = new UpdateVelocityEvent(this.getYaw(), (float) movementInput.x, (float) movementInput.z, speed);
+            updateVeloEvent.post();
+
+            float yaw = updateVeloEvent.getYaw();
+            float strafe = updateVeloEvent.getStrafe();
+            float forward = updateVeloEvent.getForward();
+            float friction = updateVeloEvent.getFriction();
+
+            Vec3d vec3d = movementInputToVelocity(new Vec3d(strafe, movementInput.y, forward), friction, yaw);
+            this.setVelocity(this.getVelocity().add(vec3d));
+        } else {
+            Vec3d vec3d = movementInputToVelocity(movementInput, speed, this.getYaw());
+            this.setVelocity(this.getVelocity().add(vec3d));
+        }
     }
 }
