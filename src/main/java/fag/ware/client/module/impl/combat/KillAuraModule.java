@@ -25,7 +25,6 @@ public class KillAuraModule extends Module {
             .setParent(sortingGroup);
     public final NumberSetting searchRange = (NumberSetting) new NumberSetting("Search range", 5, 1, 6)
             .setParent(sortingGroup);
-
     public final BooleanSetting players = (BooleanSetting) new BooleanSetting("Players", true)
             .setParent(sortingGroup);
     public final BooleanSetting animals = (BooleanSetting) new BooleanSetting("Animals", false)
@@ -37,7 +36,7 @@ public class KillAuraModule extends Module {
 
     private final GroupSetting clickGroup = new GroupSetting("Clicking", false);
     private final ClickDelayCalculator delayCalculator = new ClickDelayCalculator(9, 11);
-    private final StringSetting delayMode = (StringSetting) new StringSetting("Delay mode", "1.9", "1.9", "CPS")
+    private final StringSetting delayMode = (StringSetting) new StringSetting("Delay mode", "CPS", "1.9", "CPS")
             .setParent(clickGroup);
     private final RangeNumberSetting cps = (RangeNumberSetting) new RangeNumberSetting("CPS", 9, 11, 1, 20)
             .hide(() -> delayMode.is("1.9"))
@@ -47,8 +46,9 @@ public class KillAuraModule extends Module {
                     }
             )
             .setParent(clickGroup);
+    private final NumberSetting attackRange = (NumberSetting) new NumberSetting("Attack range", 3, 1, 6)
+            .setParent(clickGroup);
 
-    private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
 
     private final Timer attackTimer = new Timer();
