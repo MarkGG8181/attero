@@ -27,7 +27,7 @@ public class WatermarkModule extends Module {
         }
 
         switch (mode.getValue()) {
-            case "Rouded" -> {
+            case "Rounded" -> {
                 ImGuiImpl.draw(io -> {
                     ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
                     ImDrawList drawList = ImGui.getForegroundDrawList();
