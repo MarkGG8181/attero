@@ -11,7 +11,7 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.util.player.RotationUtil;
 
 @ModuleInfo(name = "CorrectMovement", description = "Corrects your movement", category = ModuleCategory.MOVEMENT)
-public class CorrectMovement extends Module {
+public class CorrectMovementModule extends Module {
 
     @Subscribe(priority = 999)
     public void onInput(MoveInputEvent event) {
