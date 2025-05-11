@@ -3,6 +3,7 @@
   "package": "fag.ware.client.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ClientConnectionMixin",
     "EntityMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
