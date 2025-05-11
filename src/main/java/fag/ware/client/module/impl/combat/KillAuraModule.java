@@ -20,6 +20,21 @@ import org.lwjgl.glfw.GLFW;
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends Module {
 
+    private final GroupSetting sortingGroup = new GroupSetting("Sorting", false);
+    public final StringSetting sortBy = (StringSetting) new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks")
+            .setParent(sortingGroup);
+    public final NumberSetting searchRange = (NumberSetting) new NumberSetting("Search range", 5, 1, 6)
+            .setParent(sortingGroup);
+
+    public final BooleanSetting players = (BooleanSetting) new BooleanSetting("Players", true)
+            .setParent(sortingGroup);
+    public final BooleanSetting animals = (BooleanSetting) new BooleanSetting("Animals", false)
+            .setParent(sortingGroup);
+    public final BooleanSetting monsters = (BooleanSetting) new BooleanSetting("Monsters", false)
+            .setParent(sortingGroup);
+    public final BooleanSetting invisibles = (BooleanSetting) new BooleanSetting("Invisibles", false)
+            .setParent(sortingGroup);
+
     private final GroupSetting clickGroup = new GroupSetting("Clicking", false);
     private final ClickDelayCalculator delayCalculator = new ClickDelayCalculator(9, 11);
     private final StringSetting delayMode = (StringSetting) new StringSetting("Delay mode", "1.9", "1.9", "CPS")
@@ -33,16 +48,8 @@ public class KillAuraModule extends Module {
             )
             .setParent(clickGroup);
 
-    public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks");
-
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
-    public final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 6);
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
-
-    public final BooleanSetting players = new BooleanSetting("Players", true);
-    public final BooleanSetting animals = new BooleanSetting("Animals", false);
-    public final BooleanSetting monsters = new BooleanSetting("Monsters", false);
-    public final BooleanSetting invisibles = new BooleanSetting("Invisibles", false);
 
     private final Timer attackTimer = new Timer();
 
