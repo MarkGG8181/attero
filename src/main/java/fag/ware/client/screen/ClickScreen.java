@@ -73,7 +73,7 @@ public class ClickScreen extends Screen {
 
                         if (open) {
                             for (Setting<?> setting : module.getSettings()) {
-                                if (setting.getHidden().getAsBoolean()) {
+                                if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
                                     continue;
                                 }
 
@@ -184,10 +184,9 @@ public class ClickScreen extends Screen {
                 }
                 case GroupSetting gS -> {
                     ImGui.setWindowFontScale(0.8f);
-                    if (ImGui.treeNode(gS.getName())) {
-                        for (Setting<?> child : gS.getChildren()) {
-                            render(child);
-                        }
+                    boolean expanded = ImGui.treeNode(gS.getName());
+                    gS.setValue(expanded);
+                    if (expanded) {
                         ImGui.treePop();
                     }
                     ImGui.setWindowFontScale(1f);

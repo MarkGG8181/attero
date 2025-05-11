@@ -2,6 +2,7 @@ package fag.ware.client.module.data.setting;
 
 import fag.ware.client.Fagware;
 import fag.ware.client.module.Module;
+import fag.ware.client.module.data.setting.impl.GroupSetting;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,7 @@ public abstract class Setting<T> {
     private Consumer<T> onChange = null;
 
     private Module parent = null;
+    private GroupSetting parentSetting = null;
 
     public Setting(String name, T value) {
         this(name, value, false);
@@ -42,6 +44,11 @@ public abstract class Setting<T> {
 
     public Setting<T> onChange(Consumer<T> onChange) {
         this.onChange = onChange;
+        return this;
+    }
+
+    public Setting<T> setParent(GroupSetting parent) {
+        this.parentSetting = parent;
         return this;
     }
 

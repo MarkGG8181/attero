@@ -7,10 +7,7 @@ import fag.ware.client.event.impl.RunLoopEvent;
 import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
-import fag.ware.client.module.data.setting.impl.BooleanSetting;
-import fag.ware.client.module.data.setting.impl.NumberSetting;
-import fag.ware.client.module.data.setting.impl.RangeNumberSetting;
-import fag.ware.client.module.data.setting.impl.StringSetting;
+import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.math.ClickDelayCalculator;
 import fag.ware.client.util.math.Timer;
@@ -22,20 +19,21 @@ import org.lwjgl.glfw.GLFW;
 
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends Module {
+
+    private final GroupSetting clickGroup = new GroupSetting("Clicking", false);
     private final ClickDelayCalculator delayCalculator = new ClickDelayCalculator(9, 11);
-
-    public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks");
-    private final StringSetting delayMode = new StringSetting("Delay mode", "1.9", "1.9", "CPS");
-
-    private final RangeNumberSetting cps = (RangeNumberSetting) new RangeNumberSetting(
-            "CPS", 9, 11, 1, 20
-    )
+    private final StringSetting delayMode = (StringSetting) new StringSetting("Delay mode", "1.9", "1.9", "CPS")
+            .setParent(clickGroup);
+    private final RangeNumberSetting cps = (RangeNumberSetting) new RangeNumberSetting("CPS", 9, 11, 1, 20)
             .hide(() -> delayMode.is("1.9"))
             .onChange(newValue -> {
                         delayCalculator.setMinCPS(newValue[0].doubleValue());
                         delayCalculator.setMaxCPS(newValue[1].doubleValue());
                     }
-            );
+            )
+            .setParent(clickGroup);
+
+    public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks");
 
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     public final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 6);
