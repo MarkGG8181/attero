@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "EntityMixin",
+    "LivingEntityMixin",
     "MinecraftServerMixin",
     "ModStatusMixin"
   ],
@@ -14,10 +15,11 @@
     "ClientPlayerMixin",
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
+    "KeyboardInputMixin",
     "KeyboardMixin",
     "LivingEntityRendererMixin",
     "MinecraftMixin",
-    "ToastManagerMixin",
-    "ParticleManagerMixin"
+    "ParticleManagerMixin",
+    "ToastManagerMixin"
   ]
 }
