@@ -1,6 +1,7 @@
 package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
+import fag.ware.client.event.impl.RunLoopEvent;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.util.imgui.ImGuiImpl;
 import net.minecraft.client.MinecraftClient;
@@ -51,8 +52,19 @@ public class MinecraftMixin {
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void onRun(CallbackInfo ci) {
+    public void onTick(CallbackInfo ci) {
         new TickEvent().post();
+    }
+
+    @Inject(
+            method = "run",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/MinecraftClient;render(Z)V"
+            )
+    )
+    public void onRun(CallbackInfo ci) {
+        new RunLoopEvent().post();
     }
 
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)

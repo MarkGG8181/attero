@@ -3,7 +3,7 @@ package fag.ware.client.module.impl.combat;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.MotionEvent;
-import fag.ware.client.event.impl.TickEvent;
+import fag.ware.client.event.impl.RunLoopEvent;
 import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -52,8 +52,8 @@ public class KillAuraModule extends Module {
     }
 
     @Subscribe
-    public void onTick(TickEvent event) {
-        if (mc.player == null || mc.world == null) return;
+    public void onTick(RunLoopEvent event) {
+        if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         if (Fagware.INSTANCE.combatTracker.target != null && CombatTracker.isWithinRange(Fagware.INSTANCE.combatTracker.target, attackRange.toDouble())) {
             switch (delayMode.getValue()) {
