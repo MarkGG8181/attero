@@ -10,18 +10,21 @@ import fag.ware.client.util.player.MovementUtil;
 
 @ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you fast")
 public class SpeedModule extends Module {
-    public final StringSetting speedMode = new StringSetting("Mode", "Strafe", "Strafe", "Legit");
+    private final StringSetting mode = new StringSetting("Mode", "Strafe", "Strafe", "Legit");
 
     @Subscribe
     public void onMotion(MotionEvent event) {
-        mc.options.jumpKey.setPressed(true);
-        mc.options.sprintKey.setPressed(true);
-
         if (event.isPre()) {
-            switch (speedMode.getValue()) {
-                case "Strafe" -> MovementUtil.setSpeed(0.27);
+            switch (mode.getValue()) {
+                case "Strafe" -> {
+                    mc.options.jumpKey.setPressed(MovementUtil.isMoving());
+                    mc.options.sprintKey.setPressed(true);
+                    MovementUtil.setSpeed(0.27);
+                }
 
                 case "Legit" -> {
+                    mc.options.jumpKey.setPressed(MovementUtil.isMoving());
+                    mc.options.sprintKey.setPressed(true);
                 }
             }
         }
@@ -29,7 +32,6 @@ public class SpeedModule extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override

@@ -9,9 +9,13 @@ public class MovementUtil implements IMinecraft {
     public static float getSpeed() {
         return mc.player != null ? mc.player.speed : 0.0f;
     }
-    // idk if this is good - graph
+
+    /**
+     * Checks if the player is moving on every axis except the vertical one.
+     * @return Returns a boolean value if the player is moving horizontally or diagonally.
+     */
     public static boolean isMoving() {
-        return mc.options.leftKey.isPressed() || mc.options.rightKey.isPressed() || mc.options.backKey.isPressed() || mc.options.forwardKey.isPressed();
+        return mc.player.input.getMovementInput().y != 0 || mc.player.input.getMovementInput().x != 0;
     }
 
     public static void setSpeed(double moveSpeed) {
@@ -45,9 +49,11 @@ public class MovementUtil implements IMinecraft {
     public static void setMotionX(double motionX) {
         mc.player.setVelocity(motionX, mc.player.getVelocity().y, mc.player.getVelocity().z);
     }
+
     public static void setMotionY(double motionY) {
         mc.player.setVelocity(mc.player.getVelocity().x, motionY, mc.player.getVelocity().z);
     }
+
     public static void setMotionZ(double motionZ) {
         mc.player.setVelocity(mc.player.getVelocity().x, mc.player.getVelocity().y, motionZ);
     }
