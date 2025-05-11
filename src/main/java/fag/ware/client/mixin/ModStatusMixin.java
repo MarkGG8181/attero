@@ -8,6 +8,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Supplier;
 
+/**
+ * @author markuss
+ */
 @Mixin(ModStatus.class)
 public class ModStatusMixin {
     @Inject(method = "check", at = @At("HEAD"), cancellable = true)

@@ -17,7 +17,6 @@ public class AntiBlindModule extends Module {
     private final BooleanSetting blockBreakParticles = new BooleanSetting("Block break particles", true);
     private final BooleanSetting blockBreakingParticles = new BooleanSetting("Block breaking particles", true);
 
-
     @Subscribe
     public void onRenderFireOverlay(RenderFireOverlayEvent event) {
         event.setCancelled(fireOverlay.getValue());
@@ -42,10 +41,12 @@ public class AntiBlindModule extends Module {
     public void onRenderNauseaOverlay(RenderNauseaOverlayEvent event) {
         event.setCancelled(nauseaOverlay.getValue());
     }
+
     @Subscribe
     public void onRenderBlockBreakingParticles(BlockBreakingParticleEvent event) {
         event.setCancelled(blockBreakingParticles.getValue());
     }
+
     @Subscribe
     public void onRenderBlockBreakParticles(BlockBreakParticleEvent event) {
         event.setCancelled(blockBreakParticles.getValue());
@@ -53,11 +54,9 @@ public class AntiBlindModule extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 }

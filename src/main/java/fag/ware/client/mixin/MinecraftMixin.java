@@ -18,6 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
 
+/**
+ * @author markuss
+ */
 @Mixin(MinecraftClient.class)
 public class MinecraftMixin {
     @Shadow

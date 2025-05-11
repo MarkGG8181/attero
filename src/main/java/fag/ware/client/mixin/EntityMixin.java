@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
+/**
+ * @author markuss
+ */
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @Shadow public abstract float getYaw();

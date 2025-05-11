@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftServer.class)
-public class LoadWorldMixin {
+public class MinecraftServerMixin {
 	@Inject(at = @At("HEAD"), method = "loadWorld")
 	private void init(CallbackInfo info) {
 		new LoadWorldEvent().post();

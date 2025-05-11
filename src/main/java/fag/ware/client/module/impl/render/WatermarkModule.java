@@ -26,49 +26,47 @@ public class WatermarkModule extends Module {
             return;
         }
 
-        if (mode.is("Rounded"))
-        {
-            ImGuiImpl.draw(io -> {
-                ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
-                ImDrawList drawList = ImGui.getForegroundDrawList();
+        switch (mode.getValue()) {
+            case "Rouded" -> {
+                ImGuiImpl.draw(io -> {
+                    ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+                    ImDrawList drawList = ImGui.getForegroundDrawList();
 
-                String watermarkText = "Fagware";
-                String userInfoText = "| " + mc.getSession().getUsername() + " | " + mc.getCurrentFps() + " fps";
+                    String watermarkText = "Fagware";
+                    String userInfoText = "| " + mc.getSession().getUsername() + " | " + mc.getCurrentFps() + " fps";
 
-                ImVec2 watermarkTextSize = ImGui.calcTextSize(watermarkText);
-                ImVec2 userInfoTextSize = ImGui.calcTextSize(userInfoText);
+                    ImVec2 watermarkTextSize = ImGui.calcTextSize(watermarkText);
+                    ImVec2 userInfoTextSize = ImGui.calcTextSize(userInfoText);
 
-                float x = 10;
-                float y = 10;
+                    float x = 10;
+                    float y = 10;
 
-                float width = watermarkTextSize.x + userInfoTextSize.x + 25;
-                float height = 30;
+                    float width = watermarkTextSize.x + userInfoTextSize.x + 25;
+                    float height = 30;
 
-                drawList.addRectFilled(x, y, x + width, y + height, toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
+                    drawList.addRectFilled(x, y, x + width, y + height, toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
 
-                drawList.addText(x + 10, y + 4, color.toImGuiColor(), watermarkText.substring(0, 3));
-                drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, y + 4, toImGuiColor(Color.WHITE), watermarkText.substring(3));
+                    drawList.addText(x + 10, y + 4, color.toImGuiColor(), watermarkText.substring(0, 3));
+                    drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, y + 4, toImGuiColor(Color.WHITE), watermarkText.substring(3));
 
-                drawList.addText(x + 5 + watermarkTextSize.x + 10, y + 4, toImGuiColor(Color.WHITE), userInfoText);
+                    drawList.addText(x + 5 + watermarkTextSize.x + 10, y + 4, toImGuiColor(Color.WHITE), userInfoText);
 
-                ImGui.popFont();
-            });
-        }
-        else if (mode.is("Minecraft"))
-        {
-            event.getDrawContext().drawText(mc.textRenderer, "fag", 5, 5, color.getValue().getRGB(), false);
-            event.getDrawContext().drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("fag"), 5, -1, false);
+                    ImGui.popFont();
+                });
+            }
+            case "Minecraft" -> {
+                event.getDrawContext().drawText(mc.textRenderer, "fag", 5, 5, color.getValue().getRGB(), false);
+                event.getDrawContext().drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("fag"), 5, -1, false);
+            }
         }
     }
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
