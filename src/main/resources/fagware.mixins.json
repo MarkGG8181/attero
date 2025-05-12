@@ -5,6 +5,7 @@
   "mixins": [
     "ClientConnectionMixin",
     "EntityMixin",
+    "EntityVelocityUpdateS2CPacketMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
     "ModStatusMixin"
