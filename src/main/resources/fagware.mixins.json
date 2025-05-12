@@ -8,7 +8,8 @@
     "EntityVelocityUpdateS2CPacketMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
-    "ModStatusMixin"
+    "ModStatusMixin",
+    "IItemCoolDownAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

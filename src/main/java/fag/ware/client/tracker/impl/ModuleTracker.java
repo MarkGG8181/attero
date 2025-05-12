@@ -10,6 +10,7 @@ import fag.ware.client.module.impl.combat.VelocityModule;
 import fag.ware.client.module.impl.movement.CorrectMovementModule;
 import fag.ware.client.module.impl.movement.SpeedModule;
 import fag.ware.client.module.impl.movement.SprintModule;
+import fag.ware.client.module.impl.player.FastPlace;
 import fag.ware.client.module.impl.render.AntiBlindModule;
 import fag.ware.client.module.impl.render.WatermarkModule;
 import fag.ware.client.tracker.Tracker;
@@ -33,6 +34,7 @@ public class ModuleTracker extends Tracker<Module> {
         getSet().add(new SpeedModule());
         getSet().add(new CorrectMovementModule());
         getSet().add(new VelocityModule());
+        getSet().add(new FastPlace());
         getSet().forEach(Module::onInit);
     }
 
