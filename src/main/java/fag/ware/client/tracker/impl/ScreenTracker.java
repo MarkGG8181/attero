@@ -5,6 +5,7 @@ import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.KeyEvent;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
+import fag.ware.client.screen.MusicPlayerScreen;
 import fag.ware.client.tracker.Tracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,6 +17,7 @@ public class ScreenTracker extends Tracker<Screen> {
         Fagware.BUS.register(this);
         getSet().add(new ClickScreen());
         getSet().add(new JelloClickScreen());
+        getSet().add(new MusicPlayerScreen());
     }
 
     @Subscribe
@@ -26,7 +28,7 @@ public class ScreenTracker extends Tracker<Screen> {
             }
 
             if (event.getKey() == GLFW.GLFW_KEY_RIGHT_CONTROL) {
-                MinecraftClient.getInstance().setScreen(getByClass(JelloClickScreen.class));
+                MinecraftClient.getInstance().setScreen(getByClass(MusicPlayerScreen.class));
             }
         });
     }
