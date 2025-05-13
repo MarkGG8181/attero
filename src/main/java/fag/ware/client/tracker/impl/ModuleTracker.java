@@ -30,6 +30,7 @@ public class ModuleTracker extends Tracker<Module> implements IMinecraft {
         getSet().add(new CorrectMovementModule());
         getSet().add(new VelocityModule());
         getSet().add(new FastPlaceModule());
+        getSet().add(new ModuleListModule());
         getSet().forEach(Module::onInit);
     }
 
