@@ -37,23 +37,23 @@ public class ModuleTracker extends Tracker<Module> implements IMinecraft {
     @Subscribe
     public void onKey(KeyEvent event) {
         if (mc.player != null && mc.world != null && mc.currentScreen == null)
-            getSet().forEach(m -> {
-                if (event.getKey() == m.getKeybind()) {
-                    m.toggle();
+            getSet().forEach(mod -> {
+                if (event.getKey() == mod.getKeybind()) {
+                    mod.toggle();
                 }
             });
     }
 
     public Module getByName(String name) {
         return getSet().stream()
-                .filter(m -> m.getInfo().name().equalsIgnoreCase(name))
+                .filter(mod -> mod.getInfo().name().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }
 
     public Set<Module> getByCategory(ModuleCategory category) {
         return getSet().stream()
-                .filter(m -> m.getInfo().category().equals(category))
+                .filter(mod -> mod.getInfo().category().equals(category))
                 .collect(Collectors.toSet());
     }
 }
