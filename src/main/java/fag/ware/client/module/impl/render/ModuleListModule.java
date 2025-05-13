@@ -11,6 +11,7 @@ import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
+import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.data.ImGuiImpl;
 import imgui.ImColor;
 import imgui.ImDrawList;
@@ -31,7 +32,7 @@ public class ModuleListModule extends Module {
 
     @Subscribe
     public void onRender(Render2DEvent event) {
-        if (mc.currentScreen instanceof ClickScreen) {
+        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen) {
             return;
         }
 
