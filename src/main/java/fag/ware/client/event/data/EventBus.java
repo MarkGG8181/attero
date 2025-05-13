@@ -26,7 +26,7 @@ public class EventBus {
                 listeners.computeIfAbsent(eventClass, c -> new ArrayList<>()).add(listener);
                 listeners.get(eventClass).sort(Comparator.comparingInt(l -> -l.priority));
 
-                Fagware.LOGGER.info("Registered listener: {} with priority {}", method, sub.priority());
+                //Fagware.LOGGER.info("Registered listener: {} with priority {}", method, sub.priority());
             }
         }
     }
@@ -35,7 +35,7 @@ public class EventBus {
         for (List<RegisteredListener> list : listeners.values()) {
             list.removeIf(listener -> listener.owner == obj);
         }
-        Fagware.LOGGER.info("Unregistered listener: {}", obj.getClass().getName());
+        //Fagware.LOGGER.info("Unregistered listener: {}", obj.getClass().getName());
     }
 
     public void post(Event event) {
