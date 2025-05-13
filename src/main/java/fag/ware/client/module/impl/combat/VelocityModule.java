@@ -1,6 +1,5 @@
 package fag.ware.client.module.impl.combat;
 
-
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.ReceivePacketEvent;
 import fag.ware.client.event.impl.TickEvent;
@@ -62,11 +61,11 @@ public class VelocityModule extends Module {
         }
     }
 
-    public boolean tookDamage() {
+    private boolean tookDamage() {
         return mc.player.hurtTime == 9 && mc.currentScreen == null;
     }
 
-    public boolean chanceCheck() {
+    private boolean chanceCheck() {
         return chance.getValue().doubleValue() > Math.random() * 100;
     }
 

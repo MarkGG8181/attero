@@ -8,7 +8,6 @@ import fag.ware.client.module.data.ModuleInfo;
 
 @ModuleInfo(name = "Sprint", category = ModuleCategory.MOVEMENT, description = "Makes you always sprint")
 public class SprintModule extends Module {
-
     @Subscribe
     public void onUpdate(UpdateEvent event) {
         mc.options.sprintKey.setPressed(true);
@@ -16,7 +15,6 @@ public class SprintModule extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
