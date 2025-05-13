@@ -62,7 +62,7 @@ public class ModuleListModule extends Module {
                         float x = io.getDisplaySizeX() - textWidth - xOffset.toFloat();
 
                         if (background.getValue()) {
-                            drawList.addRectFilled(x - 2, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
+                            drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
                         }
 
                         if (fontShadow.getValue()) {
