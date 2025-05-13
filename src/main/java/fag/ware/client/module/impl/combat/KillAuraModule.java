@@ -50,6 +50,7 @@ public class KillAuraModule extends Module {
             .setParent(clickGroup);
 
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
+    private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
     private final Timer attackTimer = new Timer();
 
@@ -57,7 +58,7 @@ public class KillAuraModule extends Module {
     public void onMotion(MotionEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (Fagware.INSTANCE.combatTracker.target != null) {
+        if (Fagware.INSTANCE.combatTracker.target != null && (raycast.getValue() && mc.player.canSee(Fagware.INSTANCE.combatTracker.target))) {
             float[] rots = RotationUtil.toRotation(Fagware.INSTANCE.combatTracker.target);
 
             event.setYaw(rots[0]);
@@ -75,6 +76,7 @@ public class KillAuraModule extends Module {
                     if (mc.player.getAttackCooldownProgress(0) >= 1)
                         attackEntity(Fagware.INSTANCE.combatTracker.target);
                 }
+
                 case "CPS" -> {
                     if (attackTimer.hasElapsed(delayCalculator.getClickDelay(), true)) {
                         attackEntity(Fagware.INSTANCE.combatTracker.target);
