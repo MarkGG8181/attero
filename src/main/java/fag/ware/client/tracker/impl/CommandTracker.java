@@ -48,7 +48,11 @@ public class CommandTracker extends Tracker<Command> implements IMinecraft {
                 if (command != null) {
                     command.execute(parts);
                 } else {
-                    send(String.format("Command %s not found!", commandName));
+                    if (commandName.isBlank()) {
+                        sendError("Missing arguments!");
+                    } else {
+                        sendError(String.format("Command %s not found!", commandName));
+                    }
                 }
             }
         }
