@@ -11,10 +11,11 @@ import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
-import fag.ware.client.util.imgui.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiImpl;
 import imgui.ImColor;
 import imgui.ImDrawList;
 import imgui.ImGui;
+import imgui.ImVec2;
 
 import java.awt.*;
 import java.util.List;
@@ -47,12 +48,16 @@ public class ModuleListModule extends Module {
             case "Simple" -> {
                 ImGuiImpl.draw(io -> {
                     ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
-                    ImDrawList drawList = ImGui.getForegroundDrawList();
 
+                    ImDrawList drawList = ImGui.getForegroundDrawList();
                     float y = yOffset.toFloat();
+
                     for (Module module : sortedModules) {
                         String name = module.toString();
-                        float textWidth = ImGui.calcTextSize(name).x;
+                        if (name == null) continue;
+
+                        ImVec2 size = ImGui.calcTextSize(name);
+                        float textWidth = size.x;
                         float x = io.getDisplaySizeX() - textWidth - xOffset.toFloat();
 
                         if (background.getValue()) {
@@ -64,7 +69,6 @@ public class ModuleListModule extends Module {
                         }
 
                         drawList.addText(x, y, textColor.toImGuiColor(), name);
-
                         y += ImGui.getFontSize() + 2;
                     }
 

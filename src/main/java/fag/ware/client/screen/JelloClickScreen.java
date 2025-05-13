@@ -3,7 +3,7 @@ package fag.ware.client.screen;
 import fag.ware.client.Fagware;
 import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
-import fag.ware.client.util.imgui.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiImpl;
 import imgui.*;
 import imgui.flag.*;
 import lombok.AllArgsConstructor;

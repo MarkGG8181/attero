@@ -1,4 +1,4 @@
-package fag.ware.client.util.imgui;
+package fag.ware.client.screen.data;
 
 import imgui.ImGuiIO;
 

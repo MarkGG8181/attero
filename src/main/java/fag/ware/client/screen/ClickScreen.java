@@ -5,7 +5,7 @@ import fag.ware.client.module.Module;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.Setting;
 import fag.ware.client.module.data.setting.impl.*;
-import fag.ware.client.util.imgui.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiImpl;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiColorEditFlags;

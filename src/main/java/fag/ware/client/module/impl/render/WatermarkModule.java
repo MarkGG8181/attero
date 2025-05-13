@@ -8,7 +8,8 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
-import fag.ware.client.util.imgui.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.util.math.ColorUtil;
 import imgui.ImDrawList;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -44,12 +45,12 @@ public class WatermarkModule extends Module {
                     float width = watermarkTextSize.x + userInfoTextSize.x + 25;
                     float height = 30;
 
-                    drawList.addRectFilled(x, y, x + width, y + height, toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
+                    drawList.addRectFilled(x, y, x + width, y + height, ColorUtil.toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
 
                     drawList.addText(x + 10, y + 4, color.toImGuiColor(), watermarkText.substring(0, 3));
-                    drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, y + 4, toImGuiColor(Color.WHITE), watermarkText.substring(3));
+                    drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, y + 4, ColorUtil.toImGuiColor(Color.WHITE), watermarkText.substring(3));
 
-                    drawList.addText(x + 5 + watermarkTextSize.x + 10, y + 4, toImGuiColor(Color.WHITE), userInfoText);
+                    drawList.addText(x + 5 + watermarkTextSize.x + 10, y + 4, ColorUtil.toImGuiColor(Color.WHITE), userInfoText);
 
                     ImGui.popFont();
                 });
@@ -72,9 +73,5 @@ public class WatermarkModule extends Module {
     @Override
     public void onInit() {
         setEnabled(true);
-    }
-
-    public static int toImGuiColor(Color color) {
-        return (color.getAlpha() << 24) | (color.getBlue() << 16) | (color.getGreen() << 8) | color.getRed();
     }
 }
