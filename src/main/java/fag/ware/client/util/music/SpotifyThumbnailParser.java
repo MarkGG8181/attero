@@ -1,7 +1,5 @@
 package fag.ware.client.util.music;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fag.ware.client.Fagware;
@@ -14,25 +12,15 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class SpotifyThumbnailParser {
-    private static final String API_URL = "https://www.spotifycover.art/api/apee?inputType=tracks&id=";
+    private static final String API_URL = "https://embed.spotify.com/oembed?url=spotify%3Atrack%3A";
 
     public static String getThumbnailURL(SpotifyPlaylistParser.TrackInfo track) {
-        String url = "https://i.scdn.co/image/ab67616d0000485118e4c2913a55fa0de4d2a0a5";
+        String url = "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02379bfc899f2870b7f55f6aef";
 
         try {
             JsonObject json = getJson(new URL(API_URL + track.id));
-            if (json.has("album")) {
-                JsonObject album = json.get("album").getAsJsonObject();
-                if (album.has("images")) {
-                    JsonArray images = album.getAsJsonArray("images");
-
-                    for (JsonElement imageElement : images) {
-                        JsonObject imageObj = imageElement.getAsJsonObject();
-
-                        url = imageObj.get("url").getAsString();
-                        break;
-                    }
-                }
+            if (json.has("thumbnail_url")) {
+                url = json.get("thumbnail_url").getAsString();
             }
         } catch (IOException e) {
             Fagware.LOGGER.error("Failed to get thumbnail url for {}", track.title, e);
