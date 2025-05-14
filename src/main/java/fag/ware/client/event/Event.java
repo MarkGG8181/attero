@@ -4,7 +4,7 @@ import fag.ware.client.Fagware;
 
 public class Event {
     // Marker base class for all events
-    public void post() {
+    public final void post() {
         Fagware.BUS.post(this);
     }
 }
