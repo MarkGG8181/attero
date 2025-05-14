@@ -17,7 +17,7 @@ public abstract class AbstractTracker<T> {
 
     public <C extends T> C getByClass(Class<C> clazz) {
         return getSet().stream()
-                // .filter(clazz::isInstance) // fuck type safety
+                .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .findFirst()
                 .orElse(null);

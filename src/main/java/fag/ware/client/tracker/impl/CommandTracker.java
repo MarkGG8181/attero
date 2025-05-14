@@ -3,6 +3,7 @@ package fag.ware.client.tracker.impl;
 import fag.ware.client.Fagware;
 import fag.ware.client.command.AbstractCommand;
 import fag.ware.client.command.data.CommandInfo;
+import fag.ware.client.command.impl.BindCommand;
 import fag.ware.client.command.impl.HelpCommand;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.SendPacketEvent;
@@ -17,6 +18,7 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
     public void initialize() {
         Fagware.BUS.register(this);
         getSet().add(new HelpCommand());
+        getSet().add(new BindCommand());
     }
 
     public AbstractCommand getByName(String name) {
