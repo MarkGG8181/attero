@@ -42,7 +42,9 @@ public class EventBus {
         List<RegisteredListener> list = listeners.get(event.getClass());
         if (list == null) return;
 
-        for (RegisteredListener listener : list) {
+        List<RegisteredListener> listenersCopy = new ArrayList<>(list);
+
+        for (RegisteredListener listener : listenersCopy) {
             try {
                 listener.method.invoke(listener.owner, event);
             } catch (Exception e) {
