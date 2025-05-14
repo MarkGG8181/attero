@@ -17,34 +17,28 @@ public class SpotifyThumbnailParser {
     private static final String API_URL = "https://www.spotifycover.art/api/apee?inputType=tracks&id=";
 
     public static String getThumbnailURL(SpotifyPlaylistParser.TrackInfo track) {
+        String url = "https://i.scdn.co/image/ab67616d0000485118e4c2913a55fa0de4d2a0a5";
+
         try {
             JsonObject json = getJson(new URL(API_URL + track.id));
             if (json.has("album")) {
                 JsonObject album = json.get("album").getAsJsonObject();
                 if (album.has("images")) {
                     JsonArray images = album.getAsJsonArray("images");
-                    String url300 = null;
 
                     for (JsonElement imageElement : images) {
                         JsonObject imageObj = imageElement.getAsJsonObject();
-                        int width = imageObj.get("width").getAsInt();
-                        int height = imageObj.get("height").getAsInt();
 
-                        if (width == 64 && height == 64) {
-                            url300 = imageObj.get("url").getAsString();
-                            break;
-                        }
-                    }
-
-                    if (url300 != null) {
-                        return url300;
+                        url = imageObj.get("url").getAsString();
+                        break;
                     }
                 }
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            Fagware.LOGGER.error("Failed to get thumbnail url for {}", track.title, e);
         }
 
-        return "https://i.scdn.co/image/ab67616d0000485118e4c2913a55fa0de4d2a0a5";
+        return url;
     }
 
     public static JsonObject getJson(URL url) throws IOException {

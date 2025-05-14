@@ -2,11 +2,8 @@ package fag.ware.client.screen;
 
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.util.music.SpotifyLoader;
-import fag.ware.client.util.music.SpotifyPlaylistParser;
 import fag.ware.client.util.music.SpotifyPlaylists;
-import fag.ware.client.util.music.SpotifyThumbnailParser;
 import imgui.ImGui;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -15,8 +12,6 @@ public class MusicPlayerScreen extends Screen {
     public MusicPlayerScreen() {
         super(Text.of("Music Player"));
     }
-
-    private boolean initialised;
 
     @Override
     protected void init() {
@@ -28,18 +23,13 @@ public class MusicPlayerScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         super.render(context, mouseX, mouseY, deltaTicks);
 
-        if (!initialised) {
-            SpotifyLoader.loadPlaylists(true);
-            initialised = true;
-        }
-
         ImGuiImpl.draw(io -> {
             ImGuiImpl.applyMarineTheme();
             if (ImGui.begin("Music Player")) {
                 if (ImGui.beginTabBar("TABBAR")) {
                     for (SpotifyPlaylists playlist : SpotifyPlaylists.values()) {
                         if (ImGui.beginTabItem(playlist.name)) {
-                            if (ImGui.beginChild("TrackGrid", 0, 300, true)) { // 300 is height
+                            if (ImGui.beginChild("TrackGrid", 0, 300, true)) {
                                 int columns = 8;
                                 int count = 0;
 
