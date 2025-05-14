@@ -29,13 +29,14 @@ public class MusicPlayerScreen extends Screen {
                 if (ImGui.beginTabBar("TABBAR")) {
                     for (SpotifyPlaylists playlist : SpotifyPlaylists.values()) {
                         if (ImGui.beginTabItem(playlist.name)) {
+                            SpotifyLoader.loadPlaylistOnce(playlist);
                             if (ImGui.beginChild("TrackGrid", 0, 300, true)) {
                                 int columns = 8;
                                 int count = 0;
 
                                 for (var track : playlist.tracks) {
                                     if (track.textureId != -1) {
-                                        ImGui.image(track.textureId, 48, 48);
+                                        ImGui.imageButton(track.textureId, 48, 48);
 
                                         count++;
                                         if (count % columns != 0) {
