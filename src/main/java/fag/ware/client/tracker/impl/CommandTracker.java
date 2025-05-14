@@ -1,16 +1,16 @@
 package fag.ware.client.tracker.impl;
 
 import fag.ware.client.Fagware;
-import fag.ware.client.command.Command;
+import fag.ware.client.command.AbstractCommand;
 import fag.ware.client.command.data.CommandInfo;
 import fag.ware.client.command.impl.HelpCommand;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.SendPacketEvent;
-import fag.ware.client.tracker.Tracker;
+import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.IMinecraft;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
-public class CommandTracker extends Tracker<Command> implements IMinecraft {
+public class CommandTracker extends AbstractTracker<AbstractCommand> implements IMinecraft {
     public static final String COMMAND_PREFIX = ".";
 
     @Override
@@ -19,7 +19,7 @@ public class CommandTracker extends Tracker<Command> implements IMinecraft {
         getSet().add(new HelpCommand());
     }
 
-    public Command getByName(String name) {
+    public AbstractCommand getByName(String name) {
         return getSet().stream()
                 .filter(cmd -> {
                     CommandInfo info = cmd.getInfo();
@@ -43,7 +43,7 @@ public class CommandTracker extends Tracker<Command> implements IMinecraft {
 
                 String[] parts = message.substring(COMMAND_PREFIX.length()).split(" ");
                 String commandName = parts[0];
-                Command command = getByName(commandName);
+                AbstractCommand command = getByName(commandName);
 
                 if (command != null) {
                     command.execute(parts);

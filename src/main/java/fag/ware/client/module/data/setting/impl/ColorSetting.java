@@ -1,10 +1,10 @@
 package fag.ware.client.module.data.setting.impl;
 
-import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.AbstractSetting;
 
 import java.awt.*;
 
-public class ColorSetting extends Setting<Color> {
+public class ColorSetting extends AbstractSetting<Color> {
     public ColorSetting(String name, Color value) {
         super(name, value);
     }

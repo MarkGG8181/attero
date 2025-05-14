@@ -5,13 +5,13 @@ import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.JumpEvent;
 import fag.ware.client.event.impl.MoveInputEvent;
 import fag.ware.client.event.impl.UpdateVelocityEvent;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.util.player.RotationUtil;
 
 @ModuleInfo(name = "CorrectMovement", description = "Corrects your movement", category = ModuleCategory.MOVEMENT)
-public class CorrectMovementModule extends Module {
+public class CorrectMovementModule extends AbstractModule {
 
     @Subscribe(priority = 999)
     public void onInput(MoveInputEvent event) {

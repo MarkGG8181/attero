@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Getter
-public abstract class Tracker<T> {
+public abstract class AbstractTracker<T> {
     private final HashSet<T> set = new HashSet<>();
 
     public abstract void initialize();
@@ -15,10 +15,12 @@ public abstract class Tracker<T> {
         return getSet().stream().toList();
     }
 
-    public <T> T getByClass(Class<T> clazz) {
-        return (T) getSet().stream()
-                .filter(t -> t.getClass().equals(clazz))
+    public <C extends T> C getByClass(Class<C> clazz) {
+        return getSet().stream()
+                // .filter(clazz::isInstance) // fuck type safety
+                .map(clazz::cast)
                 .findFirst()
                 .orElse(null);
     }
+
 }

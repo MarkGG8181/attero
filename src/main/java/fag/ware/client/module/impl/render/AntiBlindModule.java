@@ -2,13 +2,13 @@ package fag.ware.client.module.impl.render;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.render.*;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
 
 @ModuleInfo(name = "AntiBlind", category = ModuleCategory.RENDER, description = "Prevents your view from being obstructed")
-public class AntiBlindModule extends Module {
+public class AntiBlindModule extends AbstractModule {
     private final BooleanSetting fireOverlay = new BooleanSetting("Fire overlay", true);
     private final BooleanSetting waterOverlay = new BooleanSetting("Water overlay", true);
     private final BooleanSetting wallOverlay = new BooleanSetting("Wall overlay", true);

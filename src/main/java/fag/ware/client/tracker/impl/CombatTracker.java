@@ -4,7 +4,7 @@ import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.module.impl.combat.KillAuraModule;
-import fag.ware.client.tracker.Tracker;
+import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.IMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -12,11 +12,10 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class CombatTracker extends Tracker<LivingEntity> implements IMinecraft {
+public class CombatTracker extends AbstractTracker<LivingEntity> implements IMinecraft {
     private KillAuraModule killAuraModule;
     public float yaw, pitch;
     public float bodyYaw, prevBodyYaw;

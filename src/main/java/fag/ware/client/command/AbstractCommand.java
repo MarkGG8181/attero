@@ -7,10 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class Command implements IMinecraft {
+public abstract class AbstractCommand implements IMinecraft {
     private final CommandInfo info;
 
-    public Command() {
+    public AbstractCommand() {
         if (!getClass().isAnnotationPresent(CommandInfo.class)) {
             throw new RuntimeException("Command " + getClass().getName() + " is missing @CommandInfo");
         }

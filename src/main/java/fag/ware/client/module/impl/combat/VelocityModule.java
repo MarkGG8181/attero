@@ -4,7 +4,7 @@ import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.ReceivePacketEvent;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.util.IEntityVelocityPacketAccessor;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
@@ -13,7 +13,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 
 @ModuleInfo(name = "Velocity", category = ModuleCategory.COMBAT, description = "Decreases your knockback")
-public class VelocityModule extends Module {
+public class VelocityModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Legit", "Legit", "Packet");
     private final NumberSetting chance = (NumberSetting) new NumberSetting("Chance", 50, 1, 100).hide(() -> !mode.is("Legit"));
     private final NumberSetting horizontal = (NumberSetting) new NumberSetting("Horizontal", 1, 0, 1).hide(() -> !mode.is("Packet"));

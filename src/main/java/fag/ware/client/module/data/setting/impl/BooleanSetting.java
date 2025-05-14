@@ -1,8 +1,8 @@
 package fag.ware.client.module.data.setting.impl;
 
-import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.AbstractSetting;
 
-public class BooleanSetting extends Setting<Boolean> {
+public class BooleanSetting extends AbstractSetting<Boolean> {
     public BooleanSetting(String name, boolean value) {
         super(name, value);
     }

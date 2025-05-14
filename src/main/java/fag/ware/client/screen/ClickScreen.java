@@ -1,9 +1,9 @@
 package fag.ware.client.screen;
 
 import fag.ware.client.Fagware;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
-import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.screen.data.ImGuiImpl;
 import imgui.ImGui;
@@ -59,7 +59,7 @@ public class ClickScreen extends Screen {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
-                    for (Module module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
+                    for (AbstractModule module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
 
                         ImGui.pushID(module.toString());
                         ImBoolean enabledMod = new ImBoolean(module.isEnabled());
@@ -72,7 +72,7 @@ public class ClickScreen extends Screen {
                         boolean open = ImGui.collapsingHeader(module.toString());
 
                         if (open) {
-                            for (Setting<?> setting : module.getSettings()) {
+                            for (AbstractSetting<?> setting : module.getSettings()) {
                                 if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
                                     continue;
                                 }
@@ -91,7 +91,7 @@ public class ClickScreen extends Screen {
     }
 
     private static class SettingRenderer {
-        private static void render(Setting<?> setting) {
+        private static void render(AbstractSetting<?> setting) {
             switch (setting) {
                 case NumberSetting nS -> {
                     float[] value = {nS.toFloat()};

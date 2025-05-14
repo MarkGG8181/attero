@@ -4,7 +4,7 @@ import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.MotionEvent;
 import fag.ware.client.event.impl.RunLoopEvent;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.*;
@@ -18,7 +18,7 @@ import net.minecraft.util.Hand;
 import org.lwjgl.glfw.GLFW;
 
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
-public class KillAuraModule extends Module {
+public class KillAuraModule extends AbstractModule {
 
     private final GroupSetting sortingGroup = new GroupSetting("Sorting", false);
     public final StringSetting sortBy = (StringSetting) new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks")

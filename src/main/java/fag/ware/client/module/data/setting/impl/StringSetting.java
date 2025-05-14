@@ -1,12 +1,12 @@
 package fag.ware.client.module.data.setting.impl;
 
-import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.AbstractSetting;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class StringSetting extends Setting<String> {
+public class StringSetting extends AbstractSetting<String> {
     private final String[] values;
     private int index;
 

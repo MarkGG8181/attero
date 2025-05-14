@@ -3,7 +3,7 @@ package fag.ware.client.module.impl.render;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.render.Render2DEvent;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
@@ -22,7 +22,7 @@ import java.awt.*;
 import java.util.List;
 
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
-public class ModuleListModule extends Module {
+public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Simple", "Simple", "Minecraft");
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
@@ -36,8 +36,8 @@ public class ModuleListModule extends Module {
             return;
         }
 
-        List<Module> sortedModules = Fagware.INSTANCE.moduleTracker.getSet().stream()
-                .filter(Module::isEnabled)
+        List<AbstractModule> sortedModules = Fagware.INSTANCE.moduleTracker.getSet().stream()
+                .filter(AbstractModule::isEnabled)
                 .sorted((a, b) -> {
                     float aWidth = ImGui.calcTextSize(a.toString()).x;
                     float bWidth = ImGui.calcTextSize(b.toString()).x;
@@ -53,7 +53,7 @@ public class ModuleListModule extends Module {
                     ImDrawList drawList = ImGui.getForegroundDrawList();
                     float y = yOffset.toFloat();
 
-                    for (Module module : sortedModules) {
+                    for (AbstractModule module : sortedModules) {
                         String name = module.toString();
                         if (name == null) continue;
 
@@ -78,7 +78,7 @@ public class ModuleListModule extends Module {
             }
             case "Minecraft" -> {
                 int y = yOffset.toInt();
-                for (Module module : sortedModules) {
+                for (AbstractModule module : sortedModules) {
                     String name = module.toString();
                     int textWidth = mc.textRenderer.getWidth(name);
                     int x = event.getDrawContext().getScaledWindowWidth() - textWidth - xOffset.toInt();

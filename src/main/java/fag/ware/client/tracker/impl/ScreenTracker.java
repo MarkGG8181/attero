@@ -6,12 +6,12 @@ import fag.ware.client.event.impl.KeyEvent;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.MusicPlayerScreen;
-import fag.ware.client.tracker.Tracker;
+import fag.ware.client.tracker.AbstractTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.lwjgl.glfw.GLFW;
 
-public class ScreenTracker extends Tracker<Screen> {
+public class ScreenTracker extends AbstractTracker<Screen> {
     @Override
     public void initialize() {
         Fagware.BUS.register(this);

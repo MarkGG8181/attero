@@ -1,10 +1,10 @@
 package fag.ware.client.module.data.setting.impl;
 
-import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.AbstractSetting;
 import lombok.Getter;
 
 @Getter
-public class NumberSetting extends Setting<Number> {
+public class NumberSetting extends AbstractSetting<Number> {
     private final Number min, max;
 
     public NumberSetting(String name, Number value, Number min, Number max) {

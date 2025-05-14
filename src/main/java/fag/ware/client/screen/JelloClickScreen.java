@@ -1,7 +1,7 @@
 package fag.ware.client.screen;
 
 import fag.ware.client.Fagware;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.screen.data.ImGuiImpl;
 import imgui.*;
@@ -69,7 +69,7 @@ public class JelloClickScreen extends Screen {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
-                    for (Module module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
+                    for (AbstractModule module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
                         ImGui.pushID(module.toString());
 
                         boolean isToggled = module.isEnabled();
@@ -109,7 +109,7 @@ public class JelloClickScreen extends Screen {
 
     @AllArgsConstructor
     private static class SettingRenderer {
-        public Module parent;
+        public AbstractModule parent;
 
         public void render(ImGuiIO io) {
             ImGui.setNextWindowPos(new ImVec2(io.getDisplaySize().x * 0.5f, io.getDisplaySize().y * 0.5f), ImGuiCond.Always, new ImVec2(0.5f,0.5f));

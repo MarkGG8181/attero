@@ -2,7 +2,7 @@ package fag.ware.client.module.impl.render;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.render.Render2DEvent;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.ColorSetting;
@@ -18,7 +18,7 @@ import imgui.ImVec2;
 import java.awt.*;
 
 @ModuleInfo(name = "Watermark", category = ModuleCategory.RENDER, description = "Draws a watermark")
-public class WatermarkModule extends Module {
+public class WatermarkModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Rounded", "Rounded", "Minecraft");
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
 

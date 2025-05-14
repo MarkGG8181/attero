@@ -3,20 +3,20 @@ package fag.ware.client.tracker.impl;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.KeyEvent;
-import fag.ware.client.module.Module;
+import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.impl.combat.*;
 import fag.ware.client.module.impl.movement.*;
 import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
-import fag.ware.client.tracker.Tracker;
+import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.IMinecraft;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ModuleTracker extends Tracker<Module> implements IMinecraft {
-    public Module lastModule;
+public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
+    public AbstractModule lastModule;
 
     @Override
     public void initialize() {
@@ -31,7 +31,7 @@ public class ModuleTracker extends Tracker<Module> implements IMinecraft {
         getSet().add(new VelocityModule());
         getSet().add(new FastPlaceModule());
         getSet().add(new ModuleListModule());
-        getSet().forEach(Module::onInit);
+        getSet().forEach(AbstractModule::onInit);
     }
 
     @Subscribe
@@ -44,14 +44,14 @@ public class ModuleTracker extends Tracker<Module> implements IMinecraft {
             });
     }
 
-    public Module getByName(String name) {
+    public AbstractModule getByName(String name) {
         return getSet().stream()
                 .filter(mod -> mod.getInfo().name().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }
 
-    public Set<Module> getByCategory(ModuleCategory category) {
+    public Set<AbstractModule> getByCategory(ModuleCategory category) {
         return getSet().stream()
                 .filter(mod -> mod.getInfo().category().equals(category))
                 .collect(Collectors.toSet());

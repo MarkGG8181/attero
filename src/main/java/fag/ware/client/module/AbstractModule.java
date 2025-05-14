@@ -2,7 +2,7 @@ package fag.ware.client.module;
 
 import fag.ware.client.Fagware;
 import fag.ware.client.module.data.ModuleInfo;
-import fag.ware.client.module.data.setting.Setting;
+import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.util.IMinecraft;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,14 +12,14 @@ import java.util.List;
 
 @Getter
 @Setter
-public abstract class Module implements IMinecraft {
+public abstract class AbstractModule implements IMinecraft {
     private final ModuleInfo info;
     private boolean enabled, expanded;
     private int keybind = 0;
 
-    private List<Setting<?>> settings = new ArrayList<>();
+    private List<AbstractSetting<?>> settings = new ArrayList<>();
 
-    public Module() {
+    public AbstractModule() {
         if (!getClass().isAnnotationPresent(ModuleInfo.class)) {
             throw new RuntimeException("Module " + getClass().getName() + " is missing @ModuleInfo");
         }
@@ -62,7 +62,7 @@ public abstract class Module implements IMinecraft {
 
     public void onInit() {}
 
-    public Setting<?> getSettingByName(String input) {
+    public AbstractSetting<?> getSettingByName(String input) {
         return settings.stream()
                 .filter(s -> s.getName().equalsIgnoreCase(input))
                 .findFirst()
