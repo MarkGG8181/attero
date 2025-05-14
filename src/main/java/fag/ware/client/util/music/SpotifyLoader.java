@@ -7,10 +7,21 @@ import net.minecraft.client.MinecraftClient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class SpotifyLoader {
+    private static final Set<SpotifyPlaylists> loadedPlaylists = new HashSet<>();
+
+    public static void loadPlaylistOnce(SpotifyPlaylists playlist) {
+        if (loadedPlaylists.contains(playlist)) return;
+
+        loadedPlaylists.add(playlist);
+        loadPlaylist(playlist, true);
+    }
+
     public static void loadPlaylists(boolean opengl) {
         for (var playlist : SpotifyPlaylists.values()) {
             loadPlaylist(playlist, opengl);
@@ -57,15 +68,12 @@ public class SpotifyLoader {
     }
 
     public static void loadTrackImageAsyncTexture(SpotifyPlaylistParser.TrackInfo track) {
-
-        CompletableFuture.runAsync(() -> {
-            MinecraftClient.getInstance().execute(() -> {
-                try {
-                    track.textureId = ImGuiImpl.fromBufferedImage(track.bufferedImage);
-                } catch (Exception e) {
-                    Fagware.LOGGER.error("Failed to load image for track: {} {}", track.title, track.url, e);
-                }
-            });
-        });
+        CompletableFuture.runAsync(() -> MinecraftClient.getInstance().execute(() -> {
+            try {
+                track.textureId = ImGuiImpl.fromBufferedImage(track.bufferedImage);
+            } catch (Exception e) {
+                Fagware.LOGGER.error("Failed to load image for track: {} {}", track.title, track.url, e);
+            }
+        }));
     }
 }

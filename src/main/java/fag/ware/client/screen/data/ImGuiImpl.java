@@ -20,8 +20,10 @@ import net.minecraft.client.texture.GlTexture;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -118,8 +120,18 @@ public class ImGuiImpl {
         ImPlot.destroyContext();
     }
 
-    // Can be used to load buffered images in ImGui
     public static int fromBufferedImage(BufferedImage image) {
+        final int targetWidth = 48;
+        final int targetHeight = 48;
+        if (image.getWidth() != targetWidth || image.getHeight() != targetHeight) {
+            BufferedImage resized = new BufferedImage(targetWidth, targetHeight, image.getType());
+            Graphics2D g = resized.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.drawImage(image, 0, 0, targetWidth, targetHeight, null);
+            g.dispose();
+            image = resized;
+        }
+
         final int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 
@@ -141,10 +153,16 @@ public class ImGuiImpl {
         final int texture = GlStateManager._genTexture();
         GlStateManager._bindTexture(texture);
 
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL20.GL_CLAMP_TO_EDGE);
+
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
 
         return texture;
     }
