@@ -4,10 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fag.ware.client.Fagware;
 import org.apache.commons.io.IOUtils;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -30,9 +30,8 @@ public class SpotifyThumbnailParser {
                         int width = imageObj.get("width").getAsInt();
                         int height = imageObj.get("height").getAsInt();
 
-                        if (width == 300 && height == 300) {
+                        if (width == 64 && height == 64) {
                             url300 = imageObj.get("url").getAsString();
-                            System.out.println(url300);
                             break;
                         }
                     }
@@ -45,7 +44,7 @@ public class SpotifyThumbnailParser {
         } catch (IOException ignored) {
         }
 
-        return "https://i.scdn.co/image/ab67616d00001e02d9380864539fcb5522506d7c";
+        return "https://i.scdn.co/image/ab67616d0000485118e4c2913a55fa0de4d2a0a5";
     }
 
     public static JsonObject getJson(URL url) throws IOException {
@@ -53,21 +52,13 @@ public class SpotifyThumbnailParser {
         return new JsonParser().parse(json).getAsJsonObject();
     }
 
-    public static BufferedImage getScaledImageFromUrl(String urlStr, int width, int height) throws IOException {
-        URL url = new URL(urlStr);
-        BufferedImage original = ImageIO.read(url);
-
-        if (original == null) {
-            throw new IOException("Failed to read image from URL: " + urlStr);
+    public static BufferedImage getBufferedImage(String urlStr) {
+        try {
+            URL imageUrl = new URL(urlStr);
+            return ImageIO.read(imageUrl);
+        } catch (Exception e) {
+            Fagware.LOGGER.error("Failed to read image from: {}", urlStr, e);
         }
-
-        Image scaled = original.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(scaled, 0, 0, null);
-        g2d.dispose();
-
-        return resized;
+        return null;
     }
 }

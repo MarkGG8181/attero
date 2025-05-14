@@ -13,11 +13,11 @@ public enum SpotifyPlaylists {
     LATIN_MIX("/assets/" + Fagware.MOD_ID + "/spotify/latin_mix.html", "Latin mix"),
     CHILL_MIX("/assets/" + Fagware.MOD_ID + "/spotify/chill_mix.html", "Chill mix");
 
-    public final String url, name;
+    public final String path, name;
     public List<SpotifyPlaylistParser.TrackInfo> tracks = new ArrayList<>();
 
-    SpotifyPlaylists(String url, String name) {
-        this.url = url;
+    SpotifyPlaylists(String path, String name) {
+        this.path = path;
         this.name = name;
     }
 }
