@@ -9,14 +9,15 @@ import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
-@SuppressWarnings("ALL")
 @ModuleInfo(name = "NoFall", category = ModuleCategory.PLAYER, description = "Makes you take 0 fall damage")
 public class NoFallModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Damage", "Damage");
     private final NumberSetting falldistance = new NumberSetting("Distance", 3, 1, 5);
 
     @Subscribe
-    public void tick(TickEvent event) {
+    public void onTick(TickEvent event) {
+        if (mc.player == null || mc.world == null) return;
+
         if (mc.player.fallDistance >= falldistance.toFloat()) {
             switch (mode.getValue()) {
                 case "Damage" -> {
