@@ -23,7 +23,7 @@ import java.io.IOException;
  * @author markuss
  */
 @Mixin(MinecraftClient.class)
-public class MinecraftMixin {
+public class MinecraftClientMixin {
     @Shadow
     @Final
     public GameOptions options;

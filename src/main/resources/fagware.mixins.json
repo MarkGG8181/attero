@@ -6,7 +6,7 @@
     "ClientConnectionMixin",
     "EntityMixin",
     "EntityVelocityUpdateS2CPacketMixin",
-    "IItemCoolDownAccessor",
+    "MinecraftClientAccessor",
     "LivingEntityMixin",
     "MinecraftServerMixin",
     "ModStatusMixin"
@@ -21,8 +21,8 @@
     "KeyboardInputMixin",
     "KeyboardMixin",
     "LivingEntityRendererMixin",
-    "MinecraftMixin",
-    "NaratorManagerMixin",
+    "MinecraftClientMixin",
+    "NarratorManagerMixin",
     "ParticleManagerMixin",
     "RenderTickCounterDynamicMixin",
     "ToastManagerMixin"
