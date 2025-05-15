@@ -54,7 +54,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public void onKey(KeyEvent event) {
         if (mc.player != null && mc.world != null && mc.currentScreen == null)
             getSet().forEach(mod -> {
-                if (event.getKey() == mod.getKeybind()) {
+                if (mod.getKeybinds().contains(event.getKey())) {
                     mod.toggle();
                 }
             });

@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class AbstractModule implements IMinecraft {
     private final ModuleInfo info;
     private boolean enabled, expanded;
-    private int keybind = 0;
+    private final ArrayList<Integer> keybinds = new ArrayList<>();
 
     private List<AbstractSetting<?>> settings = new ArrayList<>();
 
