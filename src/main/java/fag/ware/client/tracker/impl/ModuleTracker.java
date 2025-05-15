@@ -45,6 +45,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new AutoRespawnModule());
         getSet().add(new EagleModule());
         getSet().add(new TimerModule());
+        getSet().add(new FullBrightModule());
         getSet().forEach(AbstractModule::onInit);
     }
 

@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 
 @ModuleInfo(name = "Eagle", category = ModuleCategory.MOVEMENT, description = "Sneaks at the edge of a block")
 public class EagleModule extends AbstractModule {
-    private final NumberSetting delay = new NumberSetting("Sneak Delay", 30, 0, 300);
+    private final NumberSetting delay = new NumberSetting("Sneak delay", 30, 0, 300);
 
     private final Timer timer = new Timer();
 

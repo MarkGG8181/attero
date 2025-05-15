@@ -1,6 +1,5 @@
 package fag.ware.client.module.impl.render;
 
-import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.render.Render2DEvent;
 import fag.ware.client.module.AbstractModule;
@@ -47,36 +46,34 @@ public class ModuleListModule extends AbstractModule {
                 .toList();
 
         switch (mode.getValue()) {
-            case "Simple" -> {
-                ImGuiImpl.draw(io -> {
-                    ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+            case "Simple" -> ImGuiImpl.draw(io -> {
+                ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
 
-                    ImDrawList drawList = ImGui.getForegroundDrawList();
-                    float y = yOffset.toFloat();
+                ImDrawList drawList = ImGui.getForegroundDrawList();
+                float y = yOffset.toFloat();
 
-                    for (AbstractModule module : sortedModules) {
-                        String name = module.toString();
-                        if (name == null) continue;
+                for (AbstractModule module : sortedModules) {
+                    String name = module.toString();
+                    if (name == null) continue;
 
-                        ImVec2 size = ImGui.calcTextSize(name);
-                        float textWidth = size.x;
-                        float x = io.getDisplaySizeX() - textWidth - xOffset.toFloat();
+                    ImVec2 size = ImGui.calcTextSize(name);
+                    float textWidth = size.x;
+                    float x = io.getDisplaySizeX() - textWidth - xOffset.toFloat();
 
-                        if (background.getValue()) {
-                            drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
-                        }
-
-                        if (fontShadow.getValue()) {
-                            drawList.addText(x + 1, y + 1, ImColor.rgba(0, 0, 0, 160), name);
-                        }
-
-                        drawList.addText(x, y, textColor.toImGuiColor(), name);
-                        y += ImGui.getFontSize() + 2;
+                    if (background.getValue()) {
+                        drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
                     }
 
-                    ImGui.popFont();
-                });
-            }
+                    if (fontShadow.getValue()) {
+                        drawList.addText(x + 1, y + 1, ImColor.rgba(0, 0, 0, 160), name);
+                    }
+
+                    drawList.addText(x, y, textColor.toImGuiColor(), name);
+                    y += ImGui.getFontSize() + 2;
+                }
+
+                ImGui.popFont();
+            });
             case "Minecraft" -> {
                 int y = yOffset.toInt();
                 for (AbstractModule module : sortedModules) {
@@ -108,10 +105,5 @@ public class ModuleListModule extends AbstractModule {
 
     @Override
     public void onDisable() {
-    }
-
-    @Override
-    public void onInit() {
-        setEnabled(true);
     }
 }
