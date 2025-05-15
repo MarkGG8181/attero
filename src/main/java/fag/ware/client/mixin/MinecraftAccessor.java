@@ -1,0 +1,24 @@
+package fag.ware.client.mixin;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Mouse;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
+
+@Mixin(MinecraftClient.class)
+public interface MinecraftAccessor {
+    // For private field access (if you need to access these fields directly)
+    @Accessor("itemUseCooldown")
+    void setItemUseCooldown(int cooldown);
+
+    @Accessor("mouse")
+    Mouse getMouse();
+
+    // For private method invocation (calling these private methods)
+    @Invoker("doItemUse")
+    void invokeDoItemUse();
+
+    @Invoker("doAttack")
+    boolean invokeDoAttack();
+}
