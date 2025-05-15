@@ -15,7 +15,6 @@ import net.minecraft.entity.Tameable;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -48,15 +47,25 @@ public class TriggerBotModule extends AbstractModule {
 
     private boolean delay() {
         Item item = mc.player.getMainHandStack().getItem();
-        try {
-            if (item instanceof AxeItem) {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(axeMS.getMinAsFloat(), axeMS.getMaxAsFloat())), true);
-            } else if (isSword(item)) {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
-            } else {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
-            }
+        float min, max;
 
+        if (item instanceof AxeItem) {
+            min = axeMS.getMinAsFloat();
+            max = axeMS.getMaxAsFloat();
+        } else {
+            min = swordMs.getMinAsFloat();
+            max = swordMs.getMaxAsFloat();
+        }
+
+        try {
+            if (swordMs.getAbsoluteMax() == swordMs.getAbsoluteMin()) {
+                return timer.hasElapsed(swordMs.getAbsoluteMax().longValue());
+            }
+            if (axeMS.getAbsoluteMax() == axeMS.getAbsoluteMin()) {
+                return timer.hasElapsed(axeMS.getAbsoluteMax().longValue());
+            }
+            float ms = SecureRandom.getInstanceStrong().nextFloat(min, max);
+            return timer.hasElapsed((long) ms, true);
         } catch (NoSuchAlgorithmException e) {
             return false;
         }
@@ -69,11 +78,6 @@ public class TriggerBotModule extends AbstractModule {
             return false;
 
         return !(e instanceof AnimalEntity a && a.isBaby());
-    }
-
-    private boolean isSword(Item item) {
-        return item == Items.WOODEN_SWORD || item == Items.STONE_SWORD || item == Items.IRON_SWORD ||
-                item == Items.DIAMOND_SWORD || item == Items.NETHERITE_SWORD;
     }
 
     private void attack(Entity target) {
