@@ -67,7 +67,7 @@ public class KillAuraModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onTick(RunLoopEvent event) {
+    public void onRunLoop(RunLoopEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         if (CombatTracker.getInstance().target != null && CombatTracker.isWithinRange(CombatTracker.getInstance().target, attackRange.toDouble())) {

@@ -16,8 +16,9 @@ public class AutoLogModule extends AbstractModule {
 
     // Horrid.
     @Subscribe
-    public void Tick(TickEvent event) {
+    public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.player.isDead()) return;
+
         if (mc.player.getHealth() < hp.getValue().floatValue()) {
             disconnect("Low HP");
         }

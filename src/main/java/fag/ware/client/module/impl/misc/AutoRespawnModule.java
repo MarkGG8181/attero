@@ -9,7 +9,7 @@ import fag.ware.client.module.data.ModuleInfo;
 @ModuleInfo(name = "AutoRespawn", category = ModuleCategory.MISC, description = "Respawns automaticslly on death")
 public class AutoRespawnModule extends AbstractModule {
     @Subscribe
-    public void onTicky(TickEvent event) {
+    public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         if (mc.player.isDead()) {

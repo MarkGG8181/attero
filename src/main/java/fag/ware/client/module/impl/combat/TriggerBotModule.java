@@ -29,7 +29,7 @@ public class TriggerBotModule extends AbstractModule {
     private final Timer timer = new Timer();
 
     @Subscribe
-    public void TickEvent(TickEvent event) {
+    public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking())
             return;
 

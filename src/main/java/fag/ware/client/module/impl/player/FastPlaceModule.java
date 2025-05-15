@@ -18,8 +18,8 @@ public class FastPlaceModule extends AbstractModule {
 
     @Subscribe
     public void onTick(TickEvent event) {
-        if (mc.player == null || mc.world == null || mc.player.isHolding(Items.BOW) || mc.player.isUsingItem())
-            return;
+        if (mc.player == null || mc.world == null || mc.player.isHolding(Items.BOW) || mc.player.isUsingItem()) return;
+
         ItemStack itemstack = mc.player.getMainHandStack();
         if (xp.getValue() && mc.player.isHolding(Items.EXPERIENCE_BOTTLE) || blocks.getValue() && itemstack.getItem() instanceof BlockItem) {
             ((IItemCoolDownAccessor) mc).setItemUseCooldown(0);

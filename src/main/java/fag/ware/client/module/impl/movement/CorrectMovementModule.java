@@ -1,6 +1,5 @@
 package fag.ware.client.module.impl.movement;
 
-import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.JumpEvent;
 import fag.ware.client.event.impl.MoveInputEvent;
@@ -20,14 +19,14 @@ public class CorrectMovementModule extends AbstractModule {
     }
 
     @Subscribe(priority = 999)
-    public void onInput(JumpEvent event) {
+    public void onJump(JumpEvent event) {
         if (event.getEntity() == mc.player) {
             event.setYaw(CombatTracker.getInstance().yaw);
         }
     }
 
     @Subscribe(priority = 999)
-    public void onInput(UpdateVelocityEvent event) {
+    public void onUpdateVelo(UpdateVelocityEvent event) {
         event.setYaw(CombatTracker.getInstance().yaw);
     }
 
