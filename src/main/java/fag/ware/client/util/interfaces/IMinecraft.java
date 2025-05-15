@@ -1,4 +1,4 @@
-package fag.ware.client.util;
+package fag.ware.client.util.interfaces;
 
 import fag.ware.client.util.math.ColorUtil;
 import net.minecraft.client.MinecraftClient;

@@ -4,7 +4,7 @@ import fag.ware.client.Fagware;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.tracker.impl.ModuleTracker;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 import lombok.Getter;
 import lombok.Setter;
 

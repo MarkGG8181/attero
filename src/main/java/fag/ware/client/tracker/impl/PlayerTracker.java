@@ -3,7 +3,7 @@ package fag.ware.client.tracker.impl;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.tracker.AbstractTracker;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.entity.player.PlayerEntity;
 
 /**

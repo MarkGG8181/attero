@@ -1,7 +1,7 @@
 package fag.ware.client.util.player;
 
 import fag.ware.client.event.impl.MoveInputEvent;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;

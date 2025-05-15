@@ -1,4 +1,4 @@
-package fag.ware.client.util;
+package fag.ware.client.util.interfaces;
 
 public interface IEntityVelocityPacketAccessor {
     void setVelocityX(int x);
