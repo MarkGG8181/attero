@@ -50,7 +50,7 @@ public class EagleModule extends AbstractModule {
             }
         }
 
-        if (timer.hasElapsed(delay.toInt()))
+        if (timer.hasElapsed(delay.toInt(), true))
             mc.options.sneakKey.setPressed(onEdge);
     }
 
@@ -61,5 +61,6 @@ public class EagleModule extends AbstractModule {
     @Override
     public void onDisable() {
         mc.options.sneakKey.setPressed(false);
+        timer.reset();
     }
 }
