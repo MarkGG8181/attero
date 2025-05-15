@@ -42,6 +42,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new TriggerBotModule());
         getSet().add(new NoFallModule());
         getSet().add(new AutoRespawnModule());
+        getSet().add(new EagleModule());
         getSet().forEach(AbstractModule::onInit);
     }
 
