@@ -1,7 +1,7 @@
 package fag.ware.client.command;
 
 import fag.ware.client.command.data.CommandInfo;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -8,7 +8,7 @@ import fag.ware.client.command.impl.HelpCommand;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.SendPacketEvent;
 import fag.ware.client.tracker.AbstractTracker;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 public class CommandTracker extends AbstractTracker<AbstractCommand> implements IMinecraft {
@@ -65,5 +65,4 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
             }
         }
     }
-
 }

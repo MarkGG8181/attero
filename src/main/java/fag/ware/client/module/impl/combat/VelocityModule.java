@@ -3,7 +3,7 @@ package fag.ware.client.module.impl.combat;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.ReceivePacketEvent;
 import fag.ware.client.event.impl.TickEvent;
-import fag.ware.client.util.IEntityVelocityPacketAccessor;
+import fag.ware.client.util.interfaces.IEntityVelocityPacketAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;

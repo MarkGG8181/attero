@@ -1,6 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.util.ITimerAccessor;
+import fag.ware.client.util.interfaces.ITimerAccessor;
 import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

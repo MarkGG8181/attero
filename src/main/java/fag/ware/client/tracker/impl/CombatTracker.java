@@ -5,7 +5,7 @@ import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.module.impl.combat.KillAuraModule;
 import fag.ware.client.tracker.AbstractTracker;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;

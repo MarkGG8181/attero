@@ -1,6 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.util.IEntityVelocityPacketAccessor;
+import fag.ware.client.util.interfaces.IEntityVelocityPacketAccessor;
 import lombok.Setter;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;

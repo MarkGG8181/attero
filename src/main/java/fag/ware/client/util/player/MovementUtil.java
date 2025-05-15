@@ -1,6 +1,6 @@
 package fag.ware.client.util.player;
 
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 
 // Warnings pmo sm icl
 @SuppressWarnings("ALL")

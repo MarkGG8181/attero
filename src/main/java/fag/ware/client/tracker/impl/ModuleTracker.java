@@ -12,7 +12,7 @@ import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
 import fag.ware.client.module.impl.world.TimerModule;
 import fag.ware.client.tracker.AbstractTracker;
-import fag.ware.client.util.IMinecraft;
+import fag.ware.client.util.interfaces.IMinecraft;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,13 +39,14 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new VelocityModule());
         getSet().add(new FastPlaceModule());
         getSet().add(new ModuleListModule());
-        getSet().add(new AutoLogModule());
+        getSet().add(new AutoDisconnectModule());
         getSet().add(new TriggerBotModule());
         getSet().add(new NoFallModule());
         getSet().add(new AutoRespawnModule());
         getSet().add(new EagleModule());
         getSet().add(new TimerModule());
         getSet().add(new FullBrightModule());
+        getSet().add(new InventoryMoveModule());
         getSet().forEach(AbstractModule::onInit);
     }
 
