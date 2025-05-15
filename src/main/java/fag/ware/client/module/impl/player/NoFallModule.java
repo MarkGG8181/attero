@@ -12,8 +12,8 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "NoFall", category = ModuleCategory.PLAYER, description = "Makes you take 0 fall damage")
 public class NoFallModule extends AbstractModule {
-    private StringSetting mode = new StringSetting("Mode", "Damage", "Damage");
-    private NumberSetting falldistance = new NumberSetting("Min Fall Distance", 3, 1, 5);
+    private final StringSetting mode = new StringSetting("Mode", "Damage", "Damage");
+    private final NumberSetting falldistance = new NumberSetting("Distance", 3, 1, 5);
 
     @Subscribe
     public void tick(TickEvent event) {
@@ -26,13 +26,12 @@ public class NoFallModule extends AbstractModule {
             }
         }
     }
+
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 }
