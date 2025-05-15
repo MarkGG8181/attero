@@ -7,7 +7,7 @@ import fag.ware.client.tracker.impl.CommandTracker;
 
 import java.util.Arrays;
 
-@CommandInfo(name = "Bind", description = "Binds a module to a key", aliases = {"help", "?"})
+@CommandInfo(name = "Bind", description = "Binds a module to a key", aliases = {"bind", "bnd"})
 public class BindCommand extends AbstractCommand {
     @Override
     public void execute(String[] args) {
