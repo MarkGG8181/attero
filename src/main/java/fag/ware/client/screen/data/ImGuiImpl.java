@@ -38,6 +38,9 @@ public class ImGuiImpl {
 
     public static ImFont INTER_REGULAR_17;
     public static ImFont INTER_REGULAR_30;
+    public static ImFont Sansation;
+    public static ImFont Comfortaa;
+    public static ImFont Arial;
 
     public static void create(final long handle) throws IOException {
         ImGui.createContext();
@@ -47,7 +50,7 @@ public class ImGuiImpl {
         data.setIniFilename(Fagware.MOD_ID + File.separator + Fagware.MOD_ID + ".ini");
         data.setFontGlobalScale(1F);
 
-        List<ImFont> generatedFonts;
+        List<ImFont> generatedFonts = new ArrayList<>();
         {
             final ImFontAtlas fonts = data.getFonts();
             final ImFontGlyphRangesBuilder rangesBuilder = new ImFontGlyphRangesBuilder();
@@ -61,22 +64,45 @@ public class ImGuiImpl {
             final ImFontConfig basicConfig = new ImFontConfig();
             basicConfig.setGlyphRanges(data.getFonts().getGlyphRangesCyrillic());
 
-            generatedFonts = new ArrayList<>();
             for (int i = 21; i < 50; i++) {  // Start from i = 21 (17th font size)
                 basicConfig.setName("Inter_28pt-Regular " + i + "px");
                 generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Inter_28pt-Regular.ttf"))), i, basicConfig, glyphRanges));
             }
+
+            ImFont sansation = fonts.addFontFromMemoryTTF(
+                    IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Sansation-Regular.ttf"))),
+                    18,
+                    basicConfig,
+                    glyphRanges
+            );
+            generatedFonts.add(sansation);
+
+            ImFont comfortaa = fonts.addFontFromMemoryTTF(
+                    IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Comfortaa.ttf"))),
+                    18,
+                    basicConfig,
+                    glyphRanges
+            );
+            generatedFonts.add(comfortaa);
+
+            ImFont arial = fonts.addFontFromMemoryTTF(
+                    IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/ARIAL.ttf"))),
+                    18,
+                    basicConfig,
+                    glyphRanges
+            );
+            generatedFonts.add(arial);
             fonts.build();
             basicConfig.destroy();
         }
 
-        INTER_REGULAR_17 = generatedFonts.getFirst();
-        INTER_REGULAR_30 = generatedFonts.get(13); //size 30
+        INTER_REGULAR_17 = generatedFonts.get(0);
+        INTER_REGULAR_30 = generatedFonts.get(13);
+        Sansation = generatedFonts.get(generatedFonts.size() - 1);
+        Comfortaa = generatedFonts.get(generatedFonts.size() - 1);
+        Arial = generatedFonts.get(generatedFonts.size() - 1);
 
         data.setConfigFlags(ImGuiConfigFlags.DockingEnable);
-
-        // In case you want to enable Viewports on Windows, you have to do this instead of the above line:
-        // data.setConfigFlags(ImGuiConfigFlags.DockingEnable | ImGuiConfigFlags.ViewportsEnable);
 
         imGuiImplGlfw.init(handle, true);
         imGuiImplGl3.init();
@@ -89,12 +115,10 @@ public class ImGuiImpl {
         GlStateManager._glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);
         GL11.glViewport(0, 0, framebuffer.viewportWidth, framebuffer.viewportHeight);
 
-        // start frame
         imGuiImplGl3.newFrame();
-        imGuiImplGlfw.newFrame(); // Handle keyboard and mouse interactions
+        imGuiImplGlfw.newFrame();
         ImGui.newFrame();
 
-        // do rendering logic
         runnable.render(ImGui.getIO());
 
         // end frame
