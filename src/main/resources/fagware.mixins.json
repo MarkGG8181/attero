@@ -22,6 +22,7 @@
     "KeyboardMixin",
     "LivingEntityRendererMixin",
     "MinecraftMixin",
+    "NaratorManagerMixin",
     "ParticleManagerMixin",
     "RenderTickCounterDynamicMixin",
     "ToastManagerMixin"
