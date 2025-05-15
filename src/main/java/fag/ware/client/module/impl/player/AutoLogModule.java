@@ -24,7 +24,7 @@ public class AutoLogModule extends AbstractModule {
         }
     }
 
-    public void disconnect(Object reason) {
+    private void disconnect(Object reason) {
         toggle();
         MutableText text = Text.literal("[AutoLog] ");
 
