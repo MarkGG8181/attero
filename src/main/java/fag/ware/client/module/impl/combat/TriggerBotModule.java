@@ -19,6 +19,7 @@ import net.minecraft.util.Hand;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Optional;
 
 /// Horrid Code - graph
 @SuppressWarnings("ALL")
@@ -33,56 +34,50 @@ public class TriggerBotModule extends AbstractModule {
         if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking())
             return;
 
-        Entity targetedEntity = mc.targetedEntity;
-        if (targetedEntity == null && !mc.player.canSee(targetedEntity)) {
-            return;
-        }
+        Entity target = mc.targetedEntity;
+        if (target == null || !mc.player.canSee(target)) return;
 
         Item item = mc.player.getMainHandStack().getItem();
-        if (item.getComponents().contains(DataComponentTypes.FOOD) && mc.options.rightKey.isPressed()) {
-            return;
-        }
+        if (item.getComponents().contains(DataComponentTypes.FOOD) && mc.options.rightKey.isPressed()) return;
 
-        if (!delay()) {
-            return;
-        }
+        if (!delay()) return;
 
-        if (entityCheck(targetedEntity)) {
-            hitEntity(targetedEntity);
-        }
+        if (isValidTarget(target))
+            attack(target);
     }
 
-    private boolean entityCheck(Entity entity) {
-        // ignore self
-        if (entity.equals(mc.player) || entity.equals(mc.cameraEntity)) return false;
-        // check
-        if (!(entity instanceof LivingEntity livingEntity) || livingEntity.isDead() || !entity.isAlive()) return false;
-        // doggies horsies and etc
-        if (entity instanceof Tameable tameable && tameable.getOwner().getUuid() != null && tameable.getOwner().getUuid().equals(mc.player.getUuid()))
-            return false;
-
-        return !(entity instanceof AnimalEntity) || !((AnimalEntity) entity).isBaby();
-    }
-
-    private void hitEntity(Entity target) {
-        mc.interactionManager.attackEntity(mc.player, target);
-        mc.player.swingHand(Hand.MAIN_HAND);
-    }
-
-    public boolean delay() {
+    private boolean delay() {
         Item item = mc.player.getMainHandStack().getItem();
+        float min, max;
+
+        if (item instanceof AxeItem) {
+            min = axeMS.getMinAsFloat();
+            max = axeMS.getMaxAsFloat();
+        } else {
+            min = swordMs.getMinAsFloat();
+            max = swordMs.getMaxAsFloat();
+        }
+
         try {
-            if (item instanceof AxeItem) {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(axeMS.getMinAsFloat(), axeMS.getMaxAsFloat())), true);
-            } else if (mc.player.isHolding(Items.WOODEN_SWORD) || mc.player.isHolding(Items.STONE_SWORD) || mc.player.isHolding(Items.IRON_SWORD) || mc.player.isHolding(Items.DIAMOND_SWORD) || mc.player.isHolding(Items.NETHERITE_SWORD)) {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
-            } else {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
-            }
-
+            float ms = SecureRandom.getInstanceStrong().nextFloat(min, max);
+            return timer.hasElapsed((long) ms, true);
         } catch (NoSuchAlgorithmException e) {
             return false;
         }
+    }
+
+    private boolean isValidTarget(Entity e) {
+        if (e == mc.player || e == mc.cameraEntity || !e.isAlive()) return false;
+        if (!(e instanceof LivingEntity l) || l.isDead()) return false;
+        if (e instanceof Tameable t && mc.player.getUuid().equals(Optional.ofNullable(t.getOwner()).map(Entity::getUuid).orElse(null)))
+            return false;
+
+        return !(e instanceof AnimalEntity a && a.isBaby());
+    }
+
+    private void attack(Entity target) {
+        mc.interactionManager.attackEntity(mc.player, target);
+        mc.player.swingHand(Hand.MAIN_HAND);
     }
 
     @Override
@@ -92,6 +87,5 @@ public class TriggerBotModule extends AbstractModule {
 
     @Override
     public void onDisable() {
-        // No need to reset timer on disable, unless you want to
     }
 }
