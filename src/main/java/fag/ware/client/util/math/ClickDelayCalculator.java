@@ -22,6 +22,11 @@ public class ClickDelayCalculator {
     private double minCPS;
     private double maxCPS;
 
+    public void setMinMax(double minCPS, double maxCPS) {
+        this.minCPS = minCPS;
+        this.maxCPS = maxCPS;
+    }
+
     public ClickDelayCalculator(double minCPS, double maxCPS) {
         this.minCPS = minCPS;
         this.maxCPS = maxCPS;
