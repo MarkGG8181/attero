@@ -6,6 +6,7 @@
     "ClientConnectionMixin",
     "EntityMixin",
     "EntityVelocityUpdateS2CPacketMixin",
+    "LeavesBlockMixin",
     "LivingEntityMixin",
     "MinecraftClientAccessor",
     "MinecraftServerMixin",
@@ -26,6 +27,7 @@
     "NarratorManagerMixin",
     "ParticleManagerMixin",
     "RenderTickCounterDynamicMixin",
-    "ToastManagerMixin"
+    "ToastManagerMixin",
+    "WeatherRenderingMixin"
   ]
 }
