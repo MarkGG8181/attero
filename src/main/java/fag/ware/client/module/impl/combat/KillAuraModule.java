@@ -1,6 +1,5 @@
 package fag.ware.client.module.impl.combat;
 
-import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.MotionEvent;
 import fag.ware.client.event.impl.RunLoopEvent;
@@ -98,6 +97,6 @@ public class KillAuraModule extends AbstractModule {
 
     @Override
     public void onInit() {
-        setKeybind(GLFW.GLFW_KEY_R);
+        getKeybinds().add((int) 'R');
     }
 }
