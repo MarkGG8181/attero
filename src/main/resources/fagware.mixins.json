@@ -28,6 +28,7 @@
     "KeyBindingAccessor",
     "KeyboardInputMixin",
     "KeyboardMixin",
+    "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
     "MinecraftClientMixin",
     "NarratorManagerMixin",

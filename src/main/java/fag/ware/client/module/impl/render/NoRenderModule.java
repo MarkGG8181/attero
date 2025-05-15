@@ -170,11 +170,23 @@ public class NoRenderModule extends AbstractModule {
         event.setCancelled(enchantingGlint.getValue());
     }
 
-    @Override
-    public void onEnable() {
+    @Subscribe
+    public void hasBlindness(HasBlindnessEvent event) {
+        event.setCancelled(blindness.getValue());
     }
 
-    @Override
-    public void onDisable() {
+    @Subscribe
+    public void hasDarkness(HasDarknessEvent event) {
+        event.setCancelled(darkness.getValue());
+    }
+
+    @Subscribe
+    public void getDarkness(GetDarknessEvent event) {
+        event.setCancelled(darkness.getValue());
+    }
+
+    @Subscribe
+    public void getFogModifier(GetFogModifierEvent event) {
+        event.setCancelled(blindness.getValue());
     }
 }
