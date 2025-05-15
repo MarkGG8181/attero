@@ -20,31 +20,33 @@ import net.minecraft.util.Hand;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-
 /// Horrid Code - graph
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "TriggerBot", category = ModuleCategory.COMBAT, description = "Attacks enemies if you're looking at them")
 public class TriggerBotModule extends AbstractModule {
-    private RangeNumberSetting swordMs = new RangeNumberSetting("Sword MS", 40, 1000, 40, 1000);
-    private RangeNumberSetting axeMS = new RangeNumberSetting("Axe MS", 40, 1000, 40, 1000);
-    private Timer timer = new Timer();
-
+    private final RangeNumberSetting swordMs = new RangeNumberSetting("Sword MS", 40, 1000, 40, 1000);
+    private final RangeNumberSetting axeMS = new RangeNumberSetting("Axe MS", 40, 1000, 40, 1000);
+    private final Timer timer = new Timer();
 
     @Subscribe
     public void TickEvent(TickEvent event) {
-        if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking()) return;
+        if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking())
+            return;
 
         Entity targetedEntity = mc.targetedEntity;
         if (targetedEntity == null && !mc.player.canSee(targetedEntity)) {
             return;
         }
+
         Item item = mc.player.getMainHandStack().getItem();
         if (item.getComponents().contains(DataComponentTypes.FOOD) && mc.options.rightKey.isPressed()) {
             return;
         }
+
         if (!delay()) {
             return;
         }
+
         if (entityCheck(targetedEntity)) {
             hitEntity(targetedEntity);
         }
@@ -58,6 +60,7 @@ public class TriggerBotModule extends AbstractModule {
         // doggies horsies and etc
         if (entity instanceof Tameable tameable && tameable.getOwner().getUuid() != null && tameable.getOwner().getUuid().equals(mc.player.getUuid()))
             return false;
+
         return !(entity instanceof AnimalEntity) || !((AnimalEntity) entity).isBaby();
     }
 
@@ -78,11 +81,10 @@ public class TriggerBotModule extends AbstractModule {
             }
 
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 
-    // Resetting timer
     @Override
     public void onEnable() {
         timer.reset();

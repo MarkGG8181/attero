@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 
 @ModuleInfo(name = "AutoLog", category = ModuleCategory.PLAYER, description = "Automatically logs out if you're low on hp.")
 public class AutoLogModule extends AbstractModule {
-    public NumberSetting hp = new NumberSetting("Min HP", 5, 1, 20);
+    private final NumberSetting hp = new NumberSetting("Min HP", 5, 1, 20);
 
     // Horrid.
     @Subscribe
@@ -22,6 +22,7 @@ public class AutoLogModule extends AbstractModule {
             disconnect("Low HP");
         }
     }
+
     public void disconnect(Object reason) {
         toggle();
         MutableText text = Text.literal("[AutoLog] ");
@@ -37,11 +38,9 @@ public class AutoLogModule extends AbstractModule {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 }
