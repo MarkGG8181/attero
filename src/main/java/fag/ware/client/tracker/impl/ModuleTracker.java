@@ -39,7 +39,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new VelocityModule());
         getSet().add(new FastPlaceModule());
         getSet().add(new ModuleListModule());
-        getSet().add(new AutoLogModule());
+        getSet().add(new AutoDisconnectModule());
         getSet().add(new TriggerBotModule());
         getSet().add(new NoFallModule());
         getSet().add(new AutoRespawnModule());
