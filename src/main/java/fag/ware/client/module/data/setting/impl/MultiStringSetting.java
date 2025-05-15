@@ -16,7 +16,7 @@ public class MultiStringSetting extends AbstractSetting<String[]> {
 
     public boolean enabled(String value) {
         for (String s : getValue()) {
-            if (s.contains(value)) {
+            if (s.equalsIgnoreCase(value)) {
                 return true;
             }
         }
