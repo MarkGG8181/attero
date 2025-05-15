@@ -49,15 +49,15 @@ public class ModuleListModule extends AbstractModule {
                 modules.add(module);
             }
         }
-        modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
 
         switch (mode.getValue()) {
             case "Simple" -> ImGuiImpl.draw(io -> {
                 ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
-
                 ImDrawList drawList = ImGui.getForegroundDrawList();
-                float y = yOffset.toFloat();
 
+                modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
+
+                float y = yOffset.toFloat();
                 for (AbstractModule module : modules) {
                     String name = module.toString();
                     if (name == null) continue;
@@ -81,6 +81,8 @@ public class ModuleListModule extends AbstractModule {
                 ImGui.popFont();
             });
             case "Minecraft" -> {
+                modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(module.getInfo().name())));
+
                 int y = yOffset.toInt();
                 for (AbstractModule module : modules) {
                     String name = module.toString();
@@ -96,9 +98,7 @@ public class ModuleListModule extends AbstractModule {
                                 new Color(0, 0, 0, 150).getRGB()
                         );
                     }
-
                     event.getDrawContext().drawText(mc.textRenderer, name, x, y, textColor.toInt(), fontShadow.getValue());
-
                     y += mc.textRenderer.fontHeight + 1;
                 }
             }
