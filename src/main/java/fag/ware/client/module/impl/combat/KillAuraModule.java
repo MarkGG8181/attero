@@ -100,6 +100,7 @@ public class KillAuraModule extends AbstractModule {
     @Override
     public void onDisable() {
         CombatTracker.getInstance().target = null;
+        attackTimer.reset();
         mc.options.attackKey.setPressed(false);
     }
 
