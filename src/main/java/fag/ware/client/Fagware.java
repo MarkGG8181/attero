@@ -14,12 +14,6 @@ public final class Fagware implements ModInitializer {
     public static final Fagware INSTANCE = new Fagware();
     public static final EventBus BUS = new EventBus();
 
-    public final ModuleTracker moduleTracker = new ModuleTracker();
-    public final ScreenTracker screenTracker = new ScreenTracker();
-    public final CombatTracker combatTracker = new CombatTracker();
-    public final PlayerTracker playerTracker = new PlayerTracker();
-    public final CommandTracker commandTracker = new CommandTracker();
-
     @Override
     public void onInitialize() {
         FileUtil.createDir(MOD_ID);
@@ -28,10 +22,10 @@ public final class Fagware implements ModInitializer {
     public void onStartup() {
         LOGGER.info("Starting {}", MOD_ID);
 
-        moduleTracker.initialize();
-        commandTracker.initialize();
-        screenTracker.initialize();
-        combatTracker.initialize();
-        playerTracker.initialize();
+        ModuleTracker.getInstance().initialize();
+        CommandTracker.getInstance().initialize();
+        ScreenTracker.getInstance().initialize();
+        CombatTracker.getInstance().initialize();
+        PlayerTracker.getInstance().initialize();
     }
 }

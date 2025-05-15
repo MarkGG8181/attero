@@ -1,6 +1,7 @@
 package fag.ware.client.mixin;
 
 import fag.ware.client.Fagware;
+import fag.ware.client.tracker.impl.CombatTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -26,7 +27,7 @@ public class LivingEntityRendererMixin {
     )
     private float replaceYawLerp(float delta, float lastYaw, float yaw, LivingEntity livingEntity) {
         if (livingEntity == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            return MathHelper.lerpAngleDegrees(delta, Fagware.INSTANCE.combatTracker.prevYaw, Fagware.INSTANCE.combatTracker.yaw);
+            return MathHelper.lerpAngleDegrees(delta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
         }
 
         return MathHelper.lerpAngleDegrees(delta, lastYaw, yaw);
@@ -35,7 +36,7 @@ public class LivingEntityRendererMixin {
     @Inject(method = "clampBodyYaw", at = @At("HEAD"), cancellable = true)
     private static void clampBodyYawReplace(LivingEntity entity, float degrees, float tickProgress, CallbackInfoReturnable<Float> cir) {
         if (entity == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            float fakeBodyYaw = MathHelper.lerpAngleDegrees(tickProgress, Fagware.INSTANCE.combatTracker.prevBodyYaw, Fagware.INSTANCE.combatTracker.bodyYaw);
+            float fakeBodyYaw = MathHelper.lerpAngleDegrees(tickProgress, CombatTracker.getInstance().prevBodyYaw, CombatTracker.getInstance().bodyYaw);
             float h = MathHelper.clamp(MathHelper.wrapDegrees(degrees - fakeBodyYaw), -85.0F, 85.0F);
             float clamped = degrees - h;
             if (Math.abs(h) > 50.0F) {
@@ -54,7 +55,7 @@ public class LivingEntityRendererMixin {
     )
     private float replaceYawLerp(LivingEntity instance, float tickProgress) {
         if (instance == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            return tickProgress == 1.0F ? Fagware.INSTANCE.combatTracker.pitch : MathHelper.lerp(tickProgress, Fagware.INSTANCE.combatTracker.prevPitch, Fagware.INSTANCE.combatTracker.pitch);
+            return tickProgress == 1.0F ? CombatTracker.getInstance().pitch : MathHelper.lerp(tickProgress, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
         }
         return tickProgress == 1.0F ? instance.getPitch() : MathHelper.lerp(tickProgress, instance.lastPitch, instance.getPitch());
     }

@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.MotionEvent;
 import fag.ware.client.event.impl.UpdateEvent;
+import fag.ware.client.tracker.impl.CombatTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -128,12 +129,12 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayerEntity {
         }
 
         motionEvent.setState(MotionEvent.State.POST);
-        Fagware.INSTANCE.combatTracker.prevYaw = Fagware.INSTANCE.combatTracker.yaw;
-        Fagware.INSTANCE.combatTracker.yaw = motionEvent.getYaw();
-        Fagware.INSTANCE.combatTracker.prevPitch = Fagware.INSTANCE.combatTracker.pitch;
-        Fagware.INSTANCE.combatTracker.pitch = motionEvent.getPitch();
-        Fagware.INSTANCE.combatTracker.prevBodyYaw = Fagware.INSTANCE.combatTracker.bodyYaw;
-        Fagware.INSTANCE.combatTracker.bodyYaw = this.bodyYaw;
+        CombatTracker.getInstance().prevYaw = CombatTracker.getInstance().yaw;
+        CombatTracker.getInstance().yaw = motionEvent.getYaw();
+        CombatTracker.getInstance().prevPitch = CombatTracker.getInstance().pitch;
+        CombatTracker.getInstance().pitch = motionEvent.getPitch();
+        CombatTracker.getInstance().prevBodyYaw = CombatTracker.getInstance().bodyYaw;
+        CombatTracker.getInstance().bodyYaw = this.bodyYaw;
         motionEvent.post();
     }
 }

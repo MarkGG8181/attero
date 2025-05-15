@@ -12,6 +12,12 @@ import net.minecraft.client.gui.screen.Screen;
 import org.lwjgl.glfw.GLFW;
 
 public class ScreenTracker extends AbstractTracker<Screen> {
+    private static final ScreenTracker tracker = new ScreenTracker();
+
+    public static ScreenTracker getInstance() {
+        return tracker;
+    }
+
     @Override
     public void initialize() {
         Fagware.BUS.register(this);

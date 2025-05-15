@@ -13,6 +13,7 @@ import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.tracker.impl.ModuleTracker;
 import imgui.ImColor;
 import imgui.ImDrawList;
 import imgui.ImGui;
@@ -36,7 +37,7 @@ public class ModuleListModule extends AbstractModule {
             return;
         }
 
-        List<AbstractModule> sortedModules = Fagware.INSTANCE.moduleTracker.getSet().stream()
+        List<AbstractModule> sortedModules = ModuleTracker.getInstance().getSet().stream()
                 .filter(AbstractModule::isEnabled)
                 .sorted((a, b) -> {
                     float aWidth = ImGui.calcTextSize(a.toString()).x;

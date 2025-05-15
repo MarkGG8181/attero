@@ -4,6 +4,8 @@ import fag.ware.client.Fagware;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.tracker.impl.ModuleTracker;
+import fag.ware.client.tracker.impl.ScreenTracker;
 import imgui.*;
 import imgui.flag.*;
 import lombok.AllArgsConstructor;
@@ -69,7 +71,7 @@ public class JelloClickScreen extends Screen {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
-                    for (AbstractModule module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
+                    for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
                         ImGui.pushID(module.toString());
 
                         boolean isToggled = module.isEnabled();
@@ -126,7 +128,7 @@ public class JelloClickScreen extends Screen {
                 ImGui.popFont();
 
                 if (!ImGui.isWindowFocused()) {
-                    Fagware.INSTANCE.screenTracker.getByClass(JelloClickScreen.class).settingRenderer = null;
+                    ScreenTracker.getInstance().getByClass(JelloClickScreen.class).settingRenderer = null;
                 }
             }
             ImGui.end();

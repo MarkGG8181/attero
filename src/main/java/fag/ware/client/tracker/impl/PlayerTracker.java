@@ -16,6 +16,12 @@ public class PlayerTracker extends AbstractTracker<PlayerEntity> implements IMin
     public static int offGroundTicks;
     public static int onGroundTicks;
 
+    private static final PlayerTracker tracker = new PlayerTracker();
+
+    public static PlayerTracker getInstance() {
+        return tracker;
+    }
+
     @Override
     public void initialize() {
         Fagware.BUS.register(this);

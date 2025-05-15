@@ -22,5 +22,4 @@ public abstract class AbstractTracker<T> {
                 .findFirst()
                 .orElse(null);
     }
-
 }

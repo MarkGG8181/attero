@@ -8,6 +8,7 @@ import fag.ware.client.event.impl.UpdateVelocityEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
+import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.player.RotationUtil;
 
 @ModuleInfo(name = "CorrectMovement", description = "Corrects your movement", category = ModuleCategory.MOVEMENT)
@@ -15,19 +16,19 @@ public class CorrectMovementModule extends AbstractModule {
 
     @Subscribe(priority = 999)
     public void onInput(MoveInputEvent event) {
-        RotationUtil.silentStrafe(event, Fagware.INSTANCE.combatTracker.yaw);
+        RotationUtil.silentStrafe(event, CombatTracker.getInstance().yaw);
     }
 
     @Subscribe(priority = 999)
     public void onInput(JumpEvent event) {
         if (event.getEntity() == mc.player) {
-            event.setYaw(Fagware.INSTANCE.combatTracker.yaw);
+            event.setYaw(CombatTracker.getInstance().yaw);
         }
     }
 
     @Subscribe(priority = 999)
     public void onInput(UpdateVelocityEvent event) {
-        event.setYaw(Fagware.INSTANCE.combatTracker.yaw);
+        event.setYaw(CombatTracker.getInstance().yaw);
     }
 
     @Override

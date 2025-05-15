@@ -58,8 +58,8 @@ public class KillAuraModule extends AbstractModule {
     public void onMotion(MotionEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (Fagware.INSTANCE.combatTracker.target != null && (raycast.getValue() && mc.player.canSee(Fagware.INSTANCE.combatTracker.target))) {
-            float[] rots = RotationUtil.toRotation(Fagware.INSTANCE.combatTracker.target);
+        if (CombatTracker.getInstance().target != null && (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
+            float[] rots = RotationUtil.toRotation(CombatTracker.getInstance().target);
 
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);
@@ -70,16 +70,16 @@ public class KillAuraModule extends AbstractModule {
     public void onTick(RunLoopEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
-        if (Fagware.INSTANCE.combatTracker.target != null && CombatTracker.isWithinRange(Fagware.INSTANCE.combatTracker.target, attackRange.toDouble())) {
+        if (CombatTracker.getInstance().target != null && CombatTracker.isWithinRange(CombatTracker.getInstance().target, attackRange.toDouble())) {
             switch (delayMode.getValue()) {
                 case "1.9" -> {
                     if (mc.player.getAttackCooldownProgress(0) >= 1)
-                        attackEntity(Fagware.INSTANCE.combatTracker.target);
+                        attackEntity(CombatTracker.getInstance().target);
                 }
 
                 case "CPS" -> {
                     if (attackTimer.hasElapsed(delayCalculator.getClickDelay(), true)) {
-                        attackEntity(Fagware.INSTANCE.combatTracker.target);
+                        attackEntity(CombatTracker.getInstance().target);
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class KillAuraModule extends AbstractModule {
 
     @Override
     public void onDisable() {
-        Fagware.INSTANCE.combatTracker.target = null;
+        CombatTracker.getInstance().target = null;
         mc.options.attackKey.setPressed(false);
     }
 

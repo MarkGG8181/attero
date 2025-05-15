@@ -6,6 +6,7 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.tracker.impl.ModuleTracker;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiColorEditFlags;
@@ -59,7 +60,7 @@ public class ClickScreen extends Screen {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
-                    for (AbstractModule module : Fagware.INSTANCE.moduleTracker.getByCategory(category)) {
+                    for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
 
                         ImGui.pushID(module.toString());
                         ImBoolean enabledMod = new ImBoolean(module.isEnabled());

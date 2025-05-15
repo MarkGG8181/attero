@@ -14,6 +14,12 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 public class CommandTracker extends AbstractTracker<AbstractCommand> implements IMinecraft {
     public static final String COMMAND_PREFIX = ".";
 
+    private static final CommandTracker tracker = new CommandTracker();
+
+    public static CommandTracker getInstance() {
+        return tracker;
+    }
+
     @Override
     public void initialize() {
         Fagware.BUS.register(this);

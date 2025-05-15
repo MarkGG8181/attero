@@ -19,6 +19,12 @@ import java.util.stream.Collectors;
 public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
     public AbstractModule lastModule;
 
+    private static final ModuleTracker tracker = new ModuleTracker();
+
+    public static ModuleTracker getInstance() {
+        return tracker;
+    }
+
     @Override
     public void initialize() {
         Fagware.BUS.register(this);

@@ -3,6 +3,7 @@ package fag.ware.client.module.data.setting;
 import fag.ware.client.Fagware;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.setting.impl.GroupSetting;
+import fag.ware.client.tracker.impl.ModuleTracker;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +33,7 @@ public abstract class AbstractSetting<T> {
         this.defaultValue = value;
 
         if (!noParent) {
-            this.parent = Fagware.INSTANCE.moduleTracker.lastModule;
+            this.parent = ModuleTracker.getInstance().lastModule;
             this.parent.getSettings().add(this);
         }
     }

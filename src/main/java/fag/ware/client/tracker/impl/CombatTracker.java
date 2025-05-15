@@ -22,10 +22,16 @@ public class CombatTracker extends AbstractTracker<LivingEntity> implements IMin
     public float prevYaw, prevPitch;
     public LivingEntity target;
 
+    private static final CombatTracker tracker = new CombatTracker();
+
+    public static CombatTracker getInstance() {
+        return tracker;
+    }
+
     @Override
     public void initialize() {
         Fagware.BUS.register(this);
-        killAuraModule = Fagware.INSTANCE.moduleTracker.getByClass(KillAuraModule.class);
+        killAuraModule = ModuleTracker.getInstance().getByClass(KillAuraModule.class);
     }
 
     @Subscribe
