@@ -20,6 +20,11 @@ public class EagleModule extends AbstractModule {
     public void onMotion(MotionEvent event) {
         if (!event.isPre()) return;
 
+        if (!mc.player.isOnGround()) {
+            mc.options.sneakKey.setPressed(false);
+            return;
+        }
+
         double x = mc.player.getX();
         double y = mc.player.getY() - 0.1;
         double z = mc.player.getZ();
