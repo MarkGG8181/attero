@@ -8,7 +8,7 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.GroupSetting;
 import fag.ware.client.module.data.setting.impl.MultiStringSetting;
-import fag.ware.client.util.player.WorldUtil;
+import fag.ware.client.util.player.EntityUtil;
 import net.minecraft.entity.EntityType;
 
 @ModuleInfo(name = "NoRender", category = ModuleCategory.RENDER, description = "Prevents your view from being obstructed")
@@ -41,7 +41,7 @@ public class NoRenderModule extends AbstractModule {
     private final BooleanSetting beaconBeams = (BooleanSetting) new BooleanSetting("Beacon beams", true).setParent(world);
     private final BooleanSetting signText = (BooleanSetting) new BooleanSetting("Sign text", false).setParent(world);
     private final BooleanSetting fallingBlocks = (BooleanSetting) new BooleanSetting("Falling blocks", false).setParent(world);
-    private final MultiStringSetting entities = (MultiStringSetting) new MultiStringSetting("Entities", WorldUtil.getExampleEntities(), WorldUtil.getAllEntityNames()).setParent(world);
+    private final MultiStringSetting entities = (MultiStringSetting) new MultiStringSetting("Entities", EntityUtil.getExampleEntities(), EntityUtil.getAllEntityNames()).setParent(world);
 
     private final GroupSetting client = new GroupSetting("Client", false);
     private final BooleanSetting blindness = (BooleanSetting) new BooleanSetting("Blindness", true).setParent(client);
@@ -149,7 +149,7 @@ public class NoRenderModule extends AbstractModule {
     public void onRenderEntity(RenderEntityEvent event) {
         if (event.getEntity() != null) {
             String entityName = EntityType.getId(event.getEntity().getType()).getPath();
-            if (entities.enabled(WorldUtil.toClassName(entityName))) {
+            if (entities.enabled(EntityUtil.toClassName(entityName))) {
                 event.setCancelled(true);
             }
         }
