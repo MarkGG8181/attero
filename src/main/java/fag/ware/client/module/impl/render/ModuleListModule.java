@@ -19,6 +19,8 @@ import imgui.ImGui;
 import imgui.ImVec2;
 
 import java.awt.*;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
@@ -30,29 +32,33 @@ public class ModuleListModule extends AbstractModule {
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
 
+    @Override
+    public void onInit() {
+        this.setEnabled(true);
+    }
+
     @Subscribe
     public void onRender(Render2DEvent event) {
         if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen) {
             return;
         }
 
-        List<AbstractModule> sortedModules = ModuleTracker.getInstance().getSet().stream()
-                .filter(AbstractModule::isEnabled)
-                .sorted((a, b) -> {
-                    float aWidth = ImGui.calcTextSize(a.toString()).x;
-                    float bWidth = ImGui.calcTextSize(b.toString()).x;
-                    return Float.compare(bWidth, aWidth);
-                })
-                .toList();
+        final List<AbstractModule> modules = new LinkedList<>();
+        for (final AbstractModule module : ModuleTracker.getInstance().toList()) {
+            if (module.isEnabled()) {
+                modules.add(module);
+            }
+        }
 
         switch (mode.getValue()) {
             case "Simple" -> ImGuiImpl.draw(io -> {
                 ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
-
                 ImDrawList drawList = ImGui.getForegroundDrawList();
-                float y = yOffset.toFloat();
 
-                for (AbstractModule module : sortedModules) {
+                modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
+
+                float y = yOffset.toFloat();
+                for (AbstractModule module : modules) {
                     String name = module.toString();
                     if (name == null) continue;
 
@@ -75,8 +81,10 @@ public class ModuleListModule extends AbstractModule {
                 ImGui.popFont();
             });
             case "Minecraft" -> {
+                modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(module.getInfo().name())));
+
                 int y = yOffset.toInt();
-                for (AbstractModule module : sortedModules) {
+                for (AbstractModule module : modules) {
                     String name = module.toString();
                     int textWidth = mc.textRenderer.getWidth(name);
                     int x = event.getDrawContext().getScaledWindowWidth() - textWidth - xOffset.toInt();
@@ -90,9 +98,7 @@ public class ModuleListModule extends AbstractModule {
                                 new Color(0, 0, 0, 150).getRGB()
                         );
                     }
-
                     event.getDrawContext().drawText(mc.textRenderer, name, x, y, textColor.toInt(), fontShadow.getValue());
-
                     y += mc.textRenderer.fontHeight + 1;
                 }
             }
