@@ -83,22 +83,22 @@ public class ModuleListModule extends AbstractModule {
             case "Minecraft" -> {
                 modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(module.getInfo().name())));
 
-                int y = yOffset.toInt();
+                float y = yOffset.toFloat();
                 for (AbstractModule module : modules) {
                     String name = module.toString();
-                    int textWidth = mc.textRenderer.getWidth(name);
-                    int x = event.getDrawContext().getScaledWindowWidth() - textWidth - xOffset.toInt();
+                    float textWidth = mc.textRenderer.getWidth(name);
+                    float x = event.getDrawContext().getScaledWindowWidth() - textWidth - xOffset.toInt();
 
                     if (background.getValue()) {
                         event.getDrawContext().fill(
-                                x - 2,
-                                y - 1,
-                                x + textWidth + 1,
-                                y + mc.textRenderer.fontHeight,
+                                (int) (x - 2),
+                                (int) (y - 1),
+                                (int) (x + textWidth + 1),
+                                (int) (y + mc.textRenderer.fontHeight),
                                 new Color(0, 0, 0, 150).getRGB()
                         );
                     }
-                    event.getDrawContext().drawText(mc.textRenderer, name, x, y, textColor.toInt(), fontShadow.getValue());
+                    event.getDrawContext().drawText(mc.textRenderer, name, (int) x, (int) y, textColor.toInt(), fontShadow.getValue());
                     y += mc.textRenderer.fontHeight + 1;
                 }
             }
