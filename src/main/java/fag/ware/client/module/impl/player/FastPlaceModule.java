@@ -2,7 +2,7 @@ package fag.ware.client.module.impl.player;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.TickEvent;
-import fag.ware.client.mixin.MinecraftAccessor;
+import fag.ware.client.mixin.IItemCoolDownAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -22,7 +22,7 @@ public class FastPlaceModule extends AbstractModule {
 
         ItemStack itemstack = mc.player.getMainHandStack();
         if (xp.getValue() && mc.player.isHolding(Items.EXPERIENCE_BOTTLE) || blocks.getValue() && itemstack.getItem() instanceof BlockItem) {
-            ((MinecraftAccessor) mc).setItemUseCooldown(0);
+            ((IItemCoolDownAccessor) mc).setItemUseCooldown(0);
         }
     }
 
