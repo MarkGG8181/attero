@@ -28,7 +28,6 @@ public class AutoDisconnectModule extends AbstractModule {
         if (mc.player == null || mc.world == null || mc.player.isDead()) return;
         if (mc.player.getHealth() >= hp.getValue().floatValue() || !timer.hasElapsed(delay.toInt(), true)) return;
 
-        toggle();
         MutableText finalText = Text.empty();
 
         MutableText prefix = ColorUtil.createGradientText("fagware", new Color(0x26A07D), Color.WHITE);
@@ -37,6 +36,8 @@ public class AutoDisconnectModule extends AbstractModule {
         finalText.append(Text.literal(" > Disconnected you because of low HP").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));
 
         mc.execute(() -> mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(finalText)));
+
+        toggle();
     }
 
     @Override
