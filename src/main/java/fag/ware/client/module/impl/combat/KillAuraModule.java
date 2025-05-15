@@ -85,10 +85,6 @@ public class KillAuraModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         CombatTracker.getInstance().target = null;
         attackTimer.reset();

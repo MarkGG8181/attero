@@ -31,10 +31,6 @@ public class SpeedModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         mc.options.jumpKey.setPressed(false);
         mc.options.sprintKey.setPressed(false);

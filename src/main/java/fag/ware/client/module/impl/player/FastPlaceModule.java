@@ -25,12 +25,4 @@ public class FastPlaceModule extends AbstractModule {
             ((MinecraftClientAccessor) mc).setItemUseCooldown(0);
         }
     }
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 }

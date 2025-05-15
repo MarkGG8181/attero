@@ -68,12 +68,4 @@ public class VelocityModule extends AbstractModule {
     private boolean chanceCheck() {
         return chance.getValue().doubleValue() > Math.random() * 100;
     }
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 }

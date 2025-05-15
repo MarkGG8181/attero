@@ -17,10 +17,6 @@ public class TimerModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         setTimer(1.0f);
     }

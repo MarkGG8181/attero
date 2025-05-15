@@ -89,8 +89,4 @@ public class TriggerBotModule extends AbstractModule {
     public void onEnable() {
         timer.reset();
     }
-
-    @Override
-    public void onDisable() {
-    }
 }

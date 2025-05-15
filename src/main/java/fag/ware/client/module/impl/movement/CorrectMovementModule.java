@@ -29,12 +29,4 @@ public class CorrectMovementModule extends AbstractModule {
     public void onUpdateVelo(UpdateVelocityEvent event) {
         event.setYaw(CombatTracker.getInstance().yaw);
     }
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 }

@@ -55,10 +55,6 @@ public class EagleModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         mc.options.sneakKey.setPressed(false);
         timer.reset();

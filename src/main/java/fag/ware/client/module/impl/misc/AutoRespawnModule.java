@@ -24,10 +24,6 @@ public class AutoRespawnModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         timer.reset();
     }

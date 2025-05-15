@@ -38,12 +38,4 @@ public class NoFallModule extends AbstractModule {
             }
         }
     }
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 }

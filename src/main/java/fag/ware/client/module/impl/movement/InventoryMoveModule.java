@@ -49,12 +49,4 @@ public class InventoryMoveModule extends AbstractModule {
             }
         }
     }
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 }

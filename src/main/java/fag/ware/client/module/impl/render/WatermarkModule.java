@@ -64,14 +64,6 @@ public class WatermarkModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
-
-    @Override
     public void onInit() {
         setEnabled(true);
     }

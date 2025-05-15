@@ -18,10 +18,6 @@ public class FullBrightModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         mc.player.removeStatusEffect(StatusEffects.NIGHT_VISION);
     }

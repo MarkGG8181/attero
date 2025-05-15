@@ -14,10 +14,6 @@ public class SprintModule extends AbstractModule {
     }
 
     @Override
-    public void onEnable() {
-    }
-
-    @Override
     public void onDisable() {
         mc.options.sprintKey.setPressed(false);
     }

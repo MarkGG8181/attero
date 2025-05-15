@@ -104,12 +104,4 @@ public class ModuleListModule extends AbstractModule {
             }
         }
     }
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 }
