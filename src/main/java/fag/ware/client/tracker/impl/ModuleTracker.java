@@ -32,7 +32,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         getSet().add(new SprintModule());
         getSet().add(new KillAuraModule());
-        getSet().add(new AntiBlindModule());
+        getSet().add(new NoRenderModule());
         getSet().add(new WatermarkModule());
         getSet().add(new SpeedModule());
         getSet().add(new CorrectMovementModule());

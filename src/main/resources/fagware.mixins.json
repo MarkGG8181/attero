@@ -16,9 +16,15 @@
     "defaultRequire": 1
   },
   "client": [
+    "AbstractSignBlockEntityRendererMixin",
+    "BackgroundRendererMixin",
+    "BeaconBlockEntityRendererMixin",
     "ClientPlayerMixin",
+    "EntityRendererMixin",
+    "GameRendererMixin",
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
+    "ItemRendererMixin",
     "KeyBindingAccessor",
     "KeyboardInputMixin",
     "KeyboardMixin",
@@ -28,6 +34,7 @@
     "ParticleManagerMixin",
     "RenderTickCounterDynamicMixin",
     "ToastManagerMixin",
-    "WeatherRenderingMixin"
+    "WeatherRenderingMixin",
+    "WorldRendererMixin"
   ]
 }

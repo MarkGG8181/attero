@@ -1,10 +1,15 @@
 package fag.ware.client.mixin;
 
 import fag.ware.client.event.impl.JumpEvent;
+import fag.ware.client.event.impl.render.RenderEatingParticlesEvent;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * @author markuss
@@ -17,5 +22,15 @@ public abstract class LivingEntityMixin {
         jumpEvent.post();
 
         return jumpEvent.getYaw();
+    }
+
+    @Inject(method = "spawnItemParticles", at = @At("HEAD"), cancellable = true)
+    private void spawnItemParticles(ItemStack stack, int count, CallbackInfo info) {
+        RenderEatingParticlesEvent renderEatingParticlesEvent = new RenderEatingParticlesEvent();
+        renderEatingParticlesEvent.post();
+
+        if (renderEatingParticlesEvent.isCancelled() && stack.getComponents().contains(DataComponentTypes.FOOD)) {
+            info.cancel();
+        }
     }
 }
