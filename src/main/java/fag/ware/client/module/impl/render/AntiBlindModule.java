@@ -16,6 +16,9 @@ public class AntiBlindModule extends AbstractModule {
     private final BooleanSetting wallOverlay = (BooleanSetting) new BooleanSetting("Wall overlay", true).setParent(overlays);
     private final BooleanSetting portalOverlay = (BooleanSetting) new BooleanSetting("Portal overlay", true).setParent(overlays);
     private final BooleanSetting nauseaOverlay = (BooleanSetting) new BooleanSetting("Nausea overlay", true).setParent(overlays);
+    private final BooleanSetting spyglassOverlay = (BooleanSetting) new BooleanSetting("Spyglass overlay", true).setParent(overlays);
+    private final BooleanSetting pumpkinOverlay = (BooleanSetting) new BooleanSetting("Pumpkin overlay", true).setParent(overlays);
+    private final BooleanSetting powderedSnowOverlay = (BooleanSetting) new BooleanSetting("Powdered snow overlay", true).setParent(overlays);
 
     private final GroupSetting blocks = new GroupSetting("Blocks", false);
     private final BooleanSetting blockBreakParticles = (BooleanSetting) new BooleanSetting("Block break particles", true).setParent(blocks);
@@ -51,6 +54,21 @@ public class AntiBlindModule extends AbstractModule {
     @Subscribe
     public void onRenderNauseaOverlay(RenderNauseaOverlayEvent event) {
         event.setCancelled(nauseaOverlay.getValue());
+    }
+
+    @Subscribe
+    public void onRenderSpyglassOverlay(RenderSpyglassOverlay event) {
+        event.setCancelled(spyglassOverlay.getValue());
+    }
+
+    @Subscribe
+    public void onRenderPumpkinOverlay(RenderPumpkinOverlay event) {
+        event.setCancelled(pumpkinOverlay.getValue());
+    }
+
+    @Subscribe
+    public void onRenderPowderedSnowOverlay(RenderPowderedSnowOverlay event) {
+        event.setCancelled(powderedSnowOverlay.getValue());
     }
 
     @Subscribe

@@ -1,8 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.render.Render2DEvent;
-import fag.ware.client.event.impl.render.RenderNauseaOverlayEvent;
-import fag.ware.client.event.impl.render.RenderPortalOverlayEvent;
+import fag.ware.client.event.impl.render.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
@@ -10,7 +8,9 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 /**
  * @author markuss
@@ -20,6 +20,36 @@ public class InGameHudMixin {
     @Inject(method = "renderCrosshair", at = @At("HEAD"))
     private void renderCrosshair(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         new Render2DEvent(context).post();
+    }
+
+    @ModifyArgs(method = "renderMiscOverlays", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;F)V", ordinal = 0))
+    private void onRenderPumpkinOverlay(Args args) {
+        RenderPumpkinOverlay renderPumpkinOverlay = new RenderPumpkinOverlay();
+        renderPumpkinOverlay.post();
+
+        if (renderPumpkinOverlay.isCancelled()) {
+            args.set(2, 0f);
+        }
+    }
+
+    @ModifyArgs(method = "renderMiscOverlays", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;F)V", ordinal = 1))
+    private void onRenderPowderedSnowOverlay(Args args) {
+        RenderPowderedSnowOverlay renderPowderedSnowOverlay = new RenderPowderedSnowOverlay();
+        renderPowderedSnowOverlay.post();
+
+        if (renderPowderedSnowOverlay.isCancelled()) {
+            args.set(2, 0f);
+        }
+    }
+
+    @Inject(method = "renderSpyglassOverlay", at = @At("HEAD"), cancellable = true)
+    private void onRenderSpyglassOverlay(DrawContext context, float scale, CallbackInfo ci) {
+        RenderSpyglassOverlay renderSpyglassOverlay = new RenderSpyglassOverlay();
+        renderSpyglassOverlay.post();
+
+        if (renderSpyglassOverlay.isCancelled()) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "renderVignetteOverlay", at = @At("HEAD"), cancellable = true)
