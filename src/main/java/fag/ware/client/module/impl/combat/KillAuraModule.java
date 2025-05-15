@@ -25,13 +25,7 @@ public class KillAuraModule extends AbstractModule {
             .setParent(sortingGroup);
     public final NumberSetting searchRange = (NumberSetting) new NumberSetting("Search range", 5, 1, 6)
             .setParent(sortingGroup);
-    public final BooleanSetting players = (BooleanSetting) new BooleanSetting("Players", true)
-            .setParent(sortingGroup);
-    public final BooleanSetting animals = (BooleanSetting) new BooleanSetting("Animals", false)
-            .setParent(sortingGroup);
-    public final BooleanSetting monsters = (BooleanSetting) new BooleanSetting("Monsters", false)
-            .setParent(sortingGroup);
-    public final BooleanSetting invisibles = (BooleanSetting) new BooleanSetting("Invisibles", false)
+    public final MultiStringSetting targets = (MultiStringSetting) new MultiStringSetting("Targets", new String[]{"Players"}, new String[]{"Players", "Animals", "Monsters", "Invisibles"})
             .setParent(sortingGroup);
 
     private final GroupSetting clickGroup = new GroupSetting("Clicking", false);

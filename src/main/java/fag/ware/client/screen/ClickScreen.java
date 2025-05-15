@@ -19,6 +19,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,6 +155,32 @@ public class ClickScreen extends Screen {
                     }
                     ImGui.setWindowFontScale(1f);
                 }
+                case MultiStringSetting mSS -> {
+                    ImGui.setWindowFontScale(0.8f);
+                    ImGui.text(mSS.getName());
+
+                    float fullWidth = ImGui.getContentRegionAvailX();
+                    ImGui.setNextItemWidth(fullWidth);
+                    if (ImGui.beginCombo("##" + mSS.getName(), mSS.toString())) {
+                        for (String value : mSS.getAll()) {
+                            boolean selected = Arrays.asList(mSS.getValue()).contains(value);
+
+                            if (ImGui.selectable(value, selected)) {
+                                if (selected) {
+                                    mSS.setValue(Arrays.stream(mSS.getValue())
+                                            .filter(v -> !v.equals(value))
+                                            .toArray(String[]::new));
+                                } else {
+                                    String[] newEnabled = Arrays.copyOf(mSS.getValue(), mSS.getValue().length + 1);
+                                    newEnabled[mSS.getValue().length] = value;
+                                    mSS.setValue(newEnabled);
+                                }
+                            }
+                        }
+                        ImGui.endCombo();
+                    }
+                    ImGui.setWindowFontScale(1f);
+                }
                 case ColorSetting cS -> {
                     ImGui.setWindowFontScale(0.8f);
                     ImGui.text(cS.getName());
@@ -192,7 +219,8 @@ public class ClickScreen extends Screen {
                     }
                     ImGui.setWindowFontScale(1f);
                 }
-                default -> {}
+                default -> {
+                }
             }
         }
 

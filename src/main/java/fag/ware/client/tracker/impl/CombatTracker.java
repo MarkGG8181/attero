@@ -89,10 +89,10 @@ public class CombatTracker extends AbstractTracker<LivingEntity> implements IMin
     }
 
     private boolean shouldIncludeEntity(LivingEntity livingEnt) {
-        boolean players = killAuraModule.players.getValue();
-        boolean animals = killAuraModule.animals.getValue();
-        boolean monsters = killAuraModule.monsters.getValue();
-        boolean invisibles = killAuraModule.invisibles.getValue();
+        boolean players = killAuraModule.targets.enabled("Players");
+        boolean animals = killAuraModule.targets.enabled("Animals");
+        boolean monsters = killAuraModule.targets.enabled("Monsters");
+        boolean invisibles = killAuraModule.targets.enabled("Invisibles");
 
         if (livingEnt instanceof PlayerEntity && players) return true;
         if (livingEnt instanceof AnimalEntity && animals) return true;
