@@ -7,8 +7,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * @author markuss
+ */
 @Mixin(NarratorManager.class)
-public class NaratorManagerMixin {
+public class NarratorManagerMixin {
     @Inject(method = "getNarratorMode", at = @At("HEAD"), cancellable = true)
     public void setNarratorMode(CallbackInfoReturnable<NarratorMode> cir) {
         cir.setReturnValue(NarratorMode.OFF);

@@ -2,6 +2,7 @@ package fag.ware.client.module.impl.combat;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.TickEvent;
+import fag.ware.client.mixin.MinecraftClientAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -15,7 +16,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -48,19 +48,15 @@ public class TriggerBotModule extends AbstractModule {
 
     private boolean delay() {
         Item item = mc.player.getMainHandStack().getItem();
-        float min, max;
-
-        if (item instanceof AxeItem) {
-            min = axeMS.getMinAsFloat();
-            max = axeMS.getMaxAsFloat();
-        } else {
-            min = swordMs.getMinAsFloat();
-            max = swordMs.getMaxAsFloat();
-        }
-
         try {
-            float ms = SecureRandom.getInstanceStrong().nextFloat(min, max);
-            return timer.hasElapsed((long) ms, true);
+            if (item instanceof AxeItem) {
+                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(axeMS.getMinAsFloat(), axeMS.getMaxAsFloat())), true);
+            } else if (isSword(item)) {
+                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
+            } else {
+                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
+            }
+
         } catch (NoSuchAlgorithmException e) {
             return false;
         }
@@ -75,9 +71,14 @@ public class TriggerBotModule extends AbstractModule {
         return !(e instanceof AnimalEntity a && a.isBaby());
     }
 
+    private boolean isSword(Item item) {
+        return item == Items.WOODEN_SWORD || item == Items.STONE_SWORD || item == Items.IRON_SWORD ||
+                item == Items.DIAMOND_SWORD || item == Items.NETHERITE_SWORD;
+    }
+
     private void attack(Entity target) {
-        mc.interactionManager.attackEntity(mc.player, target);
-        mc.player.swingHand(Hand.MAIN_HAND);
+        MinecraftClientAccessor accessor = (MinecraftClientAccessor) mc;
+        accessor.invokeDoAttack();
     }
 
     @Override
