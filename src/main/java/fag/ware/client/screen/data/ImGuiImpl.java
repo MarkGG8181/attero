@@ -36,6 +36,7 @@ public class ImGuiImpl {
     private final static ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
     private final static ImGuiImplGl3 imGuiImplGl3 = new ImGuiImplGl3();
 
+    // Fonts
     public static ImFont INTER_REGULAR_17;
     public static ImFont INTER_REGULAR_30;
     public static ImFont Sansation;
