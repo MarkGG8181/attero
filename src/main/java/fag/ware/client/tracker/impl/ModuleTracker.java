@@ -10,6 +10,7 @@ import fag.ware.client.module.impl.misc.AutoRespawnModule;
 import fag.ware.client.module.impl.movement.*;
 import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
+import fag.ware.client.module.impl.world.TimerModule;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.IMinecraft;
 
@@ -43,6 +44,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new NoFallModule());
         getSet().add(new AutoRespawnModule());
         getSet().add(new EagleModule());
+        getSet().add(new TimerModule());
         getSet().forEach(AbstractModule::onInit);
     }
 

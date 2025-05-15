@@ -2,6 +2,7 @@ package fag.ware.client.util;
 
 import fag.ware.client.util.math.ColorUtil;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -35,6 +36,14 @@ public interface IMinecraft {
             finalText.append(Text.literal(" > " + message).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));
 
             mc.player.sendMessage(finalText, false);
+        }
+    }
+
+    default void setTimer(float speed) {
+        RenderTickCounter counter = mc.getRenderTickCounter();
+
+        if (counter instanceof ITimerAccessor accessor) {
+            accessor.setTimerSpeed(speed);
         }
     }
 }

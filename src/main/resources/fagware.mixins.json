@@ -6,10 +6,10 @@
     "ClientConnectionMixin",
     "EntityMixin",
     "EntityVelocityUpdateS2CPacketMixin",
+    "IItemCoolDownAccessor",
     "LivingEntityMixin",
     "MinecraftServerMixin",
-    "ModStatusMixin",
-    "IItemCoolDownAccessor"
+    "ModStatusMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -23,6 +23,7 @@
     "LivingEntityRendererMixin",
     "MinecraftMixin",
     "ParticleManagerMixin",
+    "RenderTickCounterDynamicMixin",
     "ToastManagerMixin"
   ]
 }
