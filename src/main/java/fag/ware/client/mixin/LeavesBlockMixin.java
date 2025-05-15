@@ -1,7 +1,7 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.render.SpawnLeavesFallingParticles;
-import fag.ware.client.event.impl.render.SpawnLeavesWaterParticles;
+import fag.ware.client.event.impl.render.SpawnLeavesFallingParticlesEvent;
+import fag.ware.client.event.impl.render.SpawnLeavesWaterParticlesEvent;
 import net.minecraft.block.LeavesBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,20 +15,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LeavesBlockMixin {
     @Inject(method = "spawnWaterParticle", at = @At("HEAD"), cancellable = true)
     private static void spawnWaterParticles(CallbackInfo ci) {
-        SpawnLeavesWaterParticles spawnLeavesWaterParticles = new SpawnLeavesWaterParticles();
-        spawnLeavesWaterParticles.post();
+        SpawnLeavesWaterParticlesEvent spawnLeavesWaterParticlesEvent = new SpawnLeavesWaterParticlesEvent();
+        spawnLeavesWaterParticlesEvent.post();
 
-        if (spawnLeavesWaterParticles.isCancelled()) {
+        if (spawnLeavesWaterParticlesEvent.isCancelled()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "spawnLeafParticle(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;)V", at = @At("HEAD"), cancellable = true)
     private void spawnLeafParticle(CallbackInfo ci) {
-        SpawnLeavesFallingParticles spawnLeavesFallingParticles = new SpawnLeavesFallingParticles();
-        spawnLeavesFallingParticles.post();
+        SpawnLeavesFallingParticlesEvent spawnLeavesFallingParticlesEvent = new SpawnLeavesFallingParticlesEvent();
+        spawnLeavesFallingParticlesEvent.post();
 
-        if (spawnLeavesFallingParticles.isCancelled()) {
+        if (spawnLeavesFallingParticlesEvent.isCancelled()) {
             ci.cancel();
         }
     }

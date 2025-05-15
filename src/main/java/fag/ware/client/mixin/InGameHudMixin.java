@@ -24,10 +24,10 @@ public class InGameHudMixin {
 
     @ModifyArgs(method = "renderMiscOverlays", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderOverlay(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;F)V", ordinal = 0))
     private void onRenderPumpkinOverlay(Args args) {
-        RenderPumpkinOverlay renderPumpkinOverlay = new RenderPumpkinOverlay();
-        renderPumpkinOverlay.post();
+        RenderPumpkinOverlayEvent renderPumpkinOverlayEvent = new RenderPumpkinOverlayEvent();
+        renderPumpkinOverlayEvent.post();
 
-        if (renderPumpkinOverlay.isCancelled()) {
+        if (renderPumpkinOverlayEvent.isCancelled()) {
             args.set(2, 0f);
         }
     }
@@ -44,10 +44,10 @@ public class InGameHudMixin {
 
     @Inject(method = "renderSpyglassOverlay", at = @At("HEAD"), cancellable = true)
     private void onRenderSpyglassOverlay(DrawContext context, float scale, CallbackInfo ci) {
-        RenderSpyglassOverlay renderSpyglassOverlay = new RenderSpyglassOverlay();
-        renderSpyglassOverlay.post();
+        RenderSpyglassOverlayEvent renderSpyglassOverlayEvent = new RenderSpyglassOverlayEvent();
+        renderSpyglassOverlayEvent.post();
 
-        if (renderSpyglassOverlay.isCancelled()) {
+        if (renderSpyglassOverlayEvent.isCancelled()) {
             ci.cancel();
         }
     }
