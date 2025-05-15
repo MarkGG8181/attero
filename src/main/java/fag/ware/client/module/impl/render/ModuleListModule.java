@@ -13,6 +13,7 @@ import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.ModuleTracker;
+import fag.ware.client.util.player.EntityUtil;
 import imgui.ImColor;
 import imgui.ImDrawList;
 import imgui.ImGui;
@@ -57,7 +58,7 @@ public class ModuleListModule extends AbstractModule {
 
                 modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
 
-                float y = yOffset.toFloat();
+                float y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
                     String name = module.toString();
                     if (name == null) continue;
@@ -83,7 +84,7 @@ public class ModuleListModule extends AbstractModule {
             case "Minecraft" -> {
                 modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(module.getInfo().name())));
 
-                float y = yOffset.toFloat();
+                float y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
                     String name = module.toString();
                     float textWidth = mc.textRenderer.getWidth(name);
