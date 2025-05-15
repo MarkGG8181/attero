@@ -50,7 +50,6 @@ public class TriggerBotModule extends AbstractModule {
         if (!delay()) {
             return;
         }
-
         if (entityCheck(targetedEntity)) {
             hitEntity(targetedEntity);
         }
@@ -85,7 +84,7 @@ public class TriggerBotModule extends AbstractModule {
             } else if (isSword(item)) {
                 return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
             } else {
-                return timer.hasElapsed(((long) SecureRandom.getInstanceStrong().nextFloat(swordMs.getMinAsFloat(), swordMs.getMaxAsFloat())), true);
+                return timer.hasElapsed((long) swordMs.getMaxAsFloat(), true);
             }
 
         } catch (NoSuchAlgorithmException e) {
