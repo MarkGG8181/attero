@@ -52,7 +52,9 @@ public class KillAuraModule extends AbstractModule {
     public void onMotion(MotionEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (CombatTracker.getInstance().target != null && (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
+        if (CombatTracker.getInstance().target != null &&
+                (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
+
             float[] rots = RotationUtil.toRotation(CombatTracker.getInstance().target);
 
             event.setYaw(rots[0]);
