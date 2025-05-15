@@ -1,6 +1,10 @@
 package fag.ware.client.util.player;
 
 import fag.ware.client.util.interfaces.IMinecraft;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 
 // Warnings pmo sm icl
 @SuppressWarnings("ALL")
@@ -56,5 +60,32 @@ public class MovementUtil implements IMinecraft {
 
     public static void setMotionZ(double motionZ) {
         mc.player.setVelocity(mc.player.getVelocity().x, mc.player.getVelocity().y, motionZ);
+    }
+
+    public static int getSpeedEffect()
+    {
+        final StatusEffectInstance speed = mc.player.getStatusEffect(StatusEffects.SPEED);
+
+        if (speed != null)
+        {
+            return speed.getAmplifier() + 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public static double defaultSpeed()
+    {
+        double baseSpeed = 0.2873D;
+        int speed = getSpeedEffect();
+
+        if (speed != 0)
+        {
+            baseSpeed *= (1.0D + 0.2D * speed);
+        }
+
+        return baseSpeed;
     }
 }
