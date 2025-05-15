@@ -57,9 +57,9 @@ public abstract class AbstractModule implements IMinecraft {
         }
     }
 
-    public abstract void onEnable();
+    public void onEnable() {}
 
-    public abstract void onDisable();
+    public void onDisable() {}
 
     public void onInit() {}
 
