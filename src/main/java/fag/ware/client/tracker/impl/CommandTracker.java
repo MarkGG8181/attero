@@ -65,5 +65,4 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
             }
         }
     }
-
 }
