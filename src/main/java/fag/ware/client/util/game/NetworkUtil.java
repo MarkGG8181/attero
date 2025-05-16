@@ -478,20 +478,16 @@ public class NetworkUtil {
     public static String[] getC2SPacketArray() {
         final Set<Class<? extends Packet<?>>> packets = getC2SPackets();
 
-        String[] classNames = packets.stream()
-                .map(packet -> packet.getClass().getSimpleName())
+        return packets.stream()
+                .map(Class::getSimpleName)
                 .toArray(String[]::new);
-
-        return classNames;
     }
 
     public static String[] getS2CPacketArray() {
         final Set<Class<? extends Packet<?>>> packets = getS2CPackets();
 
-        String[] classNames = packets.stream()
-                .map(packet -> packet.getClass().getSimpleName())
+        return packets.stream()
+                .map(Class::getSimpleName)
                 .toArray(String[]::new);
-
-        return classNames;
     }
 }
