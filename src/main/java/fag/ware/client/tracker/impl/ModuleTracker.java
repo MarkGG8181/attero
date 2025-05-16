@@ -7,6 +7,7 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.impl.combat.*;
 import fag.ware.client.module.impl.misc.AutoRespawnModule;
+import fag.ware.client.module.impl.misc.PacketCancellerModule;
 import fag.ware.client.module.impl.movement.*;
 import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
@@ -48,6 +49,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new TimerModule());
         getSet().add(new FullBrightModule());
         getSet().add(new InventoryMoveModule());
+        getSet().add(new PacketCancellerModule());
         getSet().forEach(AbstractModule::onInit);
     }
 
