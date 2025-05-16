@@ -72,10 +72,28 @@ public class ClickScreen extends Screen {
 
                         ImGui.sameLine();
                         boolean open = ImGui.collapsingHeader(module.toString());
-                        
-                        if (ImGui.isItemHovered()) {
+
+                        if (ImGui.isItemHovered())
+                        {
                             ImGui.beginTooltip();
-                            ImGui.setTooltip(module.getInfo().description());
+
+                            if (module.getKeybinds().isEmpty())
+                            {
+                                ImGui.setTooltip(module.getInfo().description());
+                            }
+                            else
+                            {
+                                StringBuilder sb = new StringBuilder();
+
+                                for (Integer keybind : module.getKeybinds())
+                                {
+                                    sb.append((char)(int)keybind).append(", ");
+                                }
+
+                                sb.delete(sb.length() - 2, sb.length());
+                                ImGui.setTooltip(String.format("%s%nBinds: %s", module.getInfo().description(), sb));
+                            }
+
                             ImGui.endTooltip();
                         }
 
