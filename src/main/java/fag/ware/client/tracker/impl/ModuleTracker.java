@@ -30,26 +30,40 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public void initialize() {
         Fagware.BUS.register(this);
 
-        getSet().add(new SprintModule());
+        /* COMBAT */
         getSet().add(new KillAuraModule());
-        getSet().add(new NoRenderModule());
-        getSet().add(new WatermarkModule());
+        getSet().add(new TriggerBotModule());
+        getSet().add(new VelocityModule());
+
+        /* MOVEMENT */
+        getSet().add(new SprintModule());
         getSet().add(new SpeedModule());
         getSet().add(new CorrectMovementModule());
-        getSet().add(new VelocityModule());
-        getSet().add(new FastPlaceModule());
         getSet().add(new LongJumpModule());
-        getSet().add(new ModuleListModule());
-        getSet().add(new AutoDisconnectModule());
-        getSet().add(new TriggerBotModule());
-        getSet().add(new NoFallModule());
-        getSet().add(new AutoRespawnModule());
         getSet().add(new EagleModule());
-        getSet().add(new TimerModule());
-        getSet().add(new FullBrightModule());
         getSet().add(new InventoryMoveModule());
-        getSet().add(new PacketCancellerModule());
+        getSet().add(new CounterStrafeModule());
+
+        /* RENDER */
+        getSet().add(new NoRenderModule());
+        getSet().add(new WatermarkModule());
         getSet().add(new ESPModule());
+        getSet().add(new FullBrightModule());
+        getSet().add(new ModuleListModule());
+
+        /* PLAYER */
+        getSet().add(new NoFallModule());
+        getSet().add(new FastPlaceModule());
+        getSet().add(new AutoDisconnectModule());
+        getSet().add(new BlinkModule());
+
+        /* WORLD */
+        getSet().add(new TimerModule());
+
+        /* MISC */
+        getSet().add(new AutoRespawnModule());
+        getSet().add(new PacketCancellerModule());
+
         getSet().forEach(AbstractModule::onInit);
     }
 
