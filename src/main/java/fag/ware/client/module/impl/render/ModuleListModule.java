@@ -13,7 +13,7 @@ import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.ModuleTracker;
-import fag.ware.client.util.player.EntityUtil;
+import fag.ware.client.util.game.EntityUtil;
 import imgui.ImColor;
 import imgui.ImDrawList;
 import imgui.ImGui;

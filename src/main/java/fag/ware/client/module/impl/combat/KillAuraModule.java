@@ -10,11 +10,10 @@ import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.math.ClickDelayCalculator;
 import fag.ware.client.util.math.Timer;
-import fag.ware.client.util.player.RotationUtil;
+import fag.ware.client.util.game.RotationUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
-import org.lwjgl.glfw.GLFW;
 
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends AbstractModule {

@@ -6,7 +6,7 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.StringSetting;
-import fag.ware.client.util.player.MovementUtil;
+import fag.ware.client.util.game.MovementUtil;
 
 /**
  * All credits to the NCP longjump go to sigma client (version 4.11)

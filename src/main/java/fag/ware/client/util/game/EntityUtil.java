@@ -1,4 +1,4 @@
-package fag.ware.client.util.player;
+package fag.ware.client.util.game;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffectInstance;

@@ -8,7 +8,7 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.tracker.impl.CombatTracker;
-import fag.ware.client.util.player.RotationUtil;
+import fag.ware.client.util.game.RotationUtil;
 
 @ModuleInfo(name = "CorrectMovement", description = "Corrects your movement", category = ModuleCategory.MOVEMENT)
 public class CorrectMovementModule extends AbstractModule {

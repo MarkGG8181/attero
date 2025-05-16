@@ -6,7 +6,7 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.StringSetting;
-import fag.ware.client.util.player.MovementUtil;
+import fag.ware.client.util.game.MovementUtil;
 
 @ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you fast")
 public class SpeedModule extends AbstractModule {

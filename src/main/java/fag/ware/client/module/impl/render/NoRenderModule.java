@@ -8,7 +8,7 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.GroupSetting;
 import fag.ware.client.module.data.setting.impl.MultiStringSetting;
-import fag.ware.client.util.player.EntityUtil;
+import fag.ware.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;
 
 @ModuleInfo(name = "NoRender", category = ModuleCategory.RENDER, description = "Prevents your view from being obstructed")

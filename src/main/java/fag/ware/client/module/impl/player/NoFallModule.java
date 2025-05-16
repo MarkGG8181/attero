@@ -7,7 +7,7 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
-import fag.ware.client.util.player.MovementUtil;
+import fag.ware.client.util.game.MovementUtil;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 @ModuleInfo(name = "NoFall", category = ModuleCategory.PLAYER, description = "Makes you take 0 fall damage")

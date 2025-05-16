@@ -1,10 +1,8 @@
-package fag.ware.client.util.player;
+package fag.ware.client.util.game;
 
 import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
 
 // Warnings pmo sm icl
 @SuppressWarnings("ALL")
