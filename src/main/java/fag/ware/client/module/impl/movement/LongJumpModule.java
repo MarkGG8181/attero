@@ -23,7 +23,7 @@ public class LongJumpModule extends AbstractModule
     public void onEnable()
     {
         sigmaNcpAir = 0;
-        sigmaNcpStage = 1;
+        sigmaNcpStage = 0;
     }
 
     @Subscribe
@@ -33,7 +33,9 @@ public class LongJumpModule extends AbstractModule
 
         if (mode.is("NCP"))
         {
-            float speedEffect = 1f + MovementUtil.getSpeedEffect() * 0.45f;
+            float speedAmpl = MovementUtil.getSpeedAmplifier2();
+
+            float speedEffect = 1f + speedAmpl * 0.45f;
             if (mc.player.isOnGround())
             {
                 if (MovementUtil.isMoving())
@@ -53,15 +55,7 @@ public class LongJumpModule extends AbstractModule
                 sigmaNcpAir = 0;
             }
 
-            double speed = (0.8f + MovementUtil.getSpeedEffect() * 0.2f) - sigmaNcpAir / 25;
-            if (speed < MovementUtil.defaultSpeed())
-            {
-                speed = MovementUtil.defaultSpeed();
-            }
-            if (sigmaNcpStage < 4)
-            {
-                speed = MovementUtil.defaultSpeed();
-            }
+            double speed = (0.8f + speedAmpl * 0.2f) - sigmaNcpAir / 25;
 
             MovementUtil.setSpeed(speed);
             MovementUtil.setMotionY(getMotion(sigmaNcpStage));
@@ -77,9 +71,7 @@ public class LongJumpModule extends AbstractModule
 
     double getMotion(int stage)
     {
-        double[] mot = {0.396,-0.122,-0.1,0.423, 0.35,0.28,0.217,0.15, 0.025,-0.00625,-0.038,-0.0693,-0.102,-0.13,
-                -0.018,-0.1,-0.117,-0.14532,-0.1334, -0.1581, -0.183141, -0.170695, -0.195653, -0.221, -0.209, -0.233, -0.25767,
-                -0.314917, -0.371019, -0.426};
+        double[] mot = {0.345,0.2699,0.183,0.103,0.024,-0.008,-0.04,-0.072,-0.104,-0.13,-0.019,-0.097};
 
         stage--;
 

@@ -3,11 +3,17 @@ package fag.ware.client.util.game;
 import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.util.math.Vec3d;
 
 // Warnings pmo sm icl
 @SuppressWarnings("ALL")
 public class MovementUtil implements IMinecraft {
 
+    /**
+     * wtf even is this
+     * @see MovementUtil#getActualSpeed()
+     */
+    @Deprecated
     public static float getSpeed() {
         return mc.player != null ? mc.player.speed : 0.0f;
     }
@@ -18,6 +24,11 @@ public class MovementUtil implements IMinecraft {
      */
     public static boolean isMoving() {
         return mc.player.input.getMovementInput().y != 0 || mc.player.input.getMovementInput().x != 0;
+    }
+
+    public static double getActualSpeed()
+    {
+        return Math.sqrt(Math.pow(getMotionX(), 2) + Math.pow(getMotionZ(), 2));
     }
 
     public static void setSpeed(double moveSpeed) {
@@ -60,13 +71,42 @@ public class MovementUtil implements IMinecraft {
         mc.player.setVelocity(mc.player.getVelocity().x, mc.player.getVelocity().y, motionZ);
     }
 
-    public static int getSpeedEffect()
+    public static double getMotionX()
+    {
+        return mc.player.getVelocity().x;
+    }
+
+    public static double getMotionY()
+    {
+        return mc.player.getVelocity().y;
+    }
+
+    public static double getMotionZ()
+    {
+        return mc.player.getVelocity().z;
+    }
+
+    public static void multiplyMotion(double x, double y, double z)
+    {
+        mc.player.setVelocity(
+                mc.player.getVelocity().x * x,
+                mc.player.getVelocity().y * y,
+                mc.player.getVelocity().z * z
+        );
+    }
+
+    public static void offsetPosition(double x, double y, double z)
+    {
+        mc.player.setPosition(mc.player.getPos().add(x, y, z));
+    }
+
+    public static int getSpeedAmplifier()
     {
         final StatusEffectInstance speed = mc.player.getStatusEffect(StatusEffects.SPEED);
 
         if (speed != null)
         {
-            return speed.getAmplifier() + 1;
+            return speed.getAmplifier();
         }
         else
         {
@@ -74,10 +114,21 @@ public class MovementUtil implements IMinecraft {
         }
     }
 
+    /**
+     * Adjusted with the way that sigma handles shit (sowwy for pasting
+     */
+    public static int getSpeedAmplifier2()
+    {
+        int speed = getSpeedAmplifier();
+        if (speed > 0) speed++;
+
+        return speed;
+    }
+
     public static double defaultSpeed()
     {
         double baseSpeed = 0.2873D;
-        int speed = getSpeedEffect();
+        int speed = getSpeedAmplifier2();
 
         if (speed != 0)
         {
@@ -85,5 +136,13 @@ public class MovementUtil implements IMinecraft {
         }
 
         return baseSpeed;
+    }
+
+    /**
+     * yes
+     */
+    public static void strafe()
+    {
+        setSpeed(getActualSpeed());
     }
 }
