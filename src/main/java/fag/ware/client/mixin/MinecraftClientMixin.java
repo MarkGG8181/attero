@@ -1,13 +1,16 @@
 package fag.ware.client.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.RunLoopEvent;
 import fag.ware.client.event.impl.TickEvent;
+import fag.ware.client.event.impl.render.HasOutlineEvent;
 import fag.ware.client.screen.data.ImGuiImpl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.Window;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.message.ChatVisibility;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -109,5 +112,17 @@ public class MinecraftClientMixin {
         } else {
             cir.setReturnValue(MinecraftClient.ChatRestriction.ENABLED);
         }
+    }
+
+    @ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
+    private boolean hasOutlineModifyIsOutline(boolean original, Entity entity) {
+        HasOutlineEvent hasOutlineEvent = new HasOutlineEvent(entity);
+        hasOutlineEvent.post();
+
+        if (hasOutlineEvent.isCancelled()) {
+            return true;
+        }
+
+        return original;
     }
 }
