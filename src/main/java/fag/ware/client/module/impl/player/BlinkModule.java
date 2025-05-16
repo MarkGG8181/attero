@@ -25,6 +25,7 @@ public class BlinkModule extends AbstractModule {
 
     @Subscribe
     public void onSendPacket(SendPacketEvent event) {
+        if (mc.player == null || mc.world == null) return;
         if (OUTGOING.getValue()) {
             event.setCancelled(true);
         }
