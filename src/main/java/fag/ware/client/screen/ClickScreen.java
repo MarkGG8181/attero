@@ -72,6 +72,12 @@ public class ClickScreen extends Screen {
 
                         ImGui.sameLine();
                         boolean open = ImGui.collapsingHeader(module.toString());
+                        
+                        if (ImGui.isItemHovered()) {
+                            ImGui.beginTooltip();
+                            ImGui.setTooltip(module.getInfo().description());
+                            ImGui.endTooltip();
+                        }
 
                         if (open) {
                             for (AbstractSetting<?> setting : module.getSettings()) {
