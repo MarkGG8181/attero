@@ -34,7 +34,7 @@ public class ScreenTracker extends AbstractTracker<Screen> {
             }
 
             if (event.getKey() == GLFW.GLFW_KEY_RIGHT_CONTROL) {
-                MinecraftClient.getInstance().setScreen(getByClass(MusicPlayerScreen.class));
+                MinecraftClient.getInstance().setScreen(getByClass(JelloClickScreen.class));
             }
         });
     }
