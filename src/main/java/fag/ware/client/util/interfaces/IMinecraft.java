@@ -3,6 +3,7 @@ package fag.ware.client.util.interfaces;
 import fag.ware.client.util.math.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -45,5 +46,13 @@ public interface IMinecraft {
         if (counter instanceof ITimerAccessor accessor) {
             accessor.setTimerSpeed(speed);
         }
+    }
+
+    default void sendPacket(Packet<?> packet) {
+        mc.player.networkHandler.sendPacket(packet);
+    }
+
+    default void sendPacketNoEvent(Packet<?> packet) {
+        mc.getNetworkHandler().getConnection().send(packet);
     }
 }
