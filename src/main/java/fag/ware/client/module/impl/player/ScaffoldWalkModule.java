@@ -22,17 +22,15 @@ import net.minecraft.util.math.BlockPos;
 public class ScaffoldWalkModule extends AbstractModule {
 
     private final StringSetting rotationMode = new StringSetting("Rotation mode", "Simple", "Simple", "Godbridge");
-    private final StringSetting towerMode = new StringSetting("Tower mode", "None", "None", "Motion", "Vulcan");
+    private final StringSetting towerMode = new StringSetting("Tower mode", "None", "None", "Motion");
     private final StringSetting sprintMode = new StringSetting("Sprint mode", "None", "None", "Always", "Manual");
-    private final StringSetting sneakMode = new StringSetting("Sneak mode", "None", "None", "Eagle", "Always", "Blatant");
+    private final StringSetting sneakMode = new StringSetting("Sneak mode", "None", "None", "Eagle", "Always");
     private final StringSetting itemSpoof = new StringSetting("Item spoof", "Switch", "Switch", "None");
 
     private final BooleanSetting keepY = new BooleanSetting("Keep Y", false);
 
     private final NumberSetting jumpDistance = (NumberSetting) new NumberSetting("Jump distance", 7, 1, 10)
             .hide(() -> !rotationMode.is("Godbridge"));
-    private final NumberSetting sneakDistance = (NumberSetting) new NumberSetting("Sneak distance", 1, 1, 10)
-            .hide(() -> sneakMode.is("None") || sneakMode.is("Always"));
     private final NumberSetting sneakDelay = (NumberSetting) new NumberSetting("Sneak delay", 57, 0, 300)
             .hide(() -> sneakMode.is("None") || sneakMode.is("Always"));
     private final NumberSetting unSneakDelay = (NumberSetting) new NumberSetting("Unsneak delay", 287, 0, 300)
@@ -73,17 +71,6 @@ public class ScaffoldWalkModule extends AbstractModule {
                 if (distCounter.getTravelled() >= jumpDistance.toDouble()) {
                     if (mc.player.isOnGround()) {
                         mc.player.jump();
-                    }
-                    distCounter.reset();
-                }
-            } else if (!sneakMode.is("None") && sneakMode.getValue().equals("Blatant")) {
-                if (unSneakCounter.hasElapsed(unSneakDelay.getValue().longValue(), true)) {
-                    mc.options.sneakKey.setPressed(false);
-                }
-
-                if (distCounter.getTravelled() >= sneakDistance.toDouble()) {
-                    if (sneakCounter.hasElapsed(sneakDelay.getValue().longValue(), true)) {
-                        mc.options.sneakKey.setPressed(true);
                     }
                     distCounter.reset();
                 }
