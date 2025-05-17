@@ -19,18 +19,27 @@ import net.minecraft.client.gl.GlBackend;
 import net.minecraft.client.texture.GlTexture;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.mojang.blaze3d.opengl.GlConst.*;
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
+import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT;
 
 public class ImGuiImpl {
     private final static ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
@@ -145,51 +154,40 @@ public class ImGuiImpl {
         ImPlot.destroyContext();
     }
 
-    public static int fromBufferedImage(BufferedImage image) {
-        final int targetWidth = 48;
-        final int targetHeight = 48;
-        if (image.getWidth() != targetWidth || image.getHeight() != targetHeight) {
-            BufferedImage resized = new BufferedImage(targetWidth, targetHeight, image.getType());
-            Graphics2D g = resized.createGraphics();
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.drawImage(image, 0, 0, targetWidth, targetHeight, null);
-            g.dispose();
-            image = resized;
-        }
+    public static int loadTexture(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
 
-        final int[] pixels = new int[image.getWidth() * image.getHeight()];
-        image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+        int[] pixels = new int[width * height];
+        image.getRGB(0, 0, width, height, pixels, 0, width);
 
-        final ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
+        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                final int pixel = pixels[y * image.getWidth() + x];
-
-                buffer.put((byte) ((pixel >> 16) & 0xFF));
-                buffer.put((byte) ((pixel >> 8) & 0xFF));
-                buffer.put((byte) (pixel & 0xFF));
-                buffer.put((byte) ((pixel >> 24) & 0xFF));
+        for (int y = height - 1; y >= 0; y--) {
+            for (int x = 0; x < width; x++) {
+                int pixel = pixels[y * width + x];
+                buffer.put((byte) ((pixel >> 16) & 0xFF)); // R
+                buffer.put((byte) ((pixel >> 8) & 0xFF));  // G
+                buffer.put((byte) (pixel & 0xFF));         // B
+                buffer.put((byte) ((pixel >> 24) & 0xFF)); // A
             }
         }
-
         buffer.flip();
 
-        final int texture = GlStateManager._genTexture();
-        GlStateManager._bindTexture(texture);
+        int id = GL45C.glGenTextures();
+        GL45C.glBindTexture(GL45C.GL_TEXTURE_2D, id);
 
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_EDGE);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL20.GL_CLAMP_TO_EDGE);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL45C.glTexImage2D(GL45C.GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        GL45C.glGenerateMipmap(GL45C.GL_TEXTURE_2D);
 
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-
-        return texture;
+        return id;
     }
 
     public static void applyMarineTheme() {

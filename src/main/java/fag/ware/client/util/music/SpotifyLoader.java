@@ -70,7 +70,7 @@ public class SpotifyLoader {
     public static void loadTrackImageAsyncTexture(SpotifyPlaylistParser.TrackInfo track) {
         CompletableFuture.runAsync(() -> MinecraftClient.getInstance().execute(() -> {
             try {
-                track.textureId = ImGuiImpl.fromBufferedImage(track.bufferedImage);
+                track.textureId = ImGuiImpl.loadTexture(track.bufferedImage);
             } catch (Exception e) {
                 Fagware.LOGGER.error("Failed to load image for track: {} {}", track.title, track.url, e);
             }

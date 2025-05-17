@@ -12,7 +12,7 @@ import java.util.List;
 public class SpotifyPlaylistParser {
 
     public static class TrackInfo {
-        public final String title;
+        public String title;
         public final String artist;
         public final String url;
         public final String id;
