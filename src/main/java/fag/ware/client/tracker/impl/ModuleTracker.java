@@ -56,7 +56,6 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new FastPlaceModule());
         getSet().add(new AutoDisconnectModule());
         getSet().add(new BlinkModule());
-        getSet().add(new AutoEat());
 
         /* WORLD */
         getSet().add(new TimerModule());
