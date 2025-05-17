@@ -24,6 +24,7 @@
     "GameRendererMixin",
     "InGameHudMixin",
     "InGameOverlayRendererMixin",
+    "InputAccessor",
     "ItemRendererMixin",
     "KeyBindingAccessor",
     "KeyboardInputMixin",

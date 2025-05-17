@@ -1,21 +1,24 @@
 package fag.ware.client.mixin;
 
 import com.mojang.authlib.GameProfile;
-import fag.ware.client.Fagware;
 import fag.ware.client.event.impl.MotionEvent;
+import fag.ware.client.event.impl.SprintEvent;
 import fag.ware.client.event.impl.UpdateEvent;
 import fag.ware.client.tracker.impl.CombatTracker;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.input.Input;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -70,6 +73,8 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayerEntity {
     @Final
     protected MinecraftClient client;
 
+    @Shadow public Input input;
+
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isLoaded()Z", shift = At.Shift.AFTER))
     public void onUpdate(CallbackInfo ci) {
         new UpdateEvent().post();
@@ -78,6 +83,32 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayerEntity {
     @Override
     public Vec3d getRotationVector() {
         return this.getRotationVec(1.0f);
+    }
+
+    @Unique
+    private SprintEvent cachedSprintEvent = null;
+    @Unique
+    private float cachedMoveForward = 0;
+
+    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;canStartSprinting()Z", ordinal = 0))
+    private void tickMovementHook(CallbackInfo ci) {
+        cachedMoveForward = this.input.getMovementInput().y;
+        cachedSprintEvent = new SprintEvent();
+        cachedSprintEvent.post();
+
+        if (cachedSprintEvent.isCancelled()) {
+            cachedMoveForward = this.input.getMovementInput().y;
+            final float x = this.input.getMovementInput().x;
+            ((InputAccessor) this.input).setMovementVector(new Vec2f(x, 0));
+        }
+    }
+
+    @Inject(method = "tickMovement", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;allowFlying:Z", ordinal = 0))
+    private void tickMovementHook2(CallbackInfo ci) {
+        if (cachedSprintEvent != null && cachedSprintEvent.isCancelled()) {
+            final float x = this.input.getMovementInput().x;
+            ((InputAccessor) this.input).setMovementVector(new Vec2f(x, cachedMoveForward));
+        }
     }
 
     @Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
