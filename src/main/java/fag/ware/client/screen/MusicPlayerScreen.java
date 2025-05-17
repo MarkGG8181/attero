@@ -2,6 +2,7 @@ package fag.ware.client.screen;
 
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.util.music.SpotifyLoader;
+import fag.ware.client.util.music.SpotifyPlaylistParser;
 import fag.ware.client.util.music.SpotifyPlaylists;
 import imgui.ImGui;
 import net.minecraft.client.gui.DrawContext;
@@ -18,6 +19,8 @@ public class MusicPlayerScreen extends Screen {
         super.init();
         SpotifyLoader.loadPlaylists(false);
     }
+
+    private SpotifyPlaylistParser.TrackInfo currentTrack = null;
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
@@ -36,7 +39,11 @@ public class MusicPlayerScreen extends Screen {
 
                                 for (var track : playlist.tracks) {
                                     if (track.textureId != -1) {
-                                        ImGui.imageButton(track.textureId, 48, 48);
+                                        boolean press = ImGui.imageButton(track.textureId, 48, 48);
+
+                                        if (press) {
+                                            currentTrack = track;
+                                        }
 
                                         count++;
                                         if (count % columns != 0) {
@@ -55,15 +62,15 @@ public class MusicPlayerScreen extends Screen {
                     float startX = ImGui.getCursorPosX();
                     float startY = ImGui.getCursorPosY();
 
-                    ImGui.image(3, 100, 100);
+                    ImGui.image(currentTrack == null ? 3 : currentTrack.textureId, 100, 100);
 
                     ImGui.setCursorPosX(startX + 110);
                     ImGui.setCursorPosY(startY);
-                    ImGui.text("Title");
+                    ImGui.text(currentTrack == null ? "Title" : currentTrack.title);
 
                     ImGui.setCursorPosX(startX + 110);
                     ImGui.setCursorPosY(startY + ImGui.getTextLineHeight());
-                    ImGui.text("Author");
+                    ImGui.text(currentTrack == null ? "Author" : currentTrack.artist);
 
                     ImGui.setCursorPosX(startX + 110);
                     ImGui.setCursorPosY(startY + ImGui.getTextLineHeight() * 2);
