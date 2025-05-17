@@ -5,7 +5,6 @@ import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
-import fag.ware.client.util.game.MovementUtil;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "CounterStrafe", category = ModuleCategory.MOVEMENT, description = "CS:GO Counterstrafing")
@@ -14,9 +13,17 @@ public class CounterStrafeModule extends AbstractModule {
     public void Tick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (mc.player.isOnGround() && !MovementUtil.isMoving()) {
-            MovementUtil.setMotionX(0);
-            MovementUtil.setMotionZ(0);
+        if (mc.player.isOnGround() && !isMoving()) {
+            //replaced two calls to MovementUtil setMotion since they overwrite each other
+            mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
         }
+    }
+
+    //replaced MovementUtil.isMoving to this one, since we need to respond to movement keys, not velocity
+    private boolean isMoving() {
+        return mc.options.forwardKey.isPressed()
+                || mc.options.backKey.isPressed()
+                || mc.options.leftKey.isPressed()
+                || mc.options.rightKey.isPressed();
     }
 }
