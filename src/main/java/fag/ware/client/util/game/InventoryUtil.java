@@ -1,0 +1,37 @@
+package fag.ware.client.util.game;
+
+import fag.ware.client.util.interfaces.IMinecraft;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
+
+public class InventoryUtil implements IMinecraft {
+    public static void switchToNextSlot() {
+        int currentSlot = mc.player.getInventory().getSelectedSlot();
+        int nextSlot = -1;
+        int currentBlockCount = getBlockCount(currentSlot);
+
+        for (int i = 0; i < 9; i++) {
+            if (i == currentSlot) continue;
+
+            int slotBlockCount = getBlockCount(i);
+            if ((slotBlockCount > currentSlot) || (currentBlockCount == 0 && slotBlockCount > 0)) {
+                nextSlot = i;
+                break;
+            }
+        }
+
+        if (nextSlot != -1) {
+            mc.player.getInventory().setSelectedSlot(nextSlot);
+        }
+    }
+
+    public static int getBlockCount(int slot) {
+        ItemStack itemStack = mc.player.getInventory().getStack(slot);
+
+        if (itemStack != null && itemStack.getItem() instanceof BlockItem) {
+            return itemStack.getCount();
+        }
+
+        return 0;
+    }
+}

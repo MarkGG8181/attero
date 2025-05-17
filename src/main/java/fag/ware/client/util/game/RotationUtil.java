@@ -3,7 +3,9 @@ package fag.ware.client.util.game;
 import fag.ware.client.event.impl.MoveInputEvent;
 import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;
+import fag.ware.client.util.math.MathUtil;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
 public class RotationUtil implements IMinecraft {
@@ -85,5 +87,87 @@ public class RotationUtil implements IMinecraft {
             event.setForward(closestForward);
             event.setStrafe(closestStrafe);
         }
+    }
+
+
+    public static float getMovementYaw() {
+        boolean forward = mc.options.forwardKey.isPressed();
+        boolean back = mc.options.backKey.isPressed();
+        boolean left = mc.options.leftKey.isPressed();
+        boolean right = mc.options.rightKey.isPressed();
+
+        float moveX = 0;
+        float moveZ = 0;
+
+        if (forward) moveZ -= 1;
+        if (back) moveZ += 1;
+        if (left) moveX -= 1;
+        if (right) moveX += 1;
+
+        if (moveX == 0 && moveZ == 0) {
+            return mc.player.getYaw();
+        }
+
+        float length = (float) Math.hypot(moveX, moveZ);
+        moveX /= length;
+        moveZ /= length;
+
+        float yawRad = (float) Math.toRadians(mc.player.getYaw());
+        float sin = (float) Math.sin(yawRad);
+        float cos = (float) Math.cos(yawRad);
+
+        float rotatedX = moveX * cos - moveZ * sin;
+        float rotatedZ = moveX * sin + moveZ * cos;
+
+        return (float) Math.toDegrees(Math.atan2(rotatedZ, rotatedX)) - 90;
+    }
+
+    public static float getAdjustedYaw() {
+        switch (mc.player.getHorizontalFacing()) {
+            case SOUTH:
+                return -180;
+            case NORTH:
+                return 0;
+            case EAST:
+                return 90;
+            case WEST:
+                return -90;
+            default:
+                return mc.player.getYaw();
+        }
+    }
+
+
+    public static float[] getSimpleRotations(BlockCache blockCache, float[] lastRotations) {
+        double diffY = blockCache.pos().getY() + 0.5 - (mc.player.getY() + mc.player.getStandingEyeHeight());
+
+        if (blockCache.facing() == Direction.UP) diffY += 0.5;
+        if (blockCache.facing() == Direction.DOWN) diffY -= 0.5;
+
+        float yaw = getMovementYaw();
+        float pitch = (float) -Math.toDegrees(Math.atan2(diffY, 1)); // assume distance of 1 for fake pitch
+        yaw = MathUtil.wrap(lastRotations[0], yaw, 30);
+        pitch = MathUtil.wrap(lastRotations[1], pitch, 20);
+
+        return new float[]{yaw, pitch};
+    }
+
+    public static float[] getGodbridgeRotations(BlockCache blockCache, float[] lastRotations) {
+        double diffY = blockCache.pos().getY() + 0.5 - (mc.player.getY() + mc.player.getStandingEyeHeight());
+
+        if (blockCache.facing() == Direction.UP) diffY += 0.5;
+        if (blockCache.facing() == Direction.DOWN) diffY -= 0.5;
+
+        float yaw = getMovementYaw();
+        float pitch = (float) -Math.toDegrees(Math.atan2(diffY, 1)); // fake dist = 1
+
+        if (lastRotations == null) {
+            return new float[]{yaw, pitch};
+        }
+
+        yaw = MathUtil.wrap(lastRotations[0], yaw, 30);
+        pitch = MathUtil.wrap(lastRotations[1], pitch, 20);
+
+        return new float[]{yaw, pitch};
     }
 }
