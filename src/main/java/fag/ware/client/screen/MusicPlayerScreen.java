@@ -5,6 +5,9 @@ import fag.ware.client.util.music.SpotifyLoader;
 import fag.ware.client.util.music.SpotifyPlaylistParser;
 import fag.ware.client.util.music.SpotifyPlaylists;
 import imgui.ImGui;
+import imgui.ImGuiStyle;
+import imgui.ImVec2;
+import imgui.flag.ImGuiStyleVar;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -39,7 +42,9 @@ public class MusicPlayerScreen extends Screen {
 
                                 for (var track : playlist.tracks) {
                                     if (track.textureId != -1) {
-                                        boolean press = ImGui.imageButton(track.textureId, 48, 48);
+                                        ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, new ImVec2(2.0f, 2.0f));
+                                        boolean press = ImGui.imageButton(track.textureId, 48, 48, 0, 1, 1, 0);
+                                        ImGui.popStyleVar();
 
                                         if (press) {
                                             currentTrack = track;
@@ -62,7 +67,7 @@ public class MusicPlayerScreen extends Screen {
                     float startX = ImGui.getCursorPosX();
                     float startY = ImGui.getCursorPosY();
 
-                    ImGui.image(currentTrack == null ? 3 : currentTrack.textureId, 100, 100);
+                    ImGui.image(currentTrack == null ? 3 : currentTrack.textureId, 100, 100, 0, 1, 1, 0);
 
                     ImGui.setCursorPosX(startX + 110);
                     ImGui.setCursorPosY(startY);
