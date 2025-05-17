@@ -28,7 +28,7 @@ public class ClientConnectionMixin {
     }
 
     @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V", at = @At("HEAD"), cancellable = true)
-    private void channelRead0(Packet<?> packet, @Nullable PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
+    private void send(Packet<?> packet, @Nullable PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
         SendPacketEvent sendPacketEvent = new SendPacketEvent(packet);
         sendPacketEvent.post();
 

@@ -8,15 +8,14 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.game.MovementUtil;
 
+@SuppressWarnings("ALL")
 @ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you fast")
 public class SpeedModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Strafe", "Strafe", "Legit", "NCP OnGround");
 
     @Subscribe
     public void onMotion(MotionEvent event) {
-        if (mc.player == null) return; // to stop intellij from bitching lole
         if (event.isPre()) {
-
             switch (mode.getValue()) {
                 case "Strafe" -> {
                     mc.options.jumpKey.setPressed(MovementUtil.isMoving());
@@ -30,8 +29,7 @@ public class SpeedModule extends AbstractModule {
                 }
             }
         } else {
-            switch (mode.getValue())
-            {
+            switch (mode.getValue()) {
                 case "NCP OnGround" -> {
                     double speedAmplifier = MovementUtil.getSpeedAmplifier();
 
@@ -45,12 +43,11 @@ public class SpeedModule extends AbstractModule {
 
                     boolean pushDown = true;
 
-                    if(mc.player.isOnGround()
-                            && MovementUtil.isMoving())
-                    {
+                    if (mc.player.isOnGround()
+                            && MovementUtil.isMoving()) {
                         float boost = (float) (speedAmplifier * 0.065f);
                         mc.player.jump();
-                        if(!pushDown) return;
+                        if (!pushDown) return;
                         setTimer(1.405f);
                         MovementUtil.setSpeed(((mc.player.age % 10 > 7) ? 0.4f : 0.325f) + boost);
                         MovementUtil.multiplyMotion(
@@ -58,10 +55,8 @@ public class SpeedModule extends AbstractModule {
                                 1.0f,
                                 0.01 + 1 + speedAmplifier * 0.175f
                         );
-                    }
-                    else if (!mc.player.isOnGround()
-                            && MovementUtil.getMotionY() > 0.3)
-                    {
+                    } else if (!mc.player.isOnGround()
+                            && MovementUtil.getMotionY() > 0.3) {
                         setTimer(0.85f);
                         MovementUtil.setMotionY(-0.42);
                         MovementUtil.offsetPosition(0, -0.4, 0);

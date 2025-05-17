@@ -15,7 +15,6 @@ import java.util.*;
 
 @ModuleInfo(name = "InventoryMove", description = "Allows you to walk with open gui's", category = ModuleCategory.MOVEMENT)
 public class InventoryMoveModule extends AbstractModule {
-
     private static final Map<KeyBinding, String> KEY_BIND_NAMES = new LinkedHashMap<>();
 
     static {

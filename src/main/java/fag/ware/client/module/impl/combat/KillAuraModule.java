@@ -15,9 +15,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
 
+@SuppressWarnings("ALL")
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
 public class KillAuraModule extends AbstractModule {
-
     private final GroupSetting sortingGroup = new GroupSetting("Sorting", false);
     public final StringSetting sortBy = (StringSetting) new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks").setParent(sortingGroup);
     public final NumberSetting searchRange = (NumberSetting) new NumberSetting("Search range", 5, 1, 6).setParent(sortingGroup);
