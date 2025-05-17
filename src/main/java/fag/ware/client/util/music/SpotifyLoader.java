@@ -56,6 +56,9 @@ public class SpotifyLoader {
     }
 
     public static void loadTrackImageAsync(SpotifyPlaylistParser.TrackInfo track) {
+        if (track.bufferedImage != null) {
+            return;
+        }
         CompletableFuture.runAsync(() -> {
             try {
                 track.bufferedImage = SpotifyThumbnailParser.getBufferedImage(

@@ -37,14 +37,12 @@ public class MusicPlayerScreen extends Screen {
                         if (ImGui.beginTabItem(playlist.name)) {
                             SpotifyLoader.loadPlaylistOnce(playlist);
                             if (ImGui.beginChild("TrackGrid", 0, 300, true)) {
-                                int columns = 8;
-                                int count = 0;
+                                var columns = 8;
+                                var count = 0;
 
                                 for (var track : playlist.tracks) {
                                     if (track.textureId != -1) {
-                                        ImGui.pushStyleVar(ImGuiStyleVar.FramePadding, new ImVec2(2.0f, 2.0f));
-                                        boolean press = ImGui.imageButton(track.textureId, 48, 48, 0, 1, 1, 0);
-                                        ImGui.popStyleVar();
+                                        boolean press = ImGui.imageButton(track.textureId, 48, 48, 0, 1, 1, 0, 2);
 
                                         if (press) {
                                             currentTrack = track;
@@ -64,8 +62,8 @@ public class MusicPlayerScreen extends Screen {
 
                     ImGui.separator();
 
-                    float startX = ImGui.getCursorPosX();
-                    float startY = ImGui.getCursorPosY();
+                    var startX = ImGui.getCursorPosX();
+                    var startY = ImGui.getCursorPosY();
 
                     ImGui.image(currentTrack == null ? 3 : currentTrack.textureId, 100, 100, 0, 1, 1, 0);
 

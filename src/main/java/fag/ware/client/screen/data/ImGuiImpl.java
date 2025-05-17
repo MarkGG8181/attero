@@ -20,26 +20,15 @@ import net.minecraft.client.texture.GlTexture;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import org.lwjgl.stb.STBImage;
-import org.lwjgl.system.MemoryStack;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.mojang.blaze3d.opengl.GlConst.*;
-import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT;
-import static org.lwjgl.opengl.EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT;
 
 public class ImGuiImpl {
     private final static ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
@@ -69,12 +58,12 @@ public class ImGuiImpl {
             rangesBuilder.addRanges(data.getFonts().getGlyphRangesCyrillic());
             rangesBuilder.addRanges(data.getFonts().getGlyphRangesJapanese());
 
-            final short[] glyphRanges = rangesBuilder.buildRanges();
+            final var glyphRanges = rangesBuilder.buildRanges();
 
             final ImFontConfig basicConfig = new ImFontConfig();
             basicConfig.setGlyphRanges(data.getFonts().getGlyphRangesCyrillic());
 
-            for (int i = 21; i < 50; i++) {  // Start from i = 21 (17th font size)
+            for (var i = 21; i < 50; i++) {  // Start from i = 21 (17th font size)
                 basicConfig.setName("Inter_28pt-Regular " + i + "px");
                 generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Inter_28pt-Regular.ttf"))), i, basicConfig, glyphRanges));
             }
@@ -121,7 +110,7 @@ public class ImGuiImpl {
     public static void draw(final RenderInterface runnable) {
         // Minecraft will not bind the framebuffer unless it is needed, so do it manually and hope Vulcan never gets real:tm:
         final Framebuffer framebuffer = MinecraftClient.getInstance().getFramebuffer();
-        final int previousFramebuffer = ((GlTexture) framebuffer.getColorAttachment()).getOrCreateFramebuffer(((GlBackend) RenderSystem.getDevice()).getFramebufferManager(), null);
+        final var previousFramebuffer = ((GlTexture) framebuffer.getColorAttachment()).getOrCreateFramebuffer(((GlBackend) RenderSystem.getDevice()).getFramebufferManager(), null);
         GlStateManager._glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);
         GL11.glViewport(0, 0, framebuffer.viewportWidth, framebuffer.viewportHeight);
 
@@ -155,17 +144,17 @@ public class ImGuiImpl {
     }
 
     public static int loadTexture(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
+        var width = image.getWidth();
+        var height = image.getHeight();
 
-        int[] pixels = new int[width * height];
+        var pixels = new int[width * height];
         image.getRGB(0, 0, width, height, pixels, 0, width);
 
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 
-        for (int y = height - 1; y >= 0; y--) {
-            for (int x = 0; x < width; x++) {
-                int pixel = pixels[y * width + x];
+        for (var y = height - 1; y >= 0; y--) {
+            for (var x = 0; x < width; x++) {
+                var pixel = pixels[y * width + x];
                 buffer.put((byte) ((pixel >> 16) & 0xFF)); // R
                 buffer.put((byte) ((pixel >> 8) & 0xFF));  // G
                 buffer.put((byte) (pixel & 0xFF));         // B
@@ -174,7 +163,7 @@ public class ImGuiImpl {
         }
         buffer.flip();
 
-        int id = GL45C.glGenTextures();
+        var id = GL45C.glGenTextures();
         GL45C.glBindTexture(GL45C.GL_TEXTURE_2D, id);
 
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
