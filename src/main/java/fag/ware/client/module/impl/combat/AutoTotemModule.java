@@ -16,8 +16,9 @@ import net.minecraft.screen.slot.SlotActionType;
 @ModuleInfo(name = "AutoTotem", category = ModuleCategory.COMBAT, description = "Automatically puts a totem in your offhand")
 public class AutoTotemModule extends AbstractModule {
     private final BooleanSetting manuallyOpenInv = new BooleanSetting("Manually open inventory", false);
-    private final NumberSetting inventoryOpenDelay = (NumberSetting) new NumberSetting("Inventory Open Delay", 60, 0, 750).hide(() -> manuallyOpenInv.getValue());
-    private final NumberSetting totemDelay = (NumberSetting) new NumberSetting("Totem Delay", 100, 0, 750);
+    private final NumberSetting inventoryOpenDelay = (NumberSetting) new NumberSetting("Inventory open delay", 60, 0, 750).hide(manuallyOpenInv::getValue);
+    private final NumberSetting totemDelay = new NumberSetting("Totem delay", 100, 0, 750);
+
     private final Timer timer = new Timer();
 
     @Subscribe
@@ -62,6 +63,7 @@ public class AutoTotemModule extends AbstractModule {
             }
         }
     }
+
     @Override
     public void onDisable() {
         timer.reset();
