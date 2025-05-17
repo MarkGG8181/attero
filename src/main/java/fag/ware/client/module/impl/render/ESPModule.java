@@ -7,7 +7,6 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.ColorSetting;
-import fag.ware.client.module.data.setting.impl.GroupSetting;
 import fag.ware.client.module.data.setting.impl.MultiStringSetting;
 import fag.ware.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;

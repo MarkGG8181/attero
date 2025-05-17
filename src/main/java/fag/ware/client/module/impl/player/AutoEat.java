@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 
-
 // Fuckass mappings, fuckass mc, fuckass EVERYTHING, https://tenor.com/gw1bwm4crmQ.gif
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "AutoEat", category = ModuleCategory.PLAYER, description = "Automatically eats")
@@ -28,6 +27,8 @@ public class AutoEat extends AbstractModule {
 
     private int prevSlot = -1;
     private boolean isEating = false;
+
+    //looks really similar to Meteor's AutoEat :thinking:
 
     @Subscribe
     public void onTick(TickEvent event) {
@@ -57,7 +58,7 @@ public class AutoEat extends AbstractModule {
         }
     }
 
-    public boolean switchToFood() {
+    private boolean switchToFood() {
         for (int i = 0; i < 9; i++) {
             ItemStack stack = mc.player.getInventory().getStack(i);
             if (stack.getComponents().contains(DataComponentTypes.FOOD)) {
