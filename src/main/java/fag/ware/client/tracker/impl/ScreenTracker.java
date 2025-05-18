@@ -3,6 +3,7 @@ package fag.ware.client.tracker.impl;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.KeyEvent;
+import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.MusicPlayerScreen;
@@ -29,8 +30,19 @@ public class ScreenTracker extends AbstractTracker<Screen> {
     @Subscribe
     public void onKey(KeyEvent event) {
         getSet().forEach(s -> {
-            if (event.getKey() == GLFW.GLFW_KEY_RIGHT_SHIFT) {
-                MinecraftClient.getInstance().setScreen(getByClass(ClickScreen.class));
+            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).mode.getValue()) {
+                case "Fagware" -> {
+                    if (event.getKey() == ModuleTracker.getInstance().getByClass(ClickGUIModule.class).getKeybinds().getFirst()) {
+                        MinecraftClient.getInstance().setScreen(getByClass(ClickScreen.class));
+                        ModuleTracker.getInstance().getByClass(ClickGUIModule.class).setEnabled(true);
+                    }
+                }
+                case "Jello" -> {
+                    if (event.getKey() == ModuleTracker.getInstance().getByClass(ClickGUIModule.class).getKeybinds().getFirst()) {
+                        MinecraftClient.getInstance().setScreen(getByClass(JelloClickScreen.class));
+                        ModuleTracker.getInstance().getByClass(ClickGUIModule.class).setEnabled(true);
+                    }
+                }
             }
 
             if (event.getKey() == GLFW.GLFW_KEY_RIGHT_CONTROL) {

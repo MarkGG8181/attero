@@ -11,8 +11,10 @@ import fag.ware.client.module.impl.movement.*;
 import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
 import fag.ware.client.module.impl.world.*;
+import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
+import net.minecraft.client.gui.screen.ChatScreen;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,10 +53,11 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new ESPModule());
         getSet().add(new FullBrightModule());
         getSet().add(new ModuleListModule());
+        getSet().add(new ClickGUIModule());
 
         /* PLAYER */
         getSet().add(new NoFallModule());
-        getSet().add(new FastPlaceModule());
+        getSet().add(new FastUseModule());
         getSet().add(new AutoDisconnectModule());
         getSet().add(new BlinkModule());
         getSet().add(new ScaffoldWalkModule());
@@ -71,7 +74,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
     @Subscribe
     public void onKey(KeyEvent event) {
-        if (mc.player != null && mc.world != null && mc.currentScreen == null)
+        if (mc.currentScreen == null)
             getSet().forEach(mod -> {
                 if (mod.getKeybinds().contains(event.getKey())) {
                     mod.toggle();
