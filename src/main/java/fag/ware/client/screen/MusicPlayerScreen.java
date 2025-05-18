@@ -1,13 +1,14 @@
 package fag.ware.client.screen;
 
+import com.jfposton.ytdlp.YtDlpException;
+import fag.ware.client.Fagware;
 import fag.ware.client.screen.data.ImGuiImpl;
-import fag.ware.client.util.music.SpotifyLoader;
-import fag.ware.client.util.music.SpotifyPlaylistParser;
-import fag.ware.client.util.music.SpotifyPlaylists;
+
+import fag.ware.client.util.music.YoutubePlaylistLoader;
+import fag.ware.client.util.music.YoutubePlaylist;
+
+import fag.ware.client.util.music.YoutubePlaylistParser;
 import imgui.ImGui;
-import imgui.ImGuiStyle;
-import imgui.ImVec2;
-import imgui.flag.ImGuiStyleVar;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -20,10 +21,14 @@ public class MusicPlayerScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        SpotifyLoader.loadPlaylists(false);
+        try {
+            YoutubePlaylistLoader.loadPlaylists(false);
+        } catch (YtDlpException e) {
+            Fagware.LOGGER.warn("Failed to load playlist", e);
+        }
     }
 
-    private SpotifyPlaylistParser.TrackInfo currentTrack = null;
+    private YoutubePlaylistParser.TrackInfo currentTrack = null;
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
@@ -33,9 +38,9 @@ public class MusicPlayerScreen extends Screen {
             ImGuiImpl.applyMarineTheme();
             if (ImGui.begin("Music Player")) {
                 if (ImGui.beginTabBar("TABBAR")) {
-                    for (SpotifyPlaylists playlist : SpotifyPlaylists.values()) {
+                    for (YoutubePlaylist playlist : YoutubePlaylist.values()) {
                         if (ImGui.beginTabItem(playlist.name)) {
-                            SpotifyLoader.loadPlaylistOnce(playlist);
+                            YoutubePlaylistLoader.loadPlaylistOnce(playlist);
                             if (ImGui.beginChild("TrackGrid", 0, 300, true)) {
                                 var columns = 8;
                                 var count = 0;
