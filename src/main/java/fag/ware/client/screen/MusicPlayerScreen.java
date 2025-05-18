@@ -1,5 +1,10 @@
 package fag.ware.client.screen;
 
+import com.jfposton.ytdlp.YtDlp;
+import com.jfposton.ytdlp.YtDlpException;
+import com.jfposton.ytdlp.YtDlpRequest;
+import com.jfposton.ytdlp.YtDlpResponse;
+import fag.ware.client.Fagware;
 import fag.ware.client.screen.data.ImGuiImpl;
 
 import fag.ware.client.util.math.ColorUtil;
@@ -8,29 +13,41 @@ import fag.ware.client.util.music.*;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
+import javazoom.jl.decoder.Bitstream;
+import javazoom.jl.decoder.BitstreamException;
+import javazoom.jl.decoder.Header;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
+
 
 public class MusicPlayerScreen extends Screen {
     public MusicPlayerScreen() {
         super(Text.of("Music Player"));
     }
 
-    @Override
-    protected void init() {
-        super.init();
-    }
-
     private YoutubeSong currentSong;
     private YoutubePlaylist currentPlaylist;
     private int textureId;
+
+    private AudioPlayer audioPlayer = new AudioPlayer();
+    private int currentFrame = 0;
+    private int maxFrames = 0;
+
+    private String currentUrl = null;
+    private boolean isPlaying = false;
 
     private String getThumbnailURL(YoutubeSong song) {
         return "https://i.ytimg.com/vi/" + song.id + "/mqdefault.jpg";
@@ -111,9 +128,63 @@ public class MusicPlayerScreen extends Screen {
                     ImGui.image(textureId, 60, 60);
                     ImGui.sameLine();
                     ImGui.text(currentSong.title + "\n" + currentSong.artist);
+
+                    if (ImGui.button("Play")) {
+                        try {
+                            YtDlpRequest request = new YtDlpRequest(currentSong.url, YtDlpDownloader.getYtDlpPath().getParent().toString());
+                            request.setOption("ignore-errors");
+                            request.setOption("format", "bestaudio");
+                            request.setOption("get-url");
+
+                            YtDlpResponse response = YtDlp.execute(request);
+                            currentUrl = response.getOut().trim();
+
+                            currentUrl = response.getOut().trim();
+                            audioPlayer.play(currentUrl);
+                            isPlaying = true;
+                        } catch (Exception e) {
+                            Fagware.LOGGER.error("Failed to play song {}", currentSong.title, e);
+                        }
+                    }
+
+                    if (currentUrl != null) {
+                        if (ImGui.button(isPlaying ? "Pause" : "Resume")) {
+                            if (isPlaying) {
+                                audioPlayer.pause();
+                            } else {
+                                try {
+                                    audioPlayer.resume();
+                                } catch (Exception e) {
+                                    Fagware.LOGGER.error("Failed to pause/resume song", e);
+                                }
+                            }
+                            isPlaying = !isPlaying;
+                        }
+
+                        currentFrame = audioPlayer.getCurrentFrame();
+
+                        float[] slider = new float[]{currentFrame};
+                        if (ImGui.sliderFloat("Seek", slider, 0, maxFrames)) {
+                            try {
+                                audioPlayer.seek((int) slider[0]);
+                                currentFrame = (int) slider[0];
+                            } catch (Exception e) {
+                                Fagware.LOGGER.error("Failed to seek song", e);
+                            }
+                        }
+                    }
                 }
             }
             ImGui.end();
         });
+    }
+
+    private int getTotalFrames(InputStream input) throws IOException, BitstreamException {
+        Bitstream bitstream = new Bitstream(input);
+        Header header = bitstream.readFrame();
+        if (header == null) return 0;
+        int totalFrames = header.max_number_of_frames(input.available());
+        bitstream.closeFrame();
+        return totalFrames;
     }
 }
