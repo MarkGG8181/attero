@@ -1,5 +1,6 @@
 package fag.ware.client.util.music;
 
+import fag.ware.client.Fagware;
 import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.Decoder;
 import javazoom.jl.decoder.Header;
@@ -9,101 +10,85 @@ import javazoom.jl.player.Player;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AudioPlayer {
-    private Thread playbackThread;
     private Player player;
-    private BufferedInputStream stream;
-    private boolean isPaused = false;
-    private boolean stopRequested = false;
-    private int currentFrame = 0;
-    private int skipToFrame = 0;
-    private Bitstream bitstream;
-    private Decoder decoder;
-    private AudioDevice audioDevice;
+    private Thread playerThread;
+    private volatile boolean isPaused = false;
+    private volatile boolean isStopped = false;
+    private String currentUrl;
 
     public synchronized void play(String url) throws Exception {
-        stop(); // stop current playback if any
-
-        URLConnection conn = new URL(url).openConnection();
-        stream = new BufferedInputStream(conn.getInputStream());
-
-        stopRequested = false;
+        stop();
+        currentUrl = url;
+        isStopped = false;
         isPaused = false;
 
-        bitstream = new Bitstream(stream);
-        decoder = new Decoder();
-        audioDevice = javazoom.jl.player.FactoryRegistry.systemRegistry().createAudioDevice();
-        audioDevice.open(decoder);
+        URLConnection conn = new URL(url).openConnection();
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+        conn.setRequestProperty("Accept", "audio/*");
 
-        currentFrame = 0;
+        Fagware.LOGGER.info("Connecting to audio stream...");
+        Fagware.LOGGER.info("Content-Type: {}", conn.getContentType());
 
-        playbackThread = new Thread(() -> {
+        BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+        player = new Player(bis);
+
+        playerThread = new Thread(() -> {
             try {
-                while (!stopRequested) {
-                    Header header = bitstream.readFrame();
-                    if (header == null) break;
-
-                    if (currentFrame >= skipToFrame) {
-                        // Decode and play frame
-                        var sampleBuffer = (javazoom.jl.decoder.SampleBuffer) decoder.decodeFrame(header, bitstream);
-                        audioDevice.write(sampleBuffer.getBuffer(), 0, sampleBuffer.getBufferLength());
+                Fagware.LOGGER.info("Playback started");
+                while (!isStopped && player.play(1)) {
+                    if (isPaused) {
+                        player.close();
+                        while (isPaused && !isStopped) {
+                            Thread.sleep(100);
+                        }
+                        if (!isStopped) {
+                            // Recreate player for resume
+                            URLConnection newConn = new URL(currentUrl).openConnection();
+                            player = new Player(newConn.getInputStream());
+                        }
                     }
-                    bitstream.closeFrame();
-
-                    currentFrame++;
                 }
-                audioDevice.flush();
-                audioDevice.close();
-                bitstream.close();
+                Fagware.LOGGER.info("Playback completed");
             } catch (Exception e) {
-                e.printStackTrace();
+                if (!(e instanceof InterruptedException)) {
+                    Fagware.LOGGER.error("Playback error", e);
+                }
             }
         });
-        playbackThread.start();
-    }
-
-    public int getCurrentFrame() {
-        return currentFrame;
+        playerThread.start();
     }
 
     public void pause() {
-        if (player != null) {
-            stopRequested = true;
+        if (!isStopped && !isPaused) {
+            Fagware.LOGGER.info("Pausing playback");
             isPaused = true;
-            player.close();
-            // store the frame where it stopped
-            currentFrame = skipToFrame;
         }
     }
 
-    public void resume() throws Exception {
-        if (isPaused) {
-            skipToFrame = currentFrame;
-            playFromFrame(skipToFrame);
+    public void resume() {
+        if (!isStopped && isPaused) {
+            Fagware.LOGGER.info("Resuming playback");
             isPaused = false;
         }
     }
 
-    private void playFromFrame(int frame) throws Exception {
-        stream.reset(); // reset to beginning
-        player = new Player(stream);
-        player.play(frame);
-    }
-
     public void stop() {
-        stopRequested = true;
+        Fagware.LOGGER.info("Stopping playback");
+        isStopped = true;
+        isPaused = false;
         if (player != null) {
             player.close();
         }
-        if (playbackThread != null && playbackThread.isAlive()) {
-            playbackThread.interrupt();
+        if (playerThread != null) {
+            playerThread.interrupt();
         }
     }
 
-    public void seek(int frame) throws Exception {
-        skipToFrame = frame;
-        stop();
-        playFromFrame(frame);
+    public boolean isPlaying() {
+        return !isStopped && !isPaused;
     }
 }

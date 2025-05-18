@@ -134,11 +134,14 @@ public class MusicPlayerScreen extends Screen {
                             YtDlpRequest request = new YtDlpRequest(currentSong.url, YtDlpDownloader.getYtDlpPath().getParent().toString());
                             request.setOption("ignore-errors");
                             request.setOption("format", "bestaudio");
+                            request.setOption("extract-audio");
+                            request.setOption("audio-format", "mp3");
                             request.setOption("get-url");
 
                             YtDlpResponse response = YtDlp.execute(request);
                             currentUrl = response.getOut().trim();
 
+                            Fagware.LOGGER.info("Attempting to play URL: {}", currentUrl);
                             audioPlayer.play(currentUrl);
                             isPlaying = true;
                         } catch (Exception e) {
@@ -147,43 +150,14 @@ public class MusicPlayerScreen extends Screen {
                     }
 
                     if (currentUrl != null) {
-                        if (ImGui.button(isPlaying ? "Pause" : "Resume")) {
-                            if (isPlaying) {
-                                audioPlayer.pause();
-                            } else {
-                                try {
-                                    audioPlayer.resume();
-                                } catch (Exception e) {
-                                    Fagware.LOGGER.error("Failed to pause/resume song", e);
-                                }
-                            }
+                        if (ImGui.button("Pause")) {
+                            audioPlayer.stop();
                             isPlaying = !isPlaying;
-                        }
-
-                        currentFrame = audioPlayer.getCurrentFrame();
-
-                        float[] slider = new float[]{currentFrame};
-                        if (ImGui.sliderFloat("Seek", slider, 0, maxFrames)) {
-                            try {
-                                audioPlayer.seek((int) slider[0]);
-                                currentFrame = (int) slider[0];
-                            } catch (Exception e) {
-                                Fagware.LOGGER.error("Failed to seek song", e);
-                            }
                         }
                     }
                 }
             }
             ImGui.end();
         });
-    }
-
-    private int getTotalFrames(InputStream input) throws IOException, BitstreamException {
-        Bitstream bitstream = new Bitstream(input);
-        Header header = bitstream.readFrame();
-        if (header == null) return 0;
-        int totalFrames = header.max_number_of_frames(input.available());
-        bitstream.closeFrame();
-        return totalFrames;
     }
 }
