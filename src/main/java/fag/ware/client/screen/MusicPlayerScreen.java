@@ -2,9 +2,11 @@ package fag.ware.client.screen;
 
 import fag.ware.client.screen.data.ImGuiImpl;
 
+import fag.ware.client.util.math.ColorUtil;
 import fag.ware.client.util.music.*;
 
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -68,8 +70,21 @@ public class MusicPlayerScreen extends Screen {
 
                 for (YoutubePlaylist playlist : YoutubePlaylist.values()) {
                     float fullWidth = ImGui.getContentRegionAvailX();
+
+                    boolean isCurrent = currentPlaylist != null && playlist == currentPlaylist;
+
+                    if (isCurrent) {
+                        ImGui.pushStyleColor(ImGuiCol.Button,        ColorUtil.brighten(0.14f, 0.58f, 0.46f, 1.0f, 1.4f));
+                        ImGui.pushStyleColor(ImGuiCol.ButtonHovered, ColorUtil.brighten(0.10f, 0.43f, 0.34f, 1.0f, 1.4f));
+                        ImGui.pushStyleColor(ImGuiCol.ButtonActive,  ColorUtil.brighten(0.15f, 0.63f, 0.49f, 1.0f, 1.4f));
+                    }
+
                     if (ImGui.button(playlist.name(), fullWidth, 0)) {
                         updatePlaylist(playlist);
+                    }
+
+                    if (isCurrent) {
+                        ImGui.popStyleColor(3);
                     }
                 }
 

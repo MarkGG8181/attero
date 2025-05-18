@@ -1,5 +1,6 @@
 package fag.ware.client.util.math;
 
+import imgui.ImVec4;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -29,5 +30,14 @@ public class ColorUtil {
 
     public static int toImGuiColor(Color color) {
         return (color.getAlpha() << 24) | (color.getBlue() << 16) | (color.getGreen() << 8) | color.getRed();
+    }
+
+    public static ImVec4 brighten(float r, float g, float b, float a, float factor) {
+        return new ImVec4(
+                Math.min(r * factor, 1.0f),
+                Math.min(g * factor, 1.0f),
+                Math.min(b * factor, 1.0f),
+                a
+        );
     }
 }
