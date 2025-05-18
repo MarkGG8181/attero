@@ -28,15 +28,15 @@ public class MusicPlayerScreen extends Screen {
         super.init();
     }
 
-    public YoutubeSong currentSong;
-    public YoutubePlaylist currentPlaylist;
-    public int textureId;
+    private YoutubeSong currentSong;
+    private YoutubePlaylist currentPlaylist;
+    private int textureId;
 
-    public String getThumbnailURL(YoutubeSong song) {
+    private String getThumbnailURL(YoutubeSong song) {
         return "https://i.ytimg.com/vi/" + song.id + "/mqdefault.jpg";
     }
 
-    public void updatePlaylist(YoutubePlaylist playlist) {
+    private void updatePlaylist(YoutubePlaylist playlist) {
         if (playlist.tracks.isEmpty()) {
             new Thread(() -> playlist.tracks.addAll(Arrays.stream(YoutubeThumbnailParser.getVideosFromPlaylist(playlist.id)).toList())).start();
         }
@@ -44,7 +44,7 @@ public class MusicPlayerScreen extends Screen {
         currentPlaylist = playlist;
     }
 
-    public void updateVideo(YoutubeSong video) {
+    private void updateVideo(YoutubeSong video) {
         try {
             BufferedImage image = ImageIO.read(new URL(getThumbnailURL(video)));
             BufferedImage thumbnail = image
@@ -74,9 +74,9 @@ public class MusicPlayerScreen extends Screen {
                     boolean isCurrent = currentPlaylist != null && playlist == currentPlaylist;
 
                     if (isCurrent) {
-                        ImGui.pushStyleColor(ImGuiCol.Button,        ColorUtil.brighten(0.14f, 0.58f, 0.46f, 1.0f, 1.4f));
+                        ImGui.pushStyleColor(ImGuiCol.Button, ColorUtil.brighten(0.14f, 0.58f, 0.46f, 1.0f, 1.4f));
                         ImGui.pushStyleColor(ImGuiCol.ButtonHovered, ColorUtil.brighten(0.10f, 0.43f, 0.34f, 1.0f, 1.4f));
-                        ImGui.pushStyleColor(ImGuiCol.ButtonActive,  ColorUtil.brighten(0.15f, 0.63f, 0.49f, 1.0f, 1.4f));
+                        ImGui.pushStyleColor(ImGuiCol.ButtonActive, ColorUtil.brighten(0.15f, 0.63f, 0.49f, 1.0f, 1.4f));
                     }
 
                     if (ImGui.button(playlist.name(), fullWidth, 0)) {
@@ -106,14 +106,12 @@ public class MusicPlayerScreen extends Screen {
 
                 ImGui.endChild();
 
-
                 if (currentSong != null) {
                     ImGui.separator();
                     ImGui.image(textureId, 60, 60);
                     ImGui.sameLine();
                     ImGui.text(currentSong.title + "\n" + currentSong.artist);
                 }
-
             }
             ImGui.end();
         });
