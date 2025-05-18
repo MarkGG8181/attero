@@ -5,6 +5,7 @@ import fag.ware.client.event.impl.render.Render2DEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
+import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
@@ -20,6 +21,7 @@ import java.awt.*;
 @ModuleInfo(name = "Watermark", category = ModuleCategory.RENDER, description = "Draws a watermark")
 public class WatermarkModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Rounded", "Rounded", "Minecraft");
+    private final BooleanSetting hideName = new BooleanSetting("Hide name", false);
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
 
     @Subscribe
@@ -33,9 +35,10 @@ public class WatermarkModule extends AbstractModule {
                 ImGuiImpl.draw(io -> {
                     ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
                     ImDrawList drawList = ImGui.getForegroundDrawList();
-
+                    String username = hideName.getValue() ? "Hidden" : mc.getSession().getUsername();
                     String watermarkText = "Fagware";
-                    String userInfoText = "| " + mc.getSession().getUsername() + " | " + mc.getCurrentFps() + " fps";
+                    String userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
+
 
                     ImVec2 watermarkTextSize = ImGui.calcTextSize(watermarkText);
                     ImVec2 userInfoTextSize = ImGui.calcTextSize(userInfoText);
