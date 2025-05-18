@@ -139,7 +139,6 @@ public class MusicPlayerScreen extends Screen {
                             YtDlpResponse response = YtDlp.execute(request);
                             currentUrl = response.getOut().trim();
 
-                            currentUrl = response.getOut().trim();
                             audioPlayer.play(currentUrl);
                             isPlaying = true;
                         } catch (Exception e) {
