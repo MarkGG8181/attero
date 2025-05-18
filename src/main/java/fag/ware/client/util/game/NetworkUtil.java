@@ -1,6 +1,5 @@
 package fag.ware.client.util.game;
 
-import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.network.packet.Packet;
@@ -18,8 +17,6 @@ public class NetworkUtil {
 
     private static final Map<String, Class<? extends Packet<?>>> S2C_PACKETS_R = new Object2ReferenceOpenHashMap<>();
     private static final Map<String, Class<? extends Packet<?>>> C2S_PACKETS_R = new Object2ReferenceOpenHashMap<>();
-
-    public static final Set<Class<? extends Packet<?>>> PACKETS = Sets.union(getC2SPackets(), getS2CPackets());
 
     static {
         C2S_PACKETS.put(net.minecraft.network.packet.c2s.play.AcknowledgeChunksC2SPacket.class, "AcknowledgeChunksC2SPacket");
