@@ -1,17 +1,20 @@
 package fag.ware.client.screen;
 
-import com.jfposton.ytdlp.YtDlpException;
-import fag.ware.client.Fagware;
 import fag.ware.client.screen.data.ImGuiImpl;
 
-import fag.ware.client.util.music.YoutubePlaylistLoader;
-import fag.ware.client.util.music.YoutubePlaylist;
+import fag.ware.client.util.music.*;
 
-import fag.ware.client.util.music.YoutubePlaylistParser;
 import imgui.ImGui;
+import imgui.flag.ImGuiWindowFlags;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
 
 public class MusicPlayerScreen extends Screen {
     public MusicPlayerScreen() {
@@ -21,14 +24,37 @@ public class MusicPlayerScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        try {
-            YoutubePlaylistLoader.loadPlaylists(false);
-        } catch (YtDlpException e) {
-            Fagware.LOGGER.warn("Failed to load playlist", e);
-        }
     }
 
-    private YoutubePlaylistParser.TrackInfo currentTrack = null;
+    public YoutubeSong currentSong;
+    public YoutubePlaylist currentPlaylist;
+    public int textureId;
+
+    public String getThumbnailURL(YoutubeSong song) {
+        return "https://i.ytimg.com/vi/" + song.id + "/mqdefault.jpg";
+    }
+
+    public void updatePlaylist(YoutubePlaylist playlist) {
+        if (playlist.tracks.isEmpty()) {
+            new Thread(() -> playlist.tracks.addAll(Arrays.stream(YoutubeThumbnailParser.getVideosFromPlaylist(playlist.id)).toList())).start();
+        }
+
+        currentPlaylist = playlist;
+    }
+
+    public void updateVideo(YoutubeSong video) {
+        try {
+            BufferedImage image = ImageIO.read(new URL(getThumbnailURL(video)));
+            BufferedImage thumbnail = image
+                    .getSubimage(0, 0, image.getWidth(), image.getHeight());
+
+            textureId = ImGuiImpl.convertBufferedImageToTexture(thumbnail);
+            currentSong = video;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
@@ -36,56 +62,43 @@ public class MusicPlayerScreen extends Screen {
 
         ImGuiImpl.draw(io -> {
             ImGuiImpl.applyMarineTheme();
-            if (ImGui.begin("Music Player")) {
-                if (ImGui.beginTabBar("TABBAR")) {
-                    for (YoutubePlaylist playlist : YoutubePlaylist.values()) {
-                        if (ImGui.beginTabItem(playlist.name)) {
-                            YoutubePlaylistLoader.loadPlaylistOnce(playlist);
-                            if (ImGui.beginChild("TrackGrid", 0, 300, true)) {
-                                var columns = 8;
-                                var count = 0;
+            if (ImGui.begin("Music Player", ImGuiWindowFlags.NoDocking)) {
+                ImGui.setWindowSize(684, 385);
+                ImGui.beginChild("Sidebar", 150, 270, true);
 
-                                for (var track : playlist.tracks) {
-                                    if (track.textureId != -1) {
-                                        boolean press = ImGui.imageButton(track.textureId, 48, 48, 0, 1, 1, 0, 2);
+                for (YoutubePlaylist playlist : YoutubePlaylist.values()) {
+                    float fullWidth = ImGui.getContentRegionAvailX();
+                    if (ImGui.button(playlist.name(), fullWidth, 0)) {
+                        updatePlaylist(playlist);
+                    }
+                }
 
-                                        if (press) {
-                                            currentTrack = track;
-                                        }
+                ImGui.endChild();
 
-                                        count++;
-                                        if (count % columns != 0) {
-                                            ImGui.sameLine();
-                                        }
-                                    }
-                                }
-                                ImGui.endChild();
-                            }
-                            ImGui.endTabItem();
+                ImGui.sameLine();
+                ImGui.beginChild("Content", 0, 270, true);
+
+                if (currentPlaylist != null) {
+                    for (YoutubeSong track : currentPlaylist.tracks) {
+                        boolean selected = currentSong != null && currentSong.equals(track);
+                        if (ImGui.selectable(track.title, selected)) {
+                            updateVideo(track);
                         }
                     }
-
-                    ImGui.separator();
-
-                    var startX = ImGui.getCursorPosX();
-                    var startY = ImGui.getCursorPosY();
-
-                    ImGui.image(currentTrack == null ? 3 : currentTrack.textureId, 100, 100, 0, 1, 1, 0);
-
-                    ImGui.setCursorPosX(startX + 110);
-                    ImGui.setCursorPosY(startY);
-                    ImGui.text(currentTrack == null ? "Title" : currentTrack.title);
-
-                    ImGui.setCursorPosX(startX + 110);
-                    ImGui.setCursorPosY(startY + ImGui.getTextLineHeight());
-                    ImGui.text(currentTrack == null ? "Author" : currentTrack.artist);
-
-                    ImGui.setCursorPosX(startX + 110);
-                    ImGui.setCursorPosY(startY + ImGui.getTextLineHeight() * 2);
-                    ImGui.text("Duration: 00:00 - 03:00");
-
-                    ImGui.endTabBar();
+                } else {
+                    ImGui.text("No playlist selected.");
                 }
+
+                ImGui.endChild();
+
+
+                if (currentSong != null) {
+                    ImGui.separator();
+                    ImGui.image(textureId, 60, 60);
+                    ImGui.sameLine();
+                    ImGui.text(currentSong.title + "\n" + currentSong.artist);
+                }
+
             }
             ImGui.end();
         });

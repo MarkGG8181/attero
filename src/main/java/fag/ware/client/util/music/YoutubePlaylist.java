@@ -11,11 +11,11 @@ public enum YoutubePlaylist {
     LATIN("RDCLAK5uy_ntQM2JdqsobUzxHV4fPen-aWL_-JCCpsc", "Latin"),
     CHILL("RDCLAK5uy_lRr70m6uTvLpxAG3G6Yuc41cJBIXODAws", "Chill");
 
-    public final String playlistId, name;
-    public List<YoutubePlaylistParser.TrackInfo> tracks = new ArrayList<>();
+    public final String id, name;
+    public List<YoutubeSong> tracks = new ArrayList<>();
 
-    YoutubePlaylist(String playlistId, String name) {
-        this.playlistId = playlistId;
+    YoutubePlaylist(String id, String name) {
+        this.id = id;
         this.name = name;
     }
 }

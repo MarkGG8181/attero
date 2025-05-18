@@ -20,6 +20,8 @@ import net.minecraft.client.texture.GlTexture;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
+import org.lwjgl.system.MemoryUtil;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -143,40 +145,32 @@ public class ImGuiImpl {
         ImPlot.destroyContext();
     }
 
-    public static int loadTexture(BufferedImage image) {
-        var width = image.getWidth();
-        var height = image.getHeight();
-
-        var pixels = new int[width * height];
+    public static int convertBufferedImageToTexture(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int[] pixels = new int[width * height];
         image.getRGB(0, 0, width, height, pixels, 0, width);
 
-        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-
-        for (var y = height - 1; y >= 0; y--) {
-            for (var x = 0; x < width; x++) {
-                var pixel = pixels[y * width + x];
-                buffer.put((byte) ((pixel >> 16) & 0xFF)); // R
-                buffer.put((byte) ((pixel >> 8) & 0xFF));  // G
-                buffer.put((byte) (pixel & 0xFF));         // B
-                buffer.put((byte) ((pixel >> 24) & 0xFF)); // A
-            }
+        ByteBuffer buffer = MemoryUtil.memAlloc(width * height * 4); // 4 bytes for RGBA
+        for (int i = 0; i < pixels.length; i++) {
+            int pixel = pixels[i];
+            buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red
+            buffer.put((byte) ((pixel >> 8) & 0xFF));  // Green
+            buffer.put((byte) (pixel & 0xFF));         // Blue
+            buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha (fully opaque)
         }
         buffer.flip();
 
-        var id = GL45C.glGenTextures();
-        GL45C.glBindTexture(GL45C.GL_TEXTURE_2D, id);
+        int textureID = GL11.glGenTextures();
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
-        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        MemoryUtil.memFree(buffer);
 
-        GL45C.glTexImage2D(GL45C.GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-        GL45C.glGenerateMipmap(GL45C.GL_TEXTURE_2D);
-
-        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        GL45C.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        return id;
+        return textureID;
     }
 
     public static void applyMarineTheme() {
