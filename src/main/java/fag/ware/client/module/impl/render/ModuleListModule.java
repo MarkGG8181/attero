@@ -27,6 +27,7 @@ import java.util.List;
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Simple", "Simple", "Minecraft");
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Simple"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
@@ -53,7 +54,11 @@ public class ModuleListModule extends AbstractModule {
 
         switch (mode.getValue()) {
             case "Simple" -> ImGuiImpl.draw(io -> {
-                ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+                switch (font.getValue()) {
+                    case "Inter" ->  ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+                    case "Arial" ->  ImGui.pushFont(ImGuiImpl.Arial);
+                    case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.Comfortaa);
+                }
                 ImDrawList drawList = ImGui.getForegroundDrawList();
 
                 modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));

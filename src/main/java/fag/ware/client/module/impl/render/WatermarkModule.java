@@ -21,6 +21,7 @@ import java.awt.*;
 @ModuleInfo(name = "Watermark", category = ModuleCategory.RENDER, description = "Draws a watermark")
 public class WatermarkModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Rounded", "Rounded", "Minecraft");
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Rounded"));
     private final BooleanSetting hideName = new BooleanSetting("Hide name", false);
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
 
@@ -33,7 +34,11 @@ public class WatermarkModule extends AbstractModule {
         switch (mode.getValue()) {
             case "Rounded" -> {
                 ImGuiImpl.draw(io -> {
-                    ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+                    switch (font.getValue()) {
+                        case "Inter" ->  ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+                        case "Arial" ->  ImGui.pushFont(ImGuiImpl.Arial);
+                        case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.Comfortaa);
+                    }
                     ImDrawList drawList = ImGui.getForegroundDrawList();
                     String username = hideName.getValue() ? "Hidden" : mc.getSession().getUsername();
                     String watermarkText = "Fagware";
