@@ -66,6 +66,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         /* WORLD */
         getSet().add(new TimerModule());
+        getSet().add(new CrystalAuraModule());
 
         /* MISC */
         getSet().add(new AutoRespawnModule());
