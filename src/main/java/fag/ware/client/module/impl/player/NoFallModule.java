@@ -2,17 +2,20 @@ package fag.ware.client.module.impl.player;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.MotionEvent;
+import fag.ware.client.mixin.MinecraftClientAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.game.MovementUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 @ModuleInfo(name = "NoFall", category = ModuleCategory.PLAYER, description = "Makes you take 0 fall damage")
 public class NoFallModule extends AbstractModule {
-    private final StringSetting mode = new StringSetting("Mode", "Vanilla", "Vanilla", "Verus");
+    private final StringSetting mode = new StringSetting("Mode", "Vanilla", "Vanilla", "Verus", "MLG");
     private final StringSetting vanillaMode = (StringSetting) new StringSetting("Vanilla mode", "Packet-Full", "Packet-Full", "Packet-OnGround", "Set ground").hide(() -> !mode.is("Vanilla"));
     private final NumberSetting distance = new NumberSetting("Distance", 3.35, 1, 5);
 
@@ -34,6 +37,20 @@ public class NoFallModule extends AbstractModule {
                     mc.player.setOnGround(true);
                     MovementUtil.setMotionY(0.0);
                     mc.player.fallDistance = 0;
+                }
+                case "MLG" -> {
+                    for (int i = 0; i < 9; i++) {
+                        ItemStack stack = mc.player.getInventory().getStack(i);
+                        if (stack.isEmpty()) continue;
+                        if (stack.getItem() == Items.WATER_BUCKET) {
+                            mc.player.getInventory().setSelectedSlot(i);
+                            float prevPitch = mc.player.getPitch();
+                            mc.player.setPitch(90.0F);
+                            ((MinecraftClientAccessor) mc).invokeDoItemUse();
+                            mc.player.setPitch(prevPitch);
+
+                        }
+                    }
                 }
             }
         }
