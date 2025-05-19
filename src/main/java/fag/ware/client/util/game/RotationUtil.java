@@ -4,6 +4,7 @@ import fag.ware.client.event.impl.MoveInputEvent;
 import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;
 import fag.ware.client.util.math.MathUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -26,7 +27,7 @@ public class RotationUtil implements IMinecraft {
         noiseZ.SetFrequency(0.05f);
     }
 
-    public static float[] toRotation(LivingEntity entity) {
+    public static float[] toRotation(Entity entity) {
         float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
 
         float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;

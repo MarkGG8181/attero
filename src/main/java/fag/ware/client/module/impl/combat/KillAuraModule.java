@@ -11,9 +11,6 @@ import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.math.ClickDelayCalculator;
 import fag.ware.client.util.math.Timer;
 import fag.ware.client.util.game.RotationUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Hand;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
@@ -44,8 +41,6 @@ public class KillAuraModule extends AbstractModule {
 
     @Subscribe(priority = 10)
     public void onMotion(MotionEvent event) {
-        if (mc.player == null || mc.world == null) return;
-
         if (CombatTracker.getInstance().target != null &&
                 (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
 
@@ -64,22 +59,15 @@ public class KillAuraModule extends AbstractModule {
             switch (delayMode.getValue()) {
                 case "1.9" -> {
                     if (mc.player.getAttackCooldownProgress(0) >= 1)
-                        attackEntity(CombatTracker.getInstance().target);
+                        CombatTracker.attackEntity(CombatTracker.getInstance().target);
                 }
 
                 case "CPS" -> {
                     if (attackTimer.hasElapsed(delayCalculator.getClickDelay(), true)) {
-                        attackEntity(CombatTracker.getInstance().target);
+                        CombatTracker.attackEntity(CombatTracker.getInstance().target);
                     }
                 }
             }
-        }
-    }
-
-    private void attackEntity(LivingEntity entity) {
-        if (entity != null && entity.isAlive()) {
-            mc.interactionManager.attackEntity(MinecraftClient.getInstance().player, entity);
-            mc.player.swingHand(Hand.MAIN_HAND);
         }
     }
 

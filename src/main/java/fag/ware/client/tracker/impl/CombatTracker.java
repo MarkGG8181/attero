@@ -6,11 +6,13 @@ import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.module.impl.combat.KillAuraModule;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Hand;
 
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +28,13 @@ public class CombatTracker extends AbstractTracker<LivingEntity> implements IMin
 
     public static CombatTracker getInstance() {
         return tracker;
+    }
+
+    public static void attackEntity(Entity entity) {
+        if (entity != null && entity.isAlive()) {
+            mc.interactionManager.attackEntity(MinecraftClient.getInstance().player, entity);
+            mc.player.swingHand(Hand.MAIN_HAND);
+        }
     }
 
     @Override
