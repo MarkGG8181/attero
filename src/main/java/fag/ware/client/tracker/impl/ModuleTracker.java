@@ -38,6 +38,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new TriggerBotModule());
         getSet().add(new VelocityModule());
         getSet().add(new AutoTotemModule());
+        getSet().add(new AutoCrystalModule());
 
         /* MOVEMENT */
         getSet().add(new SprintModule());
@@ -72,6 +73,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         /* MISC */
         getSet().add(new AutoRespawnModule());
         getSet().add(new PacketCancellerModule());
+        getSet().add(new HelperModule());
 
         getSet().forEach(AbstractModule::onInit);
     }

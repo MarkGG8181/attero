@@ -12,7 +12,9 @@ import fag.ware.client.util.math.Timer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import org.lwjgl.glfw.GLFW;
 
+// Doesn't work TODO: FIX
 @ModuleInfo(name = "FastUse", category = ModuleCategory.PLAYER, description = "Makes item use faster")
 public class FastUseModule extends AbstractModule {
     private final NumberSetting delay = new NumberSetting("Delay", 100, 0, 750);
@@ -28,6 +30,8 @@ public class FastUseModule extends AbstractModule {
 
         boolean should = holdingItems();
         if (!delay()) return;
+
+        if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) return;
 
         if (should) {
             if (!legitClicking.getValue()) {
