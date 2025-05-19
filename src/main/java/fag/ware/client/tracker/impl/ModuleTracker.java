@@ -11,10 +11,8 @@ import fag.ware.client.module.impl.movement.*;
 import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
 import fag.ware.client.module.impl.world.*;
-import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
-import net.minecraft.client.gui.screen.ChatScreen;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +30,9 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public void initialize() {
         Fagware.BUS.register(this);
 
+        //even though they are sorted here, HashSet's are randomized every launch so this doesn't matter
+        //the only reason we use them is that search & lookup speed is faster than arraylist
+
         /* COMBAT */
         getSet().add(new KillAuraModule());
         getSet().add(new TriggerBotModule());
@@ -46,6 +47,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new EagleModule());
         getSet().add(new InventoryMoveModule());
         getSet().add(new CounterStrafeModule());
+        getSet().add(new JesusModule());
 
         /* RENDER */
         getSet().add(new NoRenderModule());
