@@ -48,6 +48,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new InventoryMoveModule());
         getSet().add(new CounterStrafeModule());
         getSet().add(new JesusModule());
+        getSet().add(new ParkourModule());
 
         /* RENDER */
         getSet().add(new NoRenderModule());
