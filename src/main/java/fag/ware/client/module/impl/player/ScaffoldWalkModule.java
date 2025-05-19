@@ -162,7 +162,7 @@ public class ScaffoldWalkModule extends AbstractModule {
 
     @Override
     public void onEnable() {
-        lastRots = new float[]{RotationUtil.getAdjustedYaw(), 80.7f};
+        lastRots = new float[]{RotationUtil.getAdjustedYaw(), 90};
         posY = mc.player.getY() - 0.9;
 
         switch (itemSpoof.getValue()) {
