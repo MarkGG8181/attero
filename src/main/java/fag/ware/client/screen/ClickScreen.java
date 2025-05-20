@@ -5,6 +5,7 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
+import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import imgui.ImGui;
@@ -48,7 +49,11 @@ public class ClickScreen extends Screen {
         }
 
         ImGuiImpl.draw(io -> {
-            ImGuiImpl.applyMarineTheme();
+            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
+                case "Marine" -> ImGuiImpl.applyMarineTheme();
+                case "Classic" -> ImGuiImpl.applyDarkTheme();
+            }
+
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
