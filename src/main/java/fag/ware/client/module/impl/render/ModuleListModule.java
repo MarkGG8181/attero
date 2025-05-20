@@ -33,6 +33,7 @@ public class ModuleListModule extends AbstractModule {
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
+    private final BooleanSetting animate = new BooleanSetting("Animate", true);
 
     @Override
     public void onInit() {
@@ -45,10 +46,25 @@ public class ModuleListModule extends AbstractModule {
             return;
         }
 
+        final boolean shouldAnimate = animate.toBoolean();
+
         final List<AbstractModule> modules = new LinkedList<>();
         for (final AbstractModule module : ModuleTracker.getInstance().toList()) {
-            if (module.isEnabled()) {
+            if (module.isEnabled())
+            {
                 modules.add(module);
+                module.getX().update(100);
+            }
+            else
+            {
+                module.getX().update(0);
+                module.getY().update(0);
+
+                if (!module.finishedAnimating())
+                {
+                    System.out.println(module.getX().getValue());
+                    modules.add(module);
+                }
             }
         }
 
@@ -63,14 +79,34 @@ public class ModuleListModule extends AbstractModule {
 
                 modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
 
-                float y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
+                float alignment = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
+                    module.getY().update(alignment);
+
+                    final float y;
+
+                    if (shouldAnimate)
+                    {
+                        y = module.getY().getValue();
+                    }
+                    else
+                    {
+                        y = alignment;
+                    }
+
                     String name = module.toString();
                     if (name == null) continue;
 
                     ImVec2 size = ImGui.calcTextSize(name);
                     float textWidth = size.x;
-                    float x = io.getDisplaySizeX() - textWidth - xOffset.toFloat();
+                    float progressiveWidth = textWidth + 10;
+
+                    if (shouldAnimate)
+                    {
+                        progressiveWidth *= module.getX().getValue() / 100;
+                    }
+
+                    float x = io.getDisplaySizeX() - progressiveWidth - xOffset.toFloat() + 10;
 
                     if (background.getValue()) {
                         drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
@@ -81,7 +117,11 @@ public class ModuleListModule extends AbstractModule {
                     }
 
                     drawList.addText(x, y, textColor.toImGuiColor(), name);
-                    y += ImGui.getFontSize() + 2;
+
+                    if (module.isEnabled()) // for instant y animation
+                    {
+                        alignment += ImGui.getFontSize() + 2;
+                    }
                 }
 
                 ImGui.popFont();

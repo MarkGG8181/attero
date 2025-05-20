@@ -5,6 +5,8 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
+import fag.ware.client.util.math.anim.Animation;
+import fag.ware.client.util.math.anim.EnumTransition;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +16,11 @@ import java.util.List;
 @Getter
 @Setter
 public abstract class AbstractModule implements IMinecraft {
-    private final ModuleInfo info;
-    private boolean enabled, expanded;
+    private Animation x = new Animation(0, EnumTransition.SQRT, 1f);
+    private Animation y = new Animation(0, EnumTransition.SQRT, 1f);
     private final ArrayList<Integer> keybinds = new ArrayList<>();
+    private boolean enabled, expanded;
+    private final ModuleInfo info;
 
     private List<AbstractSetting<?>> settings = new ArrayList<>();
 
@@ -69,4 +73,10 @@ public abstract class AbstractModule implements IMinecraft {
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean finishedAnimating()
+    {
+        return x.getValue() < 5;
+    }
+
 }

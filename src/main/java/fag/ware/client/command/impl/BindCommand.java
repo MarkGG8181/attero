@@ -52,7 +52,7 @@ public class BindCommand extends AbstractCommand
                     if (byName == null) throw new IllegalArgumentException(String.format("Module \"%s\" does not exist!", args[2]));
                     byName.getKeybinds().remove((Integer) key);
 
-                    PlayerTracker.getInstance().send(String.format("Bound %s to %c", byName.getInfo().name(), (char) key));
+                    PlayerTracker.getInstance().send(String.format("Unbound %s from %c", byName.getInfo().name(), (char) key));
                 }
                 case "list" -> {
                     if (args.length == 2)
