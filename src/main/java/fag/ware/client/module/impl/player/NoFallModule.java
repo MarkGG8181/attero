@@ -8,8 +8,8 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
+import fag.ware.client.util.game.InventoryUtil;
 import fag.ware.client.util.game.MovementUtil;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
@@ -39,18 +39,12 @@ public class NoFallModule extends AbstractModule {
                     mc.player.fallDistance = 0;
                 }
                 case "MLG" -> {
-                    for (int i = 0; i < 9; i++) {
-                        ItemStack stack = mc.player.getInventory().getStack(i);
-                        if (stack.isEmpty()) continue;
-                        if (stack.getItem() == Items.WATER_BUCKET) {
-                            mc.player.getInventory().setSelectedSlot(i);
-                            float prevPitch = mc.player.getPitch();
-                            mc.player.setPitch(90.0F);
-                            ((MinecraftClientAccessor) mc).invokeDoItemUse();
-                            mc.player.setPitch(prevPitch);
+                    InventoryUtil.switchToSlot(Items.WATER_BUCKET);
+                    float prevPitch = mc.player.getPitch();
+                    mc.player.setPitch(90.0F);
+                    ((MinecraftClientAccessor) mc).invokeDoItemUse();
+                    mc.player.setPitch(prevPitch);
 
-                        }
-                    }
                 }
             }
         }

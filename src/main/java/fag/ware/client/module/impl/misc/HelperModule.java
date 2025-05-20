@@ -7,6 +7,7 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
+import fag.ware.client.util.game.InventoryUtil;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,14 +36,7 @@ public class HelperModule extends AbstractModule {
     }
 
     private void switchToTotem() {
-        for (int i = 0; i < 9; i++) {
-            ItemStack stack = mc.player.getInventory().getStack(i);
-            if (stack.isEmpty()) continue;
-            if (stack.getItem().equals(Items.TOTEM_OF_UNDYING)) {
-                mc.player.getInventory().setSelectedSlot(i);
-                return;
-            }
-        }
+        InventoryUtil.switchToSlot(Items.TOTEM_OF_UNDYING);
     }
 
     public boolean inInventory() {
