@@ -63,7 +63,6 @@ public class ModuleListModule extends AbstractModule {
 
                 if (!module.finishedAnimating())
                 {
-                    System.out.println(module.getX().getValue());
                     modules.add(module);
                 }
             }

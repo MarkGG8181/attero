@@ -57,7 +57,7 @@ public final class PanelClickScreen extends Screen
                 {
                     for (ModuleCategory value : ModuleCategory.values())
                     {
-                        if (beginTabItem(value.name()))
+                        if (beginTabItem(value.name().toLowerCase()))
                         {
                             for (AbstractModule module : ModuleTracker.getInstance().getByCategory(value))
                             {
@@ -90,6 +90,8 @@ public final class PanelClickScreen extends Screen
                                 if (open) {
                                     ImBoolean enabledMod = new ImBoolean(module.isEnabled());
 
+                                    ImGui.pushID(module.toString());
+
                                     if (ImGui.checkbox("enabled", enabledMod)) {
                                         module.setEnabled(enabledMod.get());
                                     }
@@ -101,6 +103,8 @@ public final class PanelClickScreen extends Screen
 
                                         PanelClickScreen.SettingRenderer.render(setting);
                                     }
+                                    
+                                    ImGui.popID();
                                 }
                             }
 
