@@ -1,6 +1,7 @@
 package fag.ware.client.util.game;
 
 import fag.ware.client.util.interfaces.IMinecraft;
+import net.minecraft.block.GlowLichenBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

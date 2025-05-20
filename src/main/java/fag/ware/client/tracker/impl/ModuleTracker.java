@@ -14,6 +14,7 @@ import fag.ware.client.module.impl.world.*;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 

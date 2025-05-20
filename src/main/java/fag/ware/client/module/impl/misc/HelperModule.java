@@ -14,6 +14,7 @@ import net.minecraft.item.Items;
 
 @ModuleInfo(name = "Helper", category = ModuleCategory.MISC, description = "Helps you in some situations")
 public class HelperModule extends AbstractModule {
+
     public BooleanSetting autoSwitch = new BooleanSetting("Goto Slot on Inventory Open", true);
     public NumberSetting slot = (NumberSetting) new NumberSetting("Slot", 6, 1, 9).hide(() -> !autoSwitch.getValue());
     public BooleanSetting switchTotem = (BooleanSetting) new BooleanSetting("Switch to Totem on inv open", true).hide(() -> autoSwitch.getValue());
@@ -23,20 +24,12 @@ public class HelperModule extends AbstractModule {
         if (mc.player == null || mc.world == null) return;
 
         if (autoSwitch.getValue() && inInventory()) {
-            switchToSlot(slot.getValue().intValue() - 1);
+            mc.player.getInventory().setSelectedSlot(slot.getValue().intValue() - 1);
         }
 
         if (switchTotem.getValue() && inInventory()) {
-            switchToTotem();
+            InventoryUtil.switchToSlot(Items.TOTEM_OF_UNDYING);
         }
-    }
-
-    private void switchToSlot(int slotIndex) {
-        mc.player.getInventory().setSelectedSlot(slotIndex);
-    }
-
-    private void switchToTotem() {
-        InventoryUtil.switchToSlot(Items.TOTEM_OF_UNDYING);
     }
 
     public boolean inInventory() {
