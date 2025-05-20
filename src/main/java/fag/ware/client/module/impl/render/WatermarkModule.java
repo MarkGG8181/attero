@@ -10,6 +10,7 @@ import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
+import fag.ware.client.screen.PanelClickScreen;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.util.math.ColorUtil;
 import imgui.ImDrawList;
@@ -27,7 +28,7 @@ public class WatermarkModule extends AbstractModule {
 
     @Subscribe
     public void onRender(Render2DEvent event) {
-        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen) {
+        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof PanelClickScreen) {
             return;
         }
 
