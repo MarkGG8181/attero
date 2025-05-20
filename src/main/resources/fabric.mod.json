@@ -11,9 +11,9 @@
     "homepage": "https://wonderland.codeberg.page/"
   },
   "icon": "assets/fagware/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "fag.ware.client.Fagware"
     ]
   },
