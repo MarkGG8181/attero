@@ -164,8 +164,6 @@ public abstract class ClientPlayerMixin extends AbstractClientPlayerEntity {
         CombatTracker.getInstance().yaw = motionEvent.getYaw();
         CombatTracker.getInstance().prevPitch = CombatTracker.getInstance().pitch;
         CombatTracker.getInstance().pitch = motionEvent.getPitch();
-        CombatTracker.getInstance().prevBodyYaw = CombatTracker.getInstance().bodyYaw;
-        CombatTracker.getInstance().bodyYaw = this.bodyYaw;
         motionEvent.post();
     }
 }

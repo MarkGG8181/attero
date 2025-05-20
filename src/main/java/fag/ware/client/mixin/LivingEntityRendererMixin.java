@@ -1,62 +1,58 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.Fagware;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import fag.ware.client.tracker.impl.CombatTracker;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Objects;
+
+import static fag.ware.client.util.interfaces.IMinecraft.mc;
 
 /**
- * @author markuss
+ * @author kibty
  */
 @Mixin(LivingEntityRenderer.class)
-public class LivingEntityRendererMixin {
-    @Redirect(
-            method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F"
-            )
-    )
-    private float replaceYawLerp(float delta, float lastYaw, float yaw, LivingEntity livingEntity) {
-        if (livingEntity == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            return MathHelper.lerpAngleDegrees(delta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
+public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<? super S>> {
+
+    @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;clampBodyYaw(Lnet/minecraft/entity/LivingEntity;FF)F"))
+    private float changeBodyYaw(final float original, final LivingEntity living, final S state, final float tickDelta) {
+        if (living != mc.player)
+            return original;
+
+        if (Objects.nonNull(CombatTracker.getInstance().target)) {
+            return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
         }
 
-        return MathHelper.lerpAngleDegrees(delta, lastYaw, yaw);
+        return original;
     }
 
-    @Inject(method = "clampBodyYaw", at = @At("HEAD"), cancellable = true)
-    private static void clampBodyYawReplace(LivingEntity entity, float degrees, float tickProgress, CallbackInfoReturnable<Float> cir) {
-        if (entity == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            float fakeBodyYaw = MathHelper.lerpAngleDegrees(tickProgress, CombatTracker.getInstance().prevBodyYaw, CombatTracker.getInstance().bodyYaw);
-            float h = MathHelper.clamp(MathHelper.wrapDegrees(degrees - fakeBodyYaw), -85.0F, 85.0F);
-            float clamped = degrees - h;
-            if (Math.abs(h) > 50.0F) {
-                clamped += h * 0.2F;
-            }
-            cir.setReturnValue(clamped);
+    @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F"))
+    private float changeHeadYaw(final float original, final LivingEntity living, final S state, final float tickDelta) {
+        if (living != mc.player)
+            return original;
+
+        if (Objects.nonNull(CombatTracker.getInstance().target)) {
+            return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
         }
+
+        return original;
     }
 
-    @Redirect(
-            method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;getLerpedPitch(F)F"
-            )
-    )
-    private float replaceYawLerp(LivingEntity instance, float tickProgress) {
-        if (instance == MinecraftClient.getInstance().player && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            return tickProgress == 1.0F ? CombatTracker.getInstance().pitch : MathHelper.lerp(tickProgress, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
+    @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getLerpedPitch(F)F"))
+    private float changePitch(final float original, final LivingEntity living, final S state, final float tickDelta) {
+        if (living != mc.player)
+            return original;
+
+        if (Objects.nonNull(CombatTracker.getInstance().target)) {
+            return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
         }
-        return tickProgress == 1.0F ? instance.getPitch() : MathHelper.lerp(tickProgress, instance.lastPitch, instance.getPitch());
+
+        return original;
     }
 }
