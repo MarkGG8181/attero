@@ -8,7 +8,7 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.util.math.Timer;
 
-@ModuleInfo(name = "AutoRespawn", category = ModuleCategory.MISC, description = "Respawns automaticslly on death")
+@ModuleInfo(name = "AutoRespawn", category = ModuleCategory.MISC, description = "Respawns automatically on death")
 public class AutoRespawnModule extends AbstractModule {
     private final NumberSetting delay = new NumberSetting("Delay", 30, 0, 300);
 
