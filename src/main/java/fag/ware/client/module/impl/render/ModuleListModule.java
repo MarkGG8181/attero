@@ -11,6 +11,7 @@ import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
+import fag.ware.client.screen.PanelClickScreen;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.util.game.EntityUtil;
@@ -42,7 +43,7 @@ public class ModuleListModule extends AbstractModule {
 
     @Subscribe
     public void onRender(Render2DEvent event) {
-        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen) {
+        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof PanelClickScreen) {
             return;
         }
 

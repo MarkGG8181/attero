@@ -1,7 +1,6 @@
 package fag.ware.client.screen;
 
 import com.jfposton.ytdlp.YtDlp;
-import com.jfposton.ytdlp.YtDlpException;
 import com.jfposton.ytdlp.YtDlpRequest;
 import com.jfposton.ytdlp.YtDlpResponse;
 import fag.ware.client.Fagware;
@@ -13,23 +12,14 @@ import fag.ware.client.util.music.*;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiWindowFlags;
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.BitstreamException;
-import javazoom.jl.decoder.Header;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Arrays;
 
 

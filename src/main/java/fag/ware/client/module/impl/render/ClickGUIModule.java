@@ -15,7 +15,7 @@ import java.awt.*;
 
 @ModuleInfo(name = "ClickGUI", category = ModuleCategory.RENDER, description = "Renders the ClickGUI")
 public class ClickGUIModule extends AbstractModule {
-    public StringSetting mode = new StringSetting("Mode", "Fagware", "Fagware", "Jello");
+    public StringSetting mode = new StringSetting("Mode", "Fagware", "Fagware", "Jello", "Panel");
     public StringSetting theme = (StringSetting) new StringSetting("Theme", "Marine", "Marine", "Classic").hide(() -> mode.getValue().equals("Jello"));
 
     @Subscribe

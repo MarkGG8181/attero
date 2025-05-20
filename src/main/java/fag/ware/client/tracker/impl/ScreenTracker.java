@@ -7,6 +7,7 @@ import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.MusicPlayerScreen;
+import fag.ware.client.screen.PanelClickScreen;
 import fag.ware.client.tracker.AbstractTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -24,6 +25,7 @@ public class ScreenTracker extends AbstractTracker<Screen> {
         Fagware.BUS.register(this);
         getSet().add(new ClickScreen());
         getSet().add(new JelloClickScreen());
+        getSet().add(new PanelClickScreen());
         getSet().add(new MusicPlayerScreen());
     }
 
@@ -40,6 +42,12 @@ public class ScreenTracker extends AbstractTracker<Screen> {
                 case "Jello" -> {
                     if (event.getKey() == ModuleTracker.getInstance().getByClass(ClickGUIModule.class).getKeybinds().getFirst()) {
                         MinecraftClient.getInstance().setScreen(getByClass(JelloClickScreen.class));
+                        ModuleTracker.getInstance().getByClass(ClickGUIModule.class).setEnabled(true);
+                    }
+                }
+                case "Panel" -> {
+                    if (event.getKey() == ModuleTracker.getInstance().getByClass(ClickGUIModule.class).getKeybinds().getFirst()) {
+                        MinecraftClient.getInstance().setScreen(getByClass(PanelClickScreen.class));
                         ModuleTracker.getInstance().getByClass(ClickGUIModule.class).setEnabled(true);
                     }
                 }
