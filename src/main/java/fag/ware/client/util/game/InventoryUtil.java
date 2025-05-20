@@ -2,6 +2,7 @@ package fag.ware.client.util.game;
 
 import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class InventoryUtil implements IMinecraft {
@@ -22,6 +23,15 @@ public class InventoryUtil implements IMinecraft {
 
         if (nextSlot != -1) {
             mc.player.getInventory().setSelectedSlot(nextSlot);
+        }
+    }
+    public static void switchToSlot(Item item) {
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = mc.player.getInventory().getStack(i);
+            if (stack.isEmpty()) return;
+            if (stack.getItem().equals(item)) {
+                mc.player.getInventory().setSelectedSlot(i);
+            }
         }
     }
 

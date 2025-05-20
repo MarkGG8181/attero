@@ -35,7 +35,7 @@ public class AutoCrystalModule extends AbstractModule {
 
         if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) return;
 
-        if (mc.crosshairTarget instanceof BlockHitResult hit && hit.getSide() == Direction.UP) {
+        if (mc.crosshairTarget instanceof BlockHitResult hit) {
             BlockPos pos = hit.getBlockPos();
             if (mc.world.getBlockState(pos).isOf(Blocks.OBSIDIAN) || mc.world.getBlockState(pos).isOf(Blocks.BEDROCK)) {
                 if (mc.player.getInventory().getSelectedStack().getItem() == Items.END_CRYSTAL && placeDelayTimer.hasElapsed(placeDelay.toInt(), true)) {
