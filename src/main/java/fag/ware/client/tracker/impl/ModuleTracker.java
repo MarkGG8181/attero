@@ -61,7 +61,6 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         /* PLAYER */
         getSet().add(new NoFallModule());
-        getSet().add(new FastUseModule());
         getSet().add(new AutoDisconnectModule());
         getSet().add(new BlinkModule());
         getSet().add(new ScaffoldWalkModule());
