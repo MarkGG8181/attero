@@ -92,4 +92,9 @@ public class WatermarkModule extends AbstractModule {
     public void onInit() {
         setEnabled(true);
     }
+
+    @Override
+    public String getSuffix() {
+        return mode.getValue();
+    }
 }
