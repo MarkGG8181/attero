@@ -49,6 +49,12 @@ public class StringSetting extends AbstractSetting<String> {
         return null;
     }
 
+    public void setIndex(int index) {
+        if (index >= 0 && index < values.length) {
+            setValue(values[index]); // this will call onChange
+        }
+    }
+
     @Override
     public void setValue(String value) {
         super.setValue(value);
