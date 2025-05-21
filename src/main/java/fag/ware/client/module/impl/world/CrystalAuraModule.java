@@ -24,6 +24,8 @@ public class CrystalAuraModule extends AbstractModule {
     private final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 10);
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     private final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
+    private final BooleanSetting yCheck = new BooleanSetting("Y check", true);
+    private final BooleanSetting nearbyEntityCheck = new BooleanSetting("Nearby entity check", true);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
     private final HashSet<EndCrystalEntity> targets = new HashSet<>();
@@ -34,13 +36,15 @@ public class CrystalAuraModule extends AbstractModule {
         if (mc.player == null || mc.world == null) return;
 
         if (target != null) {
-            boolean stillValid = target.isAlive()
-                    && CombatTracker.isWithinRange(target, aimRange.toDouble())
-                    && mc.world.getEntitiesByClass(
+            boolean foundNearbyEntity = nearbyEntityCheck.getValue() ? mc.world.getEntitiesByClass(
                     net.minecraft.entity.Entity.class,
                     target.getBoundingBox().expand(3.0),
                     e -> e != mc.player && !(e instanceof EndCrystalEntity)
-            ).size() > 0
+            ).size() > 0 : true;
+
+            boolean stillValid = target.isAlive()
+                    && CombatTracker.isWithinRange(target, aimRange.toDouble())
+                    && foundNearbyEntity
                     && mc.player.getBlockPos().equals(target.getBlockPos().down(1));
 
             if (!stillValid) {
@@ -59,16 +63,16 @@ public class CrystalAuraModule extends AbstractModule {
                         if (!entity.isAttackable() || !CombatTracker.isWithinRange(entity, range))
                             return false;
 
-                        boolean foundNearbyEntity = mc.world.getEntitiesByClass(
+                        boolean foundNearbyEntity = nearbyEntityCheck.getValue() ? mc.world.getEntitiesByClass(
                                 net.minecraft.entity.Entity.class,
                                 entity.getBoundingBox().expand(3.0),
                                 e -> e != mc.player && !(e instanceof EndCrystalEntity)
-                        ).size() > 0;
+                        ).size() > 0 : true;
 
                         double crystalBaseY = entity.getBlockPos().getY();
                         double playerFeetY = mc.player.getBoundingBox().minY; // bottom of the player's hitbox
 
-                        boolean playerUnderneath = playerFeetY <= (crystalBaseY - 1.0);
+                        boolean playerUnderneath = yCheck.getValue() ? playerFeetY <= (crystalBaseY - 1.0) : true;
                         return foundNearbyEntity && playerUnderneath;
                     }
             );
