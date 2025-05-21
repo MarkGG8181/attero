@@ -65,9 +65,14 @@ public class CombatTracker extends AbstractTracker<LivingEntity> implements IMin
                     LivingEntity.class,
                     mc.player.getBoundingBox().expand(range),
                     entity -> !entity.equals(mc.player)
-                            && entity.isAlive()
-                            && entity.isAttackable()
                             && shouldIncludeEntity(entity)
+                            && entity.isAttackable()
+                            && !entity.isDead()
+                            && entity.isAlive()
+                            && entity.getHealth() > 0
+                            && !entity.getName().getString().isEmpty()
+                            && !entity.getName().getString().contains(" ")
+                            && !FriendTracker.getInstance().getSet().contains(entity.getName().getString())
                             && isWithinRange(entity, range)
             );
 
