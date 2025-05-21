@@ -9,15 +9,13 @@ import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.util.game.InventoryUtil;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
 @ModuleInfo(name = "Helper", category = ModuleCategory.MISC, description = "Helps you in some situations")
 public class HelperModule extends AbstractModule {
-
-    public BooleanSetting autoSwitch = new BooleanSetting("Goto Slot on Inventory Open", true);
-    public NumberSetting slot = (NumberSetting) new NumberSetting("Slot", 6, 1, 9).hide(() -> !autoSwitch.getValue());
-    public BooleanSetting switchTotem = (BooleanSetting) new BooleanSetting("Switch to Totem on inv open", true).hide(() -> autoSwitch.getValue());
+    private final BooleanSetting autoSwitch = new BooleanSetting("Goto slot on open-inv", true);
+    private final NumberSetting slot = (NumberSetting) new NumberSetting("Slot", 6, 1, 9).hide(() -> !autoSwitch.getValue());
+    private final BooleanSetting switchTotem = (BooleanSetting) new BooleanSetting("Equip totem on open-inv", true).hide(autoSwitch::getValue);
 
     @Subscribe
     public void onTick(TickEvent event) {
@@ -32,7 +30,7 @@ public class HelperModule extends AbstractModule {
         }
     }
 
-    public boolean inInventory() {
+    private boolean inInventory() {
         return mc.currentScreen instanceof InventoryScreen;
     }
 }

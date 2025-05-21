@@ -44,7 +44,6 @@ public class NoFallModule extends AbstractModule {
                     mc.player.setPitch(90.0F);
                     ((MinecraftClientAccessor) mc).invokeDoItemUse();
                     mc.player.setPitch(prevPitch);
-
                 }
             }
         }

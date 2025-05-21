@@ -24,8 +24,8 @@ import java.util.Optional;
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "TriggerBot", category = ModuleCategory.COMBAT, description = "Attacks enemies if you're looking at them")
 public class TriggerBotModule extends AbstractModule {
-    private final RangeNumberSetting swordMs = new RangeNumberSetting("Sword MS", 40, 1000, 40, 1000);
-    private final RangeNumberSetting axeMS = new RangeNumberSetting("Axe MS", 40, 1000, 40, 1000);
+    private final RangeNumberSetting swordMs = new RangeNumberSetting("Sword delay", 40, 1000, 40, 1000);
+    private final RangeNumberSetting axeMS = new RangeNumberSetting("Axe delay", 40, 1000, 40, 1000);
     private final Timer timer = new Timer();
 
     @Subscribe

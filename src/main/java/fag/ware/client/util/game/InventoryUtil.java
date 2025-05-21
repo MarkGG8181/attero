@@ -1,12 +1,12 @@
 package fag.ware.client.util.game;
 
 import fag.ware.client.util.interfaces.IMinecraft;
-import net.minecraft.block.GlowLichenBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class InventoryUtil implements IMinecraft {
+    //TODO: Recode this horrendous broken util
     public static void switchToNextSlot() {
         int currentSlot = mc.player.getInventory().getSelectedSlot();
         int nextSlot = -1;
@@ -26,6 +26,7 @@ public class InventoryUtil implements IMinecraft {
             mc.player.getInventory().setSelectedSlot(nextSlot);
         }
     }
+
     public static void switchToSlot(Item item) {
         for (int i = 0; i < 9; i++) {
             ItemStack stack = mc.player.getInventory().getStack(i);

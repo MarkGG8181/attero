@@ -13,13 +13,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import org.lwjgl.glfw.GLFW;
+
 @ModuleInfo(name = "MidClickPearl", category = ModuleCategory.PLAYER, description = "Middle click pearl")
 public class MidClickPearlModule extends AbstractModule {
-    public NumberSetting delay = new NumberSetting("Delay", 250, 0, 1000);
-    public BooleanSetting switchBack = new BooleanSetting("Switch back", false);
-    public NumberSetting switchBackDelay = ((NumberSetting) new NumberSetting("Switch back delay", 250, 0, 1000).hide(() -> !switchBack.getValue()));
-    Timer delayTimer = new Timer();
-    Timer switchBackTimer = new Timer();
+    private final NumberSetting delay = new NumberSetting("Delay", 250, 0, 1000);
+    private final BooleanSetting switchBack = new BooleanSetting("Switch back", false);
+    private final NumberSetting switchBackDelay = ((NumberSetting) new NumberSetting("Switch back delay", 250, 0, 1000).hide(() -> !switchBack.getValue()));
+
+    private final Timer delayTimer = new Timer();
+    private final Timer switchBackTimer = new Timer();
+
     @Subscribe
     public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
@@ -37,6 +40,7 @@ public class MidClickPearlModule extends AbstractModule {
             }
         }
     }
+
     @Override
     public void onDisable() {
         delayTimer.reset();
