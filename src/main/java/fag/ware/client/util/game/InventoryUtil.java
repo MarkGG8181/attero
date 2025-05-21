@@ -9,30 +9,33 @@ public class InventoryUtil implements IMinecraft {
     //TODO: Recode this horrendous broken util
     public static void switchToNextSlot() {
         int currentSlot = mc.player.getInventory().getSelectedSlot();
-        int nextSlot = -1;
-        int currentBlockCount = getBlockCount(currentSlot);
+        int bestSlot = -1;
+        int bestCount = 0;
 
         for (int i = 0; i < 9; i++) {
             if (i == currentSlot) continue;
 
             int slotBlockCount = getBlockCount(i);
-            if ((slotBlockCount > currentSlot) || (currentBlockCount == 0 && slotBlockCount > 0)) {
-                nextSlot = i;
-                break;
+            if (slotBlockCount > bestCount) {
+                bestCount = slotBlockCount;
+                bestSlot = i;
             }
         }
 
-        if (nextSlot != -1) {
-            mc.player.getInventory().setSelectedSlot(nextSlot);
+        // only switch if best slot has blocks and better than current
+        int currentBlockCount = getBlockCount(currentSlot);
+        if (bestCount > currentBlockCount) {
+            mc.player.getInventory().setSelectedSlot(bestSlot);
         }
     }
 
     public static void switchToSlot(Item item) {
         for (int i = 0; i < 9; i++) {
             ItemStack stack = mc.player.getInventory().getStack(i);
-            if (stack.isEmpty()) return;
+            if (stack.isEmpty()) continue;
             if (stack.getItem().equals(item)) {
                 mc.player.getInventory().setSelectedSlot(i);
+                return;
             }
         }
     }
