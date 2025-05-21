@@ -25,9 +25,9 @@ import java.util.List;
 
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
-    private final StringSetting mode = new StringSetting("Design", "Simple", "Simple", "Minecraft");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Simple"));
-    private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("Rounded"));
+    private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("ImGui"));
+    private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
@@ -78,7 +78,7 @@ public class ModuleListModule extends AbstractModule {
         }
 
         switch (mode.getValue()) {
-            case "Simple" -> ImGuiImpl.draw(io -> {
+            case "ImGui" -> ImGuiImpl.draw(io -> {
                 if (currentFont == null) {
                     currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
                     if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
