@@ -106,8 +106,8 @@ public class CrystalAuraModule extends AbstractModule {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         if (target != null && CombatTracker.isWithinRange(target, attackRange.toDouble())) {
-            if (mc.player.getAttackCooldownProgress(0) >= 1)
-                CombatTracker.attackEntity(target);
+            CombatTracker.attackEntity(target);
+            target = null;
         }
     }
 }
