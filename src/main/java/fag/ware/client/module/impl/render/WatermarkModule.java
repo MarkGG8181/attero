@@ -33,38 +33,36 @@ public class WatermarkModule extends AbstractModule {
         }
 
         switch (mode.getValue()) {
-            case "Rounded" -> {
-                ImGuiImpl.draw(io -> {
-                    switch (font.getValue()) {
-                        case "Inter" ->  ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
-                        case "Arial" ->  ImGui.pushFont(ImGuiImpl.Arial);
-                        case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.Comfortaa);
-                    }
-                    ImDrawList drawList = ImGui.getForegroundDrawList();
-                    String username = hideName.getValue() ? "Hidden" : mc.getSession().getUsername();
-                    String watermarkText = "Fagware";
-                    String userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
+            case "Rounded" -> ImGuiImpl.draw(io -> {
+                switch (font.getValue()) {
+                    case "Inter" ->  ImGui.pushFont(ImGuiImpl.inter17);
+                    case "Arial" ->  ImGui.pushFont(ImGuiImpl.arial);
+                    case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.comfortaa);
+                }
+                ImDrawList drawList = ImGui.getForegroundDrawList();
+                String username = hideName.getValue() ? "Player" : mc.getSession().getUsername();
+                String watermarkText = "Fagware";
+                String userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
 
+                ImVec2 watermarkTextSize = ImGui.calcTextSize(watermarkText);
+                ImVec2 userInfoTextSize = ImGui.calcTextSize(userInfoText);
 
-                    ImVec2 watermarkTextSize = ImGui.calcTextSize(watermarkText);
-                    ImVec2 userInfoTextSize = ImGui.calcTextSize(userInfoText);
+                float x = 10;
+                float y = 10;
 
-                    float x = 10;
-                    float y = 10;
+                float width = watermarkTextSize.x + userInfoTextSize.x + 25;
+                float height = 30;
 
-                    float width = watermarkTextSize.x + userInfoTextSize.x + 25;
-                    float height = 30;
+                drawList.addRectFilled(x, y, x + width, y + height, ColorUtil.toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
 
-                    drawList.addRectFilled(x, y, x + width, y + height, ColorUtil.toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
+                float textY = y + (height - ImGui.calcTextSize("A").y) / 2.0f;
 
-                    drawList.addText(x + 10, y + 4, color.toImGuiColor(), watermarkText.substring(0, 3));
-                    drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, y + 4, ColorUtil.toImGuiColor(Color.WHITE), watermarkText.substring(3));
+                drawList.addText(x + 10, textY, color.toImGuiColor(), watermarkText.substring(0, 3));
+                drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, textY, ColorUtil.toImGuiColor(Color.WHITE), watermarkText.substring(3));
+                drawList.addText(x + 5 + watermarkTextSize.x + 10, textY, ColorUtil.toImGuiColor(Color.WHITE), userInfoText);
 
-                    drawList.addText(x + 5 + watermarkTextSize.x + 10, y + 4, ColorUtil.toImGuiColor(Color.WHITE), userInfoText);
-
-                    ImGui.popFont();
-                });
-            }
+                ImGui.popFont();
+            });
             case "Minecraft" -> {
                 event.getDrawContext().drawText(mc.textRenderer, "fag", 5, 5, color.getValue().getRGB(), false);
                 event.getDrawContext().drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("fag"), 5, -1, false);

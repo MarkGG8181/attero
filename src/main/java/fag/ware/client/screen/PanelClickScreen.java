@@ -37,7 +37,7 @@ public final class PanelClickScreen extends Screen
         ImGuiImpl.draw(io -> {
             ImGuiImpl.applyDarkTheme();
 
-            pushFont(ImGuiImpl.INTER_REGULAR_17);
+            pushFont(ImGuiImpl.inter17);
 
             if (begin("Fagware"))
             {

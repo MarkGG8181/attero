@@ -28,7 +28,7 @@ import java.util.List;
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Simple", "Simple", "Minecraft");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Simple"));
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Simple"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
@@ -51,18 +51,14 @@ public class ModuleListModule extends AbstractModule {
 
         final List<AbstractModule> modules = new LinkedList<>();
         for (final AbstractModule module : ModuleTracker.getInstance().toList()) {
-            if (module.isEnabled())
-            {
+            if (module.isEnabled()) {
                 modules.add(module);
                 module.getX().update(100);
-            }
-            else
-            {
+            } else {
                 module.getX().update(0);
                 module.getY().update(0);
 
-                if (!module.finishedAnimating())
-                {
+                if (!module.finishedAnimating()) {
                     modules.add(module);
                 }
             }
@@ -71,9 +67,9 @@ public class ModuleListModule extends AbstractModule {
         switch (mode.getValue()) {
             case "Simple" -> ImGuiImpl.draw(io -> {
                 switch (font.getValue()) {
-                    case "Inter" ->  ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
-                    case "Arial" ->  ImGui.pushFont(ImGuiImpl.Arial);
-                    case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.Comfortaa);
+                    case "Inter" -> ImGui.pushFont(ImGuiImpl.inter17);
+                    case "Arial" -> ImGui.pushFont(ImGuiImpl.arial);
+                    case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.comfortaa);
                 }
                 ImDrawList drawList = ImGui.getForegroundDrawList();
 
@@ -85,12 +81,9 @@ public class ModuleListModule extends AbstractModule {
 
                     final float y;
 
-                    if (shouldAnimate)
-                    {
+                    if (shouldAnimate) {
                         y = module.getY().getValue();
-                    }
-                    else
-                    {
+                    } else {
                         y = alignment;
                     }
 
@@ -101,8 +94,7 @@ public class ModuleListModule extends AbstractModule {
                     float textWidth = size.x;
                     float progressiveWidth = textWidth + 10;
 
-                    if (shouldAnimate)
-                    {
+                    if (shouldAnimate) {
                         progressiveWidth *= module.getX().getValue() / 100;
                     }
 
@@ -112,15 +104,18 @@ public class ModuleListModule extends AbstractModule {
                         drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
                     }
 
+                    float centeredY = y + ((ImGui.getFontSize() - ImGui.calcTextSize("A").y) / 2.0f);
+
                     if (fontShadow.getValue()) {
-                        drawList.addText(x + 1, y + 1, ImColor.rgba(0, 0, 0, 160), name);
+                        drawList.addText(x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), name);
                     }
 
-                    drawList.addText(x, y, textColor.toImGuiColor(), name);
+                    drawList.addText(x, centeredY + 0.5f, textColor.toImGuiColor(), name);
 
                     if (module.isEnabled()) // for instant y animation
                     {
-                        alignment += ImGui.getFontSize() + 2;
+                        float lineHeight = ImGui.calcTextSize("M").y;
+                        alignment += lineHeight + 2;
                     }
                 }
 

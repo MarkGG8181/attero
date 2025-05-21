@@ -1,6 +1,5 @@
 package fag.ware.client.screen;
 
-import fag.ware.client.Fagware;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
@@ -58,7 +57,7 @@ public class ClickScreen extends Screen {
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
 
-                ImGui.pushFont(ImGuiImpl.INTER_REGULAR_17);
+                ImGui.pushFont(ImGuiImpl.inter17);
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
                 ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
 
