@@ -7,13 +7,16 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.ColorSetting;
+import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.PanelClickScreen;
+import fag.ware.client.screen.data.ImGuiFontManager;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.util.math.ColorUtil;
 import imgui.ImDrawList;
+import imgui.ImFont;
 import imgui.ImGui;
 import imgui.ImVec2;
 
@@ -23,8 +26,23 @@ import java.awt.*;
 public class WatermarkModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Rounded", "Rounded", "Minecraft");
     private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Rounded"));
+    private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("Rounded"));
     private final BooleanSetting hideName = new BooleanSetting("Hide name", false);
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
+
+    private ImFont currentFont = ImGuiImpl.inter17;
+
+    public WatermarkModule() {
+        font.onChange(set -> {
+            ImFont font = ImGuiFontManager.getFont(set, fontSize.toInt());
+            if (font != null) currentFont = font;
+        });
+
+        fontSize.onChange(set -> {
+            ImFont font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
+            if (font != null) currentFont = font;
+        });
+    }
 
     @Subscribe
     public void onRender(Render2DEvent event) {
@@ -34,11 +52,11 @@ public class WatermarkModule extends AbstractModule {
 
         switch (mode.getValue()) {
             case "Rounded" -> ImGuiImpl.draw(io -> {
-                switch (font.getValue()) {
-                    case "Inter" ->  ImGui.pushFont(ImGuiImpl.inter17);
-                    case "Arial" ->  ImGui.pushFont(ImGuiImpl.arial);
-                    case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.comfortaa);
+                if (currentFont == null) {
+                    currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
+                    if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
                 }
+                ImGui.pushFont(currentFont);
                 ImDrawList drawList = ImGui.getForegroundDrawList();
                 String username = hideName.getValue() ? "Player" : mc.getSession().getUsername();
                 String watermarkText = "Fagware";
