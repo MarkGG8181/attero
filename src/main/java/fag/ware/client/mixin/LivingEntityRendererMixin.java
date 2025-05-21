@@ -2,6 +2,7 @@ package fag.ware.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import fag.ware.client.tracker.impl.CombatTracker;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
@@ -23,7 +24,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;clampBodyYaw(Lnet/minecraft/entity/LivingEntity;FF)F"))
     private float changeBodyYaw(final float original, final LivingEntity living, final S state, final float tickDelta) {
-        if (living != mc.player)
+        if (living != mc.player || mc.currentScreen instanceof InventoryScreen)
             return original;
 
         float headYaw = MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
@@ -40,7 +41,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F"))
     private float changeHeadYaw(final float original, final LivingEntity living, final S state, final float tickDelta) {
-        if (living != mc.player)
+        if (living != mc.player || mc.currentScreen instanceof InventoryScreen)
             return original;
 
         return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
@@ -48,7 +49,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getLerpedPitch(F)F"))
     private float changePitch(final float original, final LivingEntity living, final S state, final float tickDelta) {
-        if (living != mc.player)
+        if (living != mc.player || mc.currentScreen instanceof InventoryScreen)
             return original;
 
         return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
