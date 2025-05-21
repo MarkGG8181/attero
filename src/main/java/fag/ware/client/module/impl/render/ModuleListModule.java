@@ -12,13 +12,11 @@ import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
 import fag.ware.client.screen.PanelClickScreen;
+import fag.ware.client.screen.data.ImGuiFontManager;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.util.game.EntityUtil;
-import imgui.ImColor;
-import imgui.ImDrawList;
-import imgui.ImGui;
-import imgui.ImVec2;
+import imgui.*;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -29,12 +27,27 @@ import java.util.List;
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "Simple", "Simple", "Minecraft");
     private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("Simple"));
+    private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("Rounded"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
     private final BooleanSetting animate = new BooleanSetting("Animate", true);
+
+    private ImFont currentFont = ImGuiImpl.inter17;
+
+    public ModuleListModule() {
+        font.onChange(set -> {
+            ImFont font = ImGuiFontManager.getFont(set, fontSize.toInt());
+            if (font != null) currentFont = font;
+        });
+
+        fontSize.onChange(set -> {
+            ImFont font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
+            if (font != null) currentFont = font;
+        });
+    }
 
     @Override
     public void onInit() {
@@ -66,11 +79,11 @@ public class ModuleListModule extends AbstractModule {
 
         switch (mode.getValue()) {
             case "Simple" -> ImGuiImpl.draw(io -> {
-                switch (font.getValue()) {
-                    case "Inter" -> ImGui.pushFont(ImGuiImpl.inter17);
-                    case "Arial" -> ImGui.pushFont(ImGuiImpl.arial);
-                    case "Comfortaa" -> ImGui.pushFont(ImGuiImpl.comfortaa);
+                if (currentFont == null) {
+                    currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
+                    if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
                 }
+                ImGui.pushFont(currentFont);
                 ImDrawList drawList = ImGui.getForegroundDrawList();
 
                 modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
