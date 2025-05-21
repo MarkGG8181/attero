@@ -36,9 +36,9 @@ public class ImGuiImpl {
     // Fonts
     public static ImFont inter17;
     public static ImFont inter30;
-    public static ImFont sansation;
-    public static ImFont comfortaa;
-    public static ImFont arial;
+    public static ImFont sansation17;
+    public static ImFont comfortaa17;
+    public static ImFont arial17;
 
     public static void create(final long handle) throws IOException {
         ImGui.createContext();
@@ -53,54 +53,73 @@ public class ImGuiImpl {
         // Shared glyph range (basic Latin + numbers)
         short[] defaultRanges = fonts.getGlyphRangesDefault();
 
-        List<ImFont> generatedFonts = new ArrayList<>();
+        List<ImFont> interGeneratedFonts = new ArrayList<>();
         for (int i = 21; i < 50; i++) {
             ImFontConfig interConfig = new ImFontConfig();
             interConfig.setGlyphRanges(defaultRanges);
             interConfig.setName("Inter " + i + "px");
-            ImFont interFont = fonts.addFontFromMemoryTTF(
+            ImFont inter = fonts.addFontFromMemoryTTF(
                     IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Inter28pt_Regular.ttf"))),
                     i,
                     interConfig
             );
-            generatedFonts.add(interFont);
+            ImGuiFontManager.register("Inter", inter, i);
+            interGeneratedFonts.add(inter);
             interConfig.destroy();
         }
 
-        ImFontConfig sansationCfg = new ImFontConfig();
-        sansationCfg.setGlyphRanges(defaultRanges);
-        ImFont sansation = fonts.addFontFromMemoryTTF(
-                IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Sansation_Regular.ttf"))),
-                18,
-                sansationCfg
-        );
-        sansationCfg.destroy();
+        List<ImFont> sansationGeneratedFonts = new ArrayList<>();
+        for (int i = 21; i < 50; i++) {
+            ImFontConfig sansationCfg = new ImFontConfig();
+            sansationCfg.setGlyphRanges(defaultRanges);
+            sansationCfg.setName("Sansation " + i + "px");
+            ImFont sansation = fonts.addFontFromMemoryTTF(
+                    IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Sansation_Regular.ttf"))),
+                    i,
+                    sansationCfg
+            );
+            ImGuiFontManager.register("Sansation", sansation, i);
+            sansationGeneratedFonts.add(sansation);
+            sansationCfg.destroy();
+        }
 
-        ImFontConfig comfortaaCfg = new ImFontConfig();
-        comfortaaCfg.setGlyphRanges(defaultRanges);
-        ImFont comfortaa = fonts.addFontFromMemoryTTF(
-                IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Comfortaa_Regular.ttf"))),
-                18,
-                comfortaaCfg
-        );
-        comfortaaCfg.destroy();
+        List<ImFont> comfortaaGeneratedFonts = new ArrayList<>();
+        for (int i = 21; i < 50; i++) {
+            ImFontConfig comfortaaCfg = new ImFontConfig();
+            comfortaaCfg.setGlyphRanges(defaultRanges);
+            comfortaaCfg.setName("Comfortaa " + i + "px");
+            ImFont comfortaa = fonts.addFontFromMemoryTTF(
+                    IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Comfortaa_Regular.ttf"))),
+                    i,
+                    comfortaaCfg
+            );
+            ImGuiFontManager.register("Comfortaa", comfortaa, i);
+            comfortaaGeneratedFonts.add(comfortaa);
+            comfortaaCfg.destroy();
+        }
 
-        ImFontConfig arialCfg = new ImFontConfig();
-        arialCfg.setGlyphRanges(defaultRanges);
-        ImFont arial = fonts.addFontFromMemoryTTF(
-                IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Arial_Regular.ttf"))),
-                18,
-                arialCfg
-        );
-        arialCfg.destroy();
+        List<ImFont> arialGeneratedFonts = new ArrayList<>();
+        for (int i = 21; i < 50; i++) {
+            ImFontConfig arialCfg = new ImFontConfig();
+            arialCfg.setGlyphRanges(defaultRanges);
+            arialCfg.setName("Arial " + i + "px");
+            ImFont arial = fonts.addFontFromMemoryTTF(
+                    IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/fonts/Arial_Regular.ttf"))),
+                    i,
+                    arialCfg
+            );
+            ImGuiFontManager.register("Arial", arial, i);
+            arialGeneratedFonts.add(arial);
+            arialCfg.destroy();
+        }
 
         fonts.build();
 
-        inter17 = generatedFonts.get(0);     // First Inter
-        inter30 = generatedFonts.get(9);     // 30px one
-        ImGuiImpl.sansation = sansation;
-        ImGuiImpl.comfortaa = comfortaa;
-        ImGuiImpl.arial = arial;
+        inter17 = interGeneratedFonts.get(0);
+        inter30 = interGeneratedFonts.get(9);
+        sansation17 = sansationGeneratedFonts.get(0);
+        comfortaa17 = comfortaaGeneratedFonts.get(0);
+        arial17 = arialGeneratedFonts.get(0);
 
         data.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 
