@@ -2,6 +2,7 @@ package fag.ware.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import fag.ware.client.Fagware;
+import fag.ware.client.event.impl.MiddleClickEvent;
 import fag.ware.client.event.impl.RunLoopEvent;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.event.impl.render.HasOutlineEvent;
@@ -124,5 +125,10 @@ public class MinecraftClientMixin {
         }
 
         return original;
+    }
+
+    @Inject(method = "doItemPick", at = @At("HEAD"))
+    private void doItemPickHook(CallbackInfo ci) {
+        new MiddleClickEvent().post();
     }
 }
