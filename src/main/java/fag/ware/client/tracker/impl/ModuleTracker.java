@@ -14,7 +14,6 @@ import fag.ware.client.module.impl.world.*;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 
-import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,7 +73,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         /* MISC */
         getSet().add(new AutoRespawnModule());
         getSet().add(new PacketCancellerModule());
-        getSet().add(new MidClickFriend());
+        getSet().add(new MidClickFriendModule());
         getSet().add(new HelperModule());
 
         getSet().forEach(AbstractModule::onInit);

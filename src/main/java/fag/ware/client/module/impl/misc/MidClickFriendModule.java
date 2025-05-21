@@ -12,7 +12,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 
 @ModuleInfo(name = "MidClickFriend", description = "Middle click to add/remove a friend", category = ModuleCategory.MISC)
-public class MidClickFriend extends AbstractModule {
+public class MidClickFriendModule extends AbstractModule {
     @Override
     public void onEnable() {
         ModuleTracker.getInstance().getByName("MidClickPearl").setEnabled(false);
