@@ -16,8 +16,10 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * @author Graph
+ */
 // TODO: MAKE THIS LESS LOW QUALITY, ADD SETTINGS.
-// Author : Graph
 @ModuleInfo(name = "AutoCrystal", description = "Places and breaks crystals hold RMB", category = ModuleCategory.COMBAT)
 public class AutoCrystalModule extends AbstractModule {
     private final NumberSetting breakDelay = new NumberSetting("Break delay", 250, 0, 750);

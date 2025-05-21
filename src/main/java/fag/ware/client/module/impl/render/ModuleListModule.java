@@ -31,6 +31,9 @@ public class ModuleListModule extends AbstractModule {
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
+    private final BooleanSetting suffixes = new BooleanSetting("Suffixes", false);
+    private final StringSetting suffixChar = (StringSetting) new StringSetting("Suffix char", " - ", " - ", " ", " # ", " $ ", " @ ", " % ", " & ", " = " , " : ", " :: ", " ; ", " ;; ").hide(() -> !suffixes.getValue());
+    private final ColorSetting suffixColor = (ColorSetting) new ColorSetting("Suffix color", new Color(0xFFFFFF)).hide(() -> !suffixes.getValue());
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
     private final BooleanSetting animate = new BooleanSetting("Animate", true);
@@ -83,28 +86,26 @@ public class ModuleListModule extends AbstractModule {
                     currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
                     if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
                 }
+
                 ImGui.pushFont(currentFont);
                 ImDrawList drawList = ImGui.getForegroundDrawList();
 
-                modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(module.getInfo().name()).x));
+                modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(getFormattedModuleName(module)).x));
 
                 float alignment = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
                     module.getY().update(alignment);
 
-                    final float y;
+                    final float y = shouldAnimate ? module.getY().getValue() : alignment;
+                    if (module == null) continue;
 
-                    if (shouldAnimate) {
-                        y = module.getY().getValue();
-                    } else {
-                        y = alignment;
-                    }
+                    String baseName = module.getInfo().name();
+                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? module.getSuffix() : null;
 
-                    String name = module.toString();
-                    if (name == null) continue;
+                    ImVec2 baseSize = ImGui.calcTextSize(baseName);
+                    ImVec2 suffixSize = suffix != null ? ImGui.calcTextSize(suffixChar.getValue() + suffix) : new ImVec2(0, 0);
 
-                    ImVec2 size = ImGui.calcTextSize(name);
-                    float textWidth = size.x;
+                    float textWidth = baseSize.x + suffixSize.x + (suffixes.getValue() ? 1 : 0);
                     float progressiveWidth = textWidth + 10;
 
                     if (shouldAnimate) {
@@ -120,13 +121,18 @@ public class ModuleListModule extends AbstractModule {
                     float centeredY = y + ((ImGui.getFontSize() - ImGui.calcTextSize("A").y) / 2.0f);
 
                     if (fontShadow.getValue()) {
-                        drawList.addText(x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), name);
+                        drawList.addText(x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), baseName);
+                        if (suffix != null)
+                            drawList.addText(x + baseSize.x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), suffixChar.getValue() + suffix);
                     }
 
-                    drawList.addText(x, centeredY + 0.5f, textColor.toImGuiColor(), name);
+                    drawList.addText(x, centeredY + 0.5f, textColor.toImGuiColor(), baseName);
+                    if (suffix != null) {
+                        drawList.addText(x + baseSize.x, centeredY + 0.5f, ImColor.rgba(200, 200, 200, 255), suffixChar.getValue()); // light gray
+                        drawList.addText(x + baseSize.x + ImGui.calcTextSize(suffixChar.getValue()).x, centeredY + 0.5f, suffixColor.toImGuiColor(), suffix);
+                    }
 
-                    if (module.isEnabled()) // for instant y animation
-                    {
+                    if (module.isEnabled()) {
                         float lineHeight = ImGui.calcTextSize("M").y;
                         alignment += lineHeight + 2;
                     }
@@ -135,27 +141,59 @@ public class ModuleListModule extends AbstractModule {
                 ImGui.popFont();
             });
             case "Minecraft" -> {
-                modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(module.getInfo().name())));
+                modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(getFormattedModuleName(module))));
 
                 float y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
-                    String name = module.toString();
-                    float textWidth = mc.textRenderer.getWidth(name);
-                    float x = event.getDrawContext().getScaledWindowWidth() - textWidth - xOffset.toInt();
+                    String baseName = module.getInfo().name();
+                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? module.getSuffix() : null;
+
+                    int baseWidth = mc.textRenderer.getWidth(baseName);
+                    int dashWidth = mc.textRenderer.getWidth(suffixChar.getValue());
+                    int suffixWidth = suffix != null ? mc.textRenderer.getWidth(suffix) : 0;
+
+                    int totalWidth = baseWidth + (suffix != null ? dashWidth + suffixWidth : 0);
+
+                    float x = event.getDrawContext().getScaledWindowWidth() - totalWidth - xOffset.toInt();
 
                     if (background.getValue()) {
                         event.getDrawContext().fill(
                                 (int) (x - 2),
                                 (int) (y - 1),
-                                (int) (x + textWidth + 1),
+                                (int) (x + totalWidth + 1),
                                 (int) (y + mc.textRenderer.fontHeight),
                                 new Color(0, 0, 0, 150).getRGB()
                         );
                     }
-                    event.getDrawContext().drawText(mc.textRenderer, name, (int) x, (int) y, textColor.toInt(), fontShadow.getValue());
+                    event.getDrawContext().drawText(mc.textRenderer, baseName, (int) x, (int) (y + 0.5f), textColor.toInt(), fontShadow.getValue());
+
+                    if (suffix != null) {
+                        int dashX = (int) (x + baseWidth);
+                        int suffixX = dashX + dashWidth;
+
+                        event.getDrawContext().drawText(mc.textRenderer, suffixChar.getValue(), dashX, (int) y, new Color(200, 200, 200).getRGB(), fontShadow.getValue());
+
+                        event.getDrawContext().drawText(mc.textRenderer, suffix, suffixX, (int) y, suffixColor.toInt(), fontShadow.getValue());
+                    }
+
                     y += mc.textRenderer.fontHeight + 1;
                 }
             }
         }
+    }
+
+    private String getFormattedModuleName(AbstractModule module) {
+        String modName = module.getInfo().name();
+
+        if (suffixes.getValue() && module.getSuffix() != null) {
+            modName += suffixChar.getValue() + module.getSuffix();
+        }
+
+        return modName;
+    }
+
+    @Override
+    public String getSuffix() {
+        return mode.getValue();
     }
 }
