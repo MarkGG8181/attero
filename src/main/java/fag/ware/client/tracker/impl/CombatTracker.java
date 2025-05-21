@@ -18,9 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CombatTracker extends AbstractTracker<LivingEntity> implements IMinecraft {
-    private KillAuraModule killAuraModule;
-    public float yaw, pitch;
     public float prevYaw, prevPitch;
+    public float yaw, pitch;
     public LivingEntity target;
 
     private static final CombatTracker tracker = new CombatTracker();
@@ -28,6 +27,8 @@ public class CombatTracker extends AbstractTracker<LivingEntity> implements IMin
     public static CombatTracker getInstance() {
         return tracker;
     }
+
+    private KillAuraModule killAuraModule;
 
     public static void attackEntity(Entity entity) {
         if (entity != null && entity.isAlive()) {
@@ -74,7 +75,8 @@ public class CombatTracker extends AbstractTracker<LivingEntity> implements IMin
                 case "Health" -> entitiesToConsider.sort(Comparator.comparingDouble(LivingEntity::getHealth));
                 case "Armor" -> entitiesToConsider.sort(Comparator.comparingDouble(LivingEntity::getArmor));
                 case "Hurt-ticks" -> entitiesToConsider.sort(Comparator.comparingInt(e -> e.hurtTime));
-                case "Range" -> entitiesToConsider.sort(Comparator.comparingDouble(entity -> mc.player.squaredDistanceTo(entity)));
+                case "Range" ->
+                        entitiesToConsider.sort(Comparator.comparingDouble(entity -> mc.player.squaredDistanceTo(entity)));
             }
 
             getSet().clear();

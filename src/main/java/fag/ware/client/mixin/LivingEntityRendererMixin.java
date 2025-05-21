@@ -16,6 +16,7 @@ import static fag.ware.client.util.interfaces.IMinecraft.mc;
 
 /**
  * @author kibty
+ * fixed rots being only locked to a target and body yaw - mark
  */
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<? super S>> {
@@ -25,11 +26,16 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         if (living != mc.player)
             return original;
 
-        if (Objects.nonNull(CombatTracker.getInstance().target)) {
-            return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
-        }
+        float headYaw = MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
+        float bodyYawPrev = MathHelper.lerpAngleDegrees(tickDelta, living.lastBodyYaw, living.bodyYaw);
+        float diff = MathHelper.wrapDegrees(headYaw - bodyYawPrev);
+        float clamped = MathHelper.clamp(diff, -85.0F, 85.0F);
+        float result = headYaw - clamped;
 
-        return original;
+        if (Math.abs(clamped) > 50.0F)
+            result += clamped * 0.2F;
+
+        return result;
     }
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F"))
@@ -37,11 +43,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         if (living != mc.player)
             return original;
 
-        if (Objects.nonNull(CombatTracker.getInstance().target)) {
-            return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
-        }
-
-        return original;
+        return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
     }
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getLerpedPitch(F)F"))
@@ -49,10 +51,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
         if (living != mc.player)
             return original;
 
-        if (Objects.nonNull(CombatTracker.getInstance().target)) {
-            return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
-        }
-
-        return original;
+        return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
     }
 }

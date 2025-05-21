@@ -20,7 +20,7 @@
     "AbstractSignBlockEntityRendererMixin",
     "BackgroundRendererMixin",
     "BeaconBlockEntityRendererMixin",
-    "ClientPlayerMixin",
+    "ClientPlayerEntityMixin",
     "EntityRendererMixin",
     "GameRendererMixin",
     "InGameHudMixin",
