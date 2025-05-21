@@ -3,6 +3,7 @@ package fag.ware.client.module.impl.combat;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.MotionEvent;
 import fag.ware.client.event.impl.RunLoopEvent;
+import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -34,6 +35,9 @@ public class KillAuraModule extends AbstractModule {
 
     private final NumberSetting attackRange = (NumberSetting) new NumberSetting("Attack range", 3, 1, 6).setParent(clickGroup);
 
+    private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
+    private final BooleanSetting fixGcd = (BooleanSetting) new BooleanSetting("Fix GCD", false).setParent(rotationGroup);
+
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
@@ -44,7 +48,7 @@ public class KillAuraModule extends AbstractModule {
         if (CombatTracker.getInstance().target != null &&
                 (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
 
-            float[] rots = RotationUtil.toRotation(CombatTracker.getInstance().target);
+            float[] rots = RotationUtil.toRotation(CombatTracker.getInstance().target, fixGcd.toBoolean());
 
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);
@@ -52,7 +56,7 @@ public class KillAuraModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onRunLoop(RunLoopEvent event) {
+    public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         if (CombatTracker.getInstance().target != null && CombatTracker.isWithinRange(CombatTracker.getInstance().target, attackRange.toDouble())) {

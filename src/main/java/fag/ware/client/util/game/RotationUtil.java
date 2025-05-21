@@ -1,15 +1,16 @@
 package fag.ware.client.util.game;
 
 import fag.ware.client.event.impl.MoveInputEvent;
+import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;
 import fag.ware.client.util.math.MathUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
 public class RotationUtil implements IMinecraft {
+    private static final float sens = mc.options.getMouseSensitivity().getValue().floatValue();
     private static final FastNoiseLite noise = new FastNoiseLite();
     private static final FastNoiseLite noiseX = new FastNoiseLite();
     private static final FastNoiseLite noiseY = new FastNoiseLite();
@@ -27,22 +28,50 @@ public class RotationUtil implements IMinecraft {
         noiseZ.SetFrequency(0.05f);
     }
 
-    public static float[] toRotation(Entity entity) {
-        float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
+    public static float[] toRotation(Entity entity,
+                                     boolean fixGcd)
+    {
+        final float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
 
-        float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
-        float noiseValueY = noiseY.GetNoise(time, 100.0f) * 0.5f;
-        float noiseValueZ = noiseZ.GetNoise(time, 200.0f) * 0.5f;
+        final float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
+        final float noiseValueY = noiseY.GetNoise(time, 100.0f) * 0.5f;
+        final float noiseValueZ = noiseZ.GetNoise(time, 200.0f) * 0.5f;
 
-        double x = noiseValueX + entity.getPos().x + (entity.getPos().x - entity.lastX) - mc.player.getPos().x;
-        double z = noiseValueZ + entity.getPos().z + (entity.getPos().z - entity.lastZ) - mc.player.getPos().z;
-        double y = noiseValueY + (entity.getPos().y + entity.getHeight() - 0.5f) - (mc.player.getPos().y + mc.player.getStandingEyeHeight());
+        final double x = noiseValueX + entity.getPos().x + (entity.getPos().x - entity.lastX) - mc.player.getPos().x;
+        final double z = noiseValueZ + entity.getPos().z + (entity.getPos().z - entity.lastZ) - mc.player.getPos().z;
+        final double y = noiseValueY + (entity.getPos().y + entity.getHeight() - 0.5f) - (mc.player.getPos().y + mc.player.getStandingEyeHeight());
 
-        double theta = Math.hypot(x, z);
-        float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
-        float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
+        final double theta = Math.hypot(x, z);
+        final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
+        final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        return new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
+        final float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
+
+        if (fixGcd)
+        {
+            return patchGCD(rots, new float[] {CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
+
+        }
+        else
+        {
+            return rots;
+        }
+    }
+
+    public static float[] patchGCD(final float[] currentRotation,
+                                   final float[] newRotation)
+    {
+        final float f = sens * 0.6F + 0.2F;
+
+        final float gcd = f * f * f * 8.0F * 0.15F;
+
+        final float deltaYaw = currentRotation[0] - newRotation[0],
+                deltaPitch = currentRotation[1] - newRotation[1];
+
+        final float yaw = newRotation[0] + Math.round(deltaYaw / gcd) * gcd,
+                pitch = newRotation[1] + Math.round(deltaPitch / gcd) * gcd;
+
+        return new float[]{yaw, pitch};
     }
 
     public static double direction(float rotationYaw, final double moveForward, final double moveStrafing) {
@@ -124,18 +153,13 @@ public class RotationUtil implements IMinecraft {
     }
 
     public static float getAdjustedYaw() {
-        switch (mc.player.getHorizontalFacing()) {
-            case SOUTH:
-                return -180;
-            case NORTH:
-                return 0;
-            case EAST:
-                return 90;
-            case WEST:
-                return -90;
-            default:
-                return mc.player.getYaw();
-        }
+        return switch (mc.player.getHorizontalFacing()) {
+            case SOUTH -> -180;
+            case NORTH -> 0;
+            case EAST -> 90;
+            case WEST -> -90;
+            default -> mc.player.getYaw();
+        };
     }
 
 
