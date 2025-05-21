@@ -74,4 +74,9 @@ public class SpeedModule extends AbstractModule {
         mc.options.sprintKey.setPressed(false);
         setTimer(1.0f);
     }
+
+    @Override
+    public String getSuffix() {
+        return mode.getValue();
+    }
 }

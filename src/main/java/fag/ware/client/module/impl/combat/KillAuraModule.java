@@ -86,4 +86,9 @@ public class KillAuraModule extends AbstractModule {
     public void onInit() {
         getKeybinds().add((int) 'R');
     }
+
+    @Override
+    public String getSuffix() {
+        return "Single"; //incase we add multi/switch later
+    }
 }

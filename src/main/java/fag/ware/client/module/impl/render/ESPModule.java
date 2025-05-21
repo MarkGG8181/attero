@@ -52,4 +52,9 @@ public class ESPModule extends AbstractModule {
             }
         }
     }
+
+    @Override
+    public String getSuffix() {
+        return "Glow";
+    }
 }

@@ -67,6 +67,10 @@ public abstract class AbstractModule implements IMinecraft {
 
     public void onInit() {}
 
+    public String getSuffix() {
+        return null;
+    }
+
     public AbstractSetting<?> getSettingByName(String input) {
         return settings.stream()
                 .filter(s -> s.getName().equalsIgnoreCase(input))

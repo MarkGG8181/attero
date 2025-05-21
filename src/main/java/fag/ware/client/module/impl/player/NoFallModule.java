@@ -48,4 +48,9 @@ public class NoFallModule extends AbstractModule {
             }
         }
     }
+
+    @Override
+    public String getSuffix() {
+        return mode.getValue();
+    }
 }

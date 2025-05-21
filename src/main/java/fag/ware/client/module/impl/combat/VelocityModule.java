@@ -68,4 +68,12 @@ public class VelocityModule extends AbstractModule {
     private boolean chanceCheck() {
         return chance.getValue().doubleValue() > Math.random() * 100;
     }
+
+    @Override
+    public String getSuffix() {
+        if (mode.is("Packet")) {
+            return horizontal.toInt() + "% " + vertical.toInt() + "%";
+        }
+        return mode.getValue();
+    }
 }

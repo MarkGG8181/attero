@@ -179,4 +179,9 @@ public class ScaffoldWalkModule extends AbstractModule {
         distCounter.reset();
         unSneakCounter.reset();
     }
+
+    @Override
+    public String getSuffix() {
+        return rotationMode.getValue();
+    }
 }

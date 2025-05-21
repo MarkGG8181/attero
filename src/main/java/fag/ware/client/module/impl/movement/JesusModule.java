@@ -62,4 +62,8 @@ public class JesusModule extends AbstractModule {
         }
     }
 
+    @Override
+    public String getSuffix() {
+        return mode.getValue();
+    }
 }

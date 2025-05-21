@@ -71,4 +71,9 @@ public class LongJumpModule extends AbstractModule {
             return mc.player.getVelocity().y;
         }
     }
+
+    @Override
+    public String getSuffix() {
+        return mode.getValue();
+    }
 }
