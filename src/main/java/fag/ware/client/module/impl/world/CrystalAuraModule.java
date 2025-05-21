@@ -44,9 +44,20 @@ public class CrystalAuraModule extends AbstractModule {
     public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
-        if (target != null && (!target.isAlive() || !CombatTracker.isWithinRange(target, aimRange.toDouble()))) {
-            target = null;
-            targets.clear();
+        if (target != null) {
+            boolean stillValid = target.isAlive()
+                    && CombatTracker.isWithinRange(target, aimRange.toDouble())
+                    && mc.world.getEntitiesByClass(
+                    net.minecraft.entity.Entity.class,
+                    target.getBoundingBox().expand(3.0),
+                    e -> e != mc.player && !(e instanceof EndCrystalEntity)
+            ).size() > 0
+                    && mc.player.getBlockPos().equals(target.getBlockPos().down(1));
+
+            if (!stillValid) {
+                target = null;
+                targets.clear();
+            }
         }
 
         if (target == null) {
@@ -55,8 +66,22 @@ public class CrystalAuraModule extends AbstractModule {
             List<EndCrystalEntity> entitiesToConsider = mc.world.getEntitiesByClass(
                     EndCrystalEntity.class,
                     mc.player.getBoundingBox().expand(range),
-                    entity -> entity.isAttackable()
-                            && CombatTracker.isWithinRange(entity, range)
+                    entity -> {
+                        if (!entity.isAttackable() || !CombatTracker.isWithinRange(entity, range))
+                            return false;
+
+                        boolean foundNearbyEntity = mc.world.getEntitiesByClass(
+                                net.minecraft.entity.Entity.class,
+                                entity.getBoundingBox().expand(3.0),
+                                e -> e != mc.player && !(e instanceof EndCrystalEntity)
+                        ).size() > 0;
+
+                        double crystalBaseY = entity.getBlockPos().getY();
+                        double playerFeetY = mc.player.getBoundingBox().minY; // bottom of the player's hitbox
+
+                        boolean playerUnderneath = playerFeetY <= (crystalBaseY - 1.0);
+                        return foundNearbyEntity && playerUnderneath;
+                    }
             );
 
             entitiesToConsider.sort(Comparator.comparingDouble(entity -> mc.player.squaredDistanceTo(entity)));
@@ -80,30 +105,6 @@ public class CrystalAuraModule extends AbstractModule {
 
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);
-        }
-
-        for (PlayerEntity player : mc.world.getPlayers()) {
-            if (player == mc.player || mc.player.distanceTo(player) > searchRange.toFloat()) {
-                continue;
-            }
-
-            BlockPos entityPos = player.getBlockPos();
-            BlockPos check = entityPos.add(0, -1, 0);
-            BlockState bs = mc.world.getBlockState(check);
-            Block block = bs.getBlock();
-
-            if (block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) {
-                for (int slot = 0; slot < 9; slot++) {
-                    Item item = mc.player.getInventory().getStack(slot).getItem();
-                    if (item == Items.END_CRYSTAL) {
-                        mc.player.getInventory().setSelectedSlot(slot);
-                        BlockHitResult rayTrace = new BlockHitResult(check.toCenterPos(), Direction.UP, check, false);
-                        mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, rayTrace);
-                        mc.player.networkHandler.sendPacket(new PlayerInteractItemC2SPacket(Hand.MAIN_HAND, 0, mc.player.getYaw(), mc.player.getPitch()));
-                        break;
-                    }
-                }
-            }
         }
     }
 
