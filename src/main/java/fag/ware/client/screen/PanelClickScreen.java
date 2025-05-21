@@ -1,32 +1,20 @@
 package fag.ware.client.screen;
 
-import com.jfposton.ytdlp.YtDlp;
-import com.jfposton.ytdlp.YtDlpRequest;
-import com.jfposton.ytdlp.YtDlpResponse;
-import fag.ware.client.Fagware;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.ModuleTracker;
-import fag.ware.client.util.math.ColorUtil;
-import fag.ware.client.util.music.*;
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
 import imgui.flag.ImGuiColorEditFlags;
-import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
 
 import static imgui.ImGui.*;

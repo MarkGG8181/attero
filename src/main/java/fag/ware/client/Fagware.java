@@ -1,10 +1,8 @@
 package fag.ware.client;
 
-import com.jfposton.ytdlp.YtDlp;
 import fag.ware.client.event.data.EventBus;
 import fag.ware.client.tracker.impl.*;
 import fag.ware.client.util.FileUtil;
-import fag.ware.client.util.music.YtDlpDownloader;
 import net.fabricmc.api.ClientModInitializer;
 
 import org.slf4j.Logger;
@@ -22,15 +20,6 @@ public final class Fagware implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FileUtil.createDir(MOD_ID);
-
-        new Thread(() -> {
-            try {
-                YtDlpDownloader.ensureYtDlpExists();
-                YtDlp.setExecutablePath(YtDlpDownloader.getYtDlpPath().toString());
-            } catch (IOException e) {
-                Fagware.LOGGER.error("Failed to ensure that yt-dlp is downloaded", e);
-            }
-        }).start();
     }
 
     public void onStartup() {

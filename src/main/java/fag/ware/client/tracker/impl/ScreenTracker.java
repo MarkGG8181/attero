@@ -6,12 +6,10 @@ import fag.ware.client.event.impl.KeyEvent;
 import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
-import fag.ware.client.screen.MusicPlayerScreen;
 import fag.ware.client.screen.PanelClickScreen;
 import fag.ware.client.tracker.AbstractTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import org.lwjgl.glfw.GLFW;
 
 public class ScreenTracker extends AbstractTracker<Screen> {
     private static final ScreenTracker tracker = new ScreenTracker();
@@ -26,7 +24,6 @@ public class ScreenTracker extends AbstractTracker<Screen> {
         getSet().add(new ClickScreen());
         getSet().add(new JelloClickScreen());
         getSet().add(new PanelClickScreen());
-        getSet().add(new MusicPlayerScreen());
     }
 
     @Subscribe
@@ -51,10 +48,6 @@ public class ScreenTracker extends AbstractTracker<Screen> {
                         ModuleTracker.getInstance().getByClass(ClickGUIModule.class).setEnabled(true);
                     }
                 }
-            }
-
-            if (event.getKey() == GLFW.GLFW_KEY_RIGHT_CONTROL) {
-                MinecraftClient.getInstance().setScreen(getByClass(MusicPlayerScreen.class));
             }
         });
     }

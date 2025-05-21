@@ -43,9 +43,6 @@ dependencies {
 	include implementation("io.github.spair:imgui-java-natives-windows:${project.imgui_version}")
 	include implementation("io.github.spair:imgui-java-natives-linux:${project.imgui_version}")
 	include implementation("io.github.spair:imgui-java-natives-macos:${project.imgui_version}")
-
-	// https://mvnrepository.com/artifact/com.googlecode.soundlibs/jlayer
-	implementation 'com.googlecode.soundlibs:jlayer:1.0.1.4'
 }
 
 configurations.all {
