@@ -15,13 +15,20 @@ public interface IMinecraft {
     MinecraftClient mc = MinecraftClient.getInstance();
 
     default void send(String message) {
+        send(message, true);
+    }
+
+    default void send(String message, boolean includePrefix) {
         if (mc.player != null) {
             MutableText finalText = Text.empty();
 
-            MutableText prefix = ColorUtil.createGradientText("fag", new Color(0x26A07D), Color.WHITE);
-            finalText.append(prefix);
+            if (includePrefix) {
+                MutableText prefix = ColorUtil.createGradientText("fag", new Color(0x26A07D), Color.WHITE);
+                finalText.append(prefix);
+                finalText.append(Text.literal(" > "));
+            }
 
-            finalText.append(Text.literal(" > " + message).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));
+            finalText.append(Text.literal(message).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));
 
             mc.player.sendMessage(finalText, false);
         }
