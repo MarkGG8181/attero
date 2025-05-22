@@ -1,5 +1,7 @@
 package fag.ware.client.file;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fag.ware.client.Fagware;
@@ -29,6 +31,24 @@ public abstract class AbstractFile {
             FileUtil.GSON.toJson(json, writer);
         } catch (IOException e) {
             Fagware.LOGGER.error("Failed to save {}", fileName, e);
+        }
+    }
+
+    public void saveJsonElement(JsonElement json) {
+        try (Writer writer = new FileWriter(file)) {
+            FileUtil.GSON.toJson(json, writer);
+        } catch (IOException e) {
+            Fagware.LOGGER.error("Failed to save {}", fileName, e);
+        }
+    }
+
+    public JsonArray loadJsonArray() {
+        if (!file.exists()) return new JsonArray();
+        try (Reader reader = new FileReader(file)) {
+            return JsonParser.parseReader(reader).getAsJsonArray();
+        } catch (IOException | IllegalStateException e) {
+            Fagware.LOGGER.error("Failed to load {}", fileName, e);
+            return new JsonArray();
         }
     }
 

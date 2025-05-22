@@ -26,6 +26,7 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
         getSet().add(new ConfigCommand());
         getSet().add(new BindCommand());
         getSet().add(new GarbageCollectorCommand());
+        getSet().add(new FriendCommand());
     }
 
     public AbstractCommand getByName(String name) {
@@ -60,7 +61,7 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
                     if (commandName.isBlank()) {
                         sendError("Missing arguments!");
                     } else {
-                        sendError(String.format("Command %s not found!", commandName));
+                        sendError(String.format("Command §e%s§r not found!", commandName));
                     }
                 }
             }
