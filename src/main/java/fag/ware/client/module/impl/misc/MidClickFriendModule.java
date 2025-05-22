@@ -26,10 +26,10 @@ public class MidClickFriendModule extends AbstractModule {
 
                 if (FriendTracker.getInstance().getSet().contains(name)) {
                     FriendTracker.getInstance().getSet().remove(name);
-                    send(String.format("Removed %s from friends", name));
+                    send(String.format("Removed §e%s§r from friends", name));
                 } else {
                     FriendTracker.getInstance().getSet().add(name);
-                    send(String.format("Added %s to friends", name));
+                    send(String.format("Added §e%s§r to friends", name));
                 }
             }
         }

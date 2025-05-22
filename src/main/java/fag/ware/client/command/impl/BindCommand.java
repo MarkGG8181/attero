@@ -14,14 +14,14 @@ public class BindCommand extends AbstractCommand {
     @Override
     public List<String> getHelp() {
         List<String> lines = new ArrayList<>();
-        lines.add("Command .bind usage:");
-        lines.add(".bind add <mod> <key> - adds a bind to a module");
-        lines.add(".bind remove <mod> <key> - removes a bind from a module");
-        lines.add(".bind list <key> - shows all modules that are bound to a key");
-        lines.add(".bind list all - shows all bound modules");
-        lines.add(".bind clear - clears all binds");
-        lines.add(".bind clear <key> - clears all bound modules from a key");
-        lines.add(".bind clear <mod> - clears all binds from a module");
+        lines.add("Command §e.bind§7 usage:");
+        lines.add(".bind §7add §e<mod> <key>§r - adds a bind to a module");
+        lines.add(".bind §7remove §3<mod> <key>§r - removes a bind from a module");
+        lines.add(".bind §7list §e<key>§r - shows all modules that are bound to a key");
+        lines.add(".bind §7list §eall§r - shows all bound modules");
+        lines.add(".bind §7clear§r - clears all binds");
+        lines.add(".bind §7clear §e<key>§r - clears all bound modules from a key");
+        lines.add(".bind §7clear §e<mod>§r - clears all binds from a module");
         return lines;
     }
 

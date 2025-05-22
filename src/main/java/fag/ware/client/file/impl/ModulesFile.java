@@ -74,7 +74,7 @@ public class ModulesFile extends AbstractFile {
         if (MinecraftClient.getInstance().player == null)
             Fagware.LOGGER.info("Saved {} successfully", getFile().getAbsolutePath());
         else
-            ModuleTracker.getInstance().send(String.format("Saved %s successfully", getFile().getName()));
+            ModuleTracker.getInstance().send(String.format("Saved §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
 
         super.saveJsonObject(jsonObject);
     }
@@ -87,7 +87,7 @@ public class ModulesFile extends AbstractFile {
             if (MinecraftClient.getInstance().player == null)
                 Fagware.LOGGER.info("Config {} not found!", getFile().getAbsolutePath());
             else
-                ModuleTracker.getInstance().send(String.format("Config %s not found", getFile().getName()));
+                ModuleTracker.getInstance().sendError(String.format("Config §e%s§r not found", getFile().getName().replaceAll(".json", "")));
 
             return;
         }
@@ -151,6 +151,6 @@ public class ModulesFile extends AbstractFile {
         if (MinecraftClient.getInstance().player == null)
             Fagware.LOGGER.info("Loaded {} successfully", getFile().getAbsolutePath());
         else
-            ModuleTracker.getInstance().send(String.format("Loaded %s successfully", getFile().getName()));
+            ModuleTracker.getInstance().send(String.format("Loaded §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
     }
 }

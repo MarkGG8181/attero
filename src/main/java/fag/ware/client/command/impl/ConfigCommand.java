@@ -20,12 +20,12 @@ public class ConfigCommand extends AbstractCommand {
     @Override
     public List<String> getHelp() {
         List<String> lines = new ArrayList<>();
-        lines.add("Command .config usage:");
-        lines.add(".config list - shows all available configs");
-        lines.add(".config folder - opens config folder");
-        lines.add(".config <cfg> - loads a config");
-        lines.add(".config load <cfg> - loads a config");
-        lines.add(".config save <cfg> - saves a config");
+        lines.add("Command §e.config§r usage:");
+        lines.add(".config §7list§r - shows all available configs");
+        lines.add(".config §7folder§r - opens config folder");
+        lines.add(".config §e<cfg>§r - loads a config");
+        lines.add(".config §7load §e<cfg>§r - loads a config");
+        lines.add(".config §7save §e<cfg>§r - saves a config");
         return lines;
     }
 
@@ -43,7 +43,7 @@ public class ConfigCommand extends AbstractCommand {
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-                        send("> " + cfg.name() + " (" + formattedTime + ")", false);
+                        send("> §e" + cfg.name().replaceAll(".json", "") + " §7(" + formattedTime + ")", false);
                     });
                 }
 
