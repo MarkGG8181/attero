@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
     public AbstractModule lastModule;
-    public final ModulesFile defaultConfig = new ModulesFile("default");
+    public final ModulesFile modulesFile = new ModulesFile("default");
 
     private static final ModuleTracker tracker = new ModuleTracker();
 
@@ -80,7 +80,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         getSet().forEach(AbstractModule::onInit);
 
-        defaultConfig.load();
+        modulesFile.load();
     }
 
     @Subscribe

@@ -53,8 +53,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "close", at = @At("RETURN"))
     public void onClose(CallbackInfo ci) {
-        ImGuiImpl.dispose();
-        ModuleTracker.getInstance().defaultConfig.save();
+        Fagware.INSTANCE.onEnd();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
