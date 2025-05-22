@@ -4,7 +4,9 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
+import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiThemes;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import imgui.ImGui;
 import imgui.flag.ImGuiColorEditFlags;
@@ -35,7 +37,11 @@ public final class PanelClickScreen extends Screen
         super.render(context, mouseX, mouseY, deltaTicks);
 
         ImGuiImpl.draw(io -> {
-            ImGuiImpl.applyDarkTheme();
+            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
+                case "Marine" -> ImGuiThemes.applyMarineTheme();
+                case "Dark" -> ImGuiThemes.applyDarkTheme();
+                case "White" -> ImGuiThemes.applyWhiteTheme();
+            }
 
             pushFont(ImGuiImpl.inter17);
 

@@ -4,7 +4,9 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
+import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiThemes;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.tracker.impl.ScreenTracker;
 import imgui.*;
@@ -64,7 +66,12 @@ public class JelloClickScreen extends Screen {
         }
 
         ImGuiImpl.draw(io -> {
-            ImGuiImpl.applyDarkTheme();
+            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
+                case "Marine" -> ImGuiThemes.applyMarineTheme();
+                case "Dark" -> ImGuiThemes.applyDarkTheme();
+                case "White" -> ImGuiThemes.applyWhiteTheme();
+            }
+
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
 
@@ -72,7 +79,7 @@ public class JelloClickScreen extends Screen {
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
                 ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
 
-                if (ImGui.begin(category.getName() + "##1", ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse)) {
+                if (ImGui.begin(category.getName() + "##1", ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar)) {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
