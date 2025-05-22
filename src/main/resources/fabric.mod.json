@@ -3,9 +3,12 @@
   "id": "fagware",
   "version": "1.0.0",
   "name": "Fagware",
-  "description": "Faggy waggy",
+  "description": "Minecraft utility mod for a more pleasant anarchy server experience.",
   "authors": [
-    "Mark"
+    "grievinglexi",
+    "graphicalinterface",
+    "winedbg",
+    "kibty1337"
   ],
   "contact": {
     "homepage": "https://wonderland.codeberg.page/"
