@@ -7,6 +7,7 @@ import fag.ware.client.event.impl.RunLoopEvent;
 import fag.ware.client.event.impl.TickEvent;
 import fag.ware.client.event.impl.render.HasOutlineEvent;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.tracker.impl.ModuleTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;
@@ -51,8 +52,9 @@ public class MinecraftClientMixin {
     }
 
     @Inject(method = "close", at = @At("RETURN"))
-    public void closeImGui(CallbackInfo ci) {
+    public void onClose(CallbackInfo ci) {
         ImGuiImpl.dispose();
+        ModuleTracker.getInstance().defaultConfig.save();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))

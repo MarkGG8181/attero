@@ -8,7 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.File;
 
 public final class Fagware implements ClientModInitializer {
 
@@ -20,6 +20,7 @@ public final class Fagware implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FileUtil.createDir(MOD_ID);
+        FileUtil.createDir(MOD_ID + File.separator + "configs");
     }
 
     public void onStartup() {

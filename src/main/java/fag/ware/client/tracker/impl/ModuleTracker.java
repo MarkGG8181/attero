@@ -3,6 +3,7 @@ package fag.ware.client.tracker.impl;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.KeyEvent;
+import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.impl.combat.*;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
     public AbstractModule lastModule;
+    public final ModulesFile defaultConfig = new ModulesFile("default");
 
     private static final ModuleTracker tracker = new ModuleTracker();
 
@@ -77,6 +79,8 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new HelperModule());
 
         getSet().forEach(AbstractModule::onInit);
+
+        defaultConfig.load();
     }
 
     @Subscribe

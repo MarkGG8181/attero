@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class AbstractModule implements IMinecraft {
     private Animation x = new Animation(0, EnumTransition.SQRT, 1f);
     private Animation y = new Animation(0, EnumTransition.SQRT, 1f);
-    private final List<Integer> keybinds = new ArrayList<>();
+    private List<Integer> keybinds = new ArrayList<>();
     private boolean enabled, expanded;
     private final ModuleInfo info;
 
