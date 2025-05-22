@@ -26,13 +26,14 @@ import java.util.List;
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("ImGui"));
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
     private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
     private final BooleanSetting suffixes = new BooleanSetting("Suffixes", false);
-    private final StringSetting suffixChar = (StringSetting) new StringSetting("Suffix char", " - ", " - ", " ", " # ", " $ ", " @ ", " % ", " & ", " = " , " : ", " :: ", " ; ", " ;; ").hide(() -> !suffixes.getValue());
+    private final StringSetting suffixChar = (StringSetting) new StringSetting("Suffix char", " - ", " - ", " ", " # ", " $ ", " @ ", " % ", " & ", " = ", " : ", " :: ", " ; ", " ;; ").hide(() -> !suffixes.getValue());
+    private final StringSetting suffixThing = (StringSetting) new StringSetting("Suffix thing", "none", "none", "[]", "()", "{}").hide(() -> !suffixes.getValue());
     private final ColorSetting suffixColor = (ColorSetting) new ColorSetting("Suffix color", new Color(0xFFFFFF)).hide(() -> !suffixes.getValue());
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
@@ -100,7 +101,9 @@ public class ModuleListModule extends AbstractModule {
                     if (module == null) continue;
 
                     String baseName = module.getInfo().name();
-                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? module.getSuffix() : null;
+                    String thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
+                    String thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
+                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? thing1 + module.getSuffix() + thing2 : null;
 
                     ImVec2 baseSize = ImGui.calcTextSize(baseName);
                     ImVec2 suffixSize = suffix != null ? ImGui.calcTextSize(suffixChar.getValue() + suffix) : new ImVec2(0, 0);
@@ -146,7 +149,9 @@ public class ModuleListModule extends AbstractModule {
                 float y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
                     String baseName = module.getInfo().name();
-                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? module.getSuffix() : null;
+                    String thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
+                    String thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
+                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? thing1 + module.getSuffix() + thing2 : null;
 
                     int baseWidth = mc.textRenderer.getWidth(baseName);
                     int dashWidth = mc.textRenderer.getWidth(suffixChar.getValue());
@@ -185,8 +190,11 @@ public class ModuleListModule extends AbstractModule {
     private String getFormattedModuleName(AbstractModule module) {
         String modName = module.getInfo().name();
 
+        String thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
+        String thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
+
         if (suffixes.getValue() && module.getSuffix() != null) {
-            modName += suffixChar.getValue() + module.getSuffix();
+            modName += suffixChar.getValue() + thing1 + module.getSuffix() + thing2;
         }
 
         return modName;

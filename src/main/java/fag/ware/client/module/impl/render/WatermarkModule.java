@@ -25,7 +25,7 @@ import java.awt.*;
 @ModuleInfo(name = "Watermark", category = ModuleCategory.RENDER, description = "Draws a watermark")
 public class WatermarkModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa").hide(() -> !mode.getValue().equals("ImGui"));
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
     private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final BooleanSetting hideName = new BooleanSetting("Hide name", false);
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
