@@ -5,6 +5,9 @@ import fag.ware.client.util.interfaces.IMinecraft;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 public abstract class AbstractCommand implements IMinecraft {
@@ -21,6 +24,10 @@ public abstract class AbstractCommand implements IMinecraft {
     @Override
     public String toString() {
         return info.name();
+    }
+
+    public List<String> getHelp() {
+        return new ArrayList<>();
     }
 
     public abstract void execute(String[] args);

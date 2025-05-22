@@ -8,6 +8,17 @@ import fag.ware.client.tracker.impl.CommandTracker;
 public class HelpCommand extends AbstractCommand {
     @Override
     public void execute(String[] args) {
-        CommandTracker.getInstance().getSet().forEach(cmd -> send(String.format("%s%s - %s", CommandTracker.COMMAND_PREFIX, cmd.getInfo().aliases()[0], cmd.getInfo().description())));
+        try {
+            AbstractCommand command = CommandTracker.getInstance().getByName(args[1]);
+            if (command != null) {
+                if (!command.getHelp().isEmpty()) {
+                    command.getHelp().forEach(line -> send(line, line.contains("usage")));
+                }
+            } else {
+                sendError(String.format("Command %s not found!", args[1]));
+            }
+        } catch (Throwable t) {
+            CommandTracker.getInstance().getSet().forEach(cmd -> send(String.format("%s%s - %s", CommandTracker.COMMAND_PREFIX, cmd.getInfo().aliases()[0], cmd.getInfo().description())));
+        }
     }
 }
