@@ -16,7 +16,7 @@ import java.awt.*;
 
 @ModuleInfo(name = "ESP", category = ModuleCategory.RENDER, description = "Renders outlines around entities")
 public class ESPModule extends AbstractModule {
-    private final MultiStringSetting entities = new MultiStringSetting("Entities", EntityUtil.getExampleEntities(), EntityUtil.getAllEntityNames());
+    private final MultiStringSetting entities = new MultiStringSetting("Entities", new String[]{"Player"}, EntityUtil.getAllEntityNames());
 
     private final ColorSetting playerColor = new ColorSetting("Player color", new Color(230, 0, 55));
     private final ColorSetting animalColor = new ColorSetting("Animal color", new Color(0, 230, 55));
