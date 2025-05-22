@@ -2,6 +2,6 @@ package fag.ware.client.screen.data;
 
 import imgui.ImGuiIO;
 
-public interface RenderInterface {
+public interface IRenderInterface {
     void render(final ImGuiIO io);
 }

@@ -1,15 +1,10 @@
 package fag.ware.client.command.impl;
 
-import fag.ware.client.Fagware;
 import fag.ware.client.command.AbstractCommand;
 import fag.ware.client.command.data.CommandInfo;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.tracker.impl.ModuleTracker;
-import fag.ware.client.tracker.impl.PlayerTracker;
-import fag.ware.client.util.GLFWUtil;
-import org.lwjgl.glfw.GLFW;
 
-import java.util.Arrays;
 import java.util.Locale;
 
 @CommandInfo(name = "Bind", description = "Binds a module to a key", aliases = {"bind", "binds", "bnd"})
@@ -42,7 +37,7 @@ public class BindCommand extends AbstractCommand
                     if (byName == null) throw new IllegalArgumentException(String.format("Module \"%s\" does not exist!", args[2]));
                     byName.getKeybinds().add(key);
 
-                    PlayerTracker.getInstance().send(String.format("Bound %s to %c", byName.getInfo().name(), (char) key));
+                    send(String.format("Bound %s to %c", byName.getInfo().name(), (char) key));
                 }
                 case "remove" -> {
                     if (args.length != 4) throw new IllegalArgumentException("Expected 2 args to a \"remove\" operation!");
@@ -52,7 +47,7 @@ public class BindCommand extends AbstractCommand
                     if (byName == null) throw new IllegalArgumentException(String.format("Module \"%s\" does not exist!", args[2]));
                     byName.getKeybinds().remove((Integer) key);
 
-                    PlayerTracker.getInstance().send(String.format("Unbound %s from %c", byName.getInfo().name(), (char) key));
+                    send(String.format("Unbound %s from %c", byName.getInfo().name(), (char) key));
                 }
                 case "list" -> {
                     if (args.length == 2)
@@ -69,7 +64,7 @@ public class BindCommand extends AbstractCommand
 
                             sb.delete(sb.length() - 2, sb.length());
 
-                            PlayerTracker.getInstance().send(String.format("%s -> %s", m.getInfo().name(), sb));
+                            send(String.format("%s -> %s", m.getInfo().name(), sb));
                         });
                     }
                     else if (args.length == 3)
@@ -87,7 +82,7 @@ public class BindCommand extends AbstractCommand
 
                             sb.delete(sb.length() - 2, sb.length());
 
-                            PlayerTracker.getInstance().send(String.format("%s -> %s", byName.getInfo().name(), sb));
+                            send(String.format("%s -> %s", byName.getInfo().name(), sb));
                         }
                         else
                         {
@@ -97,7 +92,7 @@ public class BindCommand extends AbstractCommand
                             {
                                 if (abstractModule.getKeybinds().contains(keyBind))
                                 {
-                                    PlayerTracker.getInstance().send(abstractModule.getInfo().name());
+                                    send(abstractModule.getInfo().name());
                                 }
                             }
                         }
@@ -108,7 +103,7 @@ public class BindCommand extends AbstractCommand
                     if (args.length == 2)
                     {
                         ModuleTracker.getInstance().getSet().forEach(m -> m.getKeybinds().clear());
-                        PlayerTracker.getInstance().send("Cleared all binds!");
+                        send("Cleared all binds!");
                     }
                     else if (args.length == 3)
                     {
@@ -117,7 +112,7 @@ public class BindCommand extends AbstractCommand
                         if (byName != null)
                         {
                             byName.getKeybinds().clear();
-                            PlayerTracker.getInstance().send(String.format("Cleared all for module %s!", byName.getInfo().name()));
+                            send(String.format("Cleared all for module %s!", byName.getInfo().name()));
                         }
                         else
                         {
@@ -133,7 +128,7 @@ public class BindCommand extends AbstractCommand
         }
         catch (Throwable t)
         {
-            PlayerTracker.getInstance().sendError(t.getMessage()); // lol
+            sendError(t.getMessage()); // lol
         }
     }
 

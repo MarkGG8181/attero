@@ -123,7 +123,7 @@ public class ImGuiImpl {
         imGuiImplGl3.init();
     }
 
-    public static void draw(final RenderInterface runnable) {
+    public static void draw(final IRenderInterface runnable) {
         // Minecraft will not bind the framebuffer unless it is needed, so do it manually and hope Vulcan never gets real:tm:
         final Framebuffer framebuffer = MinecraftClient.getInstance().getFramebuffer();
         final var previousFramebuffer = ((GlTexture) framebuffer.getColorAttachment()).getOrCreateFramebuffer(((GlBackend) RenderSystem.getDevice()).getFramebufferManager(), null);
