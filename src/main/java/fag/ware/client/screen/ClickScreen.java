@@ -6,6 +6,7 @@ import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
+import fag.ware.client.screen.data.ImGuiThemes;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -49,10 +50,10 @@ public class ClickScreen extends Screen {
 
         ImGuiImpl.draw(io -> {
             switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
-                case "Marine" -> ImGuiImpl.applyMarineTheme();
-                case "Classic" -> ImGuiImpl.applyDarkTheme();
+                case "Marine" -> ImGuiThemes.applyMarineTheme();
+                case "Dark" -> ImGuiThemes.applyDarkTheme();
+                case "White" -> ImGuiThemes.applyWhiteTheme();
             }
-
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
@@ -61,7 +62,7 @@ public class ClickScreen extends Screen {
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
                 ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
 
-                if (ImGui.begin(category.getName(), ImGuiWindowFlags.NoDocking)) {
+                if (ImGui.begin(category.getName(), ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoScrollbar)) {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
@@ -77,21 +78,16 @@ public class ClickScreen extends Screen {
                         ImGui.sameLine();
                         boolean open = ImGui.collapsingHeader(module.toString());
 
-                        if (ImGui.isItemHovered())
-                        {
+                        if (ImGui.isItemHovered()) {
                             ImGui.beginTooltip();
 
-                            if (module.getKeybinds().isEmpty())
-                            {
+                            if (module.getKeybinds().isEmpty()) {
                                 ImGui.setTooltip(module.getInfo().description());
-                            }
-                            else
-                            {
+                            } else {
                                 StringBuilder sb = new StringBuilder();
 
-                                for (Integer keybind : module.getKeybinds())
-                                {
-                                    sb.append((char)(int)keybind).append(", ");
+                                for (Integer keybind : module.getKeybinds()) {
+                                    sb.append((char) (int) keybind).append(", ");
                                 }
 
                                 sb.delete(sb.length() - 2, sb.length());
