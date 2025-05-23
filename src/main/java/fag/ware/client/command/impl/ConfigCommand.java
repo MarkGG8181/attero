@@ -6,9 +6,7 @@ import fag.ware.client.command.data.CommandInfo;
 import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.util.FileUtil;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -30,7 +28,7 @@ public class ConfigCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args) { // [config, load, configName]
+    public void execute(String[] args) { // [config, load, test]
         try {
             switch (args[1].toLowerCase()) {
                 case "load" -> new ModulesFile(args[2].toLowerCase()).load();

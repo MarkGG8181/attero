@@ -26,8 +26,7 @@ public class BindCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args) // [bind, add, speed, m]
-    {
+    public void execute(String[] args) { // [bind, add, speed, m]
         try {
             switch (args[1].toLowerCase()) {
                 case "add" -> {
