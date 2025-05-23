@@ -5,7 +5,7 @@ import fag.ware.client.command.AbstractCommand;
 import fag.ware.client.command.data.CommandInfo;
 import fag.ware.client.command.impl.*;
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.SendPacketEvent;
+import fag.ware.client.event.impl.player.SendPacketEvent;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;

@@ -1,4 +1,4 @@
-package fag.ware.client.event.impl;
+package fag.ware.client.event.impl.player;
 
 import fag.ware.client.event.Event;
 

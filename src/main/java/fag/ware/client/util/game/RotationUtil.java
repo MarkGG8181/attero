@@ -1,6 +1,6 @@
 package fag.ware.client.util.game;
 
-import fag.ware.client.event.impl.MoveInputEvent;
+import fag.ware.client.event.impl.interact.MoveInputEvent;
 import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;

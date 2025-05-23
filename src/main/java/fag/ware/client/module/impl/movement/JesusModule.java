@@ -1,8 +1,8 @@
 package fag.ware.client.module.impl.movement;
 
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.ComputeNextCollisionEvent;
-import fag.ware.client.event.impl.MotionEvent;
+import fag.ware.client.event.impl.world.ComputeNextCollisionEvent;
+import fag.ware.client.event.impl.player.MotionEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;

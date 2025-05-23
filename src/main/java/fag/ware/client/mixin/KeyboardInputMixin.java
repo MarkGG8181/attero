@@ -1,7 +1,7 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.MoveButtonEvent;
-import fag.ware.client.event.impl.MoveInputEvent;
+import fag.ware.client.event.impl.interact.MoveButtonEvent;
+import fag.ware.client.event.impl.interact.MoveInputEvent;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.GameOptions;

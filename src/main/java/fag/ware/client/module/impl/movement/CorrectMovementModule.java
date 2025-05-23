@@ -1,9 +1,9 @@
 package fag.ware.client.module.impl.movement;
 
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.JumpEvent;
-import fag.ware.client.event.impl.MoveInputEvent;
-import fag.ware.client.event.impl.UpdateVelocityEvent;
+import fag.ware.client.event.impl.world.JumpEvent;
+import fag.ware.client.event.impl.interact.MoveInputEvent;
+import fag.ware.client.event.impl.world.UpdateVelocityEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;

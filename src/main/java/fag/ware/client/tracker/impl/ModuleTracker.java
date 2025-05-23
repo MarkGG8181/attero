@@ -2,7 +2,7 @@ package fag.ware.client.tracker.impl;
 
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.KeyEvent;
+import fag.ware.client.event.impl.interact.KeyEvent;
 import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;

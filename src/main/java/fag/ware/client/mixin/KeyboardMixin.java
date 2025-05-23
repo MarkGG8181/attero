@@ -1,6 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.KeyEvent;
+import fag.ware.client.event.impl.interact.KeyEvent;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;

@@ -1,9 +1,9 @@
 package fag.ware.client.mixin;
 
 import com.mojang.authlib.GameProfile;
-import fag.ware.client.event.impl.MotionEvent;
-import fag.ware.client.event.impl.SprintEvent;
-import fag.ware.client.event.impl.UpdateEvent;
+import fag.ware.client.event.impl.player.MotionEvent;
+import fag.ware.client.event.impl.player.SprintEvent;
+import fag.ware.client.event.impl.player.UpdateEvent;
 import fag.ware.client.tracker.impl.CombatTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;

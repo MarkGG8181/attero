@@ -1,6 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.JumpEvent;
+import fag.ware.client.event.impl.world.JumpEvent;
 import fag.ware.client.event.impl.render.RenderEatingParticlesEvent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;

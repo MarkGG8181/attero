@@ -1,7 +1,7 @@
 package fag.ware.client.module.impl.player;
 
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.MiddleClickEvent;
+import fag.ware.client.event.impl.interact.MiddleClickEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;

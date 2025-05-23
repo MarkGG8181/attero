@@ -1,7 +1,7 @@
 package fag.ware.client.module.impl.player;
 
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.SendPacketEvent;
+import fag.ware.client.event.impl.player.SendPacketEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;

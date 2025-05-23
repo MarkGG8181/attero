@@ -1,6 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.LoadWorldEvent;
+import fag.ware.client.event.impl.world.LoadWorldEvent;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

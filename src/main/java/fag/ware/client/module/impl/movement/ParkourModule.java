@@ -2,14 +2,12 @@ package fag.ware.client.module.impl.movement;
 
 import com.google.common.collect.Streams;
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.MotionEvent;
+import fag.ware.client.event.impl.player.MotionEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.util.math.Timer;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.shape.VoxelShape;
 

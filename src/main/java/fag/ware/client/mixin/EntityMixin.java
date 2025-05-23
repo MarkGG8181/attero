@@ -1,7 +1,6 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.Fagware;
-import fag.ware.client.event.impl.UpdateVelocityEvent;
+import fag.ware.client.event.impl.world.UpdateVelocityEvent;
 import fag.ware.client.tracker.impl.CombatTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;

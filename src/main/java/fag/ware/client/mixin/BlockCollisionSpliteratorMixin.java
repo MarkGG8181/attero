@@ -2,7 +2,7 @@ package fag.ware.client.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import fag.ware.client.event.impl.ComputeNextCollisionEvent;
+import fag.ware.client.event.impl.world.ComputeNextCollisionEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;

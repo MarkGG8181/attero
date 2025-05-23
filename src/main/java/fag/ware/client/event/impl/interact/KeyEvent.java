@@ -1,4 +1,4 @@
-package fag.ware.client.event.impl;
+package fag.ware.client.event.impl.interact;
 
 import fag.ware.client.event.CancellableEvent;
 import lombok.AllArgsConstructor;

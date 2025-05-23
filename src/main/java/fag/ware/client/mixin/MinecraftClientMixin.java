@@ -2,12 +2,11 @@ package fag.ware.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import fag.ware.client.Fagware;
-import fag.ware.client.event.impl.MiddleClickEvent;
-import fag.ware.client.event.impl.RunLoopEvent;
-import fag.ware.client.event.impl.TickEvent;
+import fag.ware.client.event.impl.interact.MiddleClickEvent;
+import fag.ware.client.event.impl.game.RunLoopEvent;
+import fag.ware.client.event.impl.game.TickEvent;
 import fag.ware.client.event.impl.render.HasOutlineEvent;
 import fag.ware.client.screen.data.ImGuiImpl;
-import fag.ware.client.tracker.impl.ModuleTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;

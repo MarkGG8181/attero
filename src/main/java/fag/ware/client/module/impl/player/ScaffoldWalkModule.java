@@ -1,9 +1,9 @@
 package fag.ware.client.module.impl.player;
 
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.MotionEvent;
-import fag.ware.client.event.impl.SprintEvent;
-import fag.ware.client.event.impl.TickEvent;
+import fag.ware.client.event.impl.player.MotionEvent;
+import fag.ware.client.event.impl.player.SprintEvent;
+import fag.ware.client.event.impl.game.TickEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;

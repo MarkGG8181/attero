@@ -1,7 +1,7 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.ReceivePacketEvent;
-import fag.ware.client.event.impl.SendPacketEvent;
+import fag.ware.client.event.impl.player.ReceivePacketEvent;
+import fag.ware.client.event.impl.player.SendPacketEvent;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;

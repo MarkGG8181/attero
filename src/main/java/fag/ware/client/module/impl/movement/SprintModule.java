@@ -1,7 +1,7 @@
 package fag.ware.client.module.impl.movement;
 
 import fag.ware.client.event.data.Subscribe;
-import fag.ware.client.event.impl.UpdateEvent;
+import fag.ware.client.event.impl.player.UpdateEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
