@@ -27,6 +27,7 @@ public class TriggerBotModule extends AbstractModule {
     private final RangeNumberSetting swordMs = new RangeNumberSetting("Sword delay", 40, 1000, 40, 1000);
     private final RangeNumberSetting axeMS = new RangeNumberSetting("Axe delay", 40, 1000, 40, 1000);
     private final Timer timer = new Timer();
+    private float ms;
 
     @Subscribe
     public void onTick(TickEvent event) {
@@ -64,7 +65,7 @@ public class TriggerBotModule extends AbstractModule {
             if (axeMS.getAbsoluteMax() == axeMS.getAbsoluteMin()) {
                 return timer.hasElapsed(axeMS.getAbsoluteMax().longValue());
             }
-            float ms = SecureRandom.getInstanceStrong().nextFloat(min, max);
+            ms = SecureRandom.getInstanceStrong().nextFloat(min, max);
             return timer.hasElapsed((long) ms, true);
         } catch (NoSuchAlgorithmException e) {
             return false;
@@ -88,5 +89,10 @@ public class TriggerBotModule extends AbstractModule {
     @Override
     public void onEnable() {
         timer.reset();
+    }
+
+    @Override
+    public String getSuffix() {
+        return ((int) ms) + "ms";
     }
 }
