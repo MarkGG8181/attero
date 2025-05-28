@@ -11,7 +11,7 @@ import fag.ware.client.util.game.MovementUtil;
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "Speed", category = ModuleCategory.MOVEMENT, description = "Makes you fast")
 public class SpeedModule extends AbstractModule {
-    private final StringSetting mode = new StringSetting("Mode", "Strafe", "Strafe", "Legit", "NCP OnGround");
+    private final StringSetting mode = new StringSetting("Mode", "Strafe", "Strafe", "Legit", "NCP Y-Port");
 
     @Subscribe
     public void onMotion(MotionEvent event) {
@@ -30,7 +30,7 @@ public class SpeedModule extends AbstractModule {
             }
         } else {
             switch (mode.getValue()) {
-                case "NCP OnGround" -> {
+                case "NCP Y-Port" -> {
                     double speedAmplifier = MovementUtil.getSpeedAmplifier();
 
                     MovementUtil.strafe();
