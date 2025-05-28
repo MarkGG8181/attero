@@ -14,7 +14,7 @@ import fag.ware.client.util.game.RotationUtil;
 public class CorrectMovementModule extends AbstractModule {
     @Subscribe(priority = 999)
     public void onInput(MoveInputEvent event) {
-        RotationUtil.silentStrafe(event, CombatTracker.getInstance().yaw);
+        RotationUtil.correctMovement(event, CombatTracker.getInstance().yaw);
     }
 
     @Subscribe(priority = 999)

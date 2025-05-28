@@ -88,37 +88,39 @@ public class RotationUtil implements IMinecraft {
         return Math.toRadians(rotationYaw);
     }
 
-    public static void silentStrafe(final MoveInputEvent event, float yaw) {
-        final float forward = event.getForward();
-        final float strafe = event.getStrafe();
-
-        final double angle = MathHelper.wrapDegrees(Math.toDegrees(direction(mc.player.getYaw(), forward, strafe)));
-
-        if (forward == 0 && strafe == 0) {
+    public static void correctMovement(final MoveInputEvent event, final float yaw) {
+        if (event.getForward() == 0 && event.getStrafe() == 0) {
             return;
         }
 
-        float closestForward = 0, closestStrafe = 0, closestDifference = Float.MAX_VALUE;
+        float realYaw = mc.player.getYaw();
 
-        for (float predictedForward = -1F; predictedForward <= 1F; predictedForward += 1F) {
-            for (float predictedStrafe = -1F; predictedStrafe <= 1F; predictedStrafe += 1F) {
-                if (predictedStrafe == 0 && predictedForward == 0) continue;
+        float moveX = event.getStrafe() * (float) Math.cos(Math.toRadians(realYaw)) - event.getForward() * (float) Math.sin(Math.toRadians(realYaw));
+        float moveZ = event.getForward() * (float) Math.cos(Math.toRadians(realYaw)) + event.getStrafe() * (float) Math.sin(Math.toRadians(realYaw));
 
-                final double predictedAngle = MathHelper.wrapDegrees(Math.toDegrees(direction(yaw, predictedForward, predictedStrafe)));
-                final double difference = Math.abs(angle - predictedAngle);
+        double[] bestMovement = null;
 
-                if (difference < closestDifference) {
-                    closestDifference = (float) difference;
-                    closestForward = predictedForward;
-                    closestStrafe = predictedStrafe;
+        for (int forward = -1; forward <= 1; forward++) {
+            for (int strafe = -1; strafe <= 1; strafe++) {
+                if (forward == 0 && strafe == 0) continue;
+
+                float newMoveX = strafe * (float) Math.cos(Math.toRadians(yaw)) - forward * (float) Math.sin(Math.toRadians(yaw));
+                float newMoveZ = forward * (float) Math.cos(Math.toRadians(yaw)) + strafe * (float) Math.sin(Math.toRadians(yaw));
+
+                float deltaX = newMoveX - moveX;
+                float deltaZ = newMoveZ - moveZ;
+
+                double dist = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+
+                if (bestMovement == null || bestMovement[0] > dist) {
+                    bestMovement = new double[]{dist, forward, strafe};
                 }
             }
-
-            event.setForward(closestForward);
-            event.setStrafe(closestStrafe);
         }
-    }
 
+        event.setForward((float) Math.round(bestMovement[1]));
+        event.setStrafe((float) Math.round(bestMovement[2]));
+    }
 
     public static float getMovementYaw() {
         boolean forward = mc.options.forwardKey.isPressed();
