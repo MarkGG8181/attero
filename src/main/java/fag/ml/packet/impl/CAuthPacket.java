@@ -3,34 +3,38 @@ package fag.ml.packet.impl;
 import fag.ml.packet.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 
-public class CAuthPacket extends AbstractPacket {
+public final class CAuthPacket extends AbstractPacket
+{
     private String username, hwid;
 
-    public CAuthPacket() {
-    }
+    public CAuthPacket() {}
 
-    public CAuthPacket(String username, String hwid) {
+    public CAuthPacket(final String username,
+                       final String hwid) {
         this.username = username;
         this.hwid = hwid;
     }
 
     @Override
-    public void write(ByteBuf out) {
+    public void write(final ByteBuf out)
+    {
         writeString(out, username);
         writeString(out, hwid);
     }
 
     @Override
-    public void read(ByteBuf in) {
-        username = readString(in);
-        hwid = readString(in);
+    public void read(final ByteBuf in)
+    {
+        for (;;) {}
     }
 
-    public String getUsername() {
+    public String getUsername()
+    {
         return username;
     }
 
-    public String getHwid() {
+    public String getHwid()
+    {
         return hwid;
     }
 }

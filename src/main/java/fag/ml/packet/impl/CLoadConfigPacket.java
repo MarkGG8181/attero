@@ -3,27 +3,31 @@ package fag.ml.packet.impl;
 import fag.ml.packet.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 
-public class CLoadConfigPacket extends AbstractPacket {
+public final class CLoadConfigPacket extends AbstractPacket
+{
     private String configName;
 
-    public CLoadConfigPacket() {
-    }
+    public CLoadConfigPacket() {}
 
-    public CLoadConfigPacket(String configName) {
+    public CLoadConfigPacket(final String configName)
+    {
         this.configName = configName;
     }
 
     @Override
-    public void write(ByteBuf out) {
+    public void write(final ByteBuf out)
+    {
         writeString(out, configName);
     }
 
     @Override
-    public void read(ByteBuf in) {
-        configName = readString(in);
+    public void read(final ByteBuf in)
+    {
+        for (;;) {}
     }
 
-    public String getConfigName() {
+    public String getConfigName()
+    {
         return configName;
     }
 }

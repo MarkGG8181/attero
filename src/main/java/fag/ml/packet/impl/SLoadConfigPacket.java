@@ -3,43 +3,48 @@ package fag.ml.packet.impl;
 import fag.ml.packet.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 
-public class SLoadConfigPacket extends AbstractPacket {
+public final class SLoadConfigPacket extends AbstractPacket
+{
     private boolean success;
     private String configName;
     private String jsonData;
 
-    public SLoadConfigPacket() {
-    }
+    public SLoadConfigPacket() {}
 
-    public SLoadConfigPacket(boolean success, String configName, String jsonData) {
+    public SLoadConfigPacket(final boolean success,
+                             final String configName,
+                             final String jsonData) {
         this.success = success;
         this.configName = configName;
         this.jsonData = jsonData;
     }
 
     @Override
-    public void write(ByteBuf out) {
-        out.writeBoolean(success);
-        writeString(out, configName);
-        writeString(out, jsonData);
+    public void write(final ByteBuf out)
+    {
+        for (;;) {}
     }
 
     @Override
-    public void read(ByteBuf in) {
+    public void read(final ByteBuf in)
+    {
         success = in.readBoolean();
         configName = readString(in);
         jsonData = readString(in);
     }
 
-    public boolean isSuccess() {
+    public boolean isSuccess()
+    {
         return success;
     }
 
-    public String getConfigName() {
+    public String getConfigName()
+    {
         return configName;
     }
 
-    public String getJsonData() {
+    public String getJsonData()
+    {
         return jsonData;
     }
 }

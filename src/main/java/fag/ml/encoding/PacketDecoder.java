@@ -8,21 +8,25 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
-public class PacketDecoder extends ByteToMessageDecoder {
+public class PacketDecoder extends ByteToMessageDecoder
+{
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (in.readableBytes() < 4) {
-            return;
-        }
+    protected void decode(final ChannelHandlerContext ctx,
+                          final ByteBuf in,
+                          final List<Object> out) throws Exception {
+        if (in.readableBytes() < 4) return;
 
         in.markReaderIndex();
-        int packetId = in.readInt();
+        final int packetId = in.readInt();
 
-        try {
-            AbstractPacket packet = Registry.create(packetId);
+        try
+        {
+            final AbstractPacket packet = Registry.create(packetId);
             packet.read(in);
             out.add(packet);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             in.resetReaderIndex();
             throw e;
         }
