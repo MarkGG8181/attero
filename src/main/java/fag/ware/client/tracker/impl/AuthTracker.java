@@ -15,6 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -82,6 +83,7 @@ public class AuthTracker extends AbstractTracker {
                 authLock.notifyAll();
             }
             authFuture.complete(success);
+            valuesFuture.complete(values);
         });
 
         send(new CAuthPacket(username, hwid));
@@ -90,7 +92,14 @@ public class AuthTracker extends AbstractTracker {
             boolean success = authFuture.get(5, TimeUnit.SECONDS);
             float[] values = valuesFuture.get(5, TimeUnit.SECONDS);
 
-            this.values = values;
+            System.out.println("values: " + Arrays.toString(values));
+
+            if (success) {
+                ModuleTracker.getInstance().initialize();
+                CommandTracker.getInstance().initialize();
+                CombatTracker.getInstance().initialize();
+                PlayerTracker.getInstance().initialize();
+            }
         } finally {
             handler.setAuthListener(null);
         }
