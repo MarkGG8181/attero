@@ -6,10 +6,12 @@ import fag.ware.client.event.impl.interact.KeyEvent;
 import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.ClickScreen;
 import fag.ware.client.screen.JelloClickScreen;
+import fag.ware.client.screen.LoginScreen;
 import fag.ware.client.screen.PanelClickScreen;
 import fag.ware.client.tracker.AbstractTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import org.lwjgl.glfw.GLFW;
 
 public class ScreenTracker extends AbstractTracker<Screen> {
     private static final ScreenTracker tracker = new ScreenTracker();
@@ -28,6 +30,11 @@ public class ScreenTracker extends AbstractTracker<Screen> {
 
     @Subscribe
     public void onKey(KeyEvent event) {
+        if (!AuthTracker.getInstance().isAuthenticated()) {
+            MinecraftClient.getInstance().setScreen(new LoginScreen());
+            return;
+        }
+
         getSet().forEach(s -> {
             switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).mode.getValue()) {
                 case "Fagware" -> {

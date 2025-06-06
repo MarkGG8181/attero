@@ -27,11 +27,7 @@ public final class Fagware implements ClientModInitializer {
     public void onStartup() {
         LOGGER.info("Starting {}", MOD_ID);
 
-        ModuleTracker.getInstance().initialize();
-        CommandTracker.getInstance().initialize();
         ScreenTracker.getInstance().initialize();
-        CombatTracker.getInstance().initialize();
-        PlayerTracker.getInstance().initialize();
     }
 
     public void onEnd() {

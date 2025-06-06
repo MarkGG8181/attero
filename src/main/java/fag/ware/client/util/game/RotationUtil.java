@@ -1,6 +1,7 @@
 package fag.ware.client.util.game;
 
 import fag.ware.client.event.impl.interact.MoveInputEvent;
+import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;
@@ -61,9 +62,9 @@ public class RotationUtil implements IMinecraft {
     public static float[] patchGCD(final float[] currentRotation,
                                    final float[] newRotation)
     {
-        final float f = sens * 0.6F + 0.2F;
+        final float f = sens * AuthTracker.getInstance().values[0] + AuthTracker.getInstance().values[1];
 
-        final float gcd = f * f * f * 8.0F * 0.15F;
+        final float gcd = f * f * f * AuthTracker.getInstance().values[3] * AuthTracker.getInstance().values[4];
 
         final float deltaYaw = currentRotation[0] - newRotation[0],
                 deltaPitch = currentRotation[1] - newRotation[1];
