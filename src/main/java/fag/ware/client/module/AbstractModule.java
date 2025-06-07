@@ -32,7 +32,6 @@ public abstract class AbstractModule implements IMinecraft {
 
         info = getClass().getAnnotation(ModuleInfo.class);
         ModuleTracker.getInstance().lastModule = this;
-        JvmArgsChecker.force();
     }
 
     @Override

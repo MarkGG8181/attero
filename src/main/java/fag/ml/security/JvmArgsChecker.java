@@ -1,10 +1,9 @@
 package fag.ml.security;
 
-
 import fag.ware.client.tracker.impl.ModuleTracker;
-
 import java.lang.management.ManagementFactory;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author graphicalinterface
@@ -12,20 +11,17 @@ import java.util.List;
  */
 @SuppressWarnings("ALL")
 public class JvmArgsChecker {
-    private static String[] blockedArgs = {
+    private static final Set<String> BLOCKED_ARGS = Set.of(
             "-Xdebug", "-Xrunjdwp", "-agentlib:jdwp", "-javaagent",
             "-XX:+AllowAttachSelf", "-XX:+EnableDynamicAgentLoading",
             "-noverify", "-Xbootclasspath", "--add-opens", "--enable-preview",
-            "-Xverify"
-    };
-    static List<String> args = ManagementFactory.getRuntimeMXBean().getInputArguments();
+            "-Xverify");
 
-    public static void force()  {
+    public static void force() {
+        List<String> args = ManagementFactory.getRuntimeMXBean().getInputArguments();
         for (String arg : args) {
-            for (String sus : blockedArgs) {
-                if (arg.contains(sus)) {
-                    while (true);
-                }
+            if (BLOCKED_ARGS.stream().anyMatch(arg::contains)) {
+                while (true);
             }
         }
     }
