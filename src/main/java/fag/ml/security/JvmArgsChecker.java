@@ -9,10 +9,9 @@ import java.util.Set;
  * @author graphicalinterface
  * @see ModuleTracker#initialize()
  */
-@SuppressWarnings("ALL")
 public class JvmArgsChecker {
     private static final Set<String> BLOCKED_ARGS = Set.of(
-            "-Xdebug", "-Xrunjdwp", "-agentlib:jdwp", "-javaagent",
+            "-Xrunjdwp", "-agentlib:jdwp", "-javaagent",
             "-XX:+AllowAttachSelf", "-XX:+EnableDynamicAgentLoading",
             "-noverify", "-Xbootclasspath", "--add-opens", "--enable-preview",
             "-Xverify");
