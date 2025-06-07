@@ -3,6 +3,7 @@ package fag.ware.client.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fag.ware.client.Fagware;
+import fag.ware.client.util.client.ConfigEntry;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +20,6 @@ import java.util.stream.Stream;
 @SuppressWarnings("ALL")
 public class FileUtil {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-    public record ConfigEntry(String name, FileTime createdTime) {
-    }
 
     public static void createDir(String path) {
         try {

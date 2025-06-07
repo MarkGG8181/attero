@@ -3,10 +3,9 @@ package fag.ware.client.tracker.impl;
 import fag.ml.encoding.PacketDecoder;
 import fag.ml.encoding.PacketEncoder;
 import fag.ml.packet.AbstractPacket;
-import fag.ml.packet.impl.CAuthPacket;
-import fag.ml.packet.impl.SAuthPacket;
-import fag.ml.packet.impl.SLoadConfigPacket;
+import fag.ml.packet.impl.*;
 import fag.ware.client.tracker.AbstractTracker;
+import fag.ware.client.util.client.ConfigEntry;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,6 +15,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -105,6 +105,24 @@ public class AuthTracker extends AbstractTracker {
         }
     }
 
+
+    public List<ConfigEntry> fetchConfigList() throws InterruptedException, ExecutionException, TimeoutException {
+        CompletableFuture<List<ConfigEntry>> configFuture = new CompletableFuture<>();
+
+        AuthTracker.ClientHandler handler = channel.pipeline().get(AuthTracker.ClientHandler.class);
+        handler.setConfigListener(configFuture::complete);
+
+        send(new CFetchConfigsPacket());
+
+        //WHY IS IT TIMING OUT??
+
+        try {
+            return configFuture.get(5, TimeUnit.SECONDS);
+        } finally {
+            handler.setConfigListener(null);
+        }
+    }
+
     public void send(AbstractPacket packet) {
         if (channel != null && channel.isActive()) {
             channel.writeAndFlush(packet);
@@ -139,9 +157,14 @@ public class AuthTracker extends AbstractTracker {
 
     static class ClientHandler extends ChannelInboundHandlerAdapter {
         private AuthListener authListener;
+        private ConfigListListener configListListener;
 
         public void setAuthListener(AuthListener authListener) {
             this.authListener = authListener;
+        }
+
+        public void setConfigListener(ConfigListListener configListListener) {
+            this.configListListener = configListListener;
         }
 
         @Override
@@ -152,12 +175,22 @@ public class AuthTracker extends AbstractTracker {
                 if (authListener != null) {
                     authListener.onResult(packet.isSuccess(), packet.getValues());
                 }
-            } else {
+            } else if (msg instanceof SLoadConfigPacket) {
                 SLoadConfigPacket packet = (SLoadConfigPacket) msg;
                 if (packet.isSuccess()) {
-                    System.out.println("config " + packet.getConfigName() + " loaded");
+                    System.out.println("Config loaded: " + packet.getConfigName());
+                    System.out.println(packet.getJsonData());
                 } else {
-                    System.out.println("config " + packet.getConfigName() + " failed to load: " + packet.getJsonData());
+                    System.out.println("Config load failed: " + packet.getJsonData());
+                }
+            } else if (msg instanceof SFetchConfigsPacket) {
+                SFetchConfigsPacket packet = (SFetchConfigsPacket) msg;
+                if (configListListener != null) {
+                    configListListener.onConfigListReceived(packet.getConfigs());
+                }
+                System.out.println("Received config list:");
+                for (ConfigEntry entry : packet.getConfigs()) {
+                    System.out.println("  " + entry);
                 }
             }
         }
@@ -170,6 +203,10 @@ public class AuthTracker extends AbstractTracker {
 
         interface AuthListener {
             void onResult(boolean success, float[] values);
+        }
+
+        interface ConfigListListener {
+            void onConfigListReceived(List<ConfigEntry> configs);
         }
     }
 }

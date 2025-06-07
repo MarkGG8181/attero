@@ -1,9 +1,6 @@
 package fag.ml.packet;
 
-import fag.ml.packet.impl.CAuthPacket;
-import fag.ml.packet.impl.CLoadConfigPacket;
-import fag.ml.packet.impl.SAuthPacket;
-import fag.ml.packet.impl.SLoadConfigPacket;
+import fag.ml.packet.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +13,8 @@ public final class Registry {
         register(1, SAuthPacket.class);
         register(2, CLoadConfigPacket.class);
         register(3, SLoadConfigPacket.class);
+        register(4, CFetchConfigsPacket.class);
+        register(5, SFetchConfigsPacket.class);
     }
 
     public static void register(final int id,
