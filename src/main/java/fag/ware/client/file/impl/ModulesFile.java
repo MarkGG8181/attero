@@ -9,10 +9,12 @@ import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.tracker.impl.ModuleTracker;
+import fag.ware.client.util.client.ConfigEntry;
 import net.minecraft.client.MinecraftClient;
 
 import java.awt.*;
 import java.io.File;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,9 +150,10 @@ public class ModulesFile extends AbstractFile {
             if (modObject.has("Enabled")) mod.setEnabled(modObject.get("Enabled").getAsBoolean());
         }
 
-        if (MinecraftClient.getInstance().player == null)
+        if (MinecraftClient.getInstance().player == null) {
+            ModuleTracker.getInstance().currentConfig = new ConfigEntry(getFileName(), FileTime.fromMillis(System.currentTimeMillis()));
             Fagware.LOGGER.info("Loaded {} successfully", getFile().getAbsolutePath());
-        else
+        } else
             ModuleTracker.getInstance().send(String.format("Loaded §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
     }
 }

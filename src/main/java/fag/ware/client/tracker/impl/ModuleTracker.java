@@ -14,9 +14,15 @@ import fag.ware.client.module.impl.player.*;
 import fag.ware.client.module.impl.render.*;
 import fag.ware.client.module.impl.world.*;
 import fag.ware.client.tracker.AbstractTracker;
+import fag.ware.client.util.client.ConfigEntry;
 import fag.ware.client.util.interfaces.IMinecraft;
 
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
@@ -24,6 +30,8 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public final ModulesFile modulesFile = new ModulesFile("default");
 
     private static final ModuleTracker tracker = new ModuleTracker();
+
+    public ConfigEntry currentConfig;
 
     public static ModuleTracker getInstance() {
         return tracker;
@@ -81,7 +89,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         getSet().forEach(AbstractModule::onInit);
         modulesFile.load();
-        JvmArgsChecker.force();
+        //JvmArgsChecker.force();
     }
 
     @Subscribe

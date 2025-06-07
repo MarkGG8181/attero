@@ -1,5 +1,7 @@
 package fag.ware.client.screen;
 
+import fag.ware.client.Fagware;
+import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
@@ -7,7 +9,10 @@ import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.screen.data.ImGuiThemes;
+import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.tracker.impl.ModuleTracker;
+import fag.ware.client.util.client.ConfigEntry;
+import fag.ware.client.util.FileUtil;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiColorEditFlags;
@@ -20,16 +25,37 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class ClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
     private final ImVec2 size = new ImVec2(230, 0);
 
+    private final List<ConfigEntry> configs = new ArrayList<>();
+    private List<ConfigEntry> cloudConfigs = new ArrayList<>();
+    private final ImInt currentLocalConfig = new ImInt(0);
+    private final ImInt currentCloudConfig = new ImInt(0);
+
     public ClickScreen() {
         super(Text.of("Classic Dropdown"));
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        try {
+            cloudConfigs = AuthTracker.getInstance().fetchConfigList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        configs.clear();
+        configs.addAll(FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json"));
     }
 
     private boolean initialised;
@@ -66,47 +92,80 @@ public class ClickScreen extends Screen {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
-                    for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
+                    switch (category.getName()) {
+                        case "Configs" -> {
+                            boolean openLC = ImGui.collapsingHeader("Local configs");
+                            if (openLC) {
+                                ImGui.setWindowFontScale(0.8f);
+                                for (int i = 0; i < configs.size(); i++) {
+                                    ConfigEntry config = configs.get(i);
 
-                        ImGui.pushID(module.toString());
-                        ImBoolean enabledMod = new ImBoolean(module.isEnabled());
-
-                        if (ImGui.checkbox("##Enabled", enabledMod)) {
-                            module.setEnabled(enabledMod.get());
-                        }
-
-                        ImGui.sameLine();
-                        boolean open = ImGui.collapsingHeader(module.toString());
-
-                        if (ImGui.isItemHovered()) {
-                            ImGui.beginTooltip();
-
-                            if (module.getKeybinds().isEmpty()) {
-                                ImGui.setTooltip(module.getInfo().description());
-                            } else {
-                                StringBuilder sb = new StringBuilder();
-
-                                for (Integer keybind : module.getKeybinds()) {
-                                    sb.append((char) (int) keybind).append(", ");
+                                    if (ImGui.radioButton(config.name(), currentLocalConfig.get() == i)) {
+                                        currentLocalConfig.set(i);
+                                        new ModulesFile(config.name()).load();
+                                    }
                                 }
-
-                                sb.delete(sb.length() - 2, sb.length());
-                                ImGui.setTooltip(String.format("%s%nBinds: %s", module.getInfo().description(), sb));
+                                ImGui.setWindowFontScale(1.0f);
                             }
 
-                            ImGui.endTooltip();
-                        }
+                            boolean openCC = ImGui.collapsingHeader("Cloud configs");
+                            if (openCC) {
+                                ImGui.setWindowFontScale(0.8f);
+                                for (int i = 0; i < cloudConfigs.size(); i++) {
+                                    ConfigEntry config = cloudConfigs.get(i);
 
-                        if (open) {
-                            for (AbstractSetting<?> setting : module.getSettings()) {
-                                if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
-                                    continue;
+                                    if (ImGui.radioButton(config.name(), currentCloudConfig.get() == i)) {
+                                        currentCloudConfig.set(i);
+                                        new ModulesFile(config.name()).load();
+                                    }
                                 }
-
-                                SettingRenderer.render(setting);
+                                ImGui.setWindowFontScale(1.0f);
                             }
                         }
-                        ImGui.popID();
+
+                        default -> {
+                            for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
+                                ImGui.pushID(module.toString());
+                                ImBoolean enabledMod = new ImBoolean(module.isEnabled());
+
+                                if (ImGui.checkbox("##Enabled", enabledMod)) {
+                                    module.setEnabled(enabledMod.get());
+                                }
+
+                                ImGui.sameLine();
+                                boolean open = ImGui.collapsingHeader(module.toString());
+
+                                if (ImGui.isItemHovered()) {
+                                    ImGui.beginTooltip();
+
+                                    if (module.getKeybinds().isEmpty()) {
+                                        ImGui.setTooltip(module.getInfo().description());
+                                    } else {
+                                        StringBuilder sb = new StringBuilder();
+
+                                        for (Integer keybind : module.getKeybinds()) {
+                                            sb.append((char) (int) keybind).append(", ");
+                                        }
+
+                                        sb.delete(sb.length() - 2, sb.length());
+                                        ImGui.setTooltip(String.format("%s%nBinds: %s", module.getInfo().description(), sb));
+                                    }
+
+                                    ImGui.endTooltip();
+                                }
+
+                                if (open) {
+                                    for (AbstractSetting<?> setting : module.getSettings()) {
+                                        if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
+                                            continue;
+                                        }
+
+                                        SettingRenderer.render(setting);
+                                    }
+                                }
+                                ImGui.popID();
+                            }
+                        }
                     }
                 }
 
