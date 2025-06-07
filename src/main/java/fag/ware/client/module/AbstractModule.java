@@ -1,5 +1,6 @@
 package fag.ware.client.module;
 
+import fag.ml.security.JvmArgsChecker;
 import fag.ware.client.Fagware;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.AbstractSetting;
@@ -31,6 +32,7 @@ public abstract class AbstractModule implements IMinecraft {
 
         info = getClass().getAnnotation(ModuleInfo.class);
         ModuleTracker.getInstance().lastModule = this;
+        JvmArgsChecker.force();
     }
 
     @Override
