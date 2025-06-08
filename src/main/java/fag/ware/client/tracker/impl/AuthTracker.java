@@ -39,6 +39,7 @@ public class AuthTracker extends AbstractTracker {
     private final Object authLock = new Object();
 
     public float[] values;
+    private CompletableFuture<List<ConfigEntry>> pendingConfigFetch;
 
     @Override
     public void initialize() {
@@ -91,9 +92,7 @@ public class AuthTracker extends AbstractTracker {
 
         try {
             boolean success = authFuture.get(5, TimeUnit.SECONDS);
-            float[] values = valuesFuture.get(5, TimeUnit.SECONDS);
-
-            System.out.println("values: " + Arrays.toString(values));
+            float[] values = valuesFuture.get(5, TimeUnit.SECONDS);;
 
             if (success) {
                 ModuleTracker.getInstance().initialize();
@@ -106,21 +105,32 @@ public class AuthTracker extends AbstractTracker {
         }
     }
 
+    public synchronized List<ConfigEntry> fetchConfigList()
+            throws InterruptedException, ExecutionException, TimeoutException {
+        if (pendingConfigFetch != null && !pendingConfigFetch.isDone()) {
+            return pendingConfigFetch.get(5, TimeUnit.SECONDS);
+        }
 
-    public List<ConfigEntry> fetchConfigList() throws InterruptedException, ExecutionException, TimeoutException {
-        CompletableFuture<List<ConfigEntry>> configFuture = new CompletableFuture<>();
-
+        pendingConfigFetch = new CompletableFuture<>();
         AuthTracker.ClientHandler handler = channel.pipeline().get(AuthTracker.ClientHandler.class);
-        handler.setConfigListener(configFuture::complete);
+
+        if (handler == null) {
+            while (true) {}
+        }
+
+        handler.setConfigListener(configs -> {
+            if (!pendingConfigFetch.isDone()) {
+                pendingConfigFetch.complete(configs);
+            }
+        });
 
         send(new CFetchConfigsPacket());
 
-        //WHY IS IT TIMING OUT??
-
         try {
-            return configFuture.get(5, TimeUnit.SECONDS);
+            return pendingConfigFetch.get(5, TimeUnit.SECONDS);
         } finally {
             handler.setConfigListener(null);
+            pendingConfigFetch = null;
         }
     }
 
@@ -180,17 +190,11 @@ public class AuthTracker extends AbstractTracker {
                 SLoadConfigPacket packet = (SLoadConfigPacket) msg;
                 if (packet.isSuccess()) {
                     new CloudConfigFile(packet.getConfigName(), packet.getJsonData()).load();
-                } else {
-                    // System.out.println("Config load failed: " + packet.getJsonData());
                 }
             } else if (msg instanceof SFetchConfigsPacket) {
                 SFetchConfigsPacket packet = (SFetchConfigsPacket) msg;
                 if (configListListener != null) {
                     configListListener.onConfigListReceived(packet.getConfigs());
-                }
-                System.out.println("Received config list:");
-                for (ConfigEntry entry : packet.getConfigs()) {
-                    System.out.println("  " + entry);
                 }
             }
         }
