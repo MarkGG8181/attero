@@ -6,15 +6,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class InventoryUtil implements IMinecraft {
-    //TODO: Recode this horrendous broken util
     public static void switchToNextSlot() {
         int currentSlot = mc.player.getInventory().getSelectedSlot();
-        int bestSlot = -1;
-        int bestCount = 0;
+        int bestSlot = currentSlot;
+        int bestCount = getBlockCount(currentSlot);
 
         for (int i = 0; i < 9; i++) {
-            if (i == currentSlot) continue;
-
             int slotBlockCount = getBlockCount(i);
             if (slotBlockCount > bestCount) {
                 bestCount = slotBlockCount;
@@ -22,9 +19,7 @@ public class InventoryUtil implements IMinecraft {
             }
         }
 
-        // only switch if best slot has blocks and better than current
-        int currentBlockCount = getBlockCount(currentSlot);
-        if (bestCount > currentBlockCount) {
+        if (bestSlot != currentSlot) {
             mc.player.getInventory().setSelectedSlot(bestSlot);
         }
     }
@@ -42,11 +37,9 @@ public class InventoryUtil implements IMinecraft {
 
     public static int getBlockCount(int slot) {
         ItemStack itemStack = mc.player.getInventory().getStack(slot);
-
         if (itemStack != null && itemStack.getItem() instanceof BlockItem) {
             return itemStack.getCount();
         }
-
         return 0;
     }
 }

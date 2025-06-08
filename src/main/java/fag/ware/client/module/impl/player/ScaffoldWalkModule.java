@@ -13,6 +13,7 @@ import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.game.*;
 import fag.ware.client.util.math.Timer;
 import net.minecraft.block.AirBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -20,7 +21,6 @@ import net.minecraft.util.math.BlockPos;
 
 @ModuleInfo(name = "ScaffoldWalk", description = "Places blocks under you", category = ModuleCategory.PLAYER)
 public class ScaffoldWalkModule extends AbstractModule {
-
     private final StringSetting rotationMode = new StringSetting("Rotation mode", "Simple", "Simple", "Godbridge");
     private final StringSetting towerMode = new StringSetting("Tower mode", "None", "None", "Motion");
     private final StringSetting sprintMode = new StringSetting("Sprint mode", "None", "None", "Always", "Manual");
@@ -166,13 +166,28 @@ public class ScaffoldWalkModule extends AbstractModule {
             return;
         }
 
-        lastRots = new float[]{RotationUtil.getAdjustedYaw(), 90};
-        posY = mc.player.getY() - 0.9;
+        boolean blocks = false;
+        for (int i = 0; i < 9; i++) {
+            ItemStack itemStack = mc.player.getInventory().getStack(i);
 
-        switch (itemSpoof.getValue()) {
-            case "Switch":
-                InventoryUtil.switchToNextSlot();
+            if (itemStack != null && itemStack.getItem() instanceof BlockItem) {
+                blocks = true;
                 break;
+            }
+        }
+
+        if (blocks) {
+            switch (itemSpoof.getValue()) {
+                case "Switch":
+                    InventoryUtil.switchToNextSlot();
+                    break;
+            }
+
+            lastRots = new float[]{RotationUtil.getAdjustedYaw(), 90};
+            posY = mc.player.getY() - 0.9;
+        } else {
+            toggle();
+            sendError("You have no valid blocks in your hotbar!");
         }
     }
 
