@@ -21,9 +21,6 @@ public class AntiTrapModule extends AbstractModule {
         for (Entity entities : mc.world.getEntities()) {
             if (entityCheck(entities.getType()))
                 entities.remove(Entity.RemovalReason.DISCARDED);
-            if (mc.player.age % 60 == 0) {
-                send("Removed");
-            }
         }
     }
 
