@@ -71,6 +71,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new FullBrightModule());
         getSet().add(new ModuleListModule());
         getSet().add(new ClickGUIModule());
+        getSet().add(new AnimationsModule());
 
         /* PLAYER */
         getSet().add(new NoFallModule());

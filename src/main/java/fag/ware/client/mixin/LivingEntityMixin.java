@@ -1,7 +1,9 @@
 package fag.ware.client.mixin;
 
-import fag.ware.client.event.impl.world.JumpEvent;
 import fag.ware.client.event.impl.render.RenderEatingParticlesEvent;
+import fag.ware.client.event.impl.world.JumpEvent;
+import fag.ware.client.module.impl.render.AnimationsModule;
+import fag.ware.client.tracker.impl.ModuleTracker;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -10,6 +12,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static fag.ware.client.util.interfaces.IMinecraft.mc;
 
 /**
  * @author markuss
@@ -22,6 +27,16 @@ public abstract class LivingEntityMixin {
         jumpEvent.post();
 
         return jumpEvent.getYaw();
+    }
+
+    @Inject(method = "getHandSwingDuration", at = @At("HEAD"), cancellable = true)
+    public void getHandSwingDuration(CallbackInfoReturnable<Integer> cir) {
+        if (mc.player != null || mc.world != null) {
+            AnimationsModule animationsModule = ModuleTracker.getInstance().getByClass(AnimationsModule.class);
+            if (animationsModule.isEnabled()) {
+                cir.setReturnValue(animationsModule.swingSpeed.toInt());
+            }
+        }
     }
 
     @Inject(method = "spawnItemParticles", at = @At("HEAD"), cancellable = true)
