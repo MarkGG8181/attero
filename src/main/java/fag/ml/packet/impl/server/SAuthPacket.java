@@ -1,4 +1,4 @@
-package fag.ml.packet.impl;
+package fag.ml.packet.impl.server;
 
 import fag.ml.packet.AbstractPacket;
 import io.netty.buffer.ByteBuf;

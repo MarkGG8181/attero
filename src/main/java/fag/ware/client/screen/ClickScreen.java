@@ -1,6 +1,6 @@
 package fag.ware.client.screen;
 
-import fag.ml.packet.impl.CLoadConfigPacket;
+import fag.ml.packet.impl.client.CLoadConfigPacket;
 import fag.ware.client.Fagware;
 import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;

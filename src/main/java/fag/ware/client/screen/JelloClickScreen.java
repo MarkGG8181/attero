@@ -1,19 +1,17 @@
 package fag.ware.client.screen;
 
-import fag.ml.packet.impl.CLoadConfigPacket;
+import fag.ml.packet.impl.client.CLoadConfigPacket;
 import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
 import fag.ware.client.module.data.setting.impl.*;
-import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.screen.data.ImGuiThemes;
 import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.tracker.impl.ScreenTracker;
 import fag.ware.client.util.client.ConfigEntry;
-import fag.ware.client.util.math.ColorUtil;
 import imgui.*;
 import imgui.flag.*;
 import imgui.type.ImBoolean;

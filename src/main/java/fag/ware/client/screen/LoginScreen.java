@@ -1,11 +1,9 @@
 package fag.ware.client.screen;
 
-import fag.ml.packet.impl.CLoadConfigPacket;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.util.SystemUtil;
 import imgui.ImGui;
-import imgui.flag.ImGuiInputTextFlags;
 import imgui.type.ImString;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;

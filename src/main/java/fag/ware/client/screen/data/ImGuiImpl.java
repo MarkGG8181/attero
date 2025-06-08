@@ -36,6 +36,11 @@ public class ImGuiImpl {
     public static ImFont comfortaa17;
     public static ImFont arial17;
 
+    /**
+     * Just wanted to hide this a bit (used for auth)
+     */
+    public static long correctChecksum = -1L;
+
     public static void create(final long handle) throws IOException {
         ImGui.createContext();
         ImPlot.createContext();
