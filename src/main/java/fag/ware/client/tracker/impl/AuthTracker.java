@@ -30,7 +30,7 @@ public class AuthTracker extends AbstractTracker {
         return tracker;
     }
 
-    private final String host = "localhost";
+    private final String host = "161.97.140.113";
     private final int port = 1337;
 
     private Channel channel;
