@@ -9,6 +9,7 @@ import fag.ware.client.util.math.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+
 import java.security.SecureRandom;
 
 public class RotationUtil implements IMinecraft {
@@ -30,8 +31,7 @@ public class RotationUtil implements IMinecraft {
         noiseZ.SetFrequency(0.05f);
     }
 
-    public static float[] toRotation(Entity entity,
-                                     boolean fixGcd, float minSpeed, float maxSpeed) {
+    public static float[] toRotation(Entity entity, float minSpeed, float maxSpeed) {
         final float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
 
         final float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
@@ -64,22 +64,14 @@ public class RotationUtil implements IMinecraft {
         rots[0] = currentYaw + deltaYaw;
         rots[1] = currentPitch + deltaPitch;
 
-
-
-        if (fixGcd) {
-            return patchGCD(rots, new float[]{CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
-
-        } else {
-            return rots;
-        }
+        return patchGCD(rots, new float[]{CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
     }
 
     public static float[] patchGCD(final float[] currentRotation,
-                                   final float[] newRotation)
-    {
+                                   final float[] newRotation) {
         final float f = sens * AuthTracker.getInstance().values[0] + AuthTracker.getInstance().values[1];
 
-        final float gcd = f * f * f * AuthTracker.getInstance().values[3] * AuthTracker.getInstance().values[4];
+        final float gcd = f * f * f * AuthTracker.getInstance().values[2] * AuthTracker.getInstance().values[3];
 
         final float deltaYaw = currentRotation[0] - newRotation[0],
                 deltaPitch = currentRotation[1] - newRotation[1];
