@@ -13,7 +13,6 @@ import fag.ware.client.module.data.setting.impl.StringSetting;
 import fag.ware.client.util.game.*;
 import fag.ware.client.util.math.Timer;
 import net.minecraft.block.AirBlock;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -46,6 +45,8 @@ public class ScaffoldWalkModule extends AbstractModule {
     @Subscribe
     public void onTick(TickEvent event) {
         if (mc.player != null) {
+            checkForBlocks();
+
             if (sprintMode.getValue().equals("Always")) {
                 mc.options.sprintKey.setPressed(true);
             }
@@ -53,7 +54,7 @@ public class ScaffoldWalkModule extends AbstractModule {
             if (mc.player.getActiveItem() == null) {
                 switch (itemSpoof.getValue()) {
                     case "Switch":
-                        InventoryUtil.switchToNextSlot();
+                        InventoryUtil.switchToBestSlotWithBlocks();
                         break;
                 }
             }
@@ -166,29 +167,16 @@ public class ScaffoldWalkModule extends AbstractModule {
             return;
         }
 
-        boolean blocks = false;
-        for (int i = 0; i < 9; i++) {
-            ItemStack itemStack = mc.player.getInventory().getStack(i);
+        checkForBlocks();
 
-            if (itemStack != null && itemStack.getItem() instanceof BlockItem) {
-                blocks = true;
+        switch (itemSpoof.getValue()) {
+            case "Switch":
+                InventoryUtil.switchToBestSlotWithBlocks();
                 break;
-            }
         }
 
-        if (blocks) {
-            switch (itemSpoof.getValue()) {
-                case "Switch":
-                    InventoryUtil.switchToNextSlot();
-                    break;
-            }
-
-            lastRots = new float[]{RotationUtil.getAdjustedYaw(), 90};
-            posY = mc.player.getY() - 0.9;
-        } else {
-            toggle();
-            sendError("You have no valid blocks in your hotbar!");
-        }
+        lastRots = new float[]{RotationUtil.getAdjustedYaw(), 90};
+        posY = mc.player.getY() - 0.9;
     }
 
     @Override
@@ -202,5 +190,12 @@ public class ScaffoldWalkModule extends AbstractModule {
     @Override
     public String getSuffix() {
         return rotationMode.getValue();
+    }
+
+    private void checkForBlocks() {
+        if (!InventoryUtil.checkHotbarForBlocks()) {
+            toggle();
+            sendError("You have no valid blocks in your hotbar!");
+        }
     }
 }
