@@ -61,7 +61,6 @@ public class AimAssistModule extends AbstractModule {
         }
     }
 
-
     private boolean isSword(ItemStack stack) {
         return SWORDS.contains(stack.getItem());
     }
