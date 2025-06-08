@@ -29,8 +29,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 public class ClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
@@ -38,8 +36,9 @@ public class ClickScreen extends Screen {
 
     private final List<ConfigEntry> configs = new ArrayList<>();
     private List<ConfigEntry> cloudConfigs = new ArrayList<>();
-    private final ImInt currentLocalConfig = new ImInt(0);
-    private final ImInt currentCloudConfig = new ImInt(0);
+
+    private String activeConfigName = null;
+    private boolean activeIsCloud = false;
 
     public ClickScreen() {
         super(Text.of("Classic Dropdown"));
@@ -100,11 +99,12 @@ public class ClickScreen extends Screen {
                             boolean openLC = ImGui.collapsingHeader("Local configs");
                             if (openLC) {
                                 ImGui.setWindowFontScale(0.8f);
-                                for (int i = 0; i < configs.size(); i++) {
-                                    ConfigEntry config = configs.get(i);
+                                for (ConfigEntry config : configs) {
+                                    boolean selected = !activeIsCloud && config.name().equals(activeConfigName);
 
-                                    if (ImGui.radioButton(config.name(), currentLocalConfig.get() == i)) {
-                                        currentLocalConfig.set(i);
+                                    if (ImGui.radioButton(config.name(), selected)) {
+                                        activeConfigName = config.name();
+                                        activeIsCloud = false;
                                         new ModulesFile(config.name()).load();
                                     }
                                 }
@@ -114,11 +114,12 @@ public class ClickScreen extends Screen {
                             boolean openCC = ImGui.collapsingHeader("Cloud configs");
                             if (openCC) {
                                 ImGui.setWindowFontScale(0.8f);
-                                for (int i = 0; i < cloudConfigs.size(); i++) {
-                                    ConfigEntry config = cloudConfigs.get(i);
+                                for (ConfigEntry config : cloudConfigs) {
+                                    boolean selected = activeIsCloud && config.name().equals(activeConfigName);
 
-                                    if (ImGui.radioButton(config.name(), currentCloudConfig.get() == i)) {
-                                        currentCloudConfig.set(i);
+                                    if (ImGui.radioButton(config.name(), selected)) {
+                                        activeConfigName = config.name();
+                                        activeIsCloud = true;
                                         AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
                                     }
                                 }
