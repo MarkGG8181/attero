@@ -3,6 +3,10 @@ package fag.ware.client.util;
 import java.security.MessageDigest;
 
 public class SystemUtil {
+    public static void main(String[] args) {
+        System.out.println(getHWID());
+    }
+
     public static String getHWID() {
         try {
             String toEncrypt = System.getenv("COMPUTERNAME") + System.getProperty("user.name") + System.getenv("PROCESSOR_IDENTIFIER") + System.getenv("PROCESSOR_LEVEL");
