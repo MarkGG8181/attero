@@ -1,6 +1,6 @@
 package fag.ware.client.command.impl;
 
-import fag.ml.packet.impl.CLoadConfigPacket;
+import fag.ml.packet.impl.client.CLoadConfigPacket;
 import fag.ware.client.Fagware;
 import fag.ware.client.command.AbstractCommand;
 import fag.ware.client.command.data.CommandInfo;

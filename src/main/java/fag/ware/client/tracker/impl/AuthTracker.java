@@ -3,10 +3,18 @@ package fag.ware.client.tracker.impl;
 import fag.ml.encoding.PacketDecoder;
 import fag.ml.encoding.PacketEncoder;
 import fag.ml.packet.AbstractPacket;
-import fag.ml.packet.impl.*;
+import fag.ml.packet.impl.client.CAuthPacket;
+import fag.ml.packet.impl.client.CFetchConfigsPacket;
+import fag.ml.packet.impl.client.CJVMChecksumPacket;
+import fag.ml.packet.impl.server.SAuthPacket;
+import fag.ml.packet.impl.server.SFetchConfigsPacket;
+import fag.ml.packet.impl.server.SLoadConfigPacket;
+import fag.ml.security.IntegrityCheck;
 import fag.ware.client.file.impl.CloudConfigFile;
+import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.client.ConfigEntry;
+import imgui.ImGui;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,7 +23,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -95,6 +102,22 @@ public class AuthTracker extends AbstractTracker {
             float[] values = valuesFuture.get(5, TimeUnit.SECONDS);;
 
             if (success) {
+                AuthTracker.getInstance().send(new CJVMChecksumPacket());
+                while (ImGuiImpl.correctChecksum == -1L) {
+                    Thread.sleep(5); // wait for the checksum to change
+                }
+
+                if (IntegrityCheck.check() != ImGuiImpl.correctChecksum)
+                {
+                    debug: // remove in release
+                    {
+                        System.out.println("--- jvm integrity check failed ---");
+                        System.out.printf("Integrity check output -> %l%n", IntegrityCheck.check());
+                        System.out.printf("Backend checksum -> %l%n", ImGuiImpl.correctChecksum);
+                    }
+                    for (;;);
+                }
+
                 ModuleTracker.getInstance().initialize();
                 CommandTracker.getInstance().initialize();
                 CombatTracker.getInstance().initialize();
