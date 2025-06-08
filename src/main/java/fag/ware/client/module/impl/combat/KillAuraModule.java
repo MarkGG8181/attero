@@ -36,6 +36,7 @@ public class KillAuraModule extends AbstractModule {
 
     private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
     private final BooleanSetting fixGcd = (BooleanSetting) new BooleanSetting("Fix GCD", false).setParent(rotationGroup);
+    private final RangeNumberSetting speed = (RangeNumberSetting) new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180).setParent(rotationGroup);
 
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
@@ -47,10 +48,18 @@ public class KillAuraModule extends AbstractModule {
         if (CombatTracker.getInstance().target != null &&
                 (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
 
-            float[] rots = RotationUtil.toRotation(CombatTracker.getInstance().target, fixGcd.toBoolean());
+            float minSpeed = speed.getMinAsFloat();
+            float maxSpeed = speed.getMaxAsFloat();
 
-            event.setYaw(rots[0]);
-            event.setPitch(rots[1]);
+            float[] rots = RotationUtil.toRotation(
+                    CombatTracker.getInstance().target,
+                    fixGcd.toBoolean(),
+                    minSpeed,
+                    maxSpeed
+            );
+
+            mc.player.setYaw(rots[0]);
+            mc.player.setPitch(rots[1]);
         }
     }
 

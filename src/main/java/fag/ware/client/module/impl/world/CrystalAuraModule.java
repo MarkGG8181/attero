@@ -9,6 +9,7 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
+import fag.ware.client.module.data.setting.impl.RangeNumberSetting;
 import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.game.RotationUtil;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -20,12 +21,13 @@ import java.util.List;
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "CrystalAura", description = "Attacks nearby crystals", category = ModuleCategory.WORLD)
 public class CrystalAuraModule extends AbstractModule {
-
+    private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 10);
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     private final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
     private final BooleanSetting yCheck = new BooleanSetting("Y check", true);
     private final BooleanSetting nearbyEntityCheck = new BooleanSetting("Nearby entity check", true);
+    private final BooleanSetting fixGCD = new BooleanSetting("Fix GCD", false);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
     private final HashSet<EndCrystalEntity> targets = new HashSet<>();
@@ -94,7 +96,7 @@ public class CrystalAuraModule extends AbstractModule {
         if (target != null &&
                 (raycast.getValue() && mc.player.canSee(target))) {
 
-            float[] rots = RotationUtil.toRotation(target, true);
+            float[] rots = RotationUtil.toRotation(target, fixGCD.getValue(), speed.getMinAsFloat(), speed.getMaxAsFloat());
 
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);

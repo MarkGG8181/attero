@@ -9,6 +9,7 @@ import fag.ware.client.util.math.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import java.security.SecureRandom;
 
 public class RotationUtil implements IMinecraft {
     private static final float sens = mc.options.getMouseSensitivity().getValue().floatValue();
@@ -30,8 +31,7 @@ public class RotationUtil implements IMinecraft {
     }
 
     public static float[] toRotation(Entity entity,
-                                     boolean fixGcd)
-    {
+                                     boolean fixGcd, float minSpeed, float maxSpeed) {
         final float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
 
         final float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
@@ -46,15 +46,30 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        final float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
+        float currentYaw = CombatTracker.getInstance().yaw;
+        float currentPitch = CombatTracker.getInstance().pitch;
 
-        if (fixGcd)
-        {
-            return patchGCD(rots, new float[] {CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
+        float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
 
-        }
-        else
-        {
+        SecureRandom random = new SecureRandom();
+        float yawSpeed = random.nextFloat(minSpeed, maxSpeed);
+        float pitchSpeed = random.nextFloat(minSpeed, maxSpeed);
+
+        float deltaYaw = MathHelper.wrapDegrees(rots[0] - currentYaw);
+        float deltaPitch = MathHelper.wrapDegrees(rots[1] - currentPitch);
+
+        deltaYaw = MathHelper.clamp(deltaYaw, -yawSpeed, yawSpeed);
+        deltaPitch = MathHelper.clamp(deltaPitch, -pitchSpeed, pitchSpeed);
+
+        rots[0] = currentYaw + deltaYaw;
+        rots[1] = currentPitch + deltaPitch;
+
+
+
+        if (fixGcd) {
+            return patchGCD(rots, new float[]{CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
+
+        } else {
             return rots;
         }
     }
