@@ -17,7 +17,6 @@ public class AnimationsModule extends AbstractModule {
 
     @Subscribe
     public void onHandSwing(HandSwingDurationEvent event) {
-        event.setCancelled(true);
         event.setSpeed(swingSpeed.toInt());
     }
 }

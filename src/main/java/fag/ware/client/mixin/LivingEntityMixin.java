@@ -26,14 +26,12 @@ public abstract class LivingEntityMixin {
         return jumpEvent.getYaw();
     }
 
-    @Inject(method = "getHandSwingDuration", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getHandSwingDuration", at = @At("RETURN"), cancellable = true)
     public void getHandSwingDuration(CallbackInfoReturnable<Integer> cir) {
-        HandSwingDurationEvent handSwingDurationEvent = new HandSwingDurationEvent();
+        HandSwingDurationEvent handSwingDurationEvent = new HandSwingDurationEvent(cir.getReturnValue());
         handSwingDurationEvent.post();
 
-        if (handSwingDurationEvent.isCancelled()) {
-            cir.setReturnValue(handSwingDurationEvent.getSpeed());
-        }
+        cir.setReturnValue(handSwingDurationEvent.getSpeed());
     }
 
     @Inject(method = "spawnItemParticles", at = @At("HEAD"), cancellable = true)
