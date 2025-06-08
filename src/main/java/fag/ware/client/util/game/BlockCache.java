@@ -16,9 +16,8 @@ public record BlockCache(BlockPos pos, Direction facing) implements IMinecraft {
     }
 
     public static BlockCache getCache(BlockPos pos) {
-        if (!(mc.world.getBlockState(pos).getBlock() instanceof AirBlock)) {
-            return null; // Ensures we're only searching when in air
-        }
+        if (!(mc.world.getBlockState(pos).getBlock() instanceof AirBlock))
+            return null;
 
         for (int x = 0; x < 4; x++) {
             for (int z = 0; z < 4; z++) {
@@ -37,23 +36,7 @@ public record BlockCache(BlockPos pos, Direction facing) implements IMinecraft {
                 }
             }
         }
-        return null;
-    }
 
-    public static Direction getFace(BlockPos pos, ClientWorld world) {
-        for (Direction direction : Direction.values()) {
-            BlockPos adjacent = pos.offset(direction);
-            BlockState state = world.getBlockState(adjacent);
-            Block block = state.getBlock();
-
-            if (!state.isReplaceable() &&
-                    state.isOpaque() &&
-                    !state.isAir() &&
-                    !state.getRenderType().equals(BlockRenderType.INVISIBLE) &&
-                    state.getCollisionShape(world, adjacent).isEmpty() == false) {
-                return direction;
-            }
-        }
         return null;
     }
 }
