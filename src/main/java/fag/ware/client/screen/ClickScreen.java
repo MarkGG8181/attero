@@ -49,14 +49,16 @@ public class ClickScreen extends Screen {
     protected void init() {
         super.init();
 
-        try {
-            cloudConfigs = AuthTracker.getInstance().fetchConfigList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new Thread(() -> {
+            try {
+                cloudConfigs = AuthTracker.getInstance().fetchConfigList();
+            } catch (Exception e) {
+                Fagware.LOGGER.error("Failed to fetch configs", e);
+            }
 
-        configs.clear();
-        configs.addAll(FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json"));
+            configs.clear();
+            configs.addAll(FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json"));
+        }).start();
     }
 
     private boolean initialised;
