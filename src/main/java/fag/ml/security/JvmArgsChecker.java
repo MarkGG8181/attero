@@ -1,15 +1,17 @@
 package fag.ml.security;
 
 import fag.ware.client.tracker.impl.ModuleTracker;
+import fag.ware.client.tracker.impl.ScreenTracker;
+
 import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @author graphicalinterface
- * @see ModuleTracker#initialize()
+ * @see ScreenTracker#ScreenTracker()
  */
-public class JvmArgsChecker {
+public final class JvmArgsChecker {
     private static final Set<String> BLOCKED_ARGS = Set.of(
             "-Xrunjdwp", "-agentlib:jdwp", "-javaagent",
             "-XX:+AllowAttachSelf", "-XX:+EnableDynamicAgentLoading",
