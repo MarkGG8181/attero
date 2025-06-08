@@ -1,10 +1,13 @@
 package fag.ware.client.command.impl;
 
+import fag.ml.packet.impl.CLoadConfigPacket;
 import fag.ware.client.Fagware;
 import fag.ware.client.command.AbstractCommand;
 import fag.ware.client.command.data.CommandInfo;
 import fag.ware.client.file.impl.ModulesFile;
+import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.util.FileUtil;
+import fag.ware.client.util.client.ConfigEntry;
 
 import java.io.File;
 import java.time.Instant;
@@ -12,9 +15,13 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@SuppressWarnings("ALL")
 @CommandInfo(name = "Config", description = "Manage your configs", aliases = {"config", "cfg", "conf"})
 public class ConfigCommand extends AbstractCommand {
+    private List<ConfigEntry> cloudConfigs = new ArrayList<>();
+
     @Override
     public List<String> getHelp() {
         List<String> lines = new ArrayList<>();
@@ -29,20 +36,56 @@ public class ConfigCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args) { // [config, load, test]
+        new Thread(() -> {
+            try {
+                cloudConfigs = AuthTracker.getInstance().fetchConfigList();
+            } catch (Exception e) {
+                Fagware.LOGGER.error("Failed to fetch configs", e);
+            }
+        }).start();
+
         try {
+            // ASS CODE ALERT
             switch (args[1].toLowerCase()) {
-                case "load" -> new ModulesFile(args[2].toLowerCase()).load();
+                case "load" -> {
+                    String configName = args[2].toLowerCase() + (args[2].endsWith(".json") ? "" : ".json");
+                    List<ConfigEntry> local = FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json").stream().toList();
+
+                    boolean foundLocal = local.stream().anyMatch(c -> c.name().equalsIgnoreCase(configName));
+                    if (foundLocal) {
+                        new ModulesFile(configName).load();
+                    } else {
+                        Optional<ConfigEntry> cloud = cloudConfigs.stream()
+                                .filter(c -> c.name().equalsIgnoreCase(configName))
+                                .findFirst();
+
+                        if (cloud.isPresent()) {
+                            AuthTracker.getInstance().send(new CLoadConfigPacket(configName));
+                        } else {
+                            sendError("Config " + configName + " not found.");
+                        }
+                    }
+                }
+
                 case "save" -> new ModulesFile(args[2].toLowerCase()).save();
 
                 case "list" -> {
-                    send("Available configs: ");
-                    FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json").forEach(cfg -> {
+                    send("Available configs:");
+
+                    List<ConfigEntry> local = FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json").stream().toList();
+                    for (ConfigEntry cfg : local) {
                         String formattedTime = Instant.ofEpochMilli(cfg.createdTime().toMillis())
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                        send("> §e" + cfg.name().replace(".json", "") + " §7(" + formattedTime + ")", false);
+                    }
 
-                        send("> §e" + cfg.name().replaceAll(".json", "") + " §7(" + formattedTime + ")", false);
-                    });
+                    for (ConfigEntry cfg : cloudConfigs) {
+                        String formattedTime = Instant.ofEpochMilli(cfg.createdTime().toMillis())
+                                .atZone(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                        send("> §b" + cfg.name().replace(".json", "") + " §7(" + formattedTime + ")", false);
+                    }
                 }
 
                 case "folder" -> {
