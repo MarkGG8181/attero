@@ -2,7 +2,6 @@ package fag.ware.client.module.impl.combat;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.game.TickEvent;
-import fag.ware.client.event.impl.render.Render2DEvent;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -11,7 +10,6 @@ import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.RangeNumberSetting;
 import fag.ware.client.tracker.impl.CombatTracker;
 import fag.ware.client.util.game.RotationUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
@@ -26,7 +24,6 @@ import java.util.Set;
         category = ModuleCategory.COMBAT
 )
 public class AimAssistModule extends AbstractModule {
-
     private static final Set<Item> SWORDS = Set.of(
             Items.WOODEN_SWORD,
             Items.STONE_SWORD,
@@ -38,7 +35,6 @@ public class AimAssistModule extends AbstractModule {
     private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting fov = new NumberSetting("FOV", 70, 180, 360);
     private final NumberSetting distance = new NumberSetting("Distance", 4.5, 1, 8);
-    private final BooleanSetting fixGCD = new BooleanSetting("Fix GCD", false);
     private final BooleanSetting onlyWeapon = new BooleanSetting("Only Weapon", false);
 
     private LivingEntity target;
@@ -59,7 +55,7 @@ public class AimAssistModule extends AbstractModule {
                 && CombatTracker.isWithinRange(target, distance.getValue().floatValue())) {
               //  && CombatTracker.getFovToEntity(target) <= fov.getValue().doubleValue()) {
 
-            float[] rots = RotationUtil.toRotation(target, fixGCD.getValue(), speed.getMinAsFloat(), speed.getMaxAsFloat());
+            float[] rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
             mc.player.setPitch(rots[1]);
             mc.player.setYaw(rots[0]);
         }

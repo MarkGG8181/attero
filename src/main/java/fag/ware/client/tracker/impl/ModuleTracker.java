@@ -52,7 +52,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new VelocityModule());
         getSet().add(new AutoTotemModule());
         getSet().add(new AutoCrystalModule());
-      //  getSet().add(new AimAssistModule());
+        getSet().add(new AimAssistModule());
 
         /* MOVEMENT */
         getSet().add(new SprintModule());

@@ -96,7 +96,7 @@ public class CrystalAuraModule extends AbstractModule {
         if (target != null &&
                 (raycast.getValue() && mc.player.canSee(target))) {
 
-            float[] rots = RotationUtil.toRotation(target, fixGCD.getValue(), speed.getMinAsFloat(), speed.getMaxAsFloat());
+            float[] rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
 
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);
