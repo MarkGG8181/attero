@@ -1,6 +1,5 @@
 package fag.ware.client.tracker.impl;
 
-import fag.ml.security.JvmArgsChecker;
 import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.interact.KeyEvent;
@@ -16,13 +15,7 @@ import fag.ware.client.module.impl.world.*;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.client.ConfigEntry;
 import fag.ware.client.util.interfaces.IMinecraft;
-
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
