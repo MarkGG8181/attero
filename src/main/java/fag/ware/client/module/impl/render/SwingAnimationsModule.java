@@ -8,15 +8,15 @@ import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 
 @ModuleInfo(
-        name = "Animations",
-        description = "Modifies your hand animations",
+        name = "SwingAnimations",
+        description = "Modifies your swinging animations",
         category = ModuleCategory.RENDER
 )
-public class AnimationsModule extends AbstractModule {
+public class SwingAnimationsModule extends AbstractModule {
     private final NumberSetting swingSpeed = new NumberSetting("Swing Speed", 12, 1, 25);
 
     @Subscribe
     public void onHandSwing(HandSwingDurationEvent event) {
-        event.setSpeed(swingSpeed.toInt());
+        event.setSpeed((swingSpeed.getMax().intValue() - swingSpeed.toInt() + swingSpeed.getMin().intValue()));
     }
 }
