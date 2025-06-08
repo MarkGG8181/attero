@@ -9,11 +9,9 @@ public class CFetchConfigsPacket extends AbstractPacket {
 
     @Override
     public void write(ByteBuf out) {
-        for (;;) {}
     }
 
     @Override
     public void read(ByteBuf in) {
-        for (;;) {}
     }
 }

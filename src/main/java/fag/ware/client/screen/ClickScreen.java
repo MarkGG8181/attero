@@ -1,5 +1,6 @@
 package fag.ware.client.screen;
 
+import fag.ml.packet.impl.CLoadConfigPacket;
 import fag.ware.client.Fagware;
 import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
@@ -116,7 +117,7 @@ public class ClickScreen extends Screen {
 
                                     if (ImGui.radioButton(config.name(), currentCloudConfig.get() == i)) {
                                         currentCloudConfig.set(i);
-                                        new ModulesFile(config.name()).load();
+                                        AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
                                     }
                                 }
                                 ImGui.setWindowFontScale(1.0f);

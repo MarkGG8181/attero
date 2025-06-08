@@ -85,7 +85,7 @@ public class ModulesFile extends AbstractFile {
     public void load() {
         JsonObject json = loadJsonObject();
 
-        if (json.isEmpty() || !getFile().exists()) {
+        if (json == null || json.isEmpty()) {
             if (MinecraftClient.getInstance().player == null)
                 Fagware.LOGGER.info("Config {} not found!", getFile().getAbsolutePath());
             else

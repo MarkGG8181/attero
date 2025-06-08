@@ -58,7 +58,7 @@ public abstract class AbstractFile {
             return JsonParser.parseReader(reader).getAsJsonObject();
         } catch (IOException e) {
             Fagware.LOGGER.error("Failed to load {}", fileName, e);
-            return new JsonObject();
+            return null;
         }
     }
 }

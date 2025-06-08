@@ -4,6 +4,7 @@ import fag.ml.encoding.PacketDecoder;
 import fag.ml.encoding.PacketEncoder;
 import fag.ml.packet.AbstractPacket;
 import fag.ml.packet.impl.*;
+import fag.ware.client.file.impl.CloudConfigFile;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.client.ConfigEntry;
 import io.netty.bootstrap.Bootstrap;
@@ -178,10 +179,9 @@ public class AuthTracker extends AbstractTracker {
             } else if (msg instanceof SLoadConfigPacket) {
                 SLoadConfigPacket packet = (SLoadConfigPacket) msg;
                 if (packet.isSuccess()) {
-                    System.out.println("Config loaded: " + packet.getConfigName());
-                    System.out.println(packet.getJsonData());
+                    new CloudConfigFile(packet.getConfigName(), packet.getJsonData()).load();
                 } else {
-                    System.out.println("Config load failed: " + packet.getJsonData());
+                    // System.out.println("Config load failed: " + packet.getJsonData());
                 }
             } else if (msg instanceof SFetchConfigsPacket) {
                 SFetchConfigsPacket packet = (SFetchConfigsPacket) msg;
