@@ -29,6 +29,7 @@
     "InputAccessor",
     "ItemRendererMixin",
     "KeyBindingAccessor",
+    "TitleScreenMixin",
     "KeyboardInputMixin",
     "KeyboardMixin",
     "LightmapTextureManagerMixin",

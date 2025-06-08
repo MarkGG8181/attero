@@ -40,7 +40,7 @@ public class AutoCrystalModule extends AbstractModule {
                 if (mc.player.getInventory().getSelectedStack().getItem() == Items.END_CRYSTAL && placeDelayTimer.hasElapsed(placeDelay.toInt(), true)) {
                     mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, hit);
                     mc.player.swingHand(Hand.MAIN_HAND);
-
+                    breakDelayTimer.reset();
                 }
             }
         }
@@ -50,6 +50,7 @@ public class AutoCrystalModule extends AbstractModule {
                     entityHitResult.getEntity() instanceof EndCrystalEntity crystal) {
                 mc.interactionManager.attackEntity(mc.player, crystal);
                 mc.player.swingHand(Hand.MAIN_HAND);
+                placeDelayTimer.reset();
             }
         }
     }
