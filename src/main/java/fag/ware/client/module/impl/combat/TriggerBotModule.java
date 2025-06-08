@@ -15,6 +15,7 @@ import net.minecraft.entity.Tameable;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
+import org.lwjgl.glfw.GLFW;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -38,7 +39,7 @@ public class TriggerBotModule extends AbstractModule {
         if (target == null || !mc.player.canSee(target)) return;
 
         Item item = mc.player.getMainHandStack().getItem();
-        if (item.getComponents().contains(DataComponentTypes.FOOD) && mc.options.rightKey.isPressed()) return;
+        if (item.getComponents().contains(DataComponentTypes.FOOD) && GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) return;
 
         if (!delay()) return;
 
