@@ -1,5 +1,6 @@
 package fag.ware.client.util.game;
 
+import fag.ware.client.util.SystemUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,12 +20,12 @@ public class EntityUtil {
         return false;
     }
 
-    public static String[] getAllEntityNames() {
+    public static String[] getAllEntities() {
         List<String> names = new ArrayList<>();
 
         for (EntityType<?> type : Registries.ENTITY_TYPE) {
             Identifier id = Registries.ENTITY_TYPE.getId(type);
-            names.add(toClassName(id.getPath()));
+            names.add(SystemUtil.toClassName(id.getPath()));
         }
 
         return names.toArray(new String[0]);
@@ -35,15 +36,5 @@ public class EntityUtil {
                 "ArmorStand",
                 "ExperienceOrb"
         };
-    }
-
-    public static String toClassName(String name) {
-        String[] parts = name.split("_");
-        StringBuilder sb = new StringBuilder();
-        for (String part : parts) {
-            sb.append(Character.toUpperCase(part.charAt(0)))
-                    .append(part.substring(1));
-        }
-        return sb.toString();
     }
 }

@@ -8,6 +8,7 @@ import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
 import fag.ware.client.module.data.setting.impl.ColorSetting;
 import fag.ware.client.module.data.setting.impl.MultiStringSetting;
+import fag.ware.client.util.SystemUtil;
 import fag.ware.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,7 +17,7 @@ import java.awt.*;
 
 @ModuleInfo(name = "ESP", category = ModuleCategory.RENDER, description = "Renders outlines around entities")
 public class ESPModule extends AbstractModule {
-    private final MultiStringSetting entities = new MultiStringSetting("Entities", new String[]{"Player"}, EntityUtil.getAllEntityNames());
+    private final MultiStringSetting entities = new MultiStringSetting("Entities", new String[]{"Player"}, EntityUtil.getAllEntities());
 
     private final ColorSetting playerColor = new ColorSetting("Player color", new Color(230, 0, 55));
     private final ColorSetting animalColor = new ColorSetting("Animal color", new Color(0, 230, 55));
@@ -27,7 +28,7 @@ public class ESPModule extends AbstractModule {
     public void hasOutline(HasOutlineEvent event) {
         if (event.getEntity() != null) {
             String entityName = EntityType.getId(event.getEntity().getType()).getPath();
-            if (entities.enabled(EntityUtil.toClassName(entityName))) {
+            if (entities.enabled(SystemUtil.toClassName(entityName))) {
                 event.setCancelled(true);
             }
         }
@@ -37,7 +38,7 @@ public class ESPModule extends AbstractModule {
     public void renderEntitiesGlowColor(RenderEntitiesGlowColorEvent event) {
         if (event.getEntity() != null) {
             String entityName = EntityType.getId(event.getEntity().getType()).getPath();
-            if (entities.enabled(EntityUtil.toClassName(entityName))) {
+            if (entities.enabled(SystemUtil.toClassName(entityName))) {
                 event.setCancelled(true);
             }
 
