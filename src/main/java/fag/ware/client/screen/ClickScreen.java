@@ -28,17 +28,10 @@ import net.minecraft.text.Text;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
-import java.util.List;
 
 public class ClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
     private final ImVec2 size = new ImVec2(230, 0);
-
-    private final List<ConfigEntry> configs = new ArrayList<>();
-    private List<ConfigEntry> cloudConfigs = new ArrayList<>();
-
-    private String activeConfigName = null;
-    private boolean activeIsCloud = false;
 
     public ClickScreen() {
         super(Text.of("Classic Dropdown"));
@@ -50,13 +43,13 @@ public class ClickScreen extends Screen {
 
         new Thread(() -> {
             try {
-                cloudConfigs = AuthTracker.getInstance().fetchConfigList();
+                ModuleTracker.getInstance().cloudConfigs = AuthTracker.getInstance().fetchConfigList();
             } catch (Exception e) {
                 Fagware.LOGGER.error("Failed to fetch configs", e);
             }
 
-            configs.clear();
-            configs.addAll(FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json"));
+            ModuleTracker.getInstance().configs.clear();
+            ModuleTracker.getInstance().configs.addAll(FileUtil.listFiles(Fagware.MOD_ID + File.separator + "configs", ".json"));
         }).start();
     }
 
@@ -94,82 +87,78 @@ public class ClickScreen extends Screen {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
 
-                    switch (category.getName()) {
-                        case "Configs" -> {
-                            boolean openLC = ImGui.collapsingHeader("Local configs");
-                            if (openLC) {
-                                ImGui.setWindowFontScale(0.8f);
-                                for (ConfigEntry config : configs) {
-                                    boolean selected = !activeIsCloud && config.name().equals(activeConfigName);
+                    if (category.equals(ModuleCategory.CONFIGS)) {
+                        boolean openLC = ImGui.collapsingHeader("Local configs");
+                        if (openLC) {
+                            ImGui.setWindowFontScale(0.8f);
+                            for (ConfigEntry config : ModuleTracker.getInstance().configs) {
+                                boolean selected = !ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
 
-                                    if (ImGui.radioButton(config.name(), selected)) {
-                                        activeConfigName = config.name();
-                                        activeIsCloud = false;
-                                        new ModulesFile(config.name()).load();
-                                    }
+                                if (ImGui.radioButton(config.name(), selected)) {
+                                    ModuleTracker.getInstance().activeConfigName = config.name();
+                                    ModuleTracker.getInstance().activeIsCloud = false;
+                                    new ModulesFile(config.name()).load();
                                 }
-                                ImGui.setWindowFontScale(1.0f);
                             }
-
-                            boolean openCC = ImGui.collapsingHeader("Cloud configs");
-                            if (openCC) {
-                                ImGui.setWindowFontScale(0.8f);
-                                for (ConfigEntry config : cloudConfigs) {
-                                    boolean selected = activeIsCloud && config.name().equals(activeConfigName);
-
-                                    if (ImGui.radioButton(config.name(), selected)) {
-                                        activeConfigName = config.name();
-                                        activeIsCloud = true;
-                                        AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
-                                    }
-                                }
-                                ImGui.setWindowFontScale(1.0f);
-                            }
+                            ImGui.setWindowFontScale(1.0f);
                         }
 
-                        default -> {
-                            for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
-                                ImGui.pushID(module.toString());
-                                ImBoolean enabledMod = new ImBoolean(module.isEnabled());
+                        boolean openCC = ImGui.collapsingHeader("Cloud configs");
+                        if (openCC) {
+                            ImGui.setWindowFontScale(0.8f);
+                            for (ConfigEntry config : ModuleTracker.getInstance().cloudConfigs) {
+                                boolean selected = ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
 
-                                if (ImGui.checkbox("##Enabled", enabledMod)) {
-                                    module.setEnabled(enabledMod.get());
+                                if (ImGui.radioButton(config.name(), selected)) {
+                                    ModuleTracker.getInstance().activeConfigName = config.name();
+                                    ModuleTracker.getInstance().activeIsCloud = true;
+                                    AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
+                                }
+                            }
+                            ImGui.setWindowFontScale(1.0f);
+                        }
+                    }
+
+                    for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
+                        ImGui.pushID(module.toString());
+                        ImBoolean enabledMod = new ImBoolean(module.isEnabled());
+
+                        if (ImGui.checkbox("##Enabled", enabledMod)) {
+                            module.setEnabled(enabledMod.get());
+                        }
+
+                        ImGui.sameLine();
+                        boolean open = ImGui.collapsingHeader(module.toString());
+
+                        if (ImGui.isItemHovered()) {
+                            ImGui.beginTooltip();
+
+                            if (module.getKeybinds().isEmpty()) {
+                                ImGui.setTooltip(module.getInfo().description());
+                            } else {
+                                StringBuilder sb = new StringBuilder();
+
+                                for (Integer keybind : module.getKeybinds()) {
+                                    sb.append((char) (int) keybind).append(", ");
                                 }
 
-                                ImGui.sameLine();
-                                boolean open = ImGui.collapsingHeader(module.toString());
+                                sb.delete(sb.length() - 2, sb.length());
+                                ImGui.setTooltip(String.format("%s%nBinds: %s", module.getInfo().description(), sb));
+                            }
 
-                                if (ImGui.isItemHovered()) {
-                                    ImGui.beginTooltip();
+                            ImGui.endTooltip();
+                        }
 
-                                    if (module.getKeybinds().isEmpty()) {
-                                        ImGui.setTooltip(module.getInfo().description());
-                                    } else {
-                                        StringBuilder sb = new StringBuilder();
-
-                                        for (Integer keybind : module.getKeybinds()) {
-                                            sb.append((char) (int) keybind).append(", ");
-                                        }
-
-                                        sb.delete(sb.length() - 2, sb.length());
-                                        ImGui.setTooltip(String.format("%s%nBinds: %s", module.getInfo().description(), sb));
-                                    }
-
-                                    ImGui.endTooltip();
+                        if (open) {
+                            for (AbstractSetting<?> setting : module.getSettings()) {
+                                if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
+                                    continue;
                                 }
 
-                                if (open) {
-                                    for (AbstractSetting<?> setting : module.getSettings()) {
-                                        if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
-                                            continue;
-                                        }
-
-                                        SettingRenderer.render(setting);
-                                    }
-                                }
-                                ImGui.popID();
+                                SettingRenderer.render(setting);
                             }
                         }
+                        ImGui.popID();
                     }
                 }
 

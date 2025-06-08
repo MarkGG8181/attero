@@ -1,5 +1,7 @@
 package fag.ware.client.screen;
 
+import fag.ml.packet.impl.CLoadConfigPacket;
+import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
@@ -7,7 +9,9 @@ import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.screen.data.ImGuiThemes;
+import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.tracker.impl.ModuleTracker;
+import fag.ware.client.util.client.ConfigEntry;
 import imgui.ImGui;
 import imgui.flag.ImGuiColorEditFlags;
 import imgui.type.ImBoolean;
@@ -51,6 +55,38 @@ public final class PanelClickScreen extends Screen
                 {
                     for (ModuleCategory value : ModuleCategory.values())
                     {
+                        if (value.equals(ModuleCategory.CONFIGS)) {
+                            boolean openLC = ImGui.collapsingHeader("Local configs");
+                            if (openLC) {
+                                ImGui.setWindowFontScale(0.8f);
+                                for (ConfigEntry config : ModuleTracker.getInstance().configs) {
+                                    boolean selected = !ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+
+                                    if (ImGui.radioButton(config.name(), selected)) {
+                                        ModuleTracker.getInstance().activeConfigName = config.name();
+                                        ModuleTracker.getInstance().activeIsCloud = false;
+                                        new ModulesFile(config.name()).load();
+                                    }
+                                }
+                                ImGui.setWindowFontScale(1.0f);
+                            }
+
+                            boolean openCC = ImGui.collapsingHeader("Cloud configs");
+                            if (openCC) {
+                                ImGui.setWindowFontScale(0.8f);
+                                for (ConfigEntry config : ModuleTracker.getInstance().cloudConfigs) {
+                                    boolean selected = ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+
+                                    if (ImGui.radioButton(config.name(), selected)) {
+                                        ModuleTracker.getInstance().activeConfigName = config.name();
+                                        ModuleTracker.getInstance().activeIsCloud = true;
+                                        AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
+                                    }
+                                }
+                                ImGui.setWindowFontScale(1.0f);
+                            }
+                        }
+
                         if (beginTabItem(value.name().toLowerCase()))
                         {
                             for (AbstractModule module : ModuleTracker.getInstance().getByCategory(value))

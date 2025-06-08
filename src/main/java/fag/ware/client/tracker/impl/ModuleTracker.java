@@ -15,6 +15,9 @@ import fag.ware.client.module.impl.world.*;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.client.ConfigEntry;
 import fag.ware.client.util.interfaces.IMinecraft;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,12 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     private static final ModuleTracker tracker = new ModuleTracker();
 
     public ConfigEntry currentConfig;
+
+    public final List<ConfigEntry> configs = new ArrayList<>();
+    public List<ConfigEntry> cloudConfigs = new ArrayList<>();
+
+    public String activeConfigName = null;
+    public boolean activeIsCloud = false;
 
     public static ModuleTracker getInstance() {
         return tracker;

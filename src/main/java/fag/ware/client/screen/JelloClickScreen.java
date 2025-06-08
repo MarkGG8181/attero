@@ -1,5 +1,7 @@
 package fag.ware.client.screen;
 
+import fag.ml.packet.impl.CLoadConfigPacket;
+import fag.ware.client.file.impl.ModulesFile;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.setting.AbstractSetting;
@@ -7,8 +9,11 @@ import fag.ware.client.module.data.setting.impl.*;
 import fag.ware.client.module.impl.render.ClickGUIModule;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.screen.data.ImGuiThemes;
+import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.tracker.impl.ScreenTracker;
+import fag.ware.client.util.client.ConfigEntry;
+import fag.ware.client.util.math.ColorUtil;
 import imgui.*;
 import imgui.flag.*;
 import imgui.type.ImBoolean;
@@ -66,22 +71,50 @@ public class JelloClickScreen extends Screen {
         }
 
         ImGuiImpl.draw(io -> {
-            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
-                case "Marine" -> ImGuiThemes.applyMarineTheme();
-                case "Dark" -> ImGuiThemes.applyDarkTheme();
-                case "White" -> ImGuiThemes.applyWhiteTheme();
-            }
+            ImGuiThemes.applyDarkTheme();
 
+            ImGui.pushFont(ImGuiImpl.inter17);
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
 
-                ImGui.pushFont(ImGuiImpl.inter17);
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
                 ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
 
                 if (ImGui.begin(category.getName() + "##1", ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar)) {
                     ImVec2 newPosition = ImGui.getWindowPos();
                     position.set(newPosition);
+
+                    if (category.equals(ModuleCategory.CONFIGS)) {
+                        boolean openLC = ImGui.collapsingHeader("Local configs");
+                        if (openLC) {
+                            ImGui.setWindowFontScale(0.8f);
+                            for (ConfigEntry config : ModuleTracker.getInstance().configs) {
+                                boolean selected = !ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+
+                                if (ImGui.radioButton(config.name(), selected)) {
+                                    ModuleTracker.getInstance().activeConfigName = config.name();
+                                    ModuleTracker.getInstance().activeIsCloud = false;
+                                    new ModulesFile(config.name()).load();
+                                }
+                            }
+                            ImGui.setWindowFontScale(1.0f);
+                        }
+
+                        boolean openCC = ImGui.collapsingHeader("Cloud configs");
+                        if (openCC) {
+                            ImGui.setWindowFontScale(0.8f);
+                            for (ConfigEntry config : ModuleTracker.getInstance().cloudConfigs) {
+                                boolean selected = ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+
+                                if (ImGui.radioButton(config.name(), selected)) {
+                                    ModuleTracker.getInstance().activeConfigName = config.name();
+                                    ModuleTracker.getInstance().activeIsCloud = true;
+                                    AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
+                                }
+                            }
+                            ImGui.setWindowFontScale(1.0f);
+                        }
+                    }
 
                     for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
                         ImGui.pushID(module.toString());
@@ -109,11 +142,10 @@ public class JelloClickScreen extends Screen {
                         ImGui.popID();
                     }
                 }
-
                 ImGui.end();
-
-                ImGui.popFont();
             }
+
+            ImGui.popFont();
 
             if (settingRenderer != null) {
                 settingRenderer.render(io);
