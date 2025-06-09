@@ -18,6 +18,7 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiColorEditFlags;
 import imgui.flag.ImGuiCond;
+import imgui.flag.ImGuiSelectableFlags;
 import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
@@ -237,11 +238,17 @@ public class ClickScreen extends Screen {
 
                     float fullWidth = ImGui.getContentRegionAvailX();
                     ImGui.setNextItemWidth(fullWidth);
-                    if (ImGui.beginCombo("##" + mSS.getName(), mSS.toString())) {
+
+                    String popupId = "##popup_" + mSS.getName();
+                    if (ImGui.button(mSS.toString())) {
+                        ImGui.openPopup(popupId);
+                    }
+
+                    if (ImGui.beginPopup(popupId)) {
                         for (String value : mSS.getAll()) {
                             boolean selected = Arrays.asList(mSS.getValue()).contains(value);
 
-                            if (ImGui.selectable(value, selected)) {
+                            if (ImGui.selectable(value, selected, ImGuiSelectableFlags.DontClosePopups)) {
                                 if (selected) {
                                     mSS.setValue(Arrays.stream(mSS.getValue())
                                             .filter(v -> !v.equals(value))
@@ -253,7 +260,7 @@ public class ClickScreen extends Screen {
                                 }
                             }
                         }
-                        ImGui.endCombo();
+                        ImGui.endPopup();
                     }
                     ImGui.setWindowFontScale(1f);
                 }
