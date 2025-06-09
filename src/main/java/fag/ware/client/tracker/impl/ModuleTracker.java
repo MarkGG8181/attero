@@ -82,6 +82,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
         getSet().add(new MidClickPearlModule());
         getSet().add(new FastPlaceModule());
         getSet().add(new KeyFireworkModule());
+        getSet().add(new InventoryManagerModule());
 
         /* WORLD */
         getSet().add(new TimerModule());
