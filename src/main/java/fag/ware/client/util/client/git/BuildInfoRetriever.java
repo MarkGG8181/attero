@@ -1,4 +1,4 @@
-package fag.ware.client.util.client;
+package fag.ware.client.util.client.git;
 
 import lombok.SneakyThrows;
 
@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Properties;
 
 public class BuildInfoRetriever implements BuildInfoService {
-
     @Override
     @SneakyThrows
     public BuildInfo git() {

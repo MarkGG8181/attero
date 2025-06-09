@@ -1,5 +1,8 @@
-package fag.ware.client.util.client;
+package fag.ware.client.util.client.git;
 
+import lombok.Getter;
+
+@Getter
 public class BuildInfo {
     private String branch;
     private String version;
@@ -50,30 +53,5 @@ public class BuildInfo {
         public BuildInfo build() {
             return info;
         }
-    }
-
-    // Getters if needed
-    public String getBranch() {
-        return branch;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public int getCommits() {
-        return commits;
-    }
-
-    public String getCommitId() {
-        return commitId;
-    }
-
-    public String getCommitIdAbbreviation() {
-        return commitIdAbbreviation;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
     }
 }
