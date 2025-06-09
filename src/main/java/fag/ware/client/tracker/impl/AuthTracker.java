@@ -14,7 +14,6 @@ import fag.ware.client.file.impl.CloudConfigFile;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.AbstractTracker;
 import fag.ware.client.util.client.ConfigEntry;
-import imgui.ImGui;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -22,6 +21,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import net.minecraft.client.MinecraftClient;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -117,6 +117,8 @@ public class AuthTracker extends AbstractTracker {
                     }
                     for (;;);
                 }
+
+                MinecraftClient.getInstance().setScreen(null);
 
                 ModuleTracker.getInstance().initialize();
                 CommandTracker.getInstance().initialize();
