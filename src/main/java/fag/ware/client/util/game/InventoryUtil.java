@@ -2,28 +2,47 @@ package fag.ware.client.util.game;
 
 import fag.ware.client.util.SystemUtil;
 import fag.ware.client.util.interfaces.IMinecraft;
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.CactusBlock;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@SuppressWarnings("ALL")
 public class InventoryUtil implements IMinecraft {
+    public static final Set<Item> SWORDS = Set.of(
+            Items.WOODEN_SWORD,
+            Items.STONE_SWORD,
+            Items.GOLDEN_SWORD,
+            Items.IRON_SWORD,
+            Items.DIAMOND_SWORD,
+            Items.NETHERITE_SWORD
+    );
+
+    public static final Set<Item> PICKAXES = Set.of(
+            Items.WOODEN_PICKAXE,
+            Items.STONE_PICKAXE,
+            Items.GOLDEN_PICKAXE,
+            Items.IRON_PICKAXE,
+            Items.DIAMOND_PICKAXE,
+            Items.NETHERITE_PICKAXE
+    );
+
     public static String[] getAllItems() {
         List<String> names = new ArrayList<>();
 
@@ -180,7 +199,7 @@ public class InventoryUtil implements IMinecraft {
         return null;
     }
 
-    public static boolean isBetterArmor(ItemStack a, ItemStack b) {
+    public static boolean isBetterItem(ItemStack a, ItemStack b, RegistryKey<Enchantment> enchantment, RegistryEntry<EntityAttribute> attribute) {
         if (a.getMaxDamage() > 0 && b.getMaxDamage() > 0) {
             float aDurability = (float) (a.getMaxDamage() - a.getDamage()) / a.getMaxDamage();
             float bDurability = (float) (b.getMaxDamage() - b.getDamage()) / b.getMaxDamage();
@@ -189,37 +208,63 @@ public class InventoryUtil implements IMinecraft {
             }
         }
 
-        var aProt = getProtection(a);
-        var bProt = getProtection(b);
+        var aSharp = getEnchantment(a, enchantment);
+        var bSharp = getEnchantment(b, enchantment);
 
-        if (aProt != bProt) return aProt > bProt;
+        if (aSharp != bSharp) return aSharp > bSharp;
 
-        var aArmor = getArmorAttribute(a);
-        var bArmor = getArmorAttribute(b);
+        var aSword = getAttribute(a, attribute);
+        var bSword = getAttribute(b, attribute);
 
-        return aArmor > bArmor;
+        return aSword > bSword;
     }
 
-    public static int getProtection(ItemStack stack) {
-        Object2IntMap<RegistryEntry<Enchantment>> enchantments = new Object2IntOpenHashMap<>();
-        getEnchantments(stack, enchantments);
+    public static int getEnchantment(ItemStack itemStack, RegistryKey<Enchantment> enchantment) {
+        if (itemStack.isEmpty()) {
+            return 0;
+        }
 
-        for (var entry : enchantments.object2IntEntrySet()) {
-            if (entry.getKey().matchesKey(Enchantments.PROTECTION)) {
+        Object2IntMap<RegistryEntry<Enchantment>> itemEnchantments = new Object2IntArrayMap<>();
+        getEnchantments(itemStack, itemEnchantments);
+
+        return getEnchantmentLevel(itemEnchantments, enchantment);
+    }
+
+    public static int getEnchantmentLevel(Object2IntMap<RegistryEntry<Enchantment>> itemEnchantments, RegistryKey<Enchantment> enchantment) {
+        for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : Object2IntMaps.fastIterable(itemEnchantments)) {
+            if (entry.getKey().matchesKey(enchantment)) {
                 return entry.getIntValue();
             }
         }
+
         return 0;
     }
 
-    public static int getArmorAttribute(ItemStack stack) {
+    public static int getAttribute(ItemStack stack, RegistryEntry<EntityAttribute> attribute) {
         var comp = stack.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
         if (comp == null) return 0;
 
         return comp.modifiers().stream()
-                .filter(e -> e.attribute() == EntityAttributes.ARMOR)
+                .filter(e -> e.attribute() == attribute.value())
                 .mapToInt(e -> (int) e.modifier().value())
                 .sum();
+    }
+
+    public static boolean isSword(ItemStack stack) {
+        return SWORDS.contains(stack.getItem());
+    }
+
+    public static boolean isPickaxe(ItemStack stack) {
+        return SWORDS.contains(stack.getItem());
+    }
+
+    public static int getFoodScore(ItemStack stack) {
+        var foodComp = stack.getComponents().get(DataComponentTypes.FOOD);
+        if (foodComp == null) {
+            return 0;
+        }
+
+        return foodComp.nutrition();
     }
 
     public enum ArmorType {
@@ -235,8 +280,11 @@ public class InventoryUtil implements IMinecraft {
         }
     }
 
+    public record SimpleItem(ItemStack stack, int slot) {
+    }
+
     public static class ArmorItem {
-        public ItemStack stack;
+        public final ItemStack stack;
         public ArmorType type;
         public int slot = 0;
 

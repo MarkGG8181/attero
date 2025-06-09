@@ -9,14 +9,11 @@ import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.module.data.setting.impl.RangeNumberSetting;
 import fag.ware.client.tracker.impl.CombatTracker;
+import fag.ware.client.util.game.InventoryUtil;
 import fag.ware.client.util.game.RotationUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import java.util.Set;
 
 @ModuleInfo(
         name = "AimAssist",
@@ -24,14 +21,6 @@ import java.util.Set;
         category = ModuleCategory.COMBAT
 )
 public class AimAssistModule extends AbstractModule {
-    private static final Set<Item> SWORDS = Set.of(
-            Items.WOODEN_SWORD,
-            Items.STONE_SWORD,
-            Items.IRON_SWORD,
-            Items.DIAMOND_SWORD,
-            Items.NETHERITE_SWORD
-    );
-
     private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting fov = new NumberSetting("FOV", 70, 180, 360);
     private final NumberSetting distance = new NumberSetting("Distance", 4.5, 1, 8);
@@ -45,7 +34,7 @@ public class AimAssistModule extends AbstractModule {
 
         // Weapon check
         ItemStack mainHandStack = mc.player.getMainHandStack();
-        if (onlyWeapon.getValue() && !(mainHandStack.getItem() instanceof AxeItem || isSword(mainHandStack)))
+        if (onlyWeapon.getValue() && !(mainHandStack.getItem() instanceof AxeItem || InventoryUtil.isSword(mainHandStack)))
             return;
 
         // Get the target from CombatTracker
@@ -59,9 +48,5 @@ public class AimAssistModule extends AbstractModule {
             mc.player.setPitch(rots[1]);
             mc.player.setYaw(rots[0]);
         }
-    }
-
-    private boolean isSword(ItemStack stack) {
-        return SWORDS.contains(stack.getItem());
     }
 }

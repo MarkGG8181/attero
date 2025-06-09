@@ -13,6 +13,8 @@ import fag.ware.client.util.game.InventoryUtil;
 import fag.ware.client.util.math.Timer;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 //import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
@@ -29,6 +31,7 @@ public class InventoryManagerModule extends AbstractModule {
     private final NumberSetting equipDelay = (NumberSetting) new NumberSetting("Equip delay", 30, 0, 300).hide(() -> !autoArmor.getValue());
     private final BooleanSetting dropTrash = new BooleanSetting("Drop trash", true);
     private final MultiStringSetting trashItems = (MultiStringSetting) new MultiStringSetting("Trash items", InventoryUtil.getExampleItems(), InventoryUtil.getAllItems()).hide(() -> !dropTrash.getValue());
+
     private final NumberSetting dropDelay = (NumberSetting) new NumberSetting("Drop delay", 150, 0, 300).hide(() -> !dropTrash.getValue() && !autoArmor.getValue());
 
     private final List<Integer> trashSlotQueue = new ArrayList<>();
@@ -102,7 +105,7 @@ public class InventoryManagerModule extends AbstractModule {
                 var type = armorItem.type;
 
                 var best = bestArmor.get(type);
-                if (best == null || InventoryUtil.isBetterArmor(stack, best.stack)) {
+                if (best == null || InventoryUtil.isBetterItem(stack, best.stack, Enchantments.PROTECTION, EntityAttributes.ARMOR)) {
                     bestArmor.put(type, armorItem);
                 }
             }
