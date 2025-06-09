@@ -86,14 +86,13 @@ public class InventoryUtil implements IMinecraft {
 
     public static boolean checkHotbarForBlocks() {
         var blocks = false;
+
         for (var i = 0; i < 9; i++) {
             ItemStack itemStack = mc.player.getInventory().getStack(i);
 
-            if (itemStack != null && itemStack.getItem() instanceof BlockItem block) {
-                if (isGoodBlock(block)) {
-                    blocks = true;
-                    break;
-                }
+            if (itemStack != null && itemStack.getItem() instanceof BlockItem block && isGoodBlock(block)) {
+                blocks = true;
+                break;
             }
         }
 
@@ -111,12 +110,17 @@ public class InventoryUtil implements IMinecraft {
             return false;
         }
 
+        if (!block.getDefaultState().isSolid()) return false;
+        if (block.getDefaultState().isLiquid()) return false;
+
         if (block.getSlipperiness() > 0.6f) return false;
         if (block.getVelocityMultiplier() < 1.0f) return false;
         if (block.getJumpVelocityMultiplier() < 1.0f) return false;
 
         if (block instanceof CactusBlock) return false;
         if (block instanceof BlockWithEntity || block instanceof FallingBlock) return false;
+
+        System.out.println(item.toString());
 
         return true;
     }
