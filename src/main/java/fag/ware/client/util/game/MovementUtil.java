@@ -1,5 +1,6 @@
 package fag.ware.client.util.game;
 
+import fag.ware.client.tracker.impl.AuthTracker;
 import fag.ware.client.util.interfaces.IMinecraft;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -127,7 +128,7 @@ public class MovementUtil implements IMinecraft {
 
     public static double defaultSpeed()
     {
-        double baseSpeed = 0.2873D;
+        double baseSpeed = AuthTracker.getInstance().values[5];
         int speed = getSpeedAmplifier2();
 
         if (speed != 0)

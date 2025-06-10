@@ -1,5 +1,6 @@
 package fag.ware.client.util.math.anim;
 
+import fag.ware.client.tracker.impl.AuthTracker;
 import lombok.Getter;
 
 /**
@@ -27,7 +28,7 @@ public final class Animation {
     public void update(final float target)
     {
         final long currentTime = System.nanoTime();
-        final float deltaTime = (currentTime - lastUpdateTime) / 1000000000f; // this is the right value. source: allah
+        final float deltaTime = (currentTime - lastUpdateTime) / AuthTracker.getInstance().values[4]; // this is the right value. source: allah
         lastUpdateTime = currentTime;
 
         float progress = transitionSpeed * deltaTime;
