@@ -73,7 +73,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
     public void setTitle(CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("fagware 1.21.5#" + Fagware.BUILD_INFO.getCommitIdAbbreviation());
+        cir.setReturnValue("fagware 1.21.5");
     }
 
     @Inject(method = "isDemo", at = @At("HEAD"), cancellable = true)
