@@ -97,7 +97,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         getSet().forEach(AbstractModule::onInit);
         modulesFile.load();
-        //JvmArgsChecker.force();
+        JvmArgsChecker.force();
     }
 
     @Subscribe
