@@ -22,10 +22,15 @@ public class ScaffoldWalkModule extends AbstractModule {
     private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
     private final RangeNumberSetting speed = (RangeNumberSetting) new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
 
+    private float[] rots;
+
     @Override
     public void onEnable() {
         if (mc.player == null) return;
+        checkForBlocks();
         InventoryUtil.switchToBestSlotWithBlocks();
+
+        rots = new float[]{RotationUtil.getAdjustedYaw(), 85};
     }
 
     @Subscribe
@@ -56,7 +61,12 @@ public class ScaffoldWalkModule extends AbstractModule {
             BlockPos belowPlayer = mc.player.getBlockPos().down();
             Vec3d lookAt = new Vec3d(belowPlayer.getX() + 0.5, belowPlayer.getY() + 0.5, belowPlayer.getZ() + 0.5);
 
-            float[] rots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
+            rots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
+        } else {
+            rots = new float[]{mc.player.lastYaw, mc.player.lastPitch};
+        }
+
+        if (rots != null) {
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);
         }
@@ -64,10 +74,13 @@ public class ScaffoldWalkModule extends AbstractModule {
 
     private void placeBlock(BlockPos pos) {
         assert mc.player != null;
-        if (mc.player.getMainHandStack().getItem() instanceof BlockItem) {
-            assert mc.interactionManager != null;
-            mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), Direction.UP, pos, false));
-            mc.player.swingHand(Hand.MAIN_HAND);
+        var heldItemStack = mc.player.getActiveItem();
+
+        if (rots != null && heldItemStack != null) {
+            BlockHitResult result = new BlockHitResult(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), Direction.UP, pos, false);
+            if (mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, result).isAccepted()) {
+                mc.player.swingHand(Hand.MAIN_HAND);
+            }
         }
     }
 

@@ -120,8 +120,6 @@ public class InventoryUtil implements IMinecraft {
         if (block instanceof CactusBlock) return false;
         if (block instanceof BlockWithEntity || block instanceof FallingBlock) return false;
 
-        System.out.println(item.toString());
-
         return true;
     }
 
