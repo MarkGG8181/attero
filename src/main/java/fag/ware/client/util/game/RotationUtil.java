@@ -9,6 +9,7 @@ import fag.ware.client.util.math.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 import java.security.SecureRandom;
 
@@ -41,6 +42,42 @@ public class RotationUtil implements IMinecraft {
         final double x = noiseValueX + entity.getPos().x + (entity.getPos().x - entity.lastX) - mc.player.getPos().x;
         final double z = noiseValueZ + entity.getPos().z + (entity.getPos().z - entity.lastZ) - mc.player.getPos().z;
         final double y = noiseValueY + (entity.getPos().y + entity.getHeight() - 0.5f) - (mc.player.getPos().y + mc.player.getStandingEyeHeight());
+
+        final double theta = Math.hypot(x, z);
+        final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
+        final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
+
+        float currentYaw = CombatTracker.getInstance().yaw;
+        float currentPitch = CombatTracker.getInstance().pitch;
+
+        float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
+
+        SecureRandom random = new SecureRandom();
+        float yawSpeed = random.nextFloat(minSpeed, maxSpeed);
+        float pitchSpeed = random.nextFloat(minSpeed, maxSpeed);
+
+        float deltaYaw = MathHelper.wrapDegrees(rots[0] - currentYaw);
+        float deltaPitch = MathHelper.wrapDegrees(rots[1] - currentPitch);
+
+        deltaYaw = MathHelper.clamp(deltaYaw, -yawSpeed, yawSpeed);
+        deltaPitch = MathHelper.clamp(deltaPitch, -pitchSpeed, pitchSpeed);
+
+        rots[0] = currentYaw + deltaYaw;
+        rots[1] = currentPitch + deltaPitch;
+
+        return patchGCD(rots, new float[]{CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
+    }
+
+    public static float[] toRotation(Vec3d target, float minSpeed, float maxSpeed) {
+        final float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
+
+        final float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
+        final float noiseValueY = noiseY.GetNoise(time, 100.0f) * 0.5f;
+        final float noiseValueZ = noiseZ.GetNoise(time, 200.0f) * 0.5f;
+
+        final double x = noiseValueX + target.x - mc.player.getX();
+        final double y = noiseValueY + target.y - (mc.player.getY() + mc.player.getEyeHeight(mc.player.getPose()));
+        final double z = noiseValueZ + target.z - mc.player.getZ();
 
         final double theta = Math.hypot(x, z);
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
