@@ -35,7 +35,7 @@ public class KillAuraModule extends AbstractModule {
     private final NumberSetting attackRange = (NumberSetting) new NumberSetting("Attack range", 3, 1, 6).setParent(clickGroup);
 
     private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
-    private final RangeNumberSetting speed = (RangeNumberSetting) new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180).setParent(rotationGroup);
+    private final RangeNumberSetting speed = (RangeNumberSetting) new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
 
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
