@@ -4,8 +4,6 @@ import fag.ware.client.event.data.EventBus;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.tracker.impl.*;
 import fag.ware.client.util.FileUtil;
-import fag.ware.client.util.client.git.BuildInfo;
-import fag.ware.client.util.client.git.BuildInfoRetriever;
 import net.fabricmc.api.ClientModInitializer;
 
 import org.slf4j.Logger;
