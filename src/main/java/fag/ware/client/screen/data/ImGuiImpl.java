@@ -17,14 +17,18 @@ import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlBackend;
 import net.minecraft.client.texture.GlTexture;
 import org.apache.commons.io.IOUtils;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("ALL")
 public class ImGuiImpl {
     private final static ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
     private final static ImGuiImplGl3 imGuiImplGl3 = new ImGuiImplGl3();
@@ -116,11 +120,11 @@ public class ImGuiImpl {
 
         fonts.build();
 
-        inter17 = interGeneratedFonts.get(0);
+        inter17 = interGeneratedFonts.getFirst();
         inter30 = interGeneratedFonts.get(9);
-        sansation17 = sansationGeneratedFonts.get(0);
-        comfortaa17 = comfortaaGeneratedFonts.get(0);
-        arial17 = arialGeneratedFonts.get(0);
+        sansation17 = sansationGeneratedFonts.getFirst();
+        comfortaa17 = comfortaaGeneratedFonts.getFirst();
+        arial17 = arialGeneratedFonts.getFirst();
 
         data.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 
@@ -146,15 +150,6 @@ public class ImGuiImpl {
         imGuiImplGl3.renderDrawData(ImGui.getDrawData());
 
         GlStateManager._glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);
-
-// Add this code if you have enabled Viewports in the create method
-//        if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
-//            final long pointer = GLFW.glfwGetCurrentContext();
-//            ImGui.updatePlatformWindows();
-//            ImGui.renderPlatformWindowsDefault();
-//
-//            GLFW.glfwMakeContextCurrent(pointer);
-//        }
     }
 
     public static void dispose() {
@@ -162,5 +157,27 @@ public class ImGuiImpl {
 
         ImGui.destroyContext();
         ImPlot.destroyContext();
+    }
+
+    public static int fromBufferedImage(BufferedImage image) {
+        final int[] pixels = new int[image.getWidth() * image.getHeight()];
+        image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+        final ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                final int pixel = pixels[y * image.getWidth() + x];
+                buffer.put((byte) ((pixel >> 16) & 0xFF));
+                buffer.put((byte) ((pixel >> 8) & 0xFF));
+                buffer.put((byte) (pixel & 0xFF));
+                buffer.put((byte) ((pixel >> 24) & 0xFF));
+            }
+        }
+        buffer.flip();
+        final int texture = GlStateManager._genTexture();
+        GlStateManager._bindTexture(texture);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        return texture;
     }
 }

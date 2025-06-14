@@ -1,5 +1,6 @@
 package fag.ware.client.module.impl.render;
 
+import fag.ware.client.Fagware;
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.render.Render2DEvent;
 import fag.ware.client.module.AbstractModule;
@@ -17,18 +18,24 @@ import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.util.math.ColorUtil;
 import imgui.ImFont;
 import imgui.ImGui;
+import imgui.ImVec2;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Objects;
 
 @ModuleInfo(name = "Watermark", category = ModuleCategory.RENDER, description = "Draws a watermark")
 public class WatermarkModule extends AbstractModule {
-    private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter","Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
+    private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft", "Image");
+    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
     private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final BooleanSetting hideName = new BooleanSetting("Hide name", false);
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
 
     private ImFont currentFont = ImGuiImpl.inter17;
+
+    private int clientLogo = -1;
 
     public WatermarkModule() {
         font.onChange(set -> {
@@ -48,13 +55,22 @@ public class WatermarkModule extends AbstractModule {
             return;
         }
 
+        if (currentFont == null) {
+            currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
+            if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
+        }
+
+        if (clientLogo == -1) {
+            try {
+                clientLogo = ImGuiImpl.fromBufferedImage(ImageIO.read(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Fagware.MOD_ID + "/icon.png"))));
+            } catch (IOException e) {
+                sendError("Failed to load client logo: " +  e.getMessage());
+                Fagware.LOGGER.error("Failed to load client watermark png", e);
+            }
+        }
+
         switch (mode.getValue()) {
             case "ImGui" -> ImGuiImpl.draw(io -> {
-                if (currentFont == null) {
-                    currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
-                    if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
-                }
-
                 ImGui.pushFont(currentFont);
                 var drawList = ImGui.getForegroundDrawList();
 
@@ -86,6 +102,14 @@ public class WatermarkModule extends AbstractModule {
                 event.getDrawContext().drawText(mc.textRenderer, "fag", 5, 5, color.getValue().getRGB(), false);
                 event.getDrawContext().drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("fag"), 5, -1, false);
             }
+
+            case "Image" -> ImGuiImpl.draw(io -> {
+                    var drawList = ImGui.getForegroundDrawList();
+                ImVec2 size = new ImVec2(256, 256);
+                ImVec2 uv0= new ImVec2(0, 0); // Top-left UV
+                ImVec2 uv= new ImVec2(1, 1); // Bottom-right UV
+                drawList.addImage(clientLogo, size, uv0, uv);
+            });
         }
     }
 
