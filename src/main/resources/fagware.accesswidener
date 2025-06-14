@@ -1,0 +1,9 @@
+accessWidener v2 named
+accessible method net/minecraft/client/render/entity/LivingEntityRenderer clampBodyYaw (Lnet/minecraft/entity/LivingEntity;FF)F
+accessible field net/minecraft/client/MinecraftClient itemUseCooldown I
+accessible field net/minecraft/client/MinecraftClient mouse Lnet/minecraft/client/Mouse;
+accessible method net/minecraft/client/MinecraftClient doItemUse ()V
+accessible method net/minecraft/client/MinecraftClient doAttack ()Z
+accessible field net/minecraft/client/option/KeyBinding boundKey Lnet/minecraft/client/util/InputUtil$Key;
+accessible field net/minecraft/client/input/Input movementVector Lnet/minecraft/util/math/Vec2f;
+accessible field net/minecraft/client/gui/screen/ingame/HandledScreen focusedSlot Lnet/minecraft/screen/slot/Slot;

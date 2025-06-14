@@ -45,6 +45,10 @@ dependencies {
     include implementation("io.github.spair:imgui-java-natives-macos:${project.imgui_version}")
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/fagware.accesswidener")
+}
+
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.lwjgl") {
