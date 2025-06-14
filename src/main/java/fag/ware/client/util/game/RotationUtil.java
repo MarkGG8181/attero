@@ -7,6 +7,7 @@ import fag.ware.client.util.interfaces.IMinecraft;
 import fag.ware.client.util.math.FastNoiseLite;
 import fag.ware.client.util.math.MathUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -241,5 +242,22 @@ public class RotationUtil implements IMinecraft {
         pitch = MathUtil.wrap(lastRotations[1], pitch, 20);
 
         return new float[]{yaw, pitch};
+    }
+
+    public static float clampBodyYaw(LivingEntity entity, float degrees, float tickProgress) {
+        Entity var4 = entity.getVehicle();
+        if (var4 instanceof LivingEntity livingEntity) {
+            float f = MathHelper.lerpAngleDegrees(tickProgress, livingEntity.lastBodyYaw, livingEntity.bodyYaw);
+            float g = 85.0F;
+            float h = MathHelper.clamp(MathHelper.wrapDegrees(degrees - f), -85.0F, 85.0F);
+            f = degrees - h;
+            if (Math.abs(h) > 50.0F) {
+                f += h * 0.2F;
+            }
+
+            return f;
+        } else {
+            return MathHelper.lerpAngleDegrees(tickProgress, entity.lastBodyYaw, entity.bodyYaw);
+        }
     }
 }

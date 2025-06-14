@@ -2,7 +2,6 @@ package fag.ware.client.module.impl.combat;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.game.TickEvent;
-import fag.ware.client.mixin.MinecraftClientAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -43,7 +42,7 @@ public class TriggerBotModule extends AbstractModule {
         if (!delay()) return;
 
         if (isValidTarget(target)) {
-            click();
+            mc.doAttack();
         }
     }
 

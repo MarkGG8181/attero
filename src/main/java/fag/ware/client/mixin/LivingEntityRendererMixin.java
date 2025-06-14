@@ -2,6 +2,7 @@ package fag.ware.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import fag.ware.client.tracker.impl.CombatTracker;
+import fag.ware.client.util.game.RotationUtil;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -11,8 +12,6 @@ import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.Objects;
-
 import static fag.ware.client.util.interfaces.IMinecraft.mc;
 
 /**
@@ -20,23 +19,14 @@ import static fag.ware.client.util.interfaces.IMinecraft.mc;
  * fixed rots being only locked to a target and body yaw - mark
  */
 @Mixin(LivingEntityRenderer.class)
-public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<? super S>> {
-
+public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderState, M extends EntityModel<? super S>> {
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;clampBodyYaw(Lnet/minecraft/entity/LivingEntity;FF)F"))
     private float changeBodyYaw(final float original, final LivingEntity living, final S state, final float tickDelta) {
         if (living != mc.player || mc.currentScreen instanceof InventoryScreen)
             return original;
 
-        float headYaw = MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
-        float bodyYawPrev = MathHelper.lerpAngleDegrees(tickDelta, living.lastBodyYaw, living.bodyYaw);
-        float diff = MathHelper.wrapDegrees(headYaw - bodyYawPrev);
-        float clamped = MathHelper.clamp(diff, -85.0F, 85.0F);
-        float result = headYaw - clamped;
-
-        if (Math.abs(clamped) > 50.0F)
-            result += clamped * 0.2F;
-
-        return result;
+        final float lerpedBodyYaw = MathHelper.lerpAngleDegrees(tickDelta, living.lastHeadYaw, living.headYaw);
+        return LivingEntityRenderer.clampBodyYaw(living, lerpedBodyYaw, tickDelta);
     }
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerpAngleDegrees(FFF)F"))

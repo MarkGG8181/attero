@@ -99,7 +99,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         if (cachedSprintEvent.isCancelled()) {
             cachedMoveForward = this.input.getMovementInput().y;
             final float x = this.input.getMovementInput().x;
-            ((InputAccessor) this.input).setMovementVector(new Vec2f(x, 0));
+            this.input.movementVector = new Vec2f(x, 0);
         }
     }
 
@@ -107,7 +107,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     private void tickMovementHook2(CallbackInfo ci) {
         if (cachedSprintEvent != null && cachedSprintEvent.isCancelled()) {
             final float x = this.input.getMovementInput().x;
-            ((InputAccessor) this.input).setMovementVector(new Vec2f(x, cachedMoveForward));
+            this.input.movementVector = new Vec2f(x, cachedMoveForward);
         }
     }
 

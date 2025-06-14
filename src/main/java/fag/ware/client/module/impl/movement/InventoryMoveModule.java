@@ -2,7 +2,6 @@ package fag.ware.client.module.impl.movement;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.player.UpdateEvent;
-import fag.ware.client.mixin.KeyBindingAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -41,9 +40,8 @@ public class InventoryMoveModule extends AbstractModule {
             for (var entry : KEY_BIND_NAMES.entrySet()) {
                 if (allowed.contains(entry.getValue())) {
                     KeyBinding keyBind = entry.getKey();
-                    KeyBindingAccessor accessor = (KeyBindingAccessor) keyBind;
 
-                    var isPressed = GLFWUtil.isKeyDown(accessor.getBoundKey().getCode());
+                    var isPressed = GLFWUtil.isKeyDown(keyBind.boundKey.getCode());
 
                     keyBind.setPressed(isPressed);
                 }

@@ -1,6 +1,5 @@
 package fag.ware.client.util.interfaces;
 
-import fag.ware.client.mixin.MinecraftClientAccessor;
 import fag.ware.client.util.math.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
@@ -54,11 +53,6 @@ public interface IMinecraft {
         if (counter instanceof ITimerAccessor accessor) {
             accessor.setTimerSpeed(speed);
         }
-    }
-
-    default void click() {
-        MinecraftClientAccessor accessor = (MinecraftClientAccessor) mc;
-        accessor.invokeDoAttack();
     }
 
     default void sendPacket(Packet<?> packet) {

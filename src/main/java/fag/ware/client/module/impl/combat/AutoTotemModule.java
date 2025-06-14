@@ -2,7 +2,6 @@ package fag.ware.client.module.impl.combat;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.game.TickEvent;
-import fag.ware.client.mixin.HandledScreenAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -35,7 +34,7 @@ public class AutoTotemModule extends AbstractModule {
     private void handleTotem() {
         if (!(mc.currentScreen instanceof InventoryScreen inv)) return;
 
-        var hoveredSlot = ((HandledScreenAccessor) inv).getFocusedSlot();
+        var hoveredSlot = inv.focusedSlot;
         if (hoveredSlot == null) return;
 
         var hoveredStack = hoveredSlot.getStack();

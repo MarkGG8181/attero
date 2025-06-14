@@ -2,7 +2,6 @@ package fag.ware.client.module.impl.player;
 
 import fag.ware.client.event.data.Subscribe;
 import fag.ware.client.event.impl.player.MotionEvent;
-import fag.ware.client.mixin.MinecraftClientAccessor;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.ModuleCategory;
 import fag.ware.client.module.data.ModuleInfo;
@@ -44,7 +43,7 @@ public class NoFallModule extends AbstractModule {
                     InventoryUtil.switchToSlot(Items.WATER_BUCKET);
                     var prevPitch = mc.player.getPitch();
                     mc.player.setPitch(90.0F);
-                    ((MinecraftClientAccessor) mc).invokeDoItemUse();
+                    mc.doItemUse();
                     mc.player.setPitch(prevPitch);
                 }
             }
