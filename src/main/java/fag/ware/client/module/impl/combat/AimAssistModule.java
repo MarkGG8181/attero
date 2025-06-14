@@ -13,7 +13,6 @@ import fag.ware.client.util.game.InventoryUtil;
 import fag.ware.client.util.game.RotationUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
 
 @ModuleInfo(
         name = "AimAssist",
@@ -32,19 +31,17 @@ public class AimAssistModule extends AbstractModule {
     public void onRender(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
-        // Weapon check
-        ItemStack mainHandStack = mc.player.getMainHandStack();
-        if (onlyWeapon.getValue() && !(mainHandStack.getItem() instanceof AxeItem || InventoryUtil.isSword(mainHandStack)))
+        var mainHandStack = mc.player.getMainHandStack();
+        if (onlyWeapon.getValue() && !(mainHandStack.getItem() instanceof AxeItem || InventoryUtil.isSword(mainHandStack))) {
             return;
+        }
 
-        // Get the target from CombatTracker
         target = CombatTracker.getInstance().target;
 
         if (target != null
                 && CombatTracker.isWithinRange(target, distance.getValue().floatValue())) {
-              //  && CombatTracker.getFovToEntity(target) <= fov.getValue().doubleValue()) {
 
-            float[] rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
+            var rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
             mc.player.setPitch(rots[1]);
             mc.player.setYaw(rots[0]);
         }

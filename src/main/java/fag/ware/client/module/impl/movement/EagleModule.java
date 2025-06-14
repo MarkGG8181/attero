@@ -25,11 +25,11 @@ public class EagleModule extends AbstractModule {
             return;
         }
 
-        double x = mc.player.getX();
-        double y = mc.player.getY() - 0.1;
-        double z = mc.player.getZ();
+        var x = mc.player.getX();
+        var y = mc.player.getY() - 0.1;
+        var z = mc.player.getZ();
 
-        boolean onEdge = false;
+        var onEdge = false;
 
         double[][] offsets = {
                 { 0.3, 0.3 },
@@ -38,10 +38,10 @@ public class EagleModule extends AbstractModule {
                 { -0.3, -0.3 }
         };
 
-        for (double[] offset : offsets) {
-            int blockX = (int) Math.floor(x + offset[0]);
-            int blockY = (int) Math.floor(y);
-            int blockZ = (int) Math.floor(z + offset[1]);
+        for (var offset : offsets) {
+            var blockX = (int) Math.floor(x + offset[0]);
+            var blockY = (int) Math.floor(y);
+            var blockZ = (int) Math.floor(z + offset[1]);
 
             BlockPos pos = new BlockPos(blockX, blockY, blockZ);
             if (mc.world.getBlockState(pos).getBlock() == Blocks.AIR) {
@@ -50,11 +50,11 @@ public class EagleModule extends AbstractModule {
             }
         }
 
-        if (timer.hasElapsed(delay.toInt(), true))
+        if (timer.hasElapsed(delay.toInt(), true)) {
             mc.options.sneakKey.setPressed(onEdge);
+        }
     }
 
-    @Override
     public void onDisable() {
         mc.options.sneakKey.setPressed(false);
         timer.reset();

@@ -13,16 +13,11 @@ import net.minecraft.util.hit.HitResult;
 
 @ModuleInfo(name = "MidClickFriend", description = "Middle click to add/remove a friend", category = ModuleCategory.MISC)
 public class MidClickFriendModule extends AbstractModule {
-    @Override
-    public void onEnable() {
-        ModuleTracker.getInstance().getByName("MidClickPearl").setEnabled(false);
-    }
-
     @Subscribe
     public void onMidClick(MiddleClickEvent event) {
         if (mc.crosshairTarget instanceof EntityHitResult entityHitResult) {
             if (entityHitResult.getType().equals(HitResult.Type.ENTITY) && entityHitResult.getEntity() instanceof PlayerEntity plr) {
-                String name = plr.getName().getString();
+                var name = plr.getName().getString();
 
                 if (FriendTracker.getInstance().getSet().contains(name)) {
                     FriendTracker.getInstance().getSet().remove(name);
@@ -33,5 +28,9 @@ public class MidClickFriendModule extends AbstractModule {
                 }
             }
         }
+    }
+
+    public void onEnable() {
+        ModuleTracker.getInstance().getByName("MidClickPearl").setEnabled(false);
     }
 }

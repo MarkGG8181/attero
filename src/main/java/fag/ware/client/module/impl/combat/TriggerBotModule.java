@@ -14,14 +14,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Tameable;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
 import org.lwjgl.glfw.GLFW;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Optional;
 
-/// Horrid Code - graph
+// Horrid Code - graph
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "TriggerBot", category = ModuleCategory.COMBAT, description = "Attacks enemies if you're looking at them")
 public class TriggerBotModule extends AbstractModule {
@@ -35,38 +34,41 @@ public class TriggerBotModule extends AbstractModule {
         if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking())
             return;
 
-        Entity target = mc.targetedEntity;
+        var target = mc.targetedEntity;
         if (target == null || !mc.player.canSee(target)) return;
 
-        Item item = mc.player.getMainHandStack().getItem();
+        var item = mc.player.getMainHandStack().getItem();
         if (item.getComponents().contains(DataComponentTypes.FOOD) && GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) return;
 
         if (!delay()) return;
 
-        if (isValidTarget(target))
-            attack(target);
+        if (isValidTarget(target)) {
+            click();
+        }
     }
 
     private boolean delay() {
-        Item item = mc.player.getMainHandStack().getItem();
-        float min, max;
+        var item = mc.player.getMainHandStack().getItem();
+        var speed = new float[2];
 
         if (item instanceof AxeItem) {
-            min = axeMS.getMinAsFloat();
-            max = axeMS.getMaxAsFloat();
+            speed[0] = axeMS.getMinAsFloat();
+            speed[1] = axeMS.getMaxAsFloat();
         } else {
-            min = swordMs.getMinAsFloat();
-            max = swordMs.getMaxAsFloat();
+            speed[0] = swordMs.getMinAsFloat();
+            speed[1] = swordMs.getMaxAsFloat();
         }
 
         try {
             if (swordMs.getAbsoluteMax() == swordMs.getAbsoluteMin()) {
                 return timer.hasElapsed(swordMs.getAbsoluteMax().longValue());
             }
+
             if (axeMS.getAbsoluteMax() == axeMS.getAbsoluteMin()) {
                 return timer.hasElapsed(axeMS.getAbsoluteMax().longValue());
             }
-            ms = SecureRandom.getInstanceStrong().nextFloat(min, max);
+
+            ms = SecureRandom.getInstanceStrong().nextFloat(speed[0], speed[1]);
             return timer.hasElapsed((long) ms, true);
         } catch (NoSuchAlgorithmException e) {
             return false;
@@ -82,12 +84,6 @@ public class TriggerBotModule extends AbstractModule {
         return !(e instanceof AnimalEntity a && a.isBaby());
     }
 
-    private void attack(Entity target) {
-        MinecraftClientAccessor accessor = (MinecraftClientAccessor) mc;
-        accessor.invokeDoAttack();
-    }
-
-    @Override
     public void onEnable() {
         timer.reset();
     }

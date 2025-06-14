@@ -16,7 +16,6 @@ import net.minecraft.entity.decoration.EndCrystalEntity;
 
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "CrystalAura", description = "Attacks nearby crystals", category = ModuleCategory.WORLD)
@@ -38,13 +37,13 @@ public class CrystalAuraModule extends AbstractModule {
         if (mc.player == null || mc.world == null) return;
 
         if (target != null) {
-            boolean foundNearbyEntity = nearbyEntityCheck.getValue() ? mc.world.getEntitiesByClass(
+            var foundNearbyEntity = nearbyEntityCheck.getValue() ? mc.world.getEntitiesByClass(
                     net.minecraft.entity.Entity.class,
                     target.getBoundingBox().expand(3.0),
                     e -> e != mc.player && !(e instanceof EndCrystalEntity)
             ).size() > 0 : true;
 
-            boolean stillValid = target.isAlive()
+            var stillValid = target.isAlive()
                     && CombatTracker.isWithinRange(target, aimRange.toDouble())
                     && foundNearbyEntity
                     && mc.player.getBlockPos().equals(target.getBlockPos().down(1));
@@ -56,9 +55,9 @@ public class CrystalAuraModule extends AbstractModule {
         }
 
         if (target == null) {
-            double range = searchRange.toDouble();
+            var range = searchRange.toDouble();
 
-            List<EndCrystalEntity> entitiesToConsider = mc.world.getEntitiesByClass(
+            var entitiesToConsider = mc.world.getEntitiesByClass(
                     EndCrystalEntity.class,
                     mc.player.getBoundingBox().expand(range),
                     entity -> {
@@ -84,7 +83,7 @@ public class CrystalAuraModule extends AbstractModule {
             targets.clear();
             targets.addAll(entitiesToConsider);
 
-            EndCrystalEntity localTarget = targets.stream().findFirst().orElse(null);
+            var localTarget = targets.stream().findFirst().orElse(null);
             if (localTarget != null && CombatTracker.isWithinRange(localTarget, aimRange.toDouble())) {
                 target = localTarget;
             }
@@ -93,10 +92,9 @@ public class CrystalAuraModule extends AbstractModule {
 
     @Subscribe(priority = 10)
     public void onMotion(MotionEvent event) {
-        if (target != null &&
-                (raycast.getValue() && mc.player.canSee(target))) {
+        if (target != null && (raycast.getValue() && mc.player.canSee(target))) {
 
-            float[] rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
+            var rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
 
             event.setYaw(rots[0]);
             event.setPitch(rots[1]);

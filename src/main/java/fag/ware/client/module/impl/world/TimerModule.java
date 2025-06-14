@@ -13,11 +13,10 @@ public class TimerModule extends AbstractModule {
     private final NumberSetting gameSpeed = new NumberSetting("Game speed", 1.0, 0.1, 4);
 
     @Subscribe
-    public void onUpdate(UpdateEvent event) {
+    public void onUpdate(UpdateEvent ignoredEvent) {
         setTimer(gameSpeed.toFloat());
     }
 
-    @Override
     public void onDisable() {
         setTimer(1.0f);
     }

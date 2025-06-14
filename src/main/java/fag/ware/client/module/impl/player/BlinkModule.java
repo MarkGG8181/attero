@@ -33,13 +33,11 @@ public class BlinkModule extends AbstractModule {
         }
     }
 
-    @Override
     public void onEnable() {
         outPacketDeque.clear();
         active = true;
     }
 
-    @Override
     public void onDisable() {
         active = false;
         releasePackets();

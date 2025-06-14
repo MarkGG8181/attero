@@ -19,7 +19,6 @@ public class LongJumpModule extends AbstractModule {
     private float sigmaNcpAir;
     private int sigmaNcpGroundTicks;
 
-    @Override
     public void onEnable() {
         sigmaNcpAir = 0;
         sigmaNcpStage = 0;
@@ -28,9 +27,9 @@ public class LongJumpModule extends AbstractModule {
     @Subscribe
     public void onUpdate(UpdateEvent event) {
         if (mode.is("NCP")) {
-            float speedAmpl = MovementUtil.getSpeedAmplifier2();
+            var speedAmpl = MovementUtil.getSpeedAmplifier2();
+            var speedEffect = 1f + speedAmpl * 0.45f;
 
-            float speedEffect = 1f + speedAmpl * 0.45f;
             if (mc.player.isOnGround()) {
                 if (MovementUtil.isMoving()) {
                     if (sigmaNcpGroundTicks > 0) {
@@ -47,7 +46,7 @@ public class LongJumpModule extends AbstractModule {
                 sigmaNcpAir = 0;
             }
 
-            double speed = (0.8f + speedAmpl * 0.2f) - sigmaNcpAir / 25;
+            var speed = (0.8f + speedAmpl * 0.2f) - sigmaNcpAir / 25;
 
             MovementUtil.setSpeed(speed);
             MovementUtil.setMotionY(getMotion(sigmaNcpStage));

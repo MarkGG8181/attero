@@ -13,7 +13,6 @@ public class SprintModule extends AbstractModule {
         mc.options.sprintKey.setPressed(true);
     }
 
-    @Override
     public void onDisable() {
         mc.options.sprintKey.setPressed(false);
     }

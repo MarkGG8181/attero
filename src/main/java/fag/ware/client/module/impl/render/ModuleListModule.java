@@ -21,8 +21,8 @@ import imgui.*;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 
+@SuppressWarnings("ALL")
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
@@ -43,19 +43,14 @@ public class ModuleListModule extends AbstractModule {
 
     public ModuleListModule() {
         font.onChange(set -> {
-            ImFont font = ImGuiFontManager.getFont(set, fontSize.toInt());
+            var font = ImGuiFontManager.getFont(set, fontSize.toInt());
             if (font != null) currentFont = font;
         });
 
         fontSize.onChange(set -> {
-            ImFont font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
+            var font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
             if (font != null) currentFont = font;
         });
-    }
-
-    @Override
-    public void onInit() {
-        this.setEnabled(true);
     }
 
     @Subscribe
@@ -64,10 +59,10 @@ public class ModuleListModule extends AbstractModule {
             return;
         }
 
-        final boolean shouldAnimate = animate.toBoolean();
+        final var shouldAnimate = animate.toBoolean();
 
-        final List<AbstractModule> modules = new LinkedList<>();
-        for (final AbstractModule module : ModuleTracker.getInstance().toList()) {
+        final var modules = new LinkedList<AbstractModule>();
+        for (final var module : ModuleTracker.getInstance().toList()) {
             if (module.isEnabled()) {
                 modules.add(module);
                 module.getX().update(100);
@@ -89,39 +84,39 @@ public class ModuleListModule extends AbstractModule {
                 }
 
                 ImGui.pushFont(currentFont);
-                ImDrawList drawList = ImGui.getForegroundDrawList();
+                var drawList = ImGui.getForegroundDrawList();
 
                 modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(getFormattedModuleName(module)).x));
 
-                float alignment = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
+                var alignment = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
                     module.getY().update(alignment);
 
-                    final float y = shouldAnimate ? module.getY().getValue() : alignment;
+                    final var y = shouldAnimate ? module.getY().getValue() : alignment;
                     if (module == null) continue;
 
-                    String baseName = module.getInfo().name();
-                    String thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
-                    String thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
-                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? thing1 + module.getSuffix() + thing2 : null;
+                    var baseName = module.getInfo().name();
+                    var thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
+                    var thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
+                    var suffix = (suffixes.getValue() && module.getSuffix() != null) ? thing1 + module.getSuffix() + thing2 : null;
 
-                    ImVec2 baseSize = ImGui.calcTextSize(baseName);
-                    ImVec2 suffixSize = suffix != null ? ImGui.calcTextSize(suffixChar.getValue() + suffix) : new ImVec2(0, 0);
+                    var baseSize = ImGui.calcTextSize(baseName);
+                    var suffixSize = suffix != null ? ImGui.calcTextSize(suffixChar.getValue() + suffix) : new ImVec2(0, 0);
 
-                    float textWidth = baseSize.x + suffixSize.x + (suffixes.getValue() ? 1 : 0);
-                    float progressiveWidth = textWidth + 10;
+                    var textWidth = baseSize.x + suffixSize.x + (suffixes.getValue() ? 1 : 0);
+                    var progressiveWidth = textWidth + 10;
 
                     if (shouldAnimate) {
                         progressiveWidth *= module.getX().getValue() / 100;
                     }
 
-                    float x = io.getDisplaySizeX() - progressiveWidth - xOffset.toFloat() + 10;
+                    var x = io.getDisplaySizeX() - progressiveWidth - xOffset.toFloat() + 10;
 
                     if (background.getValue()) {
                         drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
                     }
 
-                    float centeredY = y + ((ImGui.getFontSize() - ImGui.calcTextSize("A").y) / 2.0f);
+                    var centeredY = y + ((ImGui.getFontSize() - ImGui.calcTextSize("A").y) / 2.0f);
 
                     if (fontShadow.getValue()) {
                         drawList.addText(x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), baseName);
@@ -136,7 +131,7 @@ public class ModuleListModule extends AbstractModule {
                     }
 
                     if (module.isEnabled()) {
-                        float lineHeight = ImGui.calcTextSize("M").y;
+                        var lineHeight = ImGui.calcTextSize("M").y;
                         alignment += lineHeight + 2;
                     }
                 }
@@ -146,26 +141,26 @@ public class ModuleListModule extends AbstractModule {
             case "Minecraft" -> {
                 modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(getFormattedModuleName(module))));
 
-                float y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
+                var y = yOffset.toFloat() + (!EntityUtil.hasVisiblePotionEffects(mc.player) ? 0 : 54);
                 for (AbstractModule module : modules) {
-                    String baseName = module.getInfo().name();
-                    String thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
-                    String thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
-                    String suffix = (suffixes.getValue() && module.getSuffix() != null) ? thing1 + module.getSuffix() + thing2 : null;
+                    var baseName = module.getInfo().name();
+                    var thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
+                    var thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
+                    var suffix = (suffixes.getValue() && module.getSuffix() != null) ? thing1 + module.getSuffix() + thing2 : null;
 
-                    int baseWidth = mc.textRenderer.getWidth(baseName);
-                    int dashWidth = mc.textRenderer.getWidth(suffixChar.getValue());
-                    int suffixWidth = suffix != null ? mc.textRenderer.getWidth(suffix) : 0;
+                    var baseWidth = mc.textRenderer.getWidth(baseName);
+                    var dashWidth = mc.textRenderer.getWidth(suffixChar.getValue());
+                    var suffixWidth = suffix != null ? mc.textRenderer.getWidth(suffix) : 0;
 
-                    int totalWidth = baseWidth + (suffix != null ? dashWidth + suffixWidth : 0);
+                    var totalWidth = baseWidth + (suffix != null ? dashWidth + suffixWidth : 0);
 
-                    float x = event.getDrawContext().getScaledWindowWidth() - totalWidth - xOffset.toInt();
+                    var x = event.getDrawContext().getScaledWindowWidth() - totalWidth - xOffset.toInt();
 
                     if (background.getValue()) {
                         event.getDrawContext().fill(
-                                (int) (x - 2),
+                                x - 2,
                                 (int) (y - 1),
-                                (int) (x + totalWidth + 1),
+                                x + totalWidth + 1,
                                 (int) (y + mc.textRenderer.fontHeight),
                                 new Color(0, 0, 0, 150).getRGB()
                         );
@@ -173,8 +168,8 @@ public class ModuleListModule extends AbstractModule {
                     event.getDrawContext().drawText(mc.textRenderer, baseName, (int) x, (int) (y + 0.5f), textColor.toInt(), fontShadow.getValue());
 
                     if (suffix != null) {
-                        int dashX = (int) (x + baseWidth);
-                        int suffixX = dashX + dashWidth;
+                        var dashX = x + baseWidth;
+                        var suffixX = dashX + dashWidth;
 
                         event.getDrawContext().drawText(mc.textRenderer, suffixChar.getValue(), dashX, (int) y, new Color(200, 200, 200).getRGB(), fontShadow.getValue());
 
@@ -188,16 +183,20 @@ public class ModuleListModule extends AbstractModule {
     }
 
     private String getFormattedModuleName(AbstractModule module) {
-        String modName = module.getInfo().name();
+        var modName = module.getInfo().name();
 
-        String thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
-        String thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
+        var thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
+        var thing2 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(1));
 
         if (suffixes.getValue() && module.getSuffix() != null) {
             modName += suffixChar.getValue() + thing1 + module.getSuffix() + thing2;
         }
 
         return modName;
+    }
+
+    public void onInit() {
+        this.setEnabled(true);
     }
 
     @Override

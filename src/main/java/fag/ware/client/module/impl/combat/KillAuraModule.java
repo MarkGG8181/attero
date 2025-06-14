@@ -47,10 +47,10 @@ public class KillAuraModule extends AbstractModule {
         if (CombatTracker.getInstance().target != null &&
                 (raycast.getValue() && mc.player.canSee(CombatTracker.getInstance().target))) {
 
-            float minSpeed = speed.getMinAsFloat();
-            float maxSpeed = speed.getMaxAsFloat();
+            var minSpeed = speed.getMinAsFloat();
+            var maxSpeed = speed.getMaxAsFloat();
 
-            float[] rots = RotationUtil.toRotation(
+            var rots = RotationUtil.toRotation(
                     CombatTracker.getInstance().target,
                     minSpeed,
                     maxSpeed
@@ -81,14 +81,12 @@ public class KillAuraModule extends AbstractModule {
         }
     }
 
-    @Override
     public void onDisable() {
         CombatTracker.getInstance().target = null;
         attackTimer.reset();
         mc.options.attackKey.setPressed(false);
     }
 
-    @Override
     public void onInit() {
         getKeybinds().add((int) 'R');
     }

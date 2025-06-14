@@ -40,12 +40,13 @@ public class JesusModule extends AbstractModule {
         if (event.isPre()) {
             switch (mode.getValue()) {
                 case "Verus" -> {
-                    BlockPos playerBlockPos = mc.player.getBlockPos();
-                    BlockPos waterBlockPos = new BlockPos(playerBlockPos.getX(), playerBlockPos.getY() - 1, playerBlockPos.getZ());
+                    var playerBlockPos = mc.player.getBlockPos();
+                    var waterBlockPos = new BlockPos(playerBlockPos.getX(), playerBlockPos.getY() - 1, playerBlockPos.getZ());
 
                     if (mc.player.isTouchingWater() || mc.world.getBlockState(waterBlockPos).isLiquid()) {
                         water = true;
                         mc.player.setVelocity(mc.player.getVelocity().x, 0.0d, mc.player.getVelocity().z);
+
                         if (MovementUtil.isMoving()) {
                             MovementUtil.setSpeed(boost.getValue() ? 2 : 0.5);
                         } else {

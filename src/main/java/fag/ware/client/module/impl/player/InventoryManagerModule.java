@@ -38,13 +38,6 @@ public class InventoryManagerModule extends AbstractModule {
     private final List<Integer> armorQueue = new ArrayList<>();
     private final Timer timer = new Timer();
 
-    @Override
-    public void onEnable() {
-        trashSlotQueue.clear();
-        armorQueue.clear();
-        timer.reset();
-    }
-
     @Subscribe
     public void onTick(TickEvent event) {
         if (mc.player == null) {
@@ -123,7 +116,7 @@ public class InventoryManagerModule extends AbstractModule {
             if (!stack.isEmpty() && InventoryUtil.isArmor(stack)) {
                 var armorItem = new InventoryUtil.ArmorItem(stack, i);
 
-                boolean best = armorQueue.contains(i);
+                var best = armorQueue.contains(i);
                 if (armorItem.isEquipped()) {
                     if (!best) {
                         throwStack(handler.syncId, i); //drop worse
@@ -175,10 +168,10 @@ public class InventoryManagerModule extends AbstractModule {
     /*
     private void dropTrashItemsHotbar() {
         var inv = mc.player.getInventory();
-        int current = inv.getSelectedSlot();
+        var current = inv.getSelectedSlot();
 
         if (trashSlotQueue.isEmpty()) {
-            for (int i = 0; i < inv.getHotbarSize(); i++) {
+            for (var i = 0; i < inv.getHotbarSize(); i++) {
                 var stack = inv.getStack(i);
 
                 if (!stack.isEmpty()) {
@@ -191,7 +184,7 @@ public class InventoryManagerModule extends AbstractModule {
         }
 
         if (!trashSlotQueue.isEmpty()) {
-            int trash = trashSlotQueue.removeFirst();
+            var trash = trashSlotQueue.removeFirst();
 
             inv.setSelectedSlot(trash);
             sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ITEM, mc.player.getBlockPos(), mc.player.getFacing()));
@@ -203,4 +196,10 @@ public class InventoryManagerModule extends AbstractModule {
         }
     }
      */
+
+    public void onEnable() {
+        trashSlotQueue.clear();
+        armorQueue.clear();
+        timer.reset();
+    }
 }

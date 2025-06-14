@@ -13,13 +13,13 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.glfw.GLFW;
 
 /**
  * @author Graph
  */
-// TODO: MAKE THIS LESS LOW QUALITY, ADD SETTINGS.
+// TODO: MAKE THIS BETTER QUALITY, ADD MORE SETTINGS.
+@SuppressWarnings("ALL")
 @ModuleInfo(name = "AutoCrystal", description = "Places and breaks crystals hold RMB", category = ModuleCategory.COMBAT)
 public class AutoCrystalModule extends AbstractModule {
     private final NumberSetting breakDelay = new NumberSetting("Break delay", 250, 0, 750);
@@ -28,14 +28,15 @@ public class AutoCrystalModule extends AbstractModule {
     private final Timer placeDelayTimer = new Timer();
 
     @Subscribe
-    public void onTick(TickEvent event) {
+    public void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || mc.player.isUsingItem()) return;
 
-        if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS)
+        if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) {
             return;
+        }
 
         if (mc.crosshairTarget instanceof BlockHitResult hit) {
-            BlockPos pos = hit.getBlockPos();
+            var pos = hit.getBlockPos();
             if (mc.world.getBlockState(pos).isOf(Blocks.OBSIDIAN) || mc.world.getBlockState(pos).isOf(Blocks.BEDROCK)) {
                 if (mc.player.getInventory().getSelectedStack().getItem() == Items.END_CRYSTAL && placeDelayTimer.hasElapsed(placeDelay.toInt(), true)) {
                     mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, hit);

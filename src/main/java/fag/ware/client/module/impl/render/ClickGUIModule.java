@@ -17,18 +17,16 @@ public class ClickGUIModule extends AbstractModule {
     public StringSetting theme = (StringSetting) new StringSetting("Theme", "Marine", "Marine", "Dark", "White").hide(() -> mode.getValue().equals("Jello"));
 
     @Subscribe
-    public void onTick(TickEvent event) {
+    public void onTick(TickEvent ignoredEvent) {
         if (isEnabled() && mc.currentScreen == null) {
             setEnabled(false);
         }
     }
 
-    @Override
     public void onInit() {
         getKeybinds().add(GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
-    @Override
     public void onDisable() {
         if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof PanelClickScreen) {
             mc.setScreen(null);

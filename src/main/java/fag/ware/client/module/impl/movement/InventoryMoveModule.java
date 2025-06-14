@@ -36,13 +36,15 @@ public class InventoryMoveModule extends AbstractModule {
     @Subscribe
     public void onUpdate(UpdateEvent event) {
         if (mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
-            Set<String> allowed = new HashSet<>(Arrays.asList(keys.getValue()));
+            var allowed = new HashSet<>(Arrays.asList(keys.getValue()));
 
-            for (Map.Entry<KeyBinding, String> entry : KEY_BIND_NAMES.entrySet()) {
+            for (var entry : KEY_BIND_NAMES.entrySet()) {
                 if (allowed.contains(entry.getValue())) {
                     KeyBinding keyBind = entry.getKey();
                     KeyBindingAccessor accessor = (KeyBindingAccessor) keyBind;
-                    boolean isPressed = GLFWUtil.isKeyDown(accessor.getBoundKey().getCode());
+
+                    var isPressed = GLFWUtil.isKeyDown(accessor.getBoundKey().getCode());
+
                     keyBind.setPressed(isPressed);
                 }
             }

@@ -33,14 +33,16 @@ public class NoFallModule extends AbstractModule {
                     }
                     mc.player.fallDistance = 0;
                 }
+
                 case "Verus" -> {
                     mc.player.setOnGround(true);
                     MovementUtil.setMotionY(0.0);
                     mc.player.fallDistance = 0;
                 }
+
                 case "MLG" -> {
                     InventoryUtil.switchToSlot(Items.WATER_BUCKET);
-                    float prevPitch = mc.player.getPitch();
+                    var prevPitch = mc.player.getPitch();
                     mc.player.setPitch(90.0F);
                     ((MinecraftClientAccessor) mc).invokeDoItemUse();
                     mc.player.setPitch(prevPitch);

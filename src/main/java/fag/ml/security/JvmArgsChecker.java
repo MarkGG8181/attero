@@ -21,7 +21,7 @@ public class JvmArgsChecker {
         List<String> args = ManagementFactory.getRuntimeMXBean().getInputArguments();
         for (String arg : args) {
             if (BLOCKED_ARGS.stream().anyMatch(arg::contains)) {
-                while (true);
+                //while (true);
             }
         }
     }

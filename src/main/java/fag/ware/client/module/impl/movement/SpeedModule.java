@@ -31,7 +31,7 @@ public class SpeedModule extends AbstractModule {
         } else {
             switch (mode.getValue()) {
                 case "NCP Y-Port" -> {
-                    double speedAmplifier = MovementUtil.getSpeedAmplifier();
+                    var speedAmplifier = MovementUtil.getSpeedAmplifier();
 
                     MovementUtil.strafe();
 
@@ -41,11 +41,11 @@ public class SpeedModule extends AbstractModule {
                             0.0045 + 1 + speedAmplifier * 0.02f
                     );
 
-                    boolean pushDown = true;
+                    var pushDown = true;
 
                     if (mc.player.isOnGround()
                             && MovementUtil.isMoving()) {
-                        float boost = (float) (speedAmplifier * 0.065f);
+                        var boost = (float) (speedAmplifier * 0.065f);
                         mc.player.jump();
                         if (!pushDown) return;
                         setTimer(1.405f);
@@ -68,7 +68,6 @@ public class SpeedModule extends AbstractModule {
         }
     }
 
-    @Override
     public void onDisable() {
         mc.options.jumpKey.setPressed(false);
         mc.options.sprintKey.setPressed(false);

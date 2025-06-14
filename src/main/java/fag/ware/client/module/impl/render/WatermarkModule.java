@@ -15,10 +15,8 @@ import fag.ware.client.screen.PanelClickScreen;
 import fag.ware.client.screen.data.ImGuiFontManager;
 import fag.ware.client.screen.data.ImGuiImpl;
 import fag.ware.client.util.math.ColorUtil;
-import imgui.ImDrawList;
 import imgui.ImFont;
 import imgui.ImGui;
-import imgui.ImVec2;
 
 import java.awt.*;
 
@@ -34,12 +32,12 @@ public class WatermarkModule extends AbstractModule {
 
     public WatermarkModule() {
         font.onChange(set -> {
-            ImFont font = ImGuiFontManager.getFont(set, fontSize.toInt());
+            var font = ImGuiFontManager.getFont(set, fontSize.toInt());
             if (font != null) currentFont = font;
         });
 
         fontSize.onChange(set -> {
-            ImFont font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
+            var font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
             if (font != null) currentFont = font;
         });
     }
@@ -56,24 +54,26 @@ public class WatermarkModule extends AbstractModule {
                     currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
                     if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
                 }
+
                 ImGui.pushFont(currentFont);
-                ImDrawList drawList = ImGui.getForegroundDrawList();
-                String username = hideName.getValue() ? "Player" : mc.getSession().getUsername();
-                String watermarkText = "Fagware";
-                String userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
+                var drawList = ImGui.getForegroundDrawList();
 
-                ImVec2 watermarkTextSize = ImGui.calcTextSize(watermarkText);
-                ImVec2 userInfoTextSize = ImGui.calcTextSize(userInfoText);
+                var username = hideName.getValue() ? "Player" : mc.getSession().getUsername();
+                var watermarkText = "Fagware";
+                var userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
 
-                float x = 10;
-                float y = 10;
+                var watermarkTextSize = ImGui.calcTextSize(watermarkText);
+                var userInfoTextSize = ImGui.calcTextSize(userInfoText);
 
-                float width = watermarkTextSize.x + userInfoTextSize.x + 25;
-                float height = 30;
+                var x = 10;
+                var y = 10;
+
+                var width = watermarkTextSize.x + userInfoTextSize.x + 25;
+                var height = 30;
 
                 drawList.addRectFilled(x, y, x + width, y + height, ColorUtil.toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
 
-                float textY = y + (height - ImGui.calcTextSize("A").y) / 2.0f;
+                var textY = y + (height - ImGui.calcTextSize("A").y) / 2.0f;
 
                 drawList.addText(x + 10, textY, color.toImGuiColor(), watermarkText.substring(0, 3));
                 drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, textY, ColorUtil.toImGuiColor(Color.WHITE), watermarkText.substring(3));
@@ -81,6 +81,7 @@ public class WatermarkModule extends AbstractModule {
 
                 ImGui.popFont();
             });
+
             case "Minecraft" -> {
                 event.getDrawContext().drawText(mc.textRenderer, "fag", 5, 5, color.getValue().getRGB(), false);
                 event.getDrawContext().drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("fag"), 5, -1, false);
@@ -88,7 +89,6 @@ public class WatermarkModule extends AbstractModule {
         }
     }
 
-    @Override
     public void onInit() {
         setEnabled(true);
     }

@@ -27,7 +27,7 @@ public class ESPModule extends AbstractModule {
     @Subscribe
     public void hasOutline(HasOutlineEvent event) {
         if (event.getEntity() != null) {
-            String entityName = EntityType.getId(event.getEntity().getType()).getPath();
+            var entityName = EntityType.getId(event.getEntity().getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
                 event.setCancelled(true);
             }
@@ -37,7 +37,7 @@ public class ESPModule extends AbstractModule {
     @Subscribe
     public void renderEntitiesGlowColor(RenderEntitiesGlowColorEvent event) {
         if (event.getEntity() != null) {
-            String entityName = EntityType.getId(event.getEntity().getType()).getPath();
+            var entityName = EntityType.getId(event.getEntity().getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
                 event.setCancelled(true);
             }

@@ -149,7 +149,7 @@ public class NoRenderModule extends AbstractModule {
     @Subscribe
     public void onRenderEntity(RenderEntityEvent event) {
         if (event.getEntity() != null) {
-            String entityName = EntityType.getId(event.getEntity().getType()).getPath();
+            var entityName = EntityType.getId(event.getEntity().getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
                 event.setCancelled(true);
             }

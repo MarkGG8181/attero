@@ -12,6 +12,7 @@ import fag.ware.client.module.data.setting.impl.StringSetting;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 
+@SuppressWarnings("ALL")
 @ModuleInfo(name = "Velocity", category = ModuleCategory.COMBAT, description = "Decreases your knockback")
 public class VelocityModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Legit", "Legit", "Packet");
@@ -19,7 +20,7 @@ public class VelocityModule extends AbstractModule {
     private final NumberSetting horizontal = (NumberSetting) new NumberSetting("Horizontal", 1, 0, 1).hide(() -> !mode.is("Packet"));
     private final NumberSetting vertical = (NumberSetting) new NumberSetting("Vertical", 0, 0, 1).hide(() -> !mode.is("Packet"));
 
-    // Keeping track of legit velocity
+    //Keeping track of legit velocity
     private boolean jumped;
 
     @Subscribe
@@ -29,11 +30,11 @@ public class VelocityModule extends AbstractModule {
         switch (mode.getValue()) {
             case "Packet" -> {
                 if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket packet && packet.getEntityId() == mc.player.getId()) {
-                    IEntityVelocityPacketAccessor accessor = (IEntityVelocityPacketAccessor) packet;
+                    var accessor = (IEntityVelocityPacketAccessor) packet;
 
-                    int newX = (int) (packet.getVelocityX() * 8000.0 * horizontal.toDouble());
-                    int newY = (int) (packet.getVelocityY() * 8000.0 * vertical.toDouble());
-                    int newZ = (int) (packet.getVelocityZ() * 8000.0 * horizontal.toDouble());
+                    var newX = (int) (packet.getVelocityX() * 8000.0 * horizontal.toDouble());
+                    var newY = (int) (packet.getVelocityY() * 8000.0 * vertical.toDouble());
+                    var newZ = (int) (packet.getVelocityZ() * 8000.0 * horizontal.toDouble());
 
                     accessor.setVelocityX(newX);
                     accessor.setVelocityY(newY);
@@ -53,6 +54,7 @@ public class VelocityModule extends AbstractModule {
                     KeyBinding.setKeyPressed(mc.options.jumpKey.getDefaultKey(), true);
                     jumped = true;
                 }
+
                 if (jumped) {
                     KeyBinding.setKeyPressed(mc.options.jumpKey.getDefaultKey(), false);
                     jumped = false;
@@ -74,6 +76,7 @@ public class VelocityModule extends AbstractModule {
         if (mode.is("Packet")) {
             return horizontal.toInt() + "% " + vertical.toInt() + "%";
         }
+
         return mode.getValue();
     }
 }

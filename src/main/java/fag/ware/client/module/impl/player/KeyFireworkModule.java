@@ -9,18 +9,13 @@ import fag.ware.client.module.data.setting.impl.BooleanSetting;
 import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.util.game.InventoryUtil;
 import fag.ware.client.util.math.Timer;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 
-@ModuleInfo(
-        name = "KeyFirework",
-        description = "Switches to a firework on enable",
-        category = ModuleCategory.PLAYER
-)
+@SuppressWarnings("ALL")
+@ModuleInfo(name = "KeyFirework", description = "Switches to a firework on enable", category = ModuleCategory.PLAYER)
 public class KeyFireworkModule extends AbstractModule {
-
     private final NumberSetting delay = new NumberSetting("Delay", 250, 0, 1000);
     private final BooleanSetting switchBack = new BooleanSetting("Switch back", false);
     private final NumberSetting switchBackDelay = (NumberSetting) new NumberSetting("Switch back delay", 250, 0, 1000).hide(() -> !switchBack.getValue());
@@ -32,11 +27,9 @@ public class KeyFireworkModule extends AbstractModule {
 
     @Subscribe
     public void onTick(TickEvent event) {
-        if (mc.player == null || mc.world == null) {
-            return;
-        }
+        if (mc.player == null || mc.world == null) return;
 
-        boolean hasElytra = mc.player.getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA;
+        var hasElytra = mc.player.getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA;
         if (!hasElytra) {
             return;
         }
@@ -54,17 +47,15 @@ public class KeyFireworkModule extends AbstractModule {
 
         if (fired && switchBack.getValue() && switchBackTimer.hasElapsed(switchBackDelay.toInt(), true)) {
             mc.player.getInventory().setSelectedSlot(previousSlot);
-            this.toggle();
+            toggle();
         }
     }
 
-    @Override
     public void onEnable() {
         delayTimer.reset();
         fired = false;
     }
 
-    @Override
     public void onDisable() {
         delayTimer.reset();
         switchBackTimer.reset();

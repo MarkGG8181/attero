@@ -10,7 +10,6 @@ import fag.ware.client.module.data.setting.impl.NumberSetting;
 import fag.ware.client.tracker.impl.ModuleTracker;
 import fag.ware.client.util.game.InventoryUtil;
 import fag.ware.client.util.math.Timer;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 
@@ -28,9 +27,11 @@ public class MidClickPearlModule extends AbstractModule {
         if (mc.player == null || mc.world == null) return;
 
         if (delayTimer.hasElapsed(delay.toInt(), true)) {
-            int slot = mc.player.getInventory().getSelectedSlot();
+            var slot = mc.player.getInventory().getSelectedSlot();
+            var item = mc.player.getMainHandStack().getItem();
+
             InventoryUtil.switchToSlot(Items.ENDER_PEARL);
-            Item item = mc.player.getMainHandStack().getItem();
+
             if (item.equals(Items.ENDER_PEARL)) {
                 mc.interactionManager.interactItem(mc.player, Hand.MAIN_HAND);
             }
@@ -41,7 +42,6 @@ public class MidClickPearlModule extends AbstractModule {
         }
     }
 
-    @Override
     public void onEnable() {
         delayTimer.reset();
         switchBackTimer.reset();

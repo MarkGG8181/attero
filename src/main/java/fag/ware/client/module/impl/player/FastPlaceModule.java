@@ -10,7 +10,7 @@ import fag.ware.client.module.data.ModuleInfo;
 @ModuleInfo(name = "FastPlace", description = "Removes right click delay", category = ModuleCategory.PLAYER)
 public class FastPlaceModule extends AbstractModule {
     @Subscribe
-    public void onTick(TickEvent event) {
+    public void onTick(TickEvent ignoredEvent) {
         ((MinecraftClientAccessor) mc).setItemUseCooldown(0);
     }
 }
