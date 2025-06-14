@@ -26,7 +26,7 @@ public class JesusModule extends AbstractModule {
     public void onComputeCollision(ComputeNextCollisionEvent event) {
         switch (mode.getValue()) {
             case "Collision" -> {
-                if (event.getState().getFluidState().isEmpty()) return;
+                if (event.getState().getFluidState().isEmpty() || mc.options.sneakKey.isPressed() || mc.options.sneakKey.wasPressed()) return;
 
                 if ((event.getState().getBlock() == Blocks.WATER | event.getState().getFluidState().getFluid() == Fluids.WATER) && !mc.player.isTouchingWater() && event.getPos().getY() <= mc.player.getY() - 1) {
                     event.setShape(VoxelShapes.fullCube());
@@ -40,6 +40,8 @@ public class JesusModule extends AbstractModule {
         if (event.isPre()) {
             switch (mode.getValue()) {
                 case "Verus" -> {
+                    if (mc.options.sneakKey.isPressed() || mc.options.sneakKey.wasPressed()) return;
+
                     var playerBlockPos = mc.player.getBlockPos();
                     var waterBlockPos = new BlockPos(playerBlockPos.getX(), playerBlockPos.getY() - 1, playerBlockPos.getZ());
 
