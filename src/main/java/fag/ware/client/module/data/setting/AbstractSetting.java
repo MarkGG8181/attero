@@ -1,6 +1,5 @@
 package fag.ware.client.module.data.setting;
 
-import fag.ware.client.Fagware;
 import fag.ware.client.module.AbstractModule;
 import fag.ware.client.module.data.setting.impl.GroupSetting;
 import fag.ware.client.tracker.impl.ModuleTracker;

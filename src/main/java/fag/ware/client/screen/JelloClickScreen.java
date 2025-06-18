@@ -183,7 +183,7 @@ public class JelloClickScreen extends Screen {
                             float rightAlignX = fullWidth - sliderWidth;
 
                             ImGui.setCursorPosX(ImGui.getCursorPosX() + rightAlignX);
-                            if (ImGui.sliderFloat("##" + nS.getName(), value, nS.getMin().floatValue(), nS.getMax().floatValue())) {
+                            if (ImGui.sliderFloat("##" + nS.getName(), value, nS.min.floatValue(), nS.max.floatValue())) {
                                 nS.setValue(value[0]);
                             }
                             ImGui.setWindowFontScale(1f);
@@ -196,8 +196,8 @@ public class JelloClickScreen extends Screen {
                             ImGui.text("Min " + rns.getName());
                             ImGui.sameLine();
 
-                            float absMin = rns.getAbsoluteMin().floatValue();
-                            float absMax = rns.getAbsoluteMax().floatValue();
+                            float absMin = rns.absoluteMin.floatValue();
+                            float absMax = rns.absoluteMax.floatValue();
 
                             float fullWidth = ImGui.getContentRegionAvailX();
                             float sliderWidth = 280;
@@ -233,7 +233,7 @@ public class JelloClickScreen extends Screen {
                             float rightAlignX = fullWidth - sliderWidth;
 
                             ImGui.setCursorPosX(ImGui.getCursorPosX() + rightAlignX);
-                            if (ImGui.combo("##" + sS.getName(), index, sS.getValues())) {
+                            if (ImGui.combo("##" + sS.getName(), index, sS.values)) {
                                 sS.setIndex(index.get());
                             }
                             ImGui.setWindowFontScale(1f);

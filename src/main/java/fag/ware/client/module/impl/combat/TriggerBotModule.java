@@ -59,12 +59,12 @@ public class TriggerBotModule extends AbstractModule {
         }
 
         try {
-            if (swordMs.getAbsoluteMax() == swordMs.getAbsoluteMin()) {
-                return timer.hasElapsed(swordMs.getAbsoluteMax().longValue());
+            if (swordMs.absoluteMax == swordMs.absoluteMin) {
+                return timer.hasElapsed(swordMs.absoluteMax.longValue());
             }
 
-            if (axeMS.getAbsoluteMax() == axeMS.getAbsoluteMin()) {
-                return timer.hasElapsed(axeMS.getAbsoluteMax().longValue());
+            if (axeMS.absoluteMax == axeMS.absoluteMin) {
+                return timer.hasElapsed(axeMS.absoluteMax.longValue());
             }
 
             ms = SecureRandom.getInstanceStrong().nextFloat(speed[0], speed[1]);

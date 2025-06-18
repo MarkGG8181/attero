@@ -179,7 +179,7 @@ public class ClickScreen extends Screen {
 
                     float fullWidth = ImGui.getContentRegionAvailX();
                     ImGui.setNextItemWidth(fullWidth);
-                    if (ImGui.sliderFloat("##" + nS.getName(), value, nS.getMin().floatValue(), nS.getMax().floatValue())) {
+                    if (ImGui.sliderFloat("##" + nS.getName(), value, nS.min.floatValue(), nS.max.floatValue())) {
                         nS.setValue(value[0]);
                     }
                     ImGui.setWindowFontScale(1f);
@@ -193,8 +193,8 @@ public class ClickScreen extends Screen {
 
                     float fullWidth = ImGui.getContentRegionAvailX() - 8;
 
-                    float absMin = rns.getAbsoluteMin().floatValue();
-                    float absMax = rns.getAbsoluteMax().floatValue();
+                    float absMin = rns.absoluteMin.floatValue();
+                    float absMax = rns.absoluteMax.floatValue();
 
                     ImGui.setNextItemWidth(fullWidth / 2f);
                     boolean minChanged = ImGui.sliderFloat("##" + rns.getName() + "_min", minVal, absMin, absMax);
@@ -227,7 +227,7 @@ public class ClickScreen extends Screen {
 
                     float fullWidth = ImGui.getContentRegionAvailX();
                     ImGui.setNextItemWidth(fullWidth);
-                    if (ImGui.combo("##" + sS.getName(), index, sS.getValues())) {
+                    if (ImGui.combo("##" + sS.getName(), index, sS.values)) {
                         sS.setIndex(index.get());
                     }
                     ImGui.setWindowFontScale(1f);

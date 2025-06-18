@@ -2,12 +2,11 @@ package fag.ware.client.module.data.setting.impl;
 
 import fag.ware.client.module.data.setting.AbstractSetting;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class StringSetting extends AbstractSetting<String> {
-    private final String[] values;
+    public final String[] values;
+
+    @Getter
     private int index;
 
     public StringSetting(String name, String value, String... values) {
