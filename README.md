@@ -6,6 +6,7 @@ A client made in Fabric 1.21.5
 - Mark
 - Graph
 - Mainline
+- Leon
 
 ## Visuals
 
