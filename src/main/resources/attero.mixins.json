@@ -1,0 +1,42 @@
+{
+  "required": true,
+  "package": "io.github.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockCollisionSpliteratorMixin",
+    "ClientConnectionMixin",
+    "EntityMixin",
+    "EntityVelocityUpdateS2CPacketMixin",
+    "LeavesBlockMixin",
+    "LivingEntityMixin",
+    "MinecraftServerMixin",
+    "ModStatusMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "AbstractSignBlockEntityRendererMixin",
+    "BackgroundRendererMixin",
+    "BeaconBlockEntityRendererMixin",
+    "ClientPlayerEntityMixin",
+    "EntityRendererMixin",
+    "GameRendererMixin",
+    "HandledScreenMixin",
+    "InGameHudMixin",
+    "InGameOverlayRendererMixin",
+    "ItemRendererMixin",
+    "KeyboardInputMixin",
+    "KeyboardMixin",
+    "LightmapTextureManagerMixin",
+    "LivingEntityRendererMixin",
+    "MinecraftClientMixin",
+    "NarratorManagerMixin",
+    "ParticleManagerMixin",
+    "RenderTickCounterDynamicMixin",
+    "TitleScreenMixin",
+    "ToastManagerMixin",
+    "WeatherRenderingMixin",
+    "WorldRendererMixin"
+  ]
+}

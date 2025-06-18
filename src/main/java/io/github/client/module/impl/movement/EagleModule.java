@@ -1,0 +1,62 @@
+package io.github.client.module.impl.movement;
+
+import io.github.client.event.data.Subscribe;
+import io.github.client.event.impl.player.MotionEvent;
+import io.github.client.module.AbstractModule;
+import io.github.client.module.data.ModuleCategory;
+import io.github.client.module.data.ModuleInfo;
+import io.github.client.module.data.setting.impl.NumberSetting;
+import io.github.client.util.math.Timer;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+
+@ModuleInfo(name = "Eagle", category = ModuleCategory.MOVEMENT, description = "Sneaks at the edge of a block")
+public class EagleModule extends AbstractModule {
+    private final NumberSetting delay = new NumberSetting("Sneak delay", 30, 0, 300);
+
+    private final Timer timer = new Timer();
+
+    @Subscribe
+    public void onMotion(MotionEvent event) {
+        if (!event.isPre()) return;
+
+        if (!mc.player.isOnGround()) {
+            mc.options.sneakKey.setPressed(false);
+            return;
+        }
+
+        var x = mc.player.getX();
+        var y = mc.player.getY() - 0.1;
+        var z = mc.player.getZ();
+
+        var onEdge = false;
+
+        double[][] offsets = {
+                { 0.3, 0.3 },
+                { -0.3, 0.3 },
+                { 0.3, -0.3 },
+                { -0.3, -0.3 }
+        };
+
+        for (var offset : offsets) {
+            var blockX = (int) Math.floor(x + offset[0]);
+            var blockY = (int) Math.floor(y);
+            var blockZ = (int) Math.floor(z + offset[1]);
+
+            BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+            if (mc.world.getBlockState(pos).getBlock() == Blocks.AIR) {
+                onEdge = true;
+                break;
+            }
+        }
+
+        if (timer.hasElapsed(delay.toInt(), true)) {
+            mc.options.sneakKey.setPressed(onEdge);
+        }
+    }
+
+    public void onDisable() {
+        mc.options.sneakKey.setPressed(false);
+        timer.reset();
+    }
+}

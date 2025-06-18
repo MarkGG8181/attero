@@ -1,0 +1,40 @@
+package io.github.client.module.data.setting.impl;
+
+import io.github.client.module.data.setting.AbstractSetting;
+
+public class NumberSetting extends AbstractSetting<Number> {
+    public final Number min, max;
+
+    public NumberSetting(String name, Number value, Number min, Number max) {
+        super(name, value);
+        this.min = min;
+        this.max = max;
+    }
+
+    public NumberSetting(String name, Number value, Number min, Number max, boolean noParent) {
+        super(name, value, noParent);
+        this.min = min;
+        this.max = max;
+    }
+
+    @Override
+    public Number getValue() {
+        return super.getValue();
+    }
+
+    public float toFloat() {
+        return getValue().floatValue();
+    }
+
+    public double toDouble() {
+        return getValue().doubleValue();
+    }
+
+    public int toInt() {
+        return getValue().intValue();
+    }
+
+    public String toString() {
+        return String.valueOf(getValue());
+    }
+}

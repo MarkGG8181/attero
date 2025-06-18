@@ -1,6 +1,6 @@
-# fagware
+# Attero client
 
-A client made in Fabric 1.21.5
+A utility client made to be used on anarchy and SMP servers on 1.21.5 fabric.
 
 ## Credits
 - Mark
@@ -18,6 +18,3 @@ Jello-type ClickGUI
 
 Ingame visuals
 ![ingame](https://github.com/user-attachments/assets/be95e196-f6f0-4bc5-b17d-a22caf1bf826)
-
-Music Player (Spotify for songs) (WIP)
-![musicplr](https://github.com/user-attachments/assets/f7d504b3-c41d-4ea8-8160-b4c0117e636f)

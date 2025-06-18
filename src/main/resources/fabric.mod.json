@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "fagware",
+  "id": "attero",
   "version": "1.0.0",
-  "name": "Fagware",
-  "accessWidener" : "fagware.accesswidener",
+  "name": "Attero",
+  "accessWidener" : "attero.accesswidener",
   "description": "Minecraft utility mod for a more pleasant anarchy server experience.",
   "authors": [
     "cottonari",
@@ -14,15 +14,15 @@
   "contact": {
     "homepage": "https://wonderland.codeberg.page/"
   },
-  "icon": "assets/fagware/icon.png",
+  "icon": "assets/attero/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "fag.ware.client.Fagware"
+      "io.github.client.Attero"
     ]
   },
   "mixins": [
-    "fagware.mixins.json"
+    "attero.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.14",

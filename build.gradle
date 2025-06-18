@@ -46,7 +46,7 @@ dependencies {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/fagware.accesswidener")
+    accessWidenerPath = file("src/main/resources/attero.accesswidener")
 }
 
 configurations.all {
