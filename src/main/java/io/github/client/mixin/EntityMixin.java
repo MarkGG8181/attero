@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * @author markuss
  */
+@SuppressWarnings("ALL")
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @Shadow
@@ -52,8 +53,8 @@ public abstract class EntityMixin {
      */
     @Overwrite
     public final Vec3d getRotationVec(float tickProgress) {
-        if ((Object) this instanceof ClientPlayerEntity && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            return getRotationVector(RotationTracker.INSTANCE.pitch, RotationTracker.INSTANCE.yaw);
+        if ((Object) this instanceof ClientPlayerEntity && RotationTracker.rotating) {
+            return getRotationVector(RotationTracker.pitch, RotationTracker.yaw);
         }
 
         return getRotationVector(getPitch(), getYaw());

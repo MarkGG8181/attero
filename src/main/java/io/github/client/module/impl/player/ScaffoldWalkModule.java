@@ -6,8 +6,10 @@ import io.github.client.event.impl.game.TickEvent;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
+import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.module.data.setting.impl.GroupSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
+import io.github.client.tracker.impl.RotationTracker;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
 import net.minecraft.item.BlockItem;
@@ -19,14 +21,18 @@ import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "ScaffoldWalk", description = "Places blocks under you", category = ModuleCategory.PLAYER)
-public class ScaffoldWalkModule extends AbstractModule {
+public class ScaffoldWalkModule extends AbstractRotator {
     private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
     private final RangeNumberSetting speed = (RangeNumberSetting) new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
 
     private float[] rots;
 
+    public ScaffoldWalkModule() {
+        super(50);
+    }
+
     @Subscribe
-    public void onTick(TickEvent ignoredEvent) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         checkForBlocks();
@@ -40,25 +46,6 @@ public class ScaffoldWalkModule extends AbstractModule {
         } else {
             InventoryUtil.switchToBestSlotWithBlocks();
         }
-    }
-
-    @Subscribe
-    public void onMotion(MotionEvent event) {
-        if (mc.player.getMainHandStack().getItem() instanceof BlockItem item && InventoryUtil.isGoodBlock(item)) {
-            var currentYaw = event.yaw;
-
-            var belowPlayer = mc.player.getBlockPos().down();
-            var lookAt = new Vec3d(belowPlayer.getX() + 0.5, belowPlayer.getY() + 0.5, belowPlayer.getZ() + 0.5);
-
-            var targetRots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
-
-            rots = new float[]{currentYaw, targetRots[1]};
-        } else {
-            rots = new float[]{mc.player.lastYaw, mc.player.lastPitch};
-        }
-
-        event.yaw = rots[0];
-        event.pitch = rots[1];
     }
 
     private void placeBlock(BlockPos pos) {
@@ -94,5 +81,23 @@ public class ScaffoldWalkModule extends AbstractModule {
         InventoryUtil.switchToBestSlotWithBlocks();
 
         rots = new float[]{RotationUtil.getAdjustedYaw(), 85};
+    }
+
+    @Override
+    public float[] shouldRotate() {
+        if (mc.player.getMainHandStack().getItem() instanceof BlockItem item && InventoryUtil.isGoodBlock(item)) {
+            var currentYaw = RotationTracker.yaw;
+
+            var belowPlayer = mc.player.getBlockPos().down();
+            var lookAt = new Vec3d(belowPlayer.getX() + 0.5, belowPlayer.getY() + 0.5, belowPlayer.getZ() + 0.5);
+
+            var targetRots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
+
+            rots = new float[]{currentYaw, targetRots[1]};
+        } else {
+            rots = new float[]{mc.player.lastYaw, mc.player.lastPitch};
+        }
+
+        return rots;
     }
 }

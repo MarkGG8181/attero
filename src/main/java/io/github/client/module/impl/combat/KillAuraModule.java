@@ -1,13 +1,11 @@
 package io.github.client.module.impl.combat;
 
 import io.github.client.event.data.Subscribe;
-import io.github.client.event.impl.player.MotionEvent;
 import io.github.client.event.impl.game.TickEvent;
-import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
+import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.module.data.setting.impl.*;
-import io.github.client.tracker.impl.RotationTracker;
 import io.github.client.util.game.EntityUtil;
 import io.github.client.util.java.math.ClickDelayCalculator;
 import io.github.client.util.java.math.Timer;
@@ -16,7 +14,7 @@ import net.minecraft.entity.LivingEntity;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
-public class KillAuraModule extends AbstractModule {
+public class KillAuraModule extends AbstractRotator {
     private final GroupSetting sortingGroup = new GroupSetting("Sorting", false);
     public final StringSetting sortBy = new StringSetting("Sort by", "Range", "Range", "Health", "Armor", "Hurt-ticks").setParent(sortingGroup);
     public final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 6).setParent(sortingGroup);
@@ -46,23 +44,8 @@ public class KillAuraModule extends AbstractModule {
     private final Timer attackTimer = new Timer();
     private LivingEntity target;
 
-    @Subscribe(priority = 10)
-    public void onMotion(MotionEvent event) {
-        if (target != null &&
-                (raycast.getValue() && mc.player.canSee(target))) {
-
-            var minSpeed = speed.getMinAsFloat();
-            var maxSpeed = speed.getMaxAsFloat();
-
-            var rots = RotationUtil.toRotation(
-                    target,
-                    minSpeed,
-                    maxSpeed
-            );
-
-            event.yaw = rots[0];
-            event.pitch = rots[1];
-        }
+    public KillAuraModule() {
+        super(100);
     }
 
     @Subscribe
@@ -100,6 +83,26 @@ public class KillAuraModule extends AbstractModule {
 
     @Override
     public String getSuffix() {
-        return "Single"; //incase we add multi/switch later
+        return "Single";
+    }
+
+    @Override
+    public float[] shouldRotate() {
+        if (target != null &&
+                (raycast.getValue() && mc.player.canSee(target))) {
+
+            var minSpeed = speed.getMinAsFloat();
+            var maxSpeed = speed.getMaxAsFloat();
+
+            var rots = RotationUtil.toRotation(
+                    target,
+                    minSpeed,
+                    maxSpeed
+            );
+
+            return rots;
+        }
+
+        return null;
     }
 }

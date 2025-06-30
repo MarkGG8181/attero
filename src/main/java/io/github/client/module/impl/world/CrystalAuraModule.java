@@ -1,12 +1,11 @@
 package io.github.client.module.impl.world;
 
 import io.github.client.event.data.Subscribe;
-import io.github.client.event.impl.player.MotionEvent;
 import io.github.client.event.impl.game.RunLoopEvent;
 import io.github.client.event.impl.game.TickEvent;
-import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
+import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
@@ -19,21 +18,24 @@ import java.util.HashSet;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "CrystalAura", description = "Attacks nearby crystals", category = ModuleCategory.WORLD)
-public class CrystalAuraModule extends AbstractModule {
+public class CrystalAuraModule extends AbstractRotator {
     private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 10);
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     private final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
     private final BooleanSetting yCheck = new BooleanSetting("Y check", true);
     private final BooleanSetting nearbyEntityCheck = new BooleanSetting("Nearby entity check", true);
-    private final BooleanSetting fixGCD = new BooleanSetting("Fix GCD", false);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
     private final HashSet<EndCrystalEntity> targets = new HashSet<>();
     private EndCrystalEntity target;
 
+    public CrystalAuraModule() {
+        super(70);
+    }
+
     @Subscribe
-    public void onTick(TickEvent event) {
+    private void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         if (target != null) {
@@ -90,24 +92,22 @@ public class CrystalAuraModule extends AbstractModule {
         }
     }
 
-    @Subscribe(priority = 10)
-    public void onMotion(MotionEvent event) {
-        if (target != null && (raycast.getValue() && mc.player.canSee(target))) {
-
-            var rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
-
-            event.yaw = rots[0];
-            event.pitch = rots[1];
-        }
-    }
-
     @Subscribe
-    public void onRunLoop(RunLoopEvent event) {
+    private void onRunLoop(RunLoopEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble())) {
             EntityUtil.attackEntity(target);
             target = null;
         }
+    }
+
+    @Override
+    public float[] shouldRotate() {
+        if (target != null && (raycast.getValue() && mc.player.canSee(target))) {
+            return RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
+        }
+
+        return null;
     }
 }

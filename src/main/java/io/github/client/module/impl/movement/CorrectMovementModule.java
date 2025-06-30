@@ -12,20 +12,20 @@ import io.github.client.util.game.RotationUtil;
 
 @ModuleInfo(name = "CorrectMovement", description = "Corrects your movement", category = ModuleCategory.MOVEMENT)
 public class CorrectMovementModule extends AbstractModule {
-    @Subscribe(priority = 999)
-    public void onInput(MoveInputEvent event) {
-        RotationUtil.correctMovement(event, RotationTracker.INSTANCE.yaw);
+    @Subscribe
+    private void onInput(MoveInputEvent event) {
+        RotationUtil.correctMovement(event, RotationTracker.yaw);
     }
 
-    @Subscribe(priority = 999)
-    public void onJump(JumpEvent event) {
+    @Subscribe
+    private void onJump(JumpEvent event) {
         if (event.entity == mc.player) {
-            event.yaw = RotationTracker.INSTANCE.yaw;
+            event.yaw = RotationTracker.yaw;
         }
     }
 
-    @Subscribe(priority = 999)
-    public void onUpdateVelo(UpdateVelocityEvent event) {
-        event.yaw = RotationTracker.INSTANCE.yaw;
+    @Subscribe
+    private void onUpdateVelo(UpdateVelocityEvent event) {
+        event.yaw = RotationTracker.yaw;
     }
 }
