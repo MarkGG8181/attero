@@ -17,7 +17,7 @@ public class ClickGUIModule extends AbstractModule {
     public final StringSetting theme = new StringSetting("Theme", "Marine", "Marine", "Dark", "White", "Future dark").hide(() -> mode.getValue().equals("Jello"));
 
     @Subscribe
-    public void onTick(TickEvent ignoredEvent) {
+    private void onTick(TickEvent ignoredEvent) {
         if (isEnabled() && mc.currentScreen == null) {
             setEnabled(false);
         }

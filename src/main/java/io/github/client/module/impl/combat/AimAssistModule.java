@@ -27,7 +27,7 @@ public class AimAssistModule extends AbstractModule {
     private LivingEntity target;
 
     @Subscribe
-    public void onRender(TickEvent event) {
+    private void onRender(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         var mainHandStack = mc.player.getMainHandStack();

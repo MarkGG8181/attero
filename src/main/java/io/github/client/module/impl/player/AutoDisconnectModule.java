@@ -24,7 +24,7 @@ public class AutoDisconnectModule extends AbstractModule {
     private final Timer timer = new Timer();
 
     @Subscribe
-    public void onTick(TickEvent event) {
+    private void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.player.isDead()) return;
 
         if (mc.player.getHealth() >= hp.getValue().floatValue() || !timer.hasElapsed(delay.toInt(), true)) {

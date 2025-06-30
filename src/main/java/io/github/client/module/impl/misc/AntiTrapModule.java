@@ -15,7 +15,7 @@ import net.minecraft.entity.EntityType;
 )
 public class AntiTrapModule extends AbstractModule {
     @Subscribe
-    public void onTick(TickEvent event) {
+    private void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         for (var entities : mc.world.getEntities()) {

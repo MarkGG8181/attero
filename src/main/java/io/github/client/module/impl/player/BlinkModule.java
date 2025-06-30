@@ -14,14 +14,8 @@ public class BlinkModule extends AbstractModule {
     private final ArrayDeque<Packet<?>> outPacketDeque = new ArrayDeque<>();
     private boolean active = false;
 
-    private void releasePackets() {
-        while (!outPacketDeque.isEmpty()) {
-            sendPacket(outPacketDeque.poll());
-        }
-    }
-
     @Subscribe
-    public void onPacket(SendPacketEvent event) {
+    private void onPacket(SendPacketEvent event) {
         if (mc.player == null || mc.world == null) {
             active = false;
             return;
@@ -30,6 +24,12 @@ public class BlinkModule extends AbstractModule {
         if (active) {
             outPacketDeque.add(event.getPacket());
             event.cancelled = true;
+        }
+    }
+
+    private void releasePackets() {
+        while (!outPacketDeque.isEmpty()) {
+            sendPacket(outPacketDeque.poll());
         }
     }
 

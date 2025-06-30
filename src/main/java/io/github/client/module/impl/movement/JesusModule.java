@@ -23,7 +23,7 @@ public class JesusModule extends AbstractModule {
     private boolean water;
 
     @Subscribe
-    public void onComputeCollision(ComputeNextCollisionEvent event) {
+    private void onComputeCollision(ComputeNextCollisionEvent event) {
         switch (mode.getValue()) {
             case "Collision" -> {
                 if (event.state.getFluidState().isEmpty() || mc.options.sneakKey.isPressed() || mc.options.sneakKey.wasPressed()) return;
@@ -36,7 +36,7 @@ public class JesusModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onMotion(MotionEvent event) {
+    private void onMotion(MotionEvent event) {
         if (event.isPre()) {
             switch (mode.getValue()) {
                 case "Verus" -> {

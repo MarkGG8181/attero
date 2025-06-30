@@ -12,7 +12,7 @@ import net.minecraft.entity.effect.StatusEffects;
 @ModuleInfo(name = "FullBright", description = "Gives you infinite night vision", category = ModuleCategory.RENDER)
 public class FullBrightModule extends AbstractModule {
     @Subscribe
-    public void onUpdate(UpdateEvent ignoredEvent) {
+    private void onUpdate(UpdateEvent ignoredEvent) {
         if (mc.player.getStatusEffect(StatusEffects.NIGHT_VISION) == null) {
             mc.player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, Integer.MAX_VALUE, 255, false, false));
         }

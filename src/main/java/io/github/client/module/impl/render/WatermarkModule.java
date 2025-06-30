@@ -50,7 +50,7 @@ public class WatermarkModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onRender(Render2DEvent event) {
+    private void onRender(Render2DEvent event) {
         if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof FrameClickScreen) {
             return;
         }

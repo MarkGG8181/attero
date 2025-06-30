@@ -25,7 +25,7 @@ public class LongJumpModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onUpdate(UpdateEvent event) {
+    private void onUpdate(UpdateEvent event) {
         if (mode.is("NCP")) {
             var speedAmpl = MovementUtil.getSpeedAmplifier2();
             var speedEffect = 1f + speedAmpl * 0.45f;

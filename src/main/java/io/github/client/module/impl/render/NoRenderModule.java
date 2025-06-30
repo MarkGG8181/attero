@@ -54,102 +54,102 @@ public class NoRenderModule extends AbstractModule {
     private final BooleanSetting enchantingGlint = new BooleanSetting("Enchanting glint", true).setParent(client);
 
     @Subscribe
-    public void onRenderFireOverlay(RenderFireOverlayEvent event) {
+    private void onRenderFireOverlay(RenderFireOverlayEvent event) {
         event.cancelled = fireOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderUnderwaterOverlay(RenderUnderwaterOverlayEvent event) {
+    private void onRenderUnderwaterOverlay(RenderUnderwaterOverlayEvent event) {
         event.cancelled = waterOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderInWallOverlay(RenderInWallOverlayEvent event) {
+    private void onRenderInWallOverlay(RenderInWallOverlayEvent event) {
         event.cancelled = wallOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderPortalOverlay(RenderPortalOverlayEvent event) {
+    private void onRenderPortalOverlay(RenderPortalOverlayEvent event) {
         event.cancelled = portalOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderNauseaOverlay(RenderNauseaOverlayEvent event) {
+    private void onRenderNauseaOverlay(RenderNauseaOverlayEvent event) {
         event.cancelled = nauseaOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderSpyglassOverlay(RenderSpyglassOverlayEvent event) {
+    private void onRenderSpyglassOverlay(RenderSpyglassOverlayEvent event) {
         event.cancelled = spyglassOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderPumpkinOverlay(RenderPumpkinOverlayEvent event) {
+    private void onRenderPumpkinOverlay(RenderPumpkinOverlayEvent event) {
         event.cancelled = pumpkinOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderPowderedSnowOverlay(RenderPowderedSnowOverlay event) {
+    private void onRenderPowderedSnowOverlay(RenderPowderedSnowOverlay event) {
         event.cancelled = powderedSnowOverlay.getValue();
     }
 
     @Subscribe
-    public void onRenderBlockBreakingParticles(AddBlockBreakingParticleEvent event) {
+    private void onRenderBlockBreakingParticles(AddBlockBreakingParticleEvent event) {
         event.cancelled = blockBreakingParticles.getValue();
     }
 
     @Subscribe
-    public void onRenderBlockBreakParticles(AddBlockBreakParticleEvent event) {
+    private void onRenderBlockBreakParticles(AddBlockBreakParticleEvent event) {
         event.cancelled = blockBreakParticles.getValue();
     }
 
     @Subscribe
-    public void onRenderPrecipitation(RenderPrecipitationEvent event) {
+    private void onRenderPrecipitation(RenderPrecipitationEvent event) {
         event.cancelled = precipitation.getValue();
     }
 
     @Subscribe
-    public void onParticlesAndSoundEvent(AddParticlesAndSoundEvent event) {
+    private void onParticlesAndSoundEvent(AddParticlesAndSoundEvent event) {
         event.cancelled = rainParticles.getValue();
     }
 
     @Subscribe
-    public void onSpawnDrippingWaterFromLeaves(SpawnLeavesWaterParticlesEvent event) {
+    private void onSpawnDrippingWaterFromLeaves(SpawnLeavesWaterParticlesEvent event) {
         event.cancelled = leafBlockWaterDrip.getValue();
     }
 
     @Subscribe
-    public void onSpawnFallingLeaves(SpawnLeavesFallingParticlesEvent event) {
+    private void onSpawnFallingLeaves(SpawnLeavesFallingParticlesEvent event) {
         event.cancelled = fallingLeavesParticles.getValue();
     }
 
     @Subscribe
-    public void onRenderFog(RenderFogEvent event) {
+    private void onRenderFog(RenderFogEvent event) {
         event.cancelled = fog.getValue();
     }
 
     @Subscribe
-    public void onRenderFallingBlocks(RenderFallingBlockEvent event) {
+    private void onRenderFallingBlocks(RenderFallingBlockEvent event) {
         event.cancelled = fallingBlocks.getValue();
     }
 
     @Subscribe
-    public void onRenderWorldBorder(RenderWorldBorderEvent event) {
+    private void onRenderWorldBorder(RenderWorldBorderEvent event) {
         event.cancelled = worldBorder.getValue();
     }
 
     @Subscribe
-    public void onRenderBeaconBeam(RenderBeaconBeamEvent event) {
+    private void onRenderBeaconBeam(RenderBeaconBeamEvent event) {
         event.cancelled = beaconBeams.getValue();
     }
 
     @Subscribe
-    public void onRenderSignText(RenderSignTextEvent event) {
+    private void onRenderSignText(RenderSignTextEvent event) {
         event.cancelled = signText.getValue();
     }
 
     @Subscribe
-    public void onRenderEntity(RenderEntityEvent event) {
+    private void onRenderEntity(RenderEntityEvent event) {
         if (event.entity != null) {
             var entityName = EntityType.getId(event.entity.getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
@@ -159,37 +159,37 @@ public class NoRenderModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onRenderTotemAnimation(RenderTotemAnimationEvent event) {
+    private void onRenderTotemAnimation(RenderTotemAnimationEvent event) {
         event.cancelled = totemAnimation.getValue();
     }
 
     @Subscribe
-    public void onRenderEatingParticles(RenderEatingParticlesEvent event) {
+    private void onRenderEatingParticles(RenderEatingParticlesEvent event) {
         event.cancelled = eatParticles.getValue();
     }
 
     @Subscribe
-    public void onRenderItemEnchantmentGlint(RenderItemEnchantmentGlintEvent event) {
+    private void onRenderItemEnchantmentGlint(RenderItemEnchantmentGlintEvent event) {
         event.cancelled = enchantingGlint.getValue();
     }
 
     @Subscribe
-    public void hasBlindness(HasBlindnessEvent event) {
+    private void hasBlindness(HasBlindnessEvent event) {
         event.cancelled = blindness.getValue();
     }
 
     @Subscribe
-    public void hasDarkness(HasDarknessEvent event) {
+    private void hasDarkness(HasDarknessEvent event) {
         event.cancelled = darkness.getValue();
     }
 
     @Subscribe
-    public void getDarkness(GetDarknessEvent event) {
+    private void getDarkness(GetDarknessEvent event) {
         event.cancelled = darkness.getValue();
     }
 
     @Subscribe
-    public void getFogModifier(ShouldApplyStatusEffectEvent event) {
+    private void getFogModifier(ShouldApplyStatusEffectEvent event) {
         event.cancelled = (event.effect == StatusEffects.BLINDNESS && blindness.getValue()) || (event.effect == StatusEffects.DARKNESS && darkness.getValue());
     }
 }

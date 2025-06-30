@@ -33,7 +33,7 @@ public class InventoryMoveModule extends AbstractModule {
     );
 
     @Subscribe
-    public void onUpdate(UpdateEvent event) {
+    private void onUpdate(UpdateEvent event) {
         if (mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
             var allowed = new HashSet<>(Arrays.asList(keys.getValue()));
 

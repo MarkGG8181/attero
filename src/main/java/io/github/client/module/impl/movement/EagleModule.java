@@ -17,7 +17,7 @@ public class EagleModule extends AbstractModule {
     private final Timer timer = new Timer();
 
     @Subscribe
-    public void onMotion(MotionEvent event) {
+    private void onMotion(MotionEvent event) {
         if (!event.isPre()) return;
 
         if (!mc.player.isOnGround()) {

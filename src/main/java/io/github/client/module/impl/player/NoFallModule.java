@@ -19,7 +19,7 @@ public class NoFallModule extends AbstractModule {
     private final NumberSetting distance = new NumberSetting("Distance", 3.35, 1, 5);
 
     @Subscribe
-    public void onTick(MotionEvent event) {
+    private void onTick(MotionEvent event) {
         if (event.isPre() && mc.player.fallDistance >= distance.toFloat()) {
             switch (mode.getValue()) {
                 case "Vanilla" -> {

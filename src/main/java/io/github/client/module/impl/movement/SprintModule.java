@@ -9,7 +9,7 @@ import io.github.client.module.data.ModuleInfo;
 @ModuleInfo(name = "Sprint", category = ModuleCategory.MOVEMENT, description = "Makes you always sprint")
 public class SprintModule extends AbstractModule {
     @Subscribe
-    public void onUpdate(UpdateEvent event) {
+    private void onUpdate(UpdateEvent event) {
         mc.options.sprintKey.setPressed(true);
     }
 

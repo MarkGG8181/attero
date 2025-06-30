@@ -24,7 +24,7 @@ public class VelocityModule extends AbstractModule {
     private boolean jumped;
 
     @Subscribe
-    public void onReceivePacket(ReceivePacketEvent event) {
+    private void onReceivePacket(ReceivePacketEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         switch (mode.getValue()) {
@@ -45,7 +45,7 @@ public class VelocityModule extends AbstractModule {
     }
 
     @Subscribe
-    public void onTick(TickEvent event) {
+    private void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null) return;
 
         switch (mode.getValue()) {

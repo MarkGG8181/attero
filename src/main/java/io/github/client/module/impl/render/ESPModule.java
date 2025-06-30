@@ -25,7 +25,7 @@ public class ESPModule extends AbstractModule {
     private final ColorSetting miscColor = new ColorSetting("Misc color", new Color(0, 120, 230));
 
     @Subscribe
-    public void hasOutline(HasOutlineEvent event) {
+    private void hasOutline(HasOutlineEvent event) {
         if (event.entity != null) {
             var entityName = EntityType.getId(event.entity.getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
@@ -35,7 +35,7 @@ public class ESPModule extends AbstractModule {
     }
 
     @Subscribe
-    public void renderEntitiesGlowColor(RenderEntitiesGlowColorEvent event) {
+    private void renderEntitiesGlowColor(RenderEntitiesGlowColorEvent event) {
         if (event.entity != null) {
             var entityName = EntityType.getId(event.entity.getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {

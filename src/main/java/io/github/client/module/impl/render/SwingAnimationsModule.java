@@ -16,7 +16,7 @@ public class SwingAnimationsModule extends AbstractModule {
     private final NumberSetting swingSpeed = new NumberSetting("Swing Speed", 12, 1, 25);
 
     @Subscribe
-    public void onHandSwing(HandSwingDurationEvent event) {
+    private void onHandSwing(HandSwingDurationEvent event) {
         event.speed = (swingSpeed.max.intValue() - swingSpeed.toInt() + swingSpeed.min.intValue());
     }
 }

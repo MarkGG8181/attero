@@ -28,7 +28,7 @@ public class AutoCrystalModule extends AbstractModule {
     private final Timer placeDelayTimer = new Timer();
 
     @Subscribe
-    public void onTick(TickEvent ignoredEvent) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || mc.player.isUsingItem()) return;
 
         if (GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) {

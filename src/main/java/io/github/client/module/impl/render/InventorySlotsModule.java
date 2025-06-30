@@ -9,7 +9,7 @@ import io.github.client.module.data.ModuleInfo;
 @ModuleInfo(name = "InventorySlots", category = ModuleCategory.RENDER, description = "Shows slot numbers")
 public class InventorySlotsModule extends AbstractModule {
     @Subscribe
-    public void drawSlot(DrawSlotEvent event) {
+    private void drawSlot(DrawSlotEvent event) {
         var slot = event.slot;
         event.context.drawText(mc.textRenderer, String.valueOf(slot.getIndex()), slot.x, slot.y + mc.textRenderer.fontHeight, -1, false);
     }

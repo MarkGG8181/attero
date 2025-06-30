@@ -14,7 +14,7 @@ import net.minecraft.util.hit.HitResult;
 @ModuleInfo(name = "MidClickFriend", description = "Middle click to add/remove a friend", category = ModuleCategory.MISC)
 public class MidClickFriendModule extends AbstractModule {
     @Subscribe
-    public void onMidClick(MiddleClickEvent event) {
+    private void onMidClick(MiddleClickEvent event) {
         if (mc.crosshairTarget instanceof EntityHitResult entityHitResult) {
             if (entityHitResult.getType().equals(HitResult.Type.ENTITY) && entityHitResult.getEntity() instanceof PlayerEntity plr) {
                 var name = plr.getName().getString();

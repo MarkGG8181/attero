@@ -39,7 +39,7 @@ public class InventoryManagerModule extends AbstractModule {
     private final Timer timer = new Timer();
 
     @Subscribe
-    public void onTick(TickEvent event) {
+    private void onTick(TickEvent event) {
         if (mc.player == null) {
             return;
         }

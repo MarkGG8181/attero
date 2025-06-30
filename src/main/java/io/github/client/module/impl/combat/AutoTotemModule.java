@@ -21,7 +21,7 @@ public class AutoTotemModule extends AbstractModule {
     private final Timer timer = new Timer();
 
     @Subscribe
-    public void onTick(TickEvent ignoredEvent) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         var offhand = mc.player.getOffHandStack();

@@ -14,7 +14,7 @@ public class SpeedModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Strafe", "Strafe", "Legit", "NCP Y-Port");
 
     @Subscribe
-    public void onMotion(MotionEvent event) {
+    private void onMotion(MotionEvent event) {
         if (event.isPre()) {
             switch (mode.getValue()) {
                 case "Strafe" -> {

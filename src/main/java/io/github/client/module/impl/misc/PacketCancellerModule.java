@@ -15,14 +15,14 @@ public class PacketCancellerModule extends AbstractModule {
     private final MultiStringSetting outgoing = new MultiStringSetting("Outgoing", new String[]{}, NetworkUtil.getC2SPacketArray());
 
     @Subscribe
-    public void onReceivePacket(ReceivePacketEvent event) {
+    private void onReceivePacket(ReceivePacketEvent event) {
         if (incoming.enabled(event.packet.getClass().getSimpleName())) {
             event.cancelled = true;
         }
     }
 
     @Subscribe
-    public void onSendPacket(SendPacketEvent event) {
+    private void onSendPacket(SendPacketEvent event) {
         if (outgoing.enabled(event.getPacket().getClass().getSimpleName())) {
             event.cancelled = true;
         }

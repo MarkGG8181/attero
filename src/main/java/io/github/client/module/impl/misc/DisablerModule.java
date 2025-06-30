@@ -13,7 +13,7 @@ public class DisablerModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Intave Cloud", "Intave Cloud");
 
     @Subscribe
-    public void onSendPacket(SendPacketEvent event) {
+    private void onSendPacket(SendPacketEvent event) {
         switch (mode.getValue()) {
             case "Intave Cloud" -> {
                 if (event.getPacket() instanceof CommonPongC2SPacket) {
