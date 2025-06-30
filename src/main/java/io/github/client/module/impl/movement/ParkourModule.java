@@ -7,7 +7,7 @@ import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.NumberSetting;
-import io.github.client.util.math.Timer;
+import io.github.client.util.java.math.Timer;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "Parkour", description = "Jumps on the edge of blocks", category = ModuleCategory.MOVEMENT)

@@ -45,7 +45,7 @@ public class ScaffoldWalkModule extends AbstractModule {
     @Subscribe
     public void onMotion(MotionEvent event) {
         if (mc.player.getMainHandStack().getItem() instanceof BlockItem item && InventoryUtil.isGoodBlock(item)) {
-            var currentYaw = event.getYaw();
+            var currentYaw = event.yaw;
 
             var belowPlayer = mc.player.getBlockPos().down();
             var lookAt = new Vec3d(belowPlayer.getX() + 0.5, belowPlayer.getY() + 0.5, belowPlayer.getZ() + 0.5);
@@ -57,8 +57,8 @@ public class ScaffoldWalkModule extends AbstractModule {
             rots = new float[]{mc.player.lastYaw, mc.player.lastPitch};
         }
 
-        event.setYaw(rots[0]);
-        event.setPitch(rots[1]);
+        event.yaw = rots[0];
+        event.pitch = rots[1];
     }
 
     private void placeBlock(BlockPos pos) {

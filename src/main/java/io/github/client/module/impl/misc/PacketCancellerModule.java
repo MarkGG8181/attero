@@ -16,15 +16,15 @@ public class PacketCancellerModule extends AbstractModule {
 
     @Subscribe
     public void onReceivePacket(ReceivePacketEvent event) {
-        if (incoming.enabled(event.getPacket().getClass().getSimpleName())) {
-            event.setCancelled(true);
+        if (incoming.enabled(event.packet.getClass().getSimpleName())) {
+            event.cancelled = true;
         }
     }
 
     @Subscribe
     public void onSendPacket(SendPacketEvent event) {
         if (outgoing.enabled(event.getPacket().getClass().getSimpleName())) {
-            event.setCancelled(true);
+            event.cancelled = true;
         }
     }
 }

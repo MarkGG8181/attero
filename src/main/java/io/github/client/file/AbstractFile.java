@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.client.Attero;
-import io.github.client.util.FileUtil;
+import io.github.client.util.java.FileUtil;
 import lombok.Getter;
 
 import java.io.*;

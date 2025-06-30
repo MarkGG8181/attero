@@ -1,4 +1,4 @@
-package io.github.client.util.math;// MIT License
+package io.github.client.util.java.math;// MIT License
 //
 // Copyright(c) 2023 Jordan Peck (jordan.me2@gmail.com)
 // Copyright(c) 2023 Contributors

@@ -1,4 +1,4 @@
-package io.github.client.util.math.anim;
+package io.github.client.util.java.math.anim;
 
 /**
  * basically a TriFunction but java doesn't have that shit

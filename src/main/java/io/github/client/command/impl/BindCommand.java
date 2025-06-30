@@ -31,7 +31,7 @@ public class BindCommand extends AbstractCommand {
             switch (args[1].toLowerCase()) {
                 case "add" -> {
                     if (args.length != 4) throw new IllegalArgumentException("Expected 2 args to a \"add\" operation!");
-                    AbstractModule byName = ModuleTracker.getInstance().getByName(args[2]);
+                    AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
                     int key = getKeyBind(args, 3);
 
                     if (byName == null)
@@ -43,7 +43,7 @@ public class BindCommand extends AbstractCommand {
                 case "remove" -> {
                     if (args.length != 4)
                         throw new IllegalArgumentException("Expected 2 args to a \"remove\" operation!");
-                    AbstractModule byName = ModuleTracker.getInstance().getByName(args[2]);
+                    AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
                     int key = getKeyBind(args, 3);
 
                     if (byName == null)
@@ -54,7 +54,7 @@ public class BindCommand extends AbstractCommand {
                 }
                 case "list" -> {
                     if (args.length == 2) {
-                        ModuleTracker.getInstance().getSet().forEach(m -> {
+                        ModuleTracker.INSTANCE.getSet().forEach(m -> {
                             if (m.getKeybinds().isEmpty()) return;
 
                             StringBuilder sb = new StringBuilder();
@@ -68,7 +68,7 @@ public class BindCommand extends AbstractCommand {
                             send(String.format("%s -> %s", m.getInfo().name(), sb));
                         });
                     } else if (args.length == 3) {
-                        AbstractModule byName = ModuleTracker.getInstance().getByName(args[2]);
+                        AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
 
                         if (byName != null) {
                             StringBuilder sb = new StringBuilder();
@@ -83,7 +83,7 @@ public class BindCommand extends AbstractCommand {
                         } else {
                             int keyBind = getKeyBind(args, 2);
 
-                            for (AbstractModule abstractModule : ModuleTracker.getInstance().getSet()) {
+                            for (AbstractModule abstractModule : ModuleTracker.INSTANCE.getSet()) {
                                 if (abstractModule.getKeybinds().contains(keyBind)) {
                                     send(abstractModule.getInfo().name());
                                 }
@@ -93,10 +93,10 @@ public class BindCommand extends AbstractCommand {
                 }
                 case "clear" -> {
                     if (args.length == 2) {
-                        ModuleTracker.getInstance().getSet().forEach(m -> m.getKeybinds().clear());
+                        ModuleTracker.INSTANCE.getSet().forEach(m -> m.getKeybinds().clear());
                         send("Cleared all binds!");
                     } else if (args.length == 3) {
-                        AbstractModule byName = ModuleTracker.getInstance().getByName(args[2]);
+                        AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
 
                         if (byName != null) {
                             byName.getKeybinds().clear();
@@ -104,7 +104,7 @@ public class BindCommand extends AbstractCommand {
                         } else {
                             int keyBind = getKeyBind(args, 2);
 
-                            ModuleTracker.getInstance().getSet().forEach(m -> m.getKeybinds().remove((Integer) keyBind));
+                            ModuleTracker.INSTANCE.getSet().forEach(m -> m.getKeybinds().remove((Integer) keyBind));
                         }
                     } else throw new IllegalArgumentException("Expected 1 or 0 args to a \"clear\" operation!");
                 }

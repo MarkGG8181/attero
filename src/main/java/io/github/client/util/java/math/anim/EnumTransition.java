@@ -1,4 +1,4 @@
-package io.github.client.util.math.anim;
+package io.github.client.util.java.math.anim;
 
 /**
  * An enum that contains all code that actually does math to keep the actual rendering code cleaner

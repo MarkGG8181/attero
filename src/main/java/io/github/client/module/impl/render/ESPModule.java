@@ -8,7 +8,7 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.ColorSetting;
 import io.github.client.module.data.setting.impl.MultiStringSetting;
-import io.github.client.util.SystemUtil;
+import io.github.client.util.java.SystemUtil;
 import io.github.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,29 +26,29 @@ public class ESPModule extends AbstractModule {
 
     @Subscribe
     public void hasOutline(HasOutlineEvent event) {
-        if (event.getEntity() != null) {
-            var entityName = EntityType.getId(event.getEntity().getType()).getPath();
+        if (event.entity != null) {
+            var entityName = EntityType.getId(event.entity.getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
-                event.setCancelled(true);
+                event.cancelled = true;
             }
         }
     }
 
     @Subscribe
     public void renderEntitiesGlowColor(RenderEntitiesGlowColorEvent event) {
-        if (event.getEntity() != null) {
-            var entityName = EntityType.getId(event.getEntity().getType()).getPath();
+        if (event.entity != null) {
+            var entityName = EntityType.getId(event.entity.getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
-                event.setCancelled(true);
+                event.cancelled = true;;
             }
 
-            if (event.getEntity() instanceof PlayerEntity) {
-                event.setColor(playerColor.getValue());
+            if (event.entity instanceof PlayerEntity) {
+                event.color = playerColor.getValue();
             } else {
-                switch (event.getEntity().getType().getSpawnGroup()) {
-                    case CREATURE -> event.setColor(animalColor.getValue());
-                    case MONSTER -> event.setColor(monsterColor.getValue());
-                    default -> event.setColor(miscColor.getValue());
+                switch (event.entity.getType().getSpawnGroup()) {
+                    case CREATURE -> event.color = animalColor.getValue();
+                    case MONSTER -> event.color = monsterColor.getValue();
+                    default -> event.color = miscColor.getValue();
                 }
             }
         }

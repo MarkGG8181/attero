@@ -1,6 +1,6 @@
 package io.github.client.util.game;
 
-import io.github.client.util.interfaces.IMinecraft;
+import io.github.client.util.java.interfaces.IMinecraft;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

@@ -1,4 +1,4 @@
-package io.github.client.util.math;
+package io.github.client.util.java.math;
 
 import lombok.Setter;
 
@@ -16,7 +16,7 @@ public class ClickDelayCalculator {
     private double delayPattern1 = 90;
     private double delayPattern2 = 110;
     private double delayPattern3 = 130;
-    private boolean patternEnabled = false;
+    private Boolean patternEnabled = false;
 
     // CPS range
     private double minCPS;

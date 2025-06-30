@@ -35,6 +35,6 @@ public abstract class BlockCollisionSpliteratorMixin {
 
         ComputeNextCollisionEvent event = new ComputeNextCollisionEvent(blockState, blockPos, shape);
         event.post();
-        return event.isCancelled() ? VoxelShapes.empty() : event.getShape();
+        return event.cancelled ? VoxelShapes.empty() : event.shape;
     }
 }

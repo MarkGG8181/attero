@@ -86,12 +86,12 @@ public class JelloClickScreen extends Screen {
                         boolean openLC = ImGui.collapsingHeader("Local configs");
                         if (openLC) {
                             ImGui.setWindowFontScale(0.8f);
-                            for (ConfigEntry config : ModuleTracker.getInstance().configs) {
-                                boolean selected = !ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+                            for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
+                                boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                 if (ImGui.radioButton(config.name(), selected)) {
-                                    ModuleTracker.getInstance().activeConfigName = config.name();
-                                    ModuleTracker.getInstance().activeIsCloud = false;
+                                    ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                    ModuleTracker.INSTANCE.activeIsCloud = false;
                                     new ModulesFile(config.name()).load();
                                 }
                             }
@@ -101,20 +101,20 @@ public class JelloClickScreen extends Screen {
                         boolean openCC = ImGui.collapsingHeader("Cloud configs");
                         if (openCC) {
                             ImGui.setWindowFontScale(0.8f);
-                            for (ConfigEntry config : ModuleTracker.getInstance().cloudConfigs) {
-                                boolean selected = ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+                            for (ConfigEntry config : ModuleTracker.INSTANCE.cloudConfigs) {
+                                boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                 if (ImGui.radioButton(config.name(), selected)) {
-                                    ModuleTracker.getInstance().activeConfigName = config.name();
-                                    ModuleTracker.getInstance().activeIsCloud = true;
-                                    AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
+                                    ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                    ModuleTracker.INSTANCE.activeIsCloud = true;
+                                    AuthTracker.INSTANCE.send(new CLoadConfigPacket(config.name()));
                                 }
                             }
                             ImGui.setWindowFontScale(1.0f);
                         }
                     }
 
-                    for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
+                    for (AbstractModule module : ModuleTracker.INSTANCE.getByCategory(category)) {
                         ImGui.pushID(module.toString());
 
                         boolean isToggled = module.isEnabled();

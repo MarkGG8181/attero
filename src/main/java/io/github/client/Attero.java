@@ -3,7 +3,7 @@ package io.github.client;
 import io.github.client.event.data.EventBus;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.tracker.impl.*;
-import io.github.client.util.FileUtil;
+import io.github.client.util.java.FileUtil;
 import net.fabricmc.api.ClientModInitializer;
 
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public final class Attero implements ClientModInitializer {
 
     public void onEnd() {
         ImGuiImpl.dispose();
-        ModuleTracker.getInstance().modulesFile.save(); //default config
+        ModuleTracker.INSTANCE.modulesFile.save(); //default config
         FriendTracker.getInstance().friendsFile.save();
     }
 }

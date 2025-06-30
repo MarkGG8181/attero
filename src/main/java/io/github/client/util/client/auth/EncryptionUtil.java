@@ -1,4 +1,4 @@
-package io.github.client.util.auth;
+package io.github.client.util.client.auth;
 
 import javax.crypto.Cipher;
 import java.security.KeyFactory;

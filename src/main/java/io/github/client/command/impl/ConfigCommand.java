@@ -6,7 +6,7 @@ import io.github.client.command.AbstractCommand;
 import io.github.client.command.data.CommandInfo;
 import io.github.client.file.impl.ModulesFile;
 import io.github.client.tracker.impl.AuthTracker;
-import io.github.client.util.FileUtil;
+import io.github.client.util.java.FileUtil;
 import io.github.client.util.client.ConfigEntry;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class ConfigCommand extends AbstractCommand {
     public void execute(String[] args) { // [config, load, test]
         new Thread(() -> {
             try {
-                cloudConfigs = AuthTracker.getInstance().fetchConfigList();
+                cloudConfigs = AuthTracker.INSTANCE.fetchConfigList();
             } catch (Exception e) {
                 Attero.LOGGER.error("Failed to fetch configs", e);
             }
@@ -60,7 +60,7 @@ public class ConfigCommand extends AbstractCommand {
                                 .findFirst();
 
                         if (cloud.isPresent()) {
-                            AuthTracker.getInstance().send(new CLoadConfigPacket(configName));
+                            AuthTracker.INSTANCE.send(new CLoadConfigPacket(configName));
                         } else {
                             sendError("Config " + configName + " not found.");
                         }

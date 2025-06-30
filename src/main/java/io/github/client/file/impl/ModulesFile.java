@@ -27,7 +27,7 @@ public class ModulesFile extends AbstractFile {
     public void save() {
         JsonObject jsonObject = new JsonObject();
 
-        for (AbstractModule mod : ModuleTracker.getInstance().getSet()) {
+        for (AbstractModule mod : ModuleTracker.INSTANCE.getSet()) {
             JsonObject modObject = new JsonObject();
             modObject.addProperty("Enabled", mod.isEnabled());
             modObject.addProperty("Expanded", mod.isExpanded());
@@ -76,7 +76,7 @@ public class ModulesFile extends AbstractFile {
         if (MinecraftClient.getInstance().player == null)
             Attero.LOGGER.info("Saved {} successfully", getFile().getAbsolutePath());
         else
-            ModuleTracker.getInstance().send(String.format("Saved §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
+            ModuleTracker.INSTANCE.send(String.format("Saved §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
 
         super.saveJsonObject(jsonObject);
     }
@@ -89,12 +89,12 @@ public class ModulesFile extends AbstractFile {
             if (MinecraftClient.getInstance().player == null)
                 Attero.LOGGER.info("Config {} not found!", getFile().getAbsolutePath());
             else
-                ModuleTracker.getInstance().sendError(String.format("Config §e%s§r not found", getFile().getName().replaceAll(".json", "")));
+                ModuleTracker.INSTANCE.sendError(String.format("Config §e%s§r not found", getFile().getName().replaceAll(".json", "")));
 
             return;
         }
 
-        for (AbstractModule mod : ModuleTracker.getInstance().getSet()) {
+        for (AbstractModule mod : ModuleTracker.INSTANCE.getSet()) {
             JsonObject modObject = json.getAsJsonObject(mod.getInfo().name());
             if (modObject == null) continue;
 
@@ -151,9 +151,9 @@ public class ModulesFile extends AbstractFile {
         }
 
         if (MinecraftClient.getInstance().player == null) {
-            ModuleTracker.getInstance().currentConfig = new ConfigEntry(getFileName(), FileTime.fromMillis(System.currentTimeMillis()));
+            ModuleTracker.INSTANCE.currentConfig = new ConfigEntry(getFileName(), FileTime.fromMillis(System.currentTimeMillis()));
             Attero.LOGGER.info("Loaded {} successfully", getFile().getAbsolutePath());
         } else
-            ModuleTracker.getInstance().send(String.format("Loaded §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
+            ModuleTracker.INSTANCE.send(String.format("Loaded §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
     }
 }

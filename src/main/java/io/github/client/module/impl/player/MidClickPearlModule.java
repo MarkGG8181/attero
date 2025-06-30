@@ -9,7 +9,7 @@ import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.game.InventoryUtil;
-import io.github.client.util.math.Timer;
+import io.github.client.util.java.math.Timer;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 
@@ -45,6 +45,6 @@ public class MidClickPearlModule extends AbstractModule {
     public void onEnable() {
         delayTimer.reset();
         switchBackTimer.reset();
-        ModuleTracker.getInstance().getByName("MidClickFriend").setEnabled(false);
+        ModuleTracker.INSTANCE.getByName("MidClickFriend").setEnabled(false);
     }
 }

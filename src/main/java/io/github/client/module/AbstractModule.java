@@ -4,9 +4,9 @@ import io.github.client.Attero;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.AbstractSetting;
 import io.github.client.tracker.impl.ModuleTracker;
-import io.github.client.util.interfaces.IMinecraft;
-import io.github.client.util.math.anim.Animation;
-import io.github.client.util.math.anim.EnumTransition;
+import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.java.math.anim.Animation;
+import io.github.client.util.java.math.anim.EnumTransition;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +30,7 @@ public abstract class AbstractModule implements IMinecraft {
         }
 
         info = getClass().getAnnotation(ModuleInfo.class);
-        ModuleTracker.getInstance().lastModule = this;
+        ModuleTracker.INSTANCE.lastModule = this;
     }
 
     @Override

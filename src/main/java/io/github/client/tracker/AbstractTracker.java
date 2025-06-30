@@ -1,22 +1,23 @@
 package io.github.client.tracker;
 
-import lombok.Getter;
+import io.github.client.Attero;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 public abstract class AbstractTracker<T> {
-    private final HashSet<T> set = new HashSet<>();
+    public final List<T> list = new ArrayList<>();
 
-    public abstract void initialize();
+    public void initialize() {
+        Attero.BUS.register(this);
+    }
 
     public List<T> toList() {
-        return getSet().stream().toList();
+        return list.stream().toList();
     }
 
     public <C extends T> C getByClass(Class<C> clazz) {
-        return getSet().stream()
+        return list.stream()
                 .filter(clazz::isInstance)
                 .map(clazz::cast)
                 .findFirst()

@@ -21,7 +21,7 @@ public abstract class ItemRendererMixin {
         RenderItemEnchantmentGlintEvent renderItemEnchantmentGlintEvent = new RenderItemEnchantmentGlintEvent();
         renderItemEnchantmentGlintEvent.post();
 
-        if (renderItemEnchantmentGlintEvent.isCancelled()) {
+        if (renderItemEnchantmentGlintEvent.cancelled) {
             return ItemRenderState.Glint.NONE;
         }
 

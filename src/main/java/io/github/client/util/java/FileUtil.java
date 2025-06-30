@@ -1,4 +1,4 @@
-package io.github.client.util;
+package io.github.client.util.java;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

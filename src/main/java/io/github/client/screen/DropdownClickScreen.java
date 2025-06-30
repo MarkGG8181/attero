@@ -7,13 +7,12 @@ import io.github.client.file.impl.ModulesFile;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.setting.AbstractSetting;
-import io.github.client.module.impl.render.ClickGUIModule;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.screen.data.ImGuiThemes;
 import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.client.ConfigEntry;
-import io.github.client.util.FileUtil;
+import io.github.client.util.java.FileUtil;
 import imgui.ImGui;
 import imgui.ImVec2;
 import imgui.flag.ImGuiColorEditFlags;
@@ -30,12 +29,12 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 
-public class ClickScreen extends Screen {
+public class DropdownClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
     private final ImVec2 size = new ImVec2(230, 0);
 
-    public ClickScreen() {
-        super(Text.of("Classic Dropdown"));
+    public DropdownClickScreen() {
+        super(Text.of("Dropdown"));
     }
 
     @Override
@@ -44,13 +43,13 @@ public class ClickScreen extends Screen {
 
         new Thread(() -> {
             try {
-                ModuleTracker.getInstance().cloudConfigs = AuthTracker.getInstance().fetchConfigList();
+                ModuleTracker.INSTANCE.cloudConfigs = AuthTracker.INSTANCE.fetchConfigList();
             } catch (Exception e) {
                 Attero.LOGGER.error("Failed to fetch configs", e);
             }
 
-            ModuleTracker.getInstance().configs.clear();
-            ModuleTracker.getInstance().configs.addAll(FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json"));
+            ModuleTracker.INSTANCE.configs.clear();
+            ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json"));
         }).start();
     }
 
@@ -71,11 +70,7 @@ public class ClickScreen extends Screen {
         }
 
         ImGuiImpl.draw(io -> {
-            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
-                case "Marine" -> ImGuiThemes.applyMarineTheme();
-                case "Dark" -> ImGuiThemes.applyDarkTheme();
-                case "White" -> ImGuiThemes.applyWhiteTheme();
-            }
+            ImGuiThemes.applyTheme();
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
@@ -92,12 +87,12 @@ public class ClickScreen extends Screen {
                         boolean openLC = ImGui.collapsingHeader("Local configs");
                         if (openLC) {
                             ImGui.setWindowFontScale(0.8f);
-                            for (ConfigEntry config : ModuleTracker.getInstance().configs) {
-                                boolean selected = !ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+                            for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
+                                boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                 if (ImGui.radioButton(config.name(), selected)) {
-                                    ModuleTracker.getInstance().activeConfigName = config.name();
-                                    ModuleTracker.getInstance().activeIsCloud = false;
+                                    ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                    ModuleTracker.INSTANCE.activeIsCloud = false;
                                     new ModulesFile(config.name()).load();
                                 }
                             }
@@ -107,20 +102,20 @@ public class ClickScreen extends Screen {
                         boolean openCC = ImGui.collapsingHeader("Cloud configs");
                         if (openCC) {
                             ImGui.setWindowFontScale(0.8f);
-                            for (ConfigEntry config : ModuleTracker.getInstance().cloudConfigs) {
-                                boolean selected = ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+                            for (ConfigEntry config : ModuleTracker.INSTANCE.cloudConfigs) {
+                                boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                 if (ImGui.radioButton(config.name(), selected)) {
-                                    ModuleTracker.getInstance().activeConfigName = config.name();
-                                    ModuleTracker.getInstance().activeIsCloud = true;
-                                    AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
+                                    ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                    ModuleTracker.INSTANCE.activeIsCloud = true;
+                                    AuthTracker.INSTANCE.send(new CLoadConfigPacket(config.name()));
                                 }
                             }
                             ImGui.setWindowFontScale(1.0f);
                         }
                     }
 
-                    for (AbstractModule module : ModuleTracker.getInstance().getByCategory(category)) {
+                    for (AbstractModule module : ModuleTracker.INSTANCE.getByCategory(category)) {
                         ImGui.pushID(module.toString());
                         ImBoolean enabledMod = new ImBoolean(module.isEnabled());
 
@@ -189,7 +184,7 @@ public class ClickScreen extends Screen {
                     float[] maxVal = {rns.getMaxAsFloat()};
 
                     ImGui.setWindowFontScale(0.8f);
-                    ImGui.text(rns.getName() + " (MIN-MAX)");
+                    ImGui.text(rns.getName() + " (Min-Max)");
 
                     float fullWidth = ImGui.getContentRegionAvailX() - 8;
 
@@ -274,12 +269,12 @@ public class ClickScreen extends Screen {
                             cS.getBlue() / 255f,
                             cS.getAlpha() / 255f
                     };
-                    int flags = ImGuiColorEditFlags.PickerHueBar
+
+                    int flags = ImGuiColorEditFlags.PickerHueWheel
                             | ImGuiColorEditFlags.AlphaBar
                             | ImGuiColorEditFlags.NoSidePreview
                             | ImGuiColorEditFlags.Float
                             | ImGuiColorEditFlags.NoInputs;
-
 
                     float fullWidth = ImGui.getContentRegionAvailX();
                     ImGui.setNextItemWidth(fullWidth);

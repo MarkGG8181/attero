@@ -3,7 +3,7 @@ package io.github.client.module.impl.combat;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.player.ReceivePacketEvent;
 import io.github.client.event.impl.game.TickEvent;
-import io.github.client.util.interfaces.IEntityVelocityPacketAccessor;
+import io.github.client.util.java.interfaces.IEntityVelocityPacketAccessor;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
@@ -29,7 +29,7 @@ public class VelocityModule extends AbstractModule {
 
         switch (mode.getValue()) {
             case "Packet" -> {
-                if (event.getPacket() instanceof EntityVelocityUpdateS2CPacket packet && packet.getEntityId() == mc.player.getId()) {
+                if (event.packet instanceof EntityVelocityUpdateS2CPacket packet && packet.getEntityId() == mc.player.getId()) {
                     var accessor = (IEntityVelocityPacketAccessor) packet;
 
                     var newX = (int) (packet.getVelocityX() * 8000.0 * horizontal.toDouble());

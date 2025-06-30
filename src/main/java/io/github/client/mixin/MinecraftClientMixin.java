@@ -7,6 +7,7 @@ import io.github.client.event.impl.game.RunLoopEvent;
 import io.github.client.event.impl.game.TickEvent;
 import io.github.client.event.impl.render.HasOutlineEvent;
 import io.github.client.screen.data.ImGuiImpl;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.option.GameOptions;
@@ -73,7 +74,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "getWindowTitle", at = @At("HEAD"), cancellable = true)
     public void setTitle(CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("attero 1.21.5");
+        cir.setReturnValue(Attero.MOD_ID + " " + SharedConstants.getGameVersion().name());
     }
 
     @Inject(method = "isDemo", at = @At("HEAD"), cancellable = true)
@@ -120,7 +121,7 @@ public class MinecraftClientMixin {
         HasOutlineEvent hasOutlineEvent = new HasOutlineEvent(entity);
         hasOutlineEvent.post();
 
-        if (hasOutlineEvent.isCancelled()) {
+        if (hasOutlineEvent.cancelled) {
             return true;
         }
 

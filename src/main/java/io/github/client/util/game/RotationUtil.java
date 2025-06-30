@@ -2,10 +2,10 @@ package io.github.client.util.game;
 
 import io.github.client.event.impl.interact.MoveInputEvent;
 import io.github.client.tracker.impl.AuthTracker;
-import io.github.client.tracker.impl.CombatTracker;
-import io.github.client.util.interfaces.IMinecraft;
-import io.github.client.util.math.FastNoiseLite;
-import io.github.client.util.math.MathUtil;
+import io.github.client.tracker.impl.RotationTracker;
+import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.java.math.FastNoiseLite;
+import io.github.client.util.java.math.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Direction;
@@ -48,8 +48,8 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        float currentYaw = CombatTracker.getInstance().yaw;
-        float currentPitch = CombatTracker.getInstance().pitch;
+        float currentYaw = RotationTracker.INSTANCE.yaw;
+        float currentPitch = RotationTracker.INSTANCE.pitch;
 
         float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
 
@@ -66,7 +66,7 @@ public class RotationUtil implements IMinecraft {
         rots[0] = currentYaw + deltaYaw;
         rots[1] = currentPitch + deltaPitch;
 
-        return patchGCD(rots, new float[]{CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
+        return patchGCD(rots, new float[]{RotationTracker.INSTANCE.yaw, RotationTracker.INSTANCE.pitch});
     }
 
     public static float[] toRotation(Vec3d target, float minSpeed, float maxSpeed) {
@@ -84,8 +84,8 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        float currentYaw = CombatTracker.getInstance().yaw;
-        float currentPitch = CombatTracker.getInstance().pitch;
+        float currentYaw = RotationTracker.INSTANCE.yaw;
+        float currentPitch = RotationTracker.INSTANCE.pitch;
 
         float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
 
@@ -102,14 +102,14 @@ public class RotationUtil implements IMinecraft {
         rots[0] = currentYaw + deltaYaw;
         rots[1] = currentPitch + deltaPitch;
 
-        return patchGCD(rots, new float[]{CombatTracker.getInstance().yaw, CombatTracker.getInstance().pitch});
+        return patchGCD(rots, new float[]{RotationTracker.INSTANCE.yaw, RotationTracker.INSTANCE.pitch});
     }
 
     public static float[] patchGCD(final float[] currentRotation,
                                    final float[] newRotation) {
-        final float f = sens * AuthTracker.getInstance().values[0] + AuthTracker.getInstance().values[1];
+        final float f = sens * AuthTracker.INSTANCE.values[0] + AuthTracker.INSTANCE.values[1];
 
-        final float gcd = f * f * f * AuthTracker.getInstance().values[2] * AuthTracker.getInstance().values[3];
+        final float gcd = f * f * f * AuthTracker.INSTANCE.values[2] * AuthTracker.INSTANCE.values[3];
 
         final float deltaYaw = currentRotation[0] - newRotation[0],
                 deltaPitch = currentRotation[1] - newRotation[1];
@@ -135,8 +135,8 @@ public class RotationUtil implements IMinecraft {
     }
 
     public static void correctMovement(final MoveInputEvent event, final float yaw) {
-        final float forward = event.getForward();
-        final float strafe = event.getStrafe();
+        final float forward = event.forward;
+        final float strafe = event.strafe;
 
         // moveFlying method in Entity.java
         float f = forward * forward + strafe * strafe;
@@ -196,8 +196,8 @@ public class RotationUtil implements IMinecraft {
             }
         }
 
-        event.setForward(bestForward);
-        event.setStrafe(bestStrafe);
+        event.forward = bestForward;
+        event.strafe = bestStrafe;
     }
 
     public static float getMovementYaw() {

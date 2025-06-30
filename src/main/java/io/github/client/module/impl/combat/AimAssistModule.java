@@ -8,7 +8,8 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
-import io.github.client.tracker.impl.CombatTracker;
+import io.github.client.tracker.impl.RotationTracker;
+import io.github.client.util.game.EntityUtil;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
 import net.minecraft.entity.LivingEntity;
@@ -36,10 +37,8 @@ public class AimAssistModule extends AbstractModule {
             return;
         }
 
-        target = CombatTracker.getInstance().target;
-
         if (target != null
-                && CombatTracker.isWithinRange(target, distance.getValue().floatValue())) {
+                && EntityUtil.isWithinRange(target, distance.getValue().floatValue())) {
 
             var rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
             mc.player.setPitch(rots[1]);

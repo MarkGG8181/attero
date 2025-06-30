@@ -2,7 +2,7 @@ package io.github.client.screen;
 
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.tracker.impl.AuthTracker;
-import io.github.client.util.SystemUtil;
+import io.github.client.util.java.SystemUtil;
 import imgui.ImGui;
 import imgui.type.ImString;
 import net.minecraft.client.gui.DrawContext;
@@ -26,8 +26,8 @@ public class LoginScreen extends Screen {
 
                 if (ImGui.button("Login")) {
                     try {
-                        AuthTracker.getInstance().initialize();
-                        AuthTracker.getInstance().authenticate(username.get(), SystemUtil.getHWID());
+                        AuthTracker.INSTANCE.initialize();
+                        AuthTracker.INSTANCE.authenticate(username.get(), SystemUtil.getHWID());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

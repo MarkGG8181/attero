@@ -1,4 +1,4 @@
-package io.github.client.util.math;
+package io.github.client.util.java.math;
 
 import imgui.ImVec4;
 import net.minecraft.text.MutableText;

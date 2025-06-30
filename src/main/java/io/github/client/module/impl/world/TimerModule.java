@@ -6,7 +6,7 @@ import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.NumberSetting;
-import io.github.client.util.math.MathUtil;
+import io.github.client.util.java.math.MathUtil;
 
 @ModuleInfo(name = "Timer", category = ModuleCategory.WORLD, description = "Modifies game speed")
 public class TimerModule extends AbstractModule {

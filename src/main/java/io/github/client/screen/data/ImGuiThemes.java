@@ -2,10 +2,23 @@ package io.github.client.screen.data;
 
 import imgui.ImGui;
 import imgui.ImGuiStyle;
+import imgui.ImVec2;
 import imgui.ImVec4;
 import imgui.flag.ImGuiCol;
+import imgui.flag.ImGuiDir;
+import io.github.client.module.impl.render.ClickGUIModule;
+import io.github.client.tracker.impl.ModuleTracker;
 
 public class ImGuiThemes {
+    public static void applyTheme() {
+        switch (ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).theme.getValue()) {
+            case "Marine" -> ImGuiThemes.applyMarineTheme();
+            case "Dark" -> ImGuiThemes.applyDarkTheme();
+            case "White" -> ImGuiThemes.applyWhiteTheme();
+            case "Future dark" -> ImGuiThemes.applyFutureDarkTheme();
+        }
+    }
+
     public static void applyWhiteTheme() {
         ImGuiStyle style = ImGui.getStyle();
 
@@ -218,5 +231,73 @@ public class ImGuiThemes {
         colors[ImGuiCol.NavWindowingDimBg] = new ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
         colors[ImGuiCol.ModalWindowDimBg] = new ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
         style.setColors(colors);
+    }
+
+    public static void applyFutureDarkTheme() {
+        ImGuiStyle style = ImGui.getStyle();
+
+        style.setWindowBorderSize(0.0f);
+
+        style.setWindowRounding(0.0f);
+        style.setChildRounding(0.0f);
+        style.setFrameRounding(0.0f);
+        style.setScrollbarRounding(0.0f);
+        style.setTabRounding(0.0f);
+        style.setPopupRounding(0.0f);
+        style.setGrabRounding(0.0f);
+
+        style.setColor(ImGuiCol.TextDisabled, 0.27450982f, 0.31764707f, 0.4509804f, 1.0f);
+        style.setColor(ImGuiCol.WindowBg, 0.078431375f, 0.08627451f, 0.101960786f, 1.0f);
+        style.setColor(ImGuiCol.Text, 1.0f, 1.0f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.ChildBg, 0.078431375f, 0.08627451f, 0.101960786f, 1.0f);
+        style.setColor(ImGuiCol.PopupBg, 0.078431375f, 0.08627451f, 0.101960786f, 1.0f);
+        style.setColor(ImGuiCol.Border, 0.15686275f, 0.16862746f, 0.19215687f, 1.0f);
+        style.setColor(ImGuiCol.BorderShadow, 0.078431375f, 0.08627451f, 0.101960786f, 1.0f);
+        style.setColor(ImGuiCol.FrameBg, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.FrameBgHovered, 0.15686275f, 0.16862746f, 0.19215687f, 1.0f);
+        style.setColor(ImGuiCol.FrameBgActive, 0.23529412f, 0.21568628f, 0.59607846f, 1.0f);
+        style.setColor(ImGuiCol.TitleBg, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.TitleBgActive, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.TitleBgCollapsed, 0.078431375f, 0.08627451f, 0.101960786f, 1.0f);
+        style.setColor(ImGuiCol.MenuBarBg, 0.09803922f, 0.105882354f, 0.12156863f, 1.0f);
+        style.setColor(ImGuiCol.ScrollbarBg, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.ScrollbarGrab, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.ScrollbarGrabHovered, 0.15686275f, 0.16862746f, 0.19215687f, 1.0f);
+        style.setColor(ImGuiCol.ScrollbarGrabActive, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.CheckMark, 0.49803922f, 0.5137255f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.SliderGrab, 0.49803922f, 0.5137255f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.SliderGrabActive, 0.5372549f, 0.5529412f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.Button, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.ButtonHovered, 0.19607843f, 0.1764706f, 0.54509807f, 1.0f);
+        style.setColor(ImGuiCol.ButtonActive, 0.23529412f, 0.21568628f, 0.59607846f, 1.0f);
+        style.setColor(ImGuiCol.Header, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.HeaderHovered, 0.19607843f, 0.1764706f, 0.54509807f, 1.0f);
+        style.setColor(ImGuiCol.HeaderActive, 0.23529412f, 0.21568628f, 0.59607846f, 1.0f);
+        style.setColor(ImGuiCol.Separator, 0.15686275f, 0.18431373f, 0.2509804f, 1.0f);
+        style.setColor(ImGuiCol.SeparatorHovered, 0.15686275f, 0.18431373f, 0.2509804f, 1.0f);
+        style.setColor(ImGuiCol.SeparatorActive, 0.15686275f, 0.18431373f, 0.2509804f, 1.0f);
+        style.setColor(ImGuiCol.ResizeGrip, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.ResizeGripHovered, 0.19607843f, 0.1764706f, 0.54509807f, 1.0f);
+        style.setColor(ImGuiCol.ResizeGripActive, 0.23529412f, 0.21568628f, 0.59607846f, 1.0f);
+        style.setColor(ImGuiCol.Tab, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.TabHovered, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.TabActive, 0.09803922f, 0.105882354f, 0.12156863f, 1.0f);
+        style.setColor(ImGuiCol.TabUnfocused, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.TabUnfocusedActive, 0.078431375f, 0.08627451f, 0.101960786f, 1.0f);
+        style.setColor(ImGuiCol.PlotLines, 0.52156866f, 0.6f, 0.7019608f, 1.0f);
+        style.setColor(ImGuiCol.PlotLinesHovered, 0.039215688f, 0.98039216f, 0.98039216f, 1.0f);
+        style.setColor(ImGuiCol.PlotHistogram, 1.0f, 0.2901961f, 0.59607846f, 1.0f);
+        style.setColor(ImGuiCol.PlotHistogramHovered, 0.99607843f, 0.4745098f, 0.69803923f, 1.0f);
+        style.setColor(ImGuiCol.TableHeaderBg, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.TableBorderStrong, 0.047058824f, 0.05490196f, 0.07058824f, 1.0f);
+        style.setColor(ImGuiCol.TableBorderLight, 0.0f, 0.0f, 0.0f, 1.0f);
+        style.setColor(ImGuiCol.TableRowBg, 0.11764706f, 0.13333334f, 0.14901961f, 1.0f);
+        style.setColor(ImGuiCol.TableRowBgAlt, 0.09803922f, 0.105882354f, 0.12156863f, 1.0f);
+        style.setColor(ImGuiCol.TextSelectedBg, 0.23529412f, 0.21568628f, 0.59607846f, 1.0f);
+        style.setColor(ImGuiCol.DragDropTarget, 0.49803922f, 0.5137255f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.NavHighlight, 0.49803922f, 0.5137255f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.NavWindowingHighlight, 0.49803922f, 0.5137255f, 1.0f, 1.0f);
+        style.setColor(ImGuiCol.NavWindowingDimBg, 0.19607843f, 0.1764706f, 0.54509807f, 0.5019608f);
+        style.setColor(ImGuiCol.ModalWindowDimBg, 0.19607843f, 0.1764706f, 0.54509807f, 0.5019608f);
     }
 }

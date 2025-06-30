@@ -10,7 +10,7 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
-import io.github.client.tracker.impl.CombatTracker;
+import io.github.client.util.game.EntityUtil;
 import io.github.client.util.game.RotationUtil;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 
@@ -44,7 +44,7 @@ public class CrystalAuraModule extends AbstractModule {
             ).size() > 0 : true;
 
             var stillValid = target.isAlive()
-                    && CombatTracker.isWithinRange(target, aimRange.toDouble())
+                    && EntityUtil.isWithinRange(target, aimRange.toDouble())
                     && foundNearbyEntity
                     && mc.player.getBlockPos().equals(target.getBlockPos().down(1));
 
@@ -61,7 +61,7 @@ public class CrystalAuraModule extends AbstractModule {
                     EndCrystalEntity.class,
                     mc.player.getBoundingBox().expand(range),
                     entity -> {
-                        if (!entity.isAttackable() || !CombatTracker.isWithinRange(entity, range))
+                        if (!entity.isAttackable() || !EntityUtil.isWithinRange(entity, range))
                             return false;
 
                         boolean foundNearbyEntity = nearbyEntityCheck.getValue() ? mc.world.getEntitiesByClass(
@@ -84,7 +84,7 @@ public class CrystalAuraModule extends AbstractModule {
             targets.addAll(entitiesToConsider);
 
             var localTarget = targets.stream().findFirst().orElse(null);
-            if (localTarget != null && CombatTracker.isWithinRange(localTarget, aimRange.toDouble())) {
+            if (localTarget != null && EntityUtil.isWithinRange(localTarget, aimRange.toDouble())) {
                 target = localTarget;
             }
         }
@@ -96,8 +96,8 @@ public class CrystalAuraModule extends AbstractModule {
 
             var rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
 
-            event.setYaw(rots[0]);
-            event.setPitch(rots[1]);
+            event.yaw = rots[0];
+            event.pitch = rots[1];
         }
     }
 
@@ -105,8 +105,8 @@ public class CrystalAuraModule extends AbstractModule {
     public void onRunLoop(RunLoopEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
-        if (target != null && CombatTracker.isWithinRange(target, attackRange.toDouble())) {
-            CombatTracker.attackEntity(target);
+        if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble())) {
+            EntityUtil.attackEntity(target);
             target = null;
         }
     }

@@ -23,7 +23,7 @@ public abstract class LivingEntityMixin {
         JumpEvent jumpEvent = new JumpEvent(instance, instance.getYaw());
         jumpEvent.post();
 
-        return jumpEvent.getYaw();
+        return jumpEvent.yaw;
     }
 
     @Inject(method = "getHandSwingDuration", at = @At("RETURN"), cancellable = true)
@@ -31,7 +31,7 @@ public abstract class LivingEntityMixin {
         HandSwingDurationEvent handSwingDurationEvent = new HandSwingDurationEvent(cir.getReturnValue());
         handSwingDurationEvent.post();
 
-        cir.setReturnValue(handSwingDurationEvent.getSpeed());
+        cir.setReturnValue(handSwingDurationEvent.speed);
     }
 
     @Inject(method = "spawnItemParticles", at = @At("HEAD"), cancellable = true)
@@ -39,7 +39,7 @@ public abstract class LivingEntityMixin {
         RenderEatingParticlesEvent renderEatingParticlesEvent = new RenderEatingParticlesEvent();
         renderEatingParticlesEvent.post();
 
-        if (renderEatingParticlesEvent.isCancelled() && stack.getComponents().contains(DataComponentTypes.FOOD)) {
+        if (renderEatingParticlesEvent.cancelled && stack.getComponents().contains(DataComponentTypes.FOOD)) {
             info.cancel();
         }
     }

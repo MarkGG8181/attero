@@ -18,7 +18,7 @@ public class LeavesBlockMixin {
         SpawnLeavesWaterParticlesEvent spawnLeavesWaterParticlesEvent = new SpawnLeavesWaterParticlesEvent();
         spawnLeavesWaterParticlesEvent.post();
 
-        if (spawnLeavesWaterParticlesEvent.isCancelled()) {
+        if (spawnLeavesWaterParticlesEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -28,7 +28,7 @@ public class LeavesBlockMixin {
         SpawnLeavesFallingParticlesEvent spawnLeavesFallingParticlesEvent = new SpawnLeavesFallingParticlesEvent();
         spawnLeavesFallingParticlesEvent.post();
 
-        if (spawnLeavesFallingParticlesEvent.isCancelled()) {
+        if (spawnLeavesFallingParticlesEvent.cancelled) {
             ci.cancel();
         }
     }

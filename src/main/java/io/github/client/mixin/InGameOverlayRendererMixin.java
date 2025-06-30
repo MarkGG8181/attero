@@ -23,7 +23,7 @@ public class InGameOverlayRendererMixin {
         RenderFireOverlayEvent fireOverlayEvent = new RenderFireOverlayEvent();
         fireOverlayEvent.post();
 
-        if (fireOverlayEvent.isCancelled()) {
+        if (fireOverlayEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -33,7 +33,7 @@ public class InGameOverlayRendererMixin {
         RenderUnderwaterOverlayEvent underwaterOverlayEvent = new RenderUnderwaterOverlayEvent();
         underwaterOverlayEvent.post();
 
-        if (underwaterOverlayEvent.isCancelled()) {
+        if (underwaterOverlayEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -43,7 +43,7 @@ public class InGameOverlayRendererMixin {
         RenderInWallOverlayEvent inWallOverlayEvent = new RenderInWallOverlayEvent();
         inWallOverlayEvent.post();
 
-        if (inWallOverlayEvent.isCancelled()) {
+        if (inWallOverlayEvent.cancelled) {
             ci.cancel();
         }
     }

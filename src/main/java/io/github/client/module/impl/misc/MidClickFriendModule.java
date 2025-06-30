@@ -31,6 +31,6 @@ public class MidClickFriendModule extends AbstractModule {
     }
 
     public void onEnable() {
-        ModuleTracker.getInstance().getByName("MidClickPearl").setEnabled(false);
+        ModuleTracker.INSTANCE.getByName("MidClickPearl").setEnabled(false);
     }
 }

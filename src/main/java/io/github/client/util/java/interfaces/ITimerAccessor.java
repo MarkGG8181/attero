@@ -1,4 +1,4 @@
-package io.github.client.util.interfaces;
+package io.github.client.util.java.interfaces;
 
 public interface ITimerAccessor {
     float getTimerSpeed();

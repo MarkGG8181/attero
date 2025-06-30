@@ -8,7 +8,7 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.util.game.InventoryUtil;
-import io.github.client.util.math.Timer;
+import io.github.client.util.java.math.Timer;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.SlotActionType;

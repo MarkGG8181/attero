@@ -10,12 +10,12 @@ import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.ColorSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.StringSetting;
-import io.github.client.screen.ClickScreen;
+import io.github.client.screen.DropdownClickScreen;
 import io.github.client.screen.JelloClickScreen;
-import io.github.client.screen.PanelClickScreen;
+import io.github.client.screen.FrameClickScreen;
 import io.github.client.screen.data.ImGuiFontManager;
 import io.github.client.screen.data.ImGuiImpl;
-import io.github.client.util.math.ColorUtil;
+import io.github.client.util.java.math.ColorUtil;
 import imgui.ImFont;
 import imgui.ImGui;
 import imgui.ImVec2;
@@ -28,8 +28,8 @@ import java.util.Objects;
 @ModuleInfo(name = "Watermark", category = ModuleCategory.RENDER, description = "Draws a watermark")
 public class WatermarkModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft", "Image");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
-    private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
+    private final StringSetting font = new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
+    private final NumberSetting fontSize = new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final BooleanSetting hideName = new BooleanSetting("Hide name", false);
     private final ColorSetting color = new ColorSetting("Color", new Color(0x26A07D));
 
@@ -51,7 +51,7 @@ public class WatermarkModule extends AbstractModule {
 
     @Subscribe
     public void onRender(Render2DEvent event) {
-        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof PanelClickScreen) {
+        if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof FrameClickScreen) {
             return;
         }
 
@@ -99,8 +99,8 @@ public class WatermarkModule extends AbstractModule {
             });
 
             case "Minecraft" -> {
-                event.getDrawContext().drawText(mc.textRenderer, "io", 5, 5, color.getValue().getRGB(), false);
-                event.getDrawContext().drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("io"), 5, -1, false);
+                event.context.drawText(mc.textRenderer, "io", 5, 5, color.getValue().getRGB(), false);
+                event.context.drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("io"), 5, -1, false);
             }
 
             case "Image" -> ImGuiImpl.draw(io -> {

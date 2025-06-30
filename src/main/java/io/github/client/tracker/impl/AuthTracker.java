@@ -31,11 +31,7 @@ import java.util.concurrent.TimeoutException;
 
 @SuppressWarnings("ALL")
 public class AuthTracker extends AbstractTracker {
-    private static final AuthTracker tracker = new AuthTracker();
-
-    public static AuthTracker getInstance() {
-        return tracker;
-    }
+    public static final AuthTracker INSTANCE = new AuthTracker();
 
     private final String host = "161.97.140.113";
     private final int port = 1337;
@@ -102,7 +98,7 @@ public class AuthTracker extends AbstractTracker {
             float[] values = valuesFuture.get(5, TimeUnit.SECONDS);;
 
             if (success) {
-                AuthTracker.getInstance().send(new CJVMChecksumPacket());
+                AuthTracker.INSTANCE.send(new CJVMChecksumPacket());
                 while (ImGuiImpl.correctChecksum == -1L) {
                     Thread.sleep(5); // wait for the checksum to change
                 }
@@ -120,10 +116,9 @@ public class AuthTracker extends AbstractTracker {
 
                 MinecraftClient.getInstance().setScreen(null);
 
-                ModuleTracker.getInstance().initialize();
-                CommandTracker.getInstance().initialize();
-                CombatTracker.getInstance().initialize();
-                PlayerTracker.getInstance().initialize();
+                ModuleTracker.INSTANCE.initialize();
+                CommandTracker.INSTANCE.initialize();
+                RotationTracker.INSTANCE.initialize();
             }
         } finally {
             handler.setAuthListener(null);

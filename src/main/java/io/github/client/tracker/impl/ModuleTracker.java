@@ -1,17 +1,13 @@
 package io.github.client.tracker.impl;
 
 import io.github.client.module.impl.combat.*;
-import io.github.client.module.impl.misc.AntiTrapModule;
-import io.github.client.module.impl.misc.AutoRespawnModule;
-import io.github.client.module.impl.misc.MidClickFriendModule;
-import io.github.client.module.impl.misc.PacketCancellerModule;
+import io.github.client.module.impl.misc.*;
 import io.github.client.module.impl.movement.*;
 import io.github.client.module.impl.player.*;
 import io.github.client.module.impl.render.*;
 import io.github.client.module.impl.world.CrystalAuraModule;
 import io.github.client.module.impl.world.TimerModule;
 import io.ml.security.JvmArgsChecker;
-import io.github.client.Attero;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.interact.KeyEvent;
 import io.github.client.file.impl.ModulesFile;
@@ -19,7 +15,7 @@ import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.client.ConfigEntry;
-import io.github.client.util.interfaces.IMinecraft;
+import io.github.client.util.java.interfaces.IMinecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +26,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public AbstractModule lastModule;
     public final ModulesFile modulesFile = new ModulesFile("default");
 
-    private static final ModuleTracker tracker = new ModuleTracker();
+    public static final ModuleTracker INSTANCE = new ModuleTracker();
 
     public ConfigEntry currentConfig;
 
@@ -40,67 +36,61 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public String activeConfigName = null;
     public boolean activeIsCloud = false;
 
-    public static ModuleTracker getInstance() {
-        return tracker;
-    }
-
     @Override
     public void initialize() {
-        Attero.BUS.register(this);
-
-        //even though they are sorted here, HashSet's are randomized every launch so this doesn't matter
-        //the only reason we use them is that search & lookup speed is faster than arraylist
+        super.initialize();
 
         /* COMBAT */
-        getSet().add(new KillAuraModule());
-        getSet().add(new TriggerBotModule());
-        getSet().add(new VelocityModule());
-        getSet().add(new AutoTotemModule());
-        getSet().add(new AutoCrystalModule());
-        getSet().add(new AimAssistModule());
+        list.add(new KillAuraModule());
+        list.add(new TriggerBotModule());
+        list.add(new VelocityModule());
+        list.add(new AutoTotemModule());
+        list.add(new AutoCrystalModule());
+        list.add(new AimAssistModule());
 
         /* MOVEMENT */
-        getSet().add(new SprintModule());
-        getSet().add(new SpeedModule());
-        getSet().add(new CorrectMovementModule());
-        getSet().add(new LongJumpModule());
-        getSet().add(new EagleModule());
-        getSet().add(new InventoryMoveModule());
-        getSet().add(new CounterStrafeModule());
-        getSet().add(new JesusModule());
-        getSet().add(new ParkourModule());
+        list.add(new SprintModule());
+        list.add(new SpeedModule());
+        list.add(new CorrectMovementModule());
+        list.add(new LongJumpModule());
+        list.add(new EagleModule());
+        list.add(new InventoryMoveModule());
+        list.add(new CounterStrafeModule());
+        list.add(new JesusModule());
+        list.add(new ParkourModule());
 
         /* RENDER */
-        getSet().add(new NoRenderModule());
-        getSet().add(new WatermarkModule());
-        getSet().add(new ESPModule());
-        getSet().add(new FullBrightModule());
-        getSet().add(new ModuleListModule());
-        getSet().add(new ClickGUIModule());
-        getSet().add(new SwingAnimationsModule());
+        list.add(new NoRenderModule());
+        list.add(new WatermarkModule());
+        list.add(new ESPModule());
+        list.add(new FullBrightModule());
+        list.add(new ModuleListModule());
+        list.add(new ClickGUIModule());
+        list.add(new SwingAnimationsModule());
 
         /* PLAYER */
-        getSet().add(new NoFallModule());
-        getSet().add(new AutoDisconnectModule());
-        getSet().add(new BlinkModule());
-        getSet().add(new ScaffoldWalkModule());
-        getSet().add(new MidClickPearlModule());
-        getSet().add(new FastPlaceModule());
-        getSet().add(new KeyFireworkModule());
-        getSet().add(new InventoryManagerModule());
+        list.add(new NoFallModule());
+        list.add(new AutoDisconnectModule());
+        list.add(new BlinkModule());
+        list.add(new ScaffoldWalkModule());
+        list.add(new MidClickPearlModule());
+        list.add(new FastPlaceModule());
+        list.add(new KeyFireworkModule());
+        list.add(new InventoryManagerModule());
 
         /* WORLD */
-        getSet().add(new TimerModule());
-        getSet().add(new CrystalAuraModule());
+        list.add(new TimerModule());
+        list.add(new CrystalAuraModule());
 
         /* MISC */
-        getSet().add(new AutoRespawnModule());
-        getSet().add(new PacketCancellerModule());
-        getSet().add(new MidClickFriendModule());
-        getSet().add(new AntiTrapModule());
-        getSet().add(new InventorySlotsModule());
+        list.add(new AutoRespawnModule());
+        list.add(new PacketCancellerModule());
+        list.add(new MidClickFriendModule());
+        list.add(new AntiTrapModule());
+        list.add(new InventorySlotsModule());
+        list.add(new DisablerModule());
 
-        getSet().forEach(AbstractModule::onInit);
+        list.forEach(AbstractModule::onInit);
         modulesFile.load();
         JvmArgsChecker.force();
     }
@@ -108,22 +98,22 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     @Subscribe
     public void onKey(KeyEvent event) {
         if (mc.currentScreen == null)
-            getSet().forEach(mod -> {
-                if (mod.getKeybinds().contains(event.getKey())) {
+            list.forEach(mod -> {
+                if (mod.getKeybinds().contains(event.key)) {
                     mod.toggle();
                 }
             });
     }
 
     public AbstractModule getByName(String name) {
-        return getSet().stream()
-                .filter(mod -> mod.getInfo().name().equalsIgnoreCase(name))
+        return list.stream()
+                .filter(mod -> mod.toString().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }
 
     public Set<AbstractModule> getByCategory(ModuleCategory category) {
-        return getSet().stream()
+        return list.stream()
                 .filter(mod -> mod.getInfo().category().equals(category))
                 .collect(Collectors.toSet());
     }

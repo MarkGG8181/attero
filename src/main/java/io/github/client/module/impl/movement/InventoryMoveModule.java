@@ -6,7 +6,7 @@ import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.MultiStringSetting;
-import io.github.client.util.GLFWUtil;
+import io.github.client.util.java.GLFWUtil;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.option.KeyBinding;
 

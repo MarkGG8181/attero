@@ -1,6 +1,6 @@
-package io.github.client.util.interfaces;
+package io.github.client.util.java.interfaces;
 
-import io.github.client.util.math.ColorUtil;
+import io.github.client.util.java.math.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.network.packet.Packet;
@@ -23,7 +23,7 @@ public interface IMinecraft {
             MutableText finalText = Text.empty();
 
             if (includePrefix) {
-                MutableText prefix = ColorUtil.createGradientText("io", new Color(0x26A07D), Color.WHITE);
+                MutableText prefix = ColorUtil.createGradientText("ao", new Color(0x26A07D), Color.WHITE);
                 finalText.append(prefix);
                 finalText.append(Text.literal(" > "));
             }
@@ -38,7 +38,7 @@ public interface IMinecraft {
         if (mc.player != null) {
             MutableText finalText = Text.empty();
 
-            MutableText prefix = ColorUtil.createGradientText("io", new Color(0xFA003F), Color.WHITE);
+            MutableText prefix = ColorUtil.createGradientText("ae", new Color(0xFA003F), Color.WHITE);
             finalText.append(prefix);
 
             finalText.append(Text.literal(" > " + message).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));

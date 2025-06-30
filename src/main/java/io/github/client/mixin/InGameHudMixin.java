@@ -27,7 +27,7 @@ public class InGameHudMixin {
         RenderPumpkinOverlayEvent renderPumpkinOverlayEvent = new RenderPumpkinOverlayEvent();
         renderPumpkinOverlayEvent.post();
 
-        if (renderPumpkinOverlayEvent.isCancelled()) {
+        if (renderPumpkinOverlayEvent.cancelled) {
             args.set(2, 0f);
         }
     }
@@ -37,7 +37,7 @@ public class InGameHudMixin {
         RenderPowderedSnowOverlay renderPowderedSnowOverlay = new RenderPowderedSnowOverlay();
         renderPowderedSnowOverlay.post();
 
-        if (renderPowderedSnowOverlay.isCancelled()) {
+        if (renderPowderedSnowOverlay.cancelled) {
             args.set(2, 0f);
         }
     }
@@ -47,7 +47,7 @@ public class InGameHudMixin {
         RenderSpyglassOverlayEvent renderSpyglassOverlayEvent = new RenderSpyglassOverlayEvent();
         renderSpyglassOverlayEvent.post();
 
-        if (renderSpyglassOverlayEvent.isCancelled()) {
+        if (renderSpyglassOverlayEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -62,7 +62,7 @@ public class InGameHudMixin {
         RenderNauseaOverlayEvent renderNauseaOverlayEvent = new RenderNauseaOverlayEvent();
         renderNauseaOverlayEvent.post();
 
-        if (renderNauseaOverlayEvent.isCancelled()) {
+        if (renderNauseaOverlayEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -72,7 +72,7 @@ public class InGameHudMixin {
         RenderPortalOverlayEvent renderPortalOverlayEvent = new RenderPortalOverlayEvent();
         renderPortalOverlayEvent.post();
 
-        if (renderPortalOverlayEvent.isCancelled()) {
+        if (renderPortalOverlayEvent.cancelled) {
             ci.cancel();
         }
     }

@@ -32,14 +32,14 @@ public abstract class AbstractSetting<T> {
         this.defaultValue = value;
 
         if (!noParent) {
-            this.parent = ModuleTracker.getInstance().lastModule;
+            this.parent = ModuleTracker.INSTANCE.lastModule;
             this.parent.getSettings().add(this);
         }
     }
 
-    public AbstractSetting<T> hide(BooleanSupplier hidden) {
-        this.hidden = hidden;
-        return this;
+    public <I extends AbstractSetting<?>> I hide(BooleanSupplier hidden) {
+        this.hidden = hidden != null ? hidden : () -> false;
+        return (I) this;
     }
 
     public AbstractSetting<T> onChange(Consumer<T> onChange) {
@@ -47,9 +47,9 @@ public abstract class AbstractSetting<T> {
         return this;
     }
 
-    public AbstractSetting<T> setParent(GroupSetting parent) {
+    public <I extends AbstractSetting<?>> I setParent(GroupSetting parent) {
         this.parentSetting = parent;
-        return this;
+        return (I) this;
     }
 
     public void setValue(T newValue) {

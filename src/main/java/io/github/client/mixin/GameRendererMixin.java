@@ -19,7 +19,7 @@ public class GameRendererMixin {
         RenderTotemAnimationEvent renderTotemAnimationEvent = new RenderTotemAnimationEvent();
         renderTotemAnimationEvent.post();
 
-        if (renderTotemAnimationEvent.isCancelled() && floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
+        if (renderTotemAnimationEvent.cancelled && floatingItem.getItem() == Items.TOTEM_OF_UNDYING) {
             info.cancel();
         }
     }

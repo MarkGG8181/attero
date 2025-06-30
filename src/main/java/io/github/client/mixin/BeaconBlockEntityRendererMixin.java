@@ -23,7 +23,7 @@ public abstract class BeaconBlockEntityRendererMixin<T extends BlockEntity & Bea
         RenderBeaconBeamEvent renderBeaconBeamEvent = new RenderBeaconBeamEvent();
         renderBeaconBeamEvent.post();
 
-        if (renderBeaconBeamEvent.isCancelled()) {
+        if (renderBeaconBeamEvent.cancelled) {
             ci.cancel();
         }
     }

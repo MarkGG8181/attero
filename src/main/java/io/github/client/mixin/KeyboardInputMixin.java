@@ -38,37 +38,37 @@ public abstract class KeyboardInputMixin extends Input {
         moveButtonEvent.post();
 
         this.playerInput = new PlayerInput(
-                moveButtonEvent.isForward(),
-                moveButtonEvent.isBack(),
-                moveButtonEvent.isLeft(),
-                moveButtonEvent.isRight(),
-                moveButtonEvent.isJump(),
-                moveButtonEvent.isSneak(),
+                moveButtonEvent.forward,
+                moveButtonEvent.back,
+                moveButtonEvent.left,
+                moveButtonEvent.right,
+                moveButtonEvent.jump,
+                moveButtonEvent.sneak,
                 this.settings.sprintKey.isPressed()
         );
 
         float moveForward = 0.0f;
         float moveStrafe = 0.0f;
 
-        if (moveButtonEvent.isForward()) moveForward += 1.0f;
-        if (moveButtonEvent.isBack()) moveForward -= 1.0f;
-        if (moveButtonEvent.isLeft()) moveStrafe += 1.0f;
-        if (moveButtonEvent.isRight()) moveStrafe -= 1.0f;
+        if (moveButtonEvent.forward) moveForward += 1.0f;
+        if (moveButtonEvent.back) moveForward -= 1.0f;
+        if (moveButtonEvent.left) moveStrafe += 1.0f;
+        if (moveButtonEvent.right) moveStrafe -= 1.0f;
 
         MoveInputEvent moveInputEvent = new MoveInputEvent(
                 moveForward, moveStrafe,
-                moveButtonEvent.isJump(),
-                moveButtonEvent.isSneak(),
+                moveButtonEvent.jump,
+                moveButtonEvent.sneak,
                 0.3f
         );
         moveInputEvent.post();
 
-        float f = moveInputEvent.getForward();
-        float g = moveInputEvent.getStrafe();
+        float f = moveInputEvent.forward;
+        float g = moveInputEvent.strafe;
 
-        if (moveInputEvent.isSneaking()) {
-            f *= moveInputEvent.getSneakFactor();
-            g *= moveInputEvent.getSneakFactor();
+        if (moveInputEvent.sneaking) {
+            f *= moveInputEvent.sneakFactor;
+            g *= moveInputEvent.sneakFactor;
         }
 
         this.movementVector = new Vec2f(g, f).normalize();

@@ -1,4 +1,4 @@
-package io.github.client.util.math;
+package io.github.client.util.java.math;
 
 @SuppressWarnings("unused")
 public class Timer {

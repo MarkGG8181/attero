@@ -1,6 +1,7 @@
 package io.github.client.module.impl.render;
 
 import io.github.client.event.data.Subscribe;
+import io.github.client.event.impl.player.ShouldApplyStatusEffectEvent;
 import io.github.client.event.impl.render.*;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
@@ -8,186 +9,187 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.GroupSetting;
 import io.github.client.module.data.setting.impl.MultiStringSetting;
-import io.github.client.util.SystemUtil;
+import io.github.client.util.java.SystemUtil;
 import io.github.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.effect.StatusEffects;
 
 @ModuleInfo(name = "NoRender", category = ModuleCategory.RENDER, description = "Prevents your view from being obstructed")
 public class NoRenderModule extends AbstractModule {
     private final GroupSetting overlays = new GroupSetting("Overlays", false);
-    private final BooleanSetting fireOverlay = (BooleanSetting) new BooleanSetting("Fire overlay", true).setParent(overlays);
-    private final BooleanSetting waterOverlay = (BooleanSetting) new BooleanSetting("Water overlay", true).setParent(overlays);
-    private final BooleanSetting wallOverlay = (BooleanSetting) new BooleanSetting("Wall overlay", true).setParent(overlays);
-    private final BooleanSetting portalOverlay = (BooleanSetting) new BooleanSetting("Portal overlay", false).setParent(overlays);
-    private final BooleanSetting nauseaOverlay = (BooleanSetting) new BooleanSetting("Nausea overlay", true).setParent(overlays);
-    private final BooleanSetting spyglassOverlay = (BooleanSetting) new BooleanSetting("Spyglass overlay", false).setParent(overlays);
-    private final BooleanSetting pumpkinOverlay = (BooleanSetting) new BooleanSetting("Pumpkin overlay", true).setParent(overlays);
-    private final BooleanSetting powderedSnowOverlay = (BooleanSetting) new BooleanSetting("Powdered snow overlay", true).setParent(overlays);
+    private final BooleanSetting fireOverlay = new BooleanSetting("Fire overlay", true).setParent(overlays);
+    private final BooleanSetting waterOverlay = new BooleanSetting("Water overlay", true).setParent(overlays);
+    private final BooleanSetting wallOverlay = new BooleanSetting("Wall overlay", true).setParent(overlays);
+    private final BooleanSetting portalOverlay = new BooleanSetting("Portal overlay", false).setParent(overlays);
+    private final BooleanSetting nauseaOverlay = new BooleanSetting("Nausea overlay", true).setParent(overlays);
+    private final BooleanSetting spyglassOverlay = new BooleanSetting("Spyglass overlay", false).setParent(overlays);
+    private final BooleanSetting pumpkinOverlay = new BooleanSetting("Pumpkin overlay", true).setParent(overlays);
+    private final BooleanSetting powderedSnowOverlay = new BooleanSetting("Powdered snow overlay", true).setParent(overlays);
 
     private final GroupSetting blocks = new GroupSetting("Blocks", false);
-    private final BooleanSetting blockBreakParticles = (BooleanSetting) new BooleanSetting("Block break particles", true).setParent(blocks);
-    private final BooleanSetting blockBreakingParticles = (BooleanSetting) new BooleanSetting("Block breaking particles", true).setParent(blocks);
-    private final BooleanSetting fallingLeavesParticles = (BooleanSetting) new BooleanSetting("Leaf block falling leaves", true).setParent(blocks);
-    private final BooleanSetting leafBlockWaterDrip = (BooleanSetting) new BooleanSetting("Leaf block water drip", true).setParent(blocks);
+    private final BooleanSetting blockBreakParticles = new BooleanSetting("Block break particles", true).setParent(blocks);
+    private final BooleanSetting blockBreakingParticles = new BooleanSetting("Block breaking particles", true).setParent(blocks);
+    private final BooleanSetting fallingLeavesParticles = new BooleanSetting("Leaf block falling leaves", true).setParent(blocks);
+    private final BooleanSetting leafBlockWaterDrip = new BooleanSetting("Leaf block water drip", true).setParent(blocks);
 
     private final GroupSetting weather = new GroupSetting("Weather", false);
 
-    private final BooleanSetting precipitation = (BooleanSetting) new BooleanSetting("Precipitation", false).setParent(weather);
-    private final BooleanSetting rainParticles = (BooleanSetting) new BooleanSetting("Rain particles & sounds", false).setParent(weather);
-    private final BooleanSetting fog = (BooleanSetting) new BooleanSetting("Fog", false).setParent(weather);
+    private final BooleanSetting precipitation = new BooleanSetting("Precipitation", false).setParent(weather);
+    private final BooleanSetting rainParticles = new BooleanSetting("Rain particles & sounds", false).setParent(weather);
+    private final BooleanSetting fog = new BooleanSetting("Fog", false).setParent(weather);
 
     private final GroupSetting world = new GroupSetting("World", false);
 
-    private final BooleanSetting worldBorder = (BooleanSetting) new BooleanSetting("World border", true).setParent(world);
-    private final BooleanSetting beaconBeams = (BooleanSetting) new BooleanSetting("Beacon beams", true).setParent(world);
-    private final BooleanSetting signText = (BooleanSetting) new BooleanSetting("Sign text", false).setParent(world);
-    private final BooleanSetting fallingBlocks = (BooleanSetting) new BooleanSetting("Falling blocks", false).setParent(world);
-    private final MultiStringSetting entities = (MultiStringSetting) new MultiStringSetting("Entities", EntityUtil.getExampleEntities(), EntityUtil.getAllEntities()).setParent(world);
+    private final BooleanSetting worldBorder = new BooleanSetting("World border", true).setParent(world);
+    private final BooleanSetting beaconBeams = new BooleanSetting("Beacon beams", true).setParent(world);
+    private final BooleanSetting signText = new BooleanSetting("Sign text", false).setParent(world);
+    private final BooleanSetting fallingBlocks = new BooleanSetting("Falling blocks", false).setParent(world);
+    private final MultiStringSetting entities = new MultiStringSetting("Entities", EntityUtil.getExampleEntities(), EntityUtil.getAllEntities()).setParent(world);
 
     private final GroupSetting client = new GroupSetting("Client", false);
-    private final BooleanSetting blindness = (BooleanSetting) new BooleanSetting("Blindness", true).setParent(client);
-    private final BooleanSetting darkness = (BooleanSetting) new BooleanSetting("Darkness", true).setParent(client);
-    private final BooleanSetting eatParticles = (BooleanSetting) new BooleanSetting("Eating particles", true).setParent(client);
-    private final BooleanSetting totemAnimation = (BooleanSetting) new BooleanSetting("Totem animation", true).setParent(client);
-    private final BooleanSetting enchantingGlint = (BooleanSetting) new BooleanSetting("Enchanting glint", true).setParent(client);
+    private final BooleanSetting blindness = new BooleanSetting("Blindness", true).setParent(client);
+    private final BooleanSetting darkness = new BooleanSetting("Darkness", true).setParent(client);
+    private final BooleanSetting eatParticles = new BooleanSetting("Eating particles", true).setParent(client);
+    private final BooleanSetting totemAnimation = new BooleanSetting("Totem animation", true).setParent(client);
+    private final BooleanSetting enchantingGlint = new BooleanSetting("Enchanting glint", true).setParent(client);
 
     @Subscribe
     public void onRenderFireOverlay(RenderFireOverlayEvent event) {
-        event.setCancelled(fireOverlay.getValue());
+        event.cancelled = fireOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderUnderwaterOverlay(RenderUnderwaterOverlayEvent event) {
-        event.setCancelled(waterOverlay.getValue());
+        event.cancelled = waterOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderInWallOverlay(RenderInWallOverlayEvent event) {
-        event.setCancelled(wallOverlay.getValue());
+        event.cancelled = wallOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderPortalOverlay(RenderPortalOverlayEvent event) {
-        event.setCancelled(portalOverlay.getValue());
+        event.cancelled = portalOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderNauseaOverlay(RenderNauseaOverlayEvent event) {
-        event.setCancelled(nauseaOverlay.getValue());
+        event.cancelled = nauseaOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderSpyglassOverlay(RenderSpyglassOverlayEvent event) {
-        event.setCancelled(spyglassOverlay.getValue());
+        event.cancelled = spyglassOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderPumpkinOverlay(RenderPumpkinOverlayEvent event) {
-        event.setCancelled(pumpkinOverlay.getValue());
+        event.cancelled = pumpkinOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderPowderedSnowOverlay(RenderPowderedSnowOverlay event) {
-        event.setCancelled(powderedSnowOverlay.getValue());
+        event.cancelled = powderedSnowOverlay.getValue();
     }
 
     @Subscribe
     public void onRenderBlockBreakingParticles(AddBlockBreakingParticleEvent event) {
-        event.setCancelled(blockBreakingParticles.getValue());
+        event.cancelled = blockBreakingParticles.getValue();
     }
 
     @Subscribe
     public void onRenderBlockBreakParticles(AddBlockBreakParticleEvent event) {
-        event.setCancelled(blockBreakParticles.getValue());
+        event.cancelled = blockBreakParticles.getValue();
     }
 
     @Subscribe
     public void onRenderPrecipitation(RenderPrecipitationEvent event) {
-        event.setCancelled(precipitation.getValue());
+        event.cancelled = precipitation.getValue();
     }
 
     @Subscribe
     public void onParticlesAndSoundEvent(AddParticlesAndSoundEvent event) {
-        event.setCancelled(rainParticles.getValue());
+        event.cancelled = rainParticles.getValue();
     }
 
     @Subscribe
     public void onSpawnDrippingWaterFromLeaves(SpawnLeavesWaterParticlesEvent event) {
-        event.setCancelled(leafBlockWaterDrip.getValue());
+        event.cancelled = leafBlockWaterDrip.getValue();
     }
 
     @Subscribe
     public void onSpawnFallingLeaves(SpawnLeavesFallingParticlesEvent event) {
-        event.setCancelled(fallingLeavesParticles.getValue());
+        event.cancelled = fallingLeavesParticles.getValue();
     }
 
     @Subscribe
     public void onRenderFog(RenderFogEvent event) {
-        event.setCancelled(fog.getValue());
+        event.cancelled = fog.getValue();
     }
 
     @Subscribe
     public void onRenderFallingBlocks(RenderFallingBlockEvent event) {
-        event.setCancelled(fallingBlocks.getValue());
+        event.cancelled = fallingBlocks.getValue();
     }
 
     @Subscribe
     public void onRenderWorldBorder(RenderWorldBorderEvent event) {
-        event.setCancelled(worldBorder.getValue());
+        event.cancelled = worldBorder.getValue();
     }
 
     @Subscribe
     public void onRenderBeaconBeam(RenderBeaconBeamEvent event) {
-        event.setCancelled(beaconBeams.getValue());
+        event.cancelled = beaconBeams.getValue();
     }
 
     @Subscribe
     public void onRenderSignText(RenderSignTextEvent event) {
-        event.setCancelled(signText.getValue());
+        event.cancelled = signText.getValue();
     }
 
     @Subscribe
     public void onRenderEntity(RenderEntityEvent event) {
-        if (event.getEntity() != null) {
-            var entityName = EntityType.getId(event.getEntity().getType()).getPath();
+        if (event.entity != null) {
+            var entityName = EntityType.getId(event.entity.getType()).getPath();
             if (entities.enabled(SystemUtil.toClassName(entityName))) {
-                event.setCancelled(true);
+                event.cancelled = true;
             }
         }
     }
 
     @Subscribe
     public void onRenderTotemAnimation(RenderTotemAnimationEvent event) {
-        event.setCancelled(totemAnimation.getValue());
+        event.cancelled = totemAnimation.getValue();
     }
 
     @Subscribe
     public void onRenderEatingParticles(RenderEatingParticlesEvent event) {
-        event.setCancelled(eatParticles.getValue());
+        event.cancelled = eatParticles.getValue();
     }
 
     @Subscribe
     public void onRenderItemEnchantmentGlint(RenderItemEnchantmentGlintEvent event) {
-        event.setCancelled(enchantingGlint.getValue());
+        event.cancelled = enchantingGlint.getValue();
     }
 
     @Subscribe
     public void hasBlindness(HasBlindnessEvent event) {
-        event.setCancelled(blindness.getValue());
+        event.cancelled = blindness.getValue();
     }
 
     @Subscribe
     public void hasDarkness(HasDarknessEvent event) {
-        event.setCancelled(darkness.getValue());
+        event.cancelled = darkness.getValue();
     }
 
     @Subscribe
     public void getDarkness(GetDarknessEvent event) {
-        event.setCancelled(darkness.getValue());
+        event.cancelled = darkness.getValue();
     }
 
     @Subscribe
-    public void getFogModifier(GetFogModifierEvent event) {
-        event.setCancelled(blindness.getValue());
+    public void getFogModifier(ShouldApplyStatusEffectEvent event) {
+        event.cancelled = (event.effect == StatusEffects.BLINDNESS && blindness.getValue()) || (event.effect == StatusEffects.DARKNESS && darkness.getValue());
     }
 }

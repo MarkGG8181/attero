@@ -1,4 +1,4 @@
-package io.github.client.util;
+package io.github.client.util.java;
 
 import net.minecraft.client.MinecraftClient;
 

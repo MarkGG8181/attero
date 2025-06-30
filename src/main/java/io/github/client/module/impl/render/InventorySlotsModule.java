@@ -10,7 +10,7 @@ import io.github.client.module.data.ModuleInfo;
 public class InventorySlotsModule extends AbstractModule {
     @Subscribe
     public void drawSlot(DrawSlotEvent event) {
-        var slot = event.getSlot();
-        event.getContext().drawText(mc.textRenderer, String.valueOf(slot.getIndex()), slot.x, slot.y + mc.textRenderer.fontHeight, -1, false);
+        var slot = event.slot;
+        event.context.drawText(mc.textRenderer, String.valueOf(slot.getIndex()), slot.x, slot.y + mc.textRenderer.fontHeight, -1, false);
     }
 }

@@ -21,7 +21,7 @@ public class ParticleManagerMixin {
         AddBlockBreakingParticleEvent addBlockBreakingParticleEvent = new AddBlockBreakingParticleEvent();
         addBlockBreakingParticleEvent.post();
 
-        if (addBlockBreakingParticleEvent.isCancelled()) {
+        if (addBlockBreakingParticleEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -31,7 +31,7 @@ public class ParticleManagerMixin {
         AddBlockBreakParticleEvent addBlockParticlesEvent = new AddBlockBreakParticleEvent();
         addBlockParticlesEvent.post();
 
-        if (addBlockParticlesEvent.isCancelled()) {
+        if (addBlockParticlesEvent.cancelled) {
             ci.cancel();
         }
     }

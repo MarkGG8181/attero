@@ -9,9 +9,9 @@ import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.ColorSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.StringSetting;
-import io.github.client.screen.ClickScreen;
+import io.github.client.screen.DropdownClickScreen;
 import io.github.client.screen.JelloClickScreen;
-import io.github.client.screen.PanelClickScreen;
+import io.github.client.screen.FrameClickScreen;
 import io.github.client.screen.data.ImGuiFontManager;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.tracker.impl.ModuleTracker;
@@ -55,14 +55,14 @@ public class ModuleListModule extends AbstractModule {
 
     @Subscribe
     public void onRender(Render2DEvent event) {
-        if (mc.currentScreen instanceof ClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof PanelClickScreen) {
+        if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof FrameClickScreen) {
             return;
         }
 
         final var shouldAnimate = animate.toBoolean();
 
         final var modules = new LinkedList<AbstractModule>();
-        for (final var module : ModuleTracker.getInstance().toList()) {
+        for (final var module : ModuleTracker.INSTANCE.toList()) {
             if (module.isEnabled()) {
                 modules.add(module);
                 module.getX().update(100);
@@ -154,10 +154,10 @@ public class ModuleListModule extends AbstractModule {
 
                     var totalWidth = baseWidth + (suffix != null ? dashWidth + suffixWidth : 0);
 
-                    var x = event.getDrawContext().getScaledWindowWidth() - totalWidth - xOffset.toInt();
+                    var x = event.context.getScaledWindowWidth() - totalWidth - xOffset.toInt();
 
                     if (background.getValue()) {
-                        event.getDrawContext().fill(
+                        event.context.fill(
                                 x - 2,
                                 (int) (y - 1),
                                 x + totalWidth + 1,
@@ -165,15 +165,15 @@ public class ModuleListModule extends AbstractModule {
                                 new Color(0, 0, 0, 150).getRGB()
                         );
                     }
-                    event.getDrawContext().drawText(mc.textRenderer, baseName, (int) x, (int) (y + 0.5f), textColor.toInt(), fontShadow.getValue());
+                    event.context.drawText(mc.textRenderer, baseName, (int) x, (int) (y + 0.5f), textColor.toInt(), fontShadow.getValue());
 
                     if (suffix != null) {
                         var dashX = x + baseWidth;
                         var suffixX = dashX + dashWidth;
 
-                        event.getDrawContext().drawText(mc.textRenderer, suffixChar.getValue(), dashX, (int) y, new Color(200, 200, 200).getRGB(), fontShadow.getValue());
+                        event.context.drawText(mc.textRenderer, suffixChar.getValue(), dashX, (int) y, new Color(200, 200, 200).getRGB(), fontShadow.getValue());
 
-                        event.getDrawContext().drawText(mc.textRenderer, suffix, suffixX, (int) y, suffixColor.toInt(), fontShadow.getValue());
+                        event.context.drawText(mc.textRenderer, suffix, suffixX, (int) y, suffixColor.toInt(), fontShadow.getValue());
                     }
 
                     y += mc.textRenderer.fontHeight + 1;

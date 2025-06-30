@@ -18,7 +18,7 @@ public abstract class LightmapTextureManagerMixin {
         GetDarknessEvent getDarknessEvent = new GetDarknessEvent();
         getDarknessEvent.post();
 
-        if (getDarknessEvent.isCancelled()) {
+        if (getDarknessEvent.cancelled) {
             info.setReturnValue(0.0f);
         }
     }

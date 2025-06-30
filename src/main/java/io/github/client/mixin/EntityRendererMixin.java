@@ -22,14 +22,14 @@ public class EntityRendererMixin<T extends Entity> {
             RenderFallingBlockEvent renderFallingBlockEvent = new RenderFallingBlockEvent();
             renderFallingBlockEvent.post();
 
-            if (renderFallingBlockEvent.isCancelled()) {
+            if (renderFallingBlockEvent.cancelled) {
                 cir.setReturnValue(false);
             }
         } else {
             RenderEntityEvent renderEntityEvent = new RenderEntityEvent(entity);
             renderEntityEvent.post();
 
-            if (renderEntityEvent.isCancelled()) {
+            if (renderEntityEvent.cancelled) {
                 cir.setReturnValue(false);
             }
         }

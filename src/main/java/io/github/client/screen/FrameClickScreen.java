@@ -7,7 +7,6 @@ import io.github.client.file.impl.ModulesFile;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.setting.AbstractSetting;
-import io.github.client.module.impl.render.ClickGUIModule;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.screen.data.ImGuiThemes;
 import io.github.client.tracker.impl.AuthTracker;
@@ -26,46 +25,35 @@ import java.util.Arrays;
 
 import static imgui.ImGui.*;
 
-public final class PanelClickScreen extends Screen
-{
-    public PanelClickScreen()
-    {
-        super(Text.of("sex"));
+public final class FrameClickScreen extends Screen {
+    public FrameClickScreen() {
+        super(Text.of("Frame"));
     }
 
     @Override
     public void render(DrawContext context,
                        int mouseX,
                        int mouseY,
-                       float deltaTicks)
-    {
+                       float deltaTicks) {
         super.render(context, mouseX, mouseY, deltaTicks);
 
         ImGuiImpl.draw(io -> {
-            switch (ModuleTracker.getInstance().getByClass(ClickGUIModule.class).theme.getValue()) {
-                case "Marine" -> ImGuiThemes.applyMarineTheme();
-                case "Dark" -> ImGuiThemes.applyDarkTheme();
-                case "White" -> ImGuiThemes.applyWhiteTheme();
-            }
-
+            ImGuiThemes.applyTheme();
             pushFont(ImGuiImpl.inter17);
 
-            if (begin(Attero.MOD_ID + " panel"))
-            {
-                if (beginTabBar("tabs"))
-                {
-                    for (ModuleCategory value : ModuleCategory.values())
-                    {
+            if (begin(Attero.MOD_ID + " panel")) {
+                if (beginTabBar("tabs")) {
+                    for (ModuleCategory value : ModuleCategory.values()) {
                         if (value.equals(ModuleCategory.CONFIGS)) {
                             boolean openLC = ImGui.collapsingHeader("Local configs");
                             if (openLC) {
                                 ImGui.setWindowFontScale(0.8f);
-                                for (ConfigEntry config : ModuleTracker.getInstance().configs) {
-                                    boolean selected = !ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+                                for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
+                                    boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                     if (ImGui.radioButton(config.name(), selected)) {
-                                        ModuleTracker.getInstance().activeConfigName = config.name();
-                                        ModuleTracker.getInstance().activeIsCloud = false;
+                                        ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                        ModuleTracker.INSTANCE.activeIsCloud = false;
                                         new ModulesFile(config.name()).load();
                                     }
                                 }
@@ -75,40 +63,33 @@ public final class PanelClickScreen extends Screen
                             boolean openCC = ImGui.collapsingHeader("Cloud configs");
                             if (openCC) {
                                 ImGui.setWindowFontScale(0.8f);
-                                for (ConfigEntry config : ModuleTracker.getInstance().cloudConfigs) {
-                                    boolean selected = ModuleTracker.getInstance().activeIsCloud && config.name().equals(ModuleTracker.getInstance().activeConfigName);
+                                for (ConfigEntry config : ModuleTracker.INSTANCE.cloudConfigs) {
+                                    boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                     if (ImGui.radioButton(config.name(), selected)) {
-                                        ModuleTracker.getInstance().activeConfigName = config.name();
-                                        ModuleTracker.getInstance().activeIsCloud = true;
-                                        AuthTracker.getInstance().send(new CLoadConfigPacket(config.name()));
+                                        ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                        ModuleTracker.INSTANCE.activeIsCloud = true;
+                                        AuthTracker.INSTANCE.send(new CLoadConfigPacket(config.name()));
                                     }
                                 }
                                 ImGui.setWindowFontScale(1.0f);
                             }
                         }
 
-                        if (beginTabItem(value.name().toLowerCase()))
-                        {
-                            for (AbstractModule module : ModuleTracker.getInstance().getByCategory(value))
-                            {
+                        if (beginTabItem(value.name().toLowerCase())) {
+                            for (AbstractModule module : ModuleTracker.INSTANCE.getByCategory(value)) {
                                 boolean open = ImGui.collapsingHeader(module.toString());
 
-                                if (ImGui.isItemHovered())
-                                {
+                                if (ImGui.isItemHovered()) {
                                     ImGui.beginTooltip();
 
-                                    if (module.getKeybinds().isEmpty())
-                                    {
+                                    if (module.getKeybinds().isEmpty()) {
                                         ImGui.setTooltip(module.getInfo().description());
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         StringBuilder sb = new StringBuilder();
 
-                                        for (Integer keybind : module.getKeybinds())
-                                        {
-                                            sb.append((char)(int)keybind).append(", ");
+                                        for (Integer keybind : module.getKeybinds()) {
+                                            sb.append((char) (int) keybind).append(", ");
                                         }
 
                                         sb.delete(sb.length() - 2, sb.length());
@@ -132,9 +113,9 @@ public final class PanelClickScreen extends Screen
                                             continue;
                                         }
 
-                                        PanelClickScreen.SettingRenderer.render(setting);
+                                        FrameClickScreen.SettingRenderer.render(setting);
                                     }
-                                    
+
                                     ImGui.popID();
                                 }
                             }
@@ -173,7 +154,7 @@ public final class PanelClickScreen extends Screen
                     float[] maxVal = {rns.getMaxAsFloat()};
 
                     ImGui.setWindowFontScale(0.8f);
-                    ImGui.text(rns.getName() + " (MIN-MAX)");
+                    ImGui.text(rns.getName() + " (Min-Max)");
 
                     float fullWidth = ImGui.getContentRegionAvailX() - 8;
 

@@ -1,7 +1,7 @@
 package io.github.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import io.github.client.tracker.impl.CombatTracker;
+import io.github.client.tracker.impl.RotationTracker;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import static io.github.client.util.interfaces.IMinecraft.mc;
+import static io.github.client.util.java.interfaces.IMinecraft.mc;
 
 /**
  * @author kibty
@@ -33,7 +33,7 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
         if (living != mc.player || mc.currentScreen instanceof InventoryScreen)
             return original;
 
-        return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevYaw, CombatTracker.getInstance().yaw);
+        return MathHelper.lerpAngleDegrees(tickDelta, RotationTracker.INSTANCE.prevYaw, RotationTracker.INSTANCE.yaw);
     }
 
     @ModifyExpressionValue(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getLerpedPitch(F)F"))
@@ -41,6 +41,6 @@ public abstract class LivingEntityRendererMixin<S extends LivingEntityRenderStat
         if (living != mc.player || mc.currentScreen instanceof InventoryScreen)
             return original;
 
-        return MathHelper.lerpAngleDegrees(tickDelta, CombatTracker.getInstance().prevPitch, CombatTracker.getInstance().pitch);
+        return MathHelper.lerpAngleDegrees(tickDelta, RotationTracker.INSTANCE.prevPitch, RotationTracker.INSTANCE.pitch);
     }
 }

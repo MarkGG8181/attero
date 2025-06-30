@@ -1,7 +1,7 @@
 package io.github.client.mixin;
 
 import io.github.client.event.impl.world.UpdateVelocityEvent;
-import io.github.client.tracker.impl.CombatTracker;
+import io.github.client.tracker.impl.RotationTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -53,7 +53,7 @@ public abstract class EntityMixin {
     @Overwrite
     public final Vec3d getRotationVec(float tickProgress) {
         if ((Object) this instanceof ClientPlayerEntity && !(MinecraftClient.getInstance().currentScreen instanceof InventoryScreen)) {
-            return getRotationVector(CombatTracker.getInstance().pitch, CombatTracker.getInstance().yaw);
+            return getRotationVector(RotationTracker.INSTANCE.pitch, RotationTracker.INSTANCE.yaw);
         }
 
         return getRotationVector(getPitch(), getYaw());
@@ -85,10 +85,10 @@ public abstract class EntityMixin {
             UpdateVelocityEvent updateVeloEvent = new UpdateVelocityEvent(this.getYaw(), (float) movementInput.x, (float) movementInput.z, speed);
             updateVeloEvent.post();
 
-            float yaw = updateVeloEvent.getYaw();
-            float strafe = updateVeloEvent.getStrafe();
-            float forward = updateVeloEvent.getForward();
-            float friction = updateVeloEvent.getFriction();
+            float yaw = updateVeloEvent.yaw;
+            float strafe = updateVeloEvent.strafe;
+            float forward = updateVeloEvent.forward;
+            float friction = updateVeloEvent.friction;
 
             Vec3d vec3d = movementInputToVelocity(new Vec3d(strafe, movementInput.y, forward), friction, yaw);
             this.setVelocity(this.getVelocity().add(vec3d));

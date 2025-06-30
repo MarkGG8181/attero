@@ -22,7 +22,7 @@ public class KeyboardMixin {
         KeyEvent keyEvent = new KeyEvent(key, scancode, modifiers);
         keyEvent.post();
 
-        if (keyEvent.isCancelled()) {
+        if (keyEvent.cancelled) {
             ci.cancel();
         }
     }

@@ -16,7 +16,7 @@ public abstract class AbstractSignBlockEntityRendererMixin {
         RenderSignTextEvent renderSignTextEvent = new RenderSignTextEvent();
         renderSignTextEvent.post();
 
-        if (renderSignTextEvent.isCancelled()) {
+        if (renderSignTextEvent.cancelled) {
             return 0;
         }
 

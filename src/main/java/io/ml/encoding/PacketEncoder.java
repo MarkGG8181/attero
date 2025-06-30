@@ -2,7 +2,7 @@ package io.ml.encoding;
 
 import io.ml.packet.AbstractPacket;
 import io.ml.packet.Registry;
-import io.github.client.util.auth.EncryptionUtil;
+import io.github.client.util.client.auth.EncryptionUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

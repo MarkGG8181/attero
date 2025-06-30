@@ -6,7 +6,7 @@ import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.NumberSetting;
-import io.github.client.util.math.Timer;
+import io.github.client.util.java.math.Timer;
 
 @ModuleInfo(name = "AutoRespawn", category = ModuleCategory.MISC, description = "Respawns automatically on death")
 public class AutoRespawnModule extends AbstractModule {

@@ -18,7 +18,7 @@ public class WeatherRenderingMixin {
         RenderPrecipitationEvent renderPrecipitationEvent = new RenderPrecipitationEvent();
         renderPrecipitationEvent.post();
 
-        if (renderPrecipitationEvent.isCancelled()) {
+        if (renderPrecipitationEvent.cancelled) {
             ci.cancel();
         }
     }
@@ -28,7 +28,7 @@ public class WeatherRenderingMixin {
         AddParticlesAndSoundEvent addParticlesAndSoundEvent = new AddParticlesAndSoundEvent();
         addParticlesAndSoundEvent.post();
 
-        if (addParticlesAndSoundEvent.isCancelled()) {
+        if (addParticlesAndSoundEvent.cancelled) {
             ci.cancel();
         }
     }

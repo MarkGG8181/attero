@@ -18,7 +18,7 @@ import net.minecraft.util.shape.VoxelShapes;
 @ModuleInfo(name = "Jesus", description = "Allows you traverse water", category = ModuleCategory.MOVEMENT)
 public class JesusModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Verus", "Verus", "Collision");
-    private final BooleanSetting boost = (BooleanSetting) new BooleanSetting("Speed boost", false).hide(() -> !mode.is("Verus"));
+    private final BooleanSetting boost = new BooleanSetting("Speed boost", false).hide(() -> !mode.is("Verus"));
 
     private boolean water;
 
@@ -26,10 +26,10 @@ public class JesusModule extends AbstractModule {
     public void onComputeCollision(ComputeNextCollisionEvent event) {
         switch (mode.getValue()) {
             case "Collision" -> {
-                if (event.getState().getFluidState().isEmpty() || mc.options.sneakKey.isPressed() || mc.options.sneakKey.wasPressed()) return;
+                if (event.state.getFluidState().isEmpty() || mc.options.sneakKey.isPressed() || mc.options.sneakKey.wasPressed()) return;
 
-                if ((event.getState().getBlock() == Blocks.WATER | event.getState().getFluidState().getFluid() == Fluids.WATER) && !mc.player.isTouchingWater() && event.getPos().getY() <= mc.player.getY() - 1) {
-                    event.setShape(VoxelShapes.fullCube());
+                if ((event.state.getBlock() == Blocks.WATER | event.state.getFluidState().getFluid() == Fluids.WATER) && !mc.player.isTouchingWater() && event.pos.getY() <= mc.player.getY() - 1) {
+                    event.shape = VoxelShapes.fullCube();
                 }
             }
         }
