@@ -50,10 +50,12 @@ public class EntityUtil implements IMinecraft {
     public static boolean isWithinRange(Entity entity, double range) {
         double distanceSquared = mc.player.squaredDistanceTo(entity);
 
-        double playerReachSquared = range * range;
         double entityRadius = entity.getWidth() / 2;
+        double effectiveRange = range + entityRadius;
 
-        return distanceSquared <= (playerReachSquared + entityRadius * entityRadius);
+        double effectiveRangeSquared = effectiveRange * effectiveRange;
+
+        return distanceSquared <= effectiveRangeSquared;
     }
 
     public static void attackEntity(Entity entity) {
