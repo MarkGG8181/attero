@@ -8,7 +8,7 @@ public abstract class AbstractRotator extends AbstractModule {
 
     public AbstractRotator(int priority) {
         this.priority = priority;
-        RotationTracker.INSTANCE.getSet().add(this);
+        RotationTracker.INSTANCE.list.add(this);
     }
 
     public int getPriority() {

@@ -8,7 +8,6 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
-import io.github.client.tracker.impl.RotationTracker;
 import io.github.client.util.game.EntityUtil;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
@@ -22,7 +21,6 @@ import net.minecraft.item.AxeItem;
 )
 public class AimAssistModule extends AbstractModule {
     private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
-    private final NumberSetting fov = new NumberSetting("FOV", 70, 180, 360);
     private final NumberSetting distance = new NumberSetting("Distance", 4.5, 1, 8);
     private final BooleanSetting onlyWeapon = new BooleanSetting("Only Weapon", false);
 
@@ -36,6 +34,8 @@ public class AimAssistModule extends AbstractModule {
         if (onlyWeapon.getValue() && !(mainHandStack.getItem() instanceof AxeItem || InventoryUtil.isSword(mainHandStack))) {
             return;
         }
+
+        target = EntityUtil.getTarget(target, 3.0, 4.5, "Range", true, false, false, false);
 
         if (target != null
                 && EntityUtil.isWithinRange(target, distance.getValue().floatValue())) {

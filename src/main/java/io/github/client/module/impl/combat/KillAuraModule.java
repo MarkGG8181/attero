@@ -12,6 +12,7 @@ import io.github.client.util.game.EntityUtil;
 import io.github.client.util.java.math.ClickDelayCalculator;
 import io.github.client.util.java.math.Timer;
 import io.github.client.util.game.RotationUtil;
+import net.minecraft.entity.LivingEntity;
 
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "KillAura", category = ModuleCategory.COMBAT, description = "Attacks entities in close proximity")
@@ -43,17 +44,18 @@ public class KillAuraModule extends AbstractModule {
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
     private final Timer attackTimer = new Timer();
+    private LivingEntity target;
 
     @Subscribe(priority = 10)
     public void onMotion(MotionEvent event) {
-        if (RotationTracker.INSTANCE.target != null &&
-                (raycast.getValue() && mc.player.canSee(RotationTracker.INSTANCE.target))) {
+        if (target != null &&
+                (raycast.getValue() && mc.player.canSee(target))) {
 
             var minSpeed = speed.getMinAsFloat();
             var maxSpeed = speed.getMaxAsFloat();
 
             var rots = RotationUtil.toRotation(
-                    RotationTracker.INSTANCE.target,
+                    target,
                     minSpeed,
                     maxSpeed
             );
@@ -67,16 +69,19 @@ public class KillAuraModule extends AbstractModule {
     public void onTick(TickEvent event) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
-        if (RotationTracker.INSTANCE.target != null && EntityUtil.isWithinRange(RotationTracker.INSTANCE.target, attackRange.toDouble())) {
+        target = EntityUtil.getTarget(target, aimRange.toDouble(), searchRange.toDouble(), sortBy.getValue(),
+                targets.enabled("Players"), targets.enabled("Animals"), targets.enabled("Monsters"), targets.enabled("Invisibles"));
+
+        if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble())) {
             switch (delayMode.getValue()) {
                 case "1.9" -> {
                     if (mc.player.getAttackCooldownProgress(0) >= 1)
-                        EntityUtil.attackEntity(RotationTracker.INSTANCE.target);
+                        EntityUtil.attackEntity(target);
                 }
 
                 case "CPS" -> {
                     if (attackTimer.hasElapsed(delayCalculator.getClickDelay(), true)) {
-                        EntityUtil.attackEntity(RotationTracker.INSTANCE.target);
+                        EntityUtil.attackEntity(target);
                     }
                 }
             }
@@ -84,7 +89,7 @@ public class KillAuraModule extends AbstractModule {
     }
 
     public void onDisable() {
-        RotationTracker.INSTANCE.target = null;
+        target = null;
         attackTimer.reset();
         mc.options.attackKey.setPressed(false);
     }

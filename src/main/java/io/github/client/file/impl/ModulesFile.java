@@ -27,7 +27,7 @@ public class ModulesFile extends AbstractFile {
     public void save() {
         JsonObject jsonObject = new JsonObject();
 
-        for (AbstractModule mod : ModuleTracker.INSTANCE.getSet()) {
+        for (AbstractModule mod : ModuleTracker.INSTANCE.list) {
             JsonObject modObject = new JsonObject();
             modObject.addProperty("Enabled", mod.isEnabled());
             modObject.addProperty("Expanded", mod.isExpanded());
@@ -94,7 +94,7 @@ public class ModulesFile extends AbstractFile {
             return;
         }
 
-        for (AbstractModule mod : ModuleTracker.INSTANCE.getSet()) {
+        for (AbstractModule mod : ModuleTracker.INSTANCE.list) {
             JsonObject modObject = json.getAsJsonObject(mod.getInfo().name());
             if (modObject == null) continue;
 

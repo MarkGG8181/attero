@@ -26,27 +26,27 @@ public class FriendCommand extends AbstractCommand {
             switch (args[1].toLowerCase()) {
                 case "add" -> {
                     String friendName = args[2];
-                    FriendTracker.getInstance().getSet().add(friendName);
+                    FriendTracker.getInstance().list.add(friendName);
                     send(String.format("Added §e%s§r to friends", friendName));
                 }
                 case "remove" -> {
                     String friendName = args[2];
-                    FriendTracker.getInstance().getSet().remove(friendName);
+                    FriendTracker.getInstance().list.remove(friendName);
                     send(String.format("Removed §e%s§r from friends", friendName));
                 }
 
                 case "list" -> {
-                    if (FriendTracker.getInstance().getSet().isEmpty())
+                    if (FriendTracker.getInstance().list.isEmpty())
                         send("You have no friends :(");
                     else {
                         send("Your friends: ");
-                        send("> " + String.join(", ", FriendTracker.getInstance().getSet()), false);
+                        send("> " + String.join(", ", FriendTracker.getInstance().list), false);
                     }
                 }
 
                 default -> {
                     String friendName = args[1];
-                    FriendTracker.getInstance().getSet().add(friendName);
+                    FriendTracker.getInstance().list.add(friendName);
                     send(String.format("Added §e%s§r to friends", friendName));
                 }
             }

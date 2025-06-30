@@ -54,7 +54,7 @@ public class BindCommand extends AbstractCommand {
                 }
                 case "list" -> {
                     if (args.length == 2) {
-                        ModuleTracker.INSTANCE.getSet().forEach(m -> {
+                        ModuleTracker.INSTANCE.list.forEach(m -> {
                             if (m.getKeybinds().isEmpty()) return;
 
                             StringBuilder sb = new StringBuilder();
@@ -83,7 +83,7 @@ public class BindCommand extends AbstractCommand {
                         } else {
                             int keyBind = getKeyBind(args, 2);
 
-                            for (AbstractModule abstractModule : ModuleTracker.INSTANCE.getSet()) {
+                            for (AbstractModule abstractModule : ModuleTracker.INSTANCE.list) {
                                 if (abstractModule.getKeybinds().contains(keyBind)) {
                                     send(abstractModule.getInfo().name());
                                 }
@@ -93,7 +93,7 @@ public class BindCommand extends AbstractCommand {
                 }
                 case "clear" -> {
                     if (args.length == 2) {
-                        ModuleTracker.INSTANCE.getSet().forEach(m -> m.getKeybinds().clear());
+                        ModuleTracker.INSTANCE.list.forEach(m -> m.getKeybinds().clear());
                         send("Cleared all binds!");
                     } else if (args.length == 3) {
                         AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
@@ -104,7 +104,7 @@ public class BindCommand extends AbstractCommand {
                         } else {
                             int keyBind = getKeyBind(args, 2);
 
-                            ModuleTracker.INSTANCE.getSet().forEach(m -> m.getKeybinds().remove((Integer) keyBind));
+                            ModuleTracker.INSTANCE.list.forEach(m -> m.getKeybinds().remove((Integer) keyBind));
                         }
                     } else throw new IllegalArgumentException("Expected 1 or 0 args to a \"clear\" operation!");
                 }

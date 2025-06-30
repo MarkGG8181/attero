@@ -14,7 +14,7 @@ public class FriendsFile extends AbstractFile {
     public void save() {
         JsonArray jsonArray = new JsonArray();
 
-        for (String friend : FriendTracker.getInstance().getSet()) {
+        for (String friend : FriendTracker.getInstance().list) {
             jsonArray.add(friend);
         }
 
@@ -25,11 +25,11 @@ public class FriendsFile extends AbstractFile {
     public void load() {
         JsonArray jsonArray = loadJsonArray();
 
-        FriendTracker.getInstance().getSet().clear();
+        FriendTracker.getInstance().list.clear();
 
         for (JsonElement element : jsonArray) {
             if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-                FriendTracker.getInstance().getSet().add(element.getAsString());
+                FriendTracker.getInstance().list.add(element.getAsString());
             }
         }
     }
