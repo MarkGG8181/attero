@@ -2,9 +2,9 @@ package io.github.client.mixin;
 
 import io.github.client.event.impl.player.ReceivePacketEvent;
 import io.github.client.event.impl.player.SendPacketEvent;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,17 +22,17 @@ public class ClientConnectionMixin {
         ReceivePacketEvent receivePacketEvent = new ReceivePacketEvent(packet);
         receivePacketEvent.post();
 
-        if (receivePacketEvent.isCancelled()) {
+        if (receivePacketEvent.cancelled) {
             ci.cancel();
         }
     }
 
-    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V", at = @At("HEAD"), cancellable = true)
-    private void send(Packet<?> packet, @Nullable PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
+    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V", at = @At("HEAD"), cancellable = true)
+    private void send(Packet<?> packet, @Nullable ChannelFutureListener channelFutureListener, boolean flush, CallbackInfo ci) {
         SendPacketEvent sendPacketEvent = new SendPacketEvent(packet);
         sendPacketEvent.post();
 
-        if (sendPacketEvent.isCancelled()) {
+        if (sendPacketEvent.cancelled) {
             ci.cancel();
         }
     }

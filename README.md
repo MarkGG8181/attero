@@ -1,6 +1,6 @@
 # Attero client
 
-A utility client made to be used on anarchy and SMP servers on 1.21.5 fabric.
+A utility client designed to be used on anarchy and SMP servers on the latest versions of Minecraft.
 
 ## Credits
 - Mark
