@@ -55,7 +55,7 @@ public class KillAuraModule extends AbstractRotator {
         target = EntityUtil.getTarget(target, aimRange.toDouble(), searchRange.toDouble(), sortBy.getValue(),
                 targets.enabled("Players"), targets.enabled("Animals"), targets.enabled("Monsters"), targets.enabled("Invisibles"));
 
-        if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble())) {
+        if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble()) && shouldRotate() != null) {
             switch (delayMode.getValue()) {
                 case "1.9" -> {
                     if (mc.player.getAttackCooldownProgress(0) >= 1)
@@ -89,7 +89,7 @@ public class KillAuraModule extends AbstractRotator {
     @Override
     public float[] shouldRotate() {
         if (target != null &&
-                (raycast.getValue() && mc.player.canSee(target))) {
+                (!raycast.getValue() || mc.player.canSee(target))) {
 
             var minSpeed = speed.getMinAsFloat();
             var maxSpeed = speed.getMaxAsFloat();
