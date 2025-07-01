@@ -15,72 +15,64 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.AxeItem;
 import org.lwjgl.glfw.GLFW;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
-// Horrid Code - graph
-@SuppressWarnings("ALL")
 @ModuleInfo(name = "TriggerBot", category = ModuleCategory.COMBAT, description = "Attacks enemies if you're looking at them")
 public class TriggerBotModule extends AbstractModule {
-    private final RangeNumberSetting swordMs = new RangeNumberSetting("Sword delay", 40, 1000, 40, 1000);
-    private final RangeNumberSetting axeMS = new RangeNumberSetting("Axe delay", 40, 1000, 40, 1000);
+    private final RangeNumberSetting swordDelay = new RangeNumberSetting("Sword delay", 40, 1000, 40, 1000);
+    private final RangeNumberSetting axeDelay = new RangeNumberSetting("Axe delay", 40, 1000, 40, 1000);
     private final Timer timer = new Timer();
-    private float ms;
 
     @Subscribe
-    private void onTick(TickEvent ignoredEvent) {
-        if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking())
-            return;
+    private void onTick(TickEvent ignored) {
+        if (mc.player == null || mc.world == null) return;
+        if (mc.player.isSpectator()) return;
+        if (mc.currentScreen != null) return;
+        if (mc.player.isBlocking()) return;
 
-        var target = mc.targetedEntity;
+        Entity target = mc.targetedEntity;
         if (target == null || !mc.player.canSee(target)) return;
+        if (!isValidTarget(target)) return;
 
-        var item = mc.player.getMainHandStack().getItem();
-        if (item.getComponents().contains(DataComponentTypes.FOOD) && GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) return;
+        var mainHandItem = mc.player.getMainHandStack().getItem();
 
-        if (!delay()) return;
-
-        if (isValidTarget(target)) {
-            mc.doAttack();
+        if (mainHandItem.getComponents().contains(DataComponentTypes.FOOD) &&
+                GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) != GLFW.GLFW_PRESS) {
+            return;
         }
+
+        long delayMs = getDelayForItem(mainHandItem);
+        if (!timer.hasElapsed(delayMs, true)) return;
+
+        mc.doAttack();
     }
 
-    private boolean delay() {
-        var item = mc.player.getMainHandStack().getItem();
-        var speed = new float[2];
-
+    private long getDelayForItem(Object item) {
+        float min, max;
         if (item instanceof AxeItem) {
-            speed[0] = axeMS.getMinAsFloat();
-            speed[1] = axeMS.getMaxAsFloat();
+            min = axeDelay.getMinAsFloat();
+            max = axeDelay.getMaxAsFloat();
         } else {
-            speed[0] = swordMs.getMinAsFloat();
-            speed[1] = swordMs.getMaxAsFloat();
+            min = swordDelay.getMinAsFloat();
+            max = swordDelay.getMaxAsFloat();
         }
-
-        try {
-            if (swordMs.absoluteMax == swordMs.absoluteMin) {
-                return timer.hasElapsed(swordMs.absoluteMax.longValue());
-            }
-
-            if (axeMS.absoluteMax == axeMS.absoluteMin) {
-                return timer.hasElapsed(axeMS.absoluteMax.longValue());
-            }
-
-            ms = SecureRandom.getInstanceStrong().nextFloat(speed[0], speed[1]);
-            return timer.hasElapsed((long) ms, true);
-        } catch (NoSuchAlgorithmException e) {
-            return false;
-        }
+        if (min == max) return (long) min;
+        return (long) (ThreadLocalRandom.current().nextFloat() * (max - min) + min);
     }
 
-    private boolean isValidTarget(Entity e) {
-        if (e == mc.player || e == mc.cameraEntity || !e.isAlive()) return false;
-        if (!(e instanceof LivingEntity l) || l.isDead()) return false;
-        if (e instanceof Tameable t && mc.player.getUuid().equals(Optional.ofNullable(t.getOwner()).map(Entity::getUuid).orElse(null)))
-            return false;
+    private boolean isValidTarget(Entity entity) {
+        if (entity == mc.player || entity == mc.cameraEntity) return false;
+        if (!(entity instanceof LivingEntity living) || !living.isAlive() || living.isDead()) return false;
 
-        return !(e instanceof AnimalEntity a && a.isBaby());
+        if (entity instanceof Tameable tameable) {
+            var owner = Optional.ofNullable(tameable.getOwner()).map(Entity::getUuid).orElse(null);
+            if (mc.player.getUuid().equals(owner)) return false;
+        }
+
+        if (entity instanceof AnimalEntity animal && animal.isBaby()) return false;
+
+        return true;
     }
 
     public void onEnable() {
@@ -89,6 +81,6 @@ public class TriggerBotModule extends AbstractModule {
 
     @Override
     public String getSuffix() {
-        return ((int) ms) + "ms";
+        return (swordDelay.absoluteMin.intValue() + swordDelay.absoluteMax.intValue()) / 2 + "ms";
     }
 }
