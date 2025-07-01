@@ -99,8 +99,7 @@ public class WatermarkModule extends AbstractModule {
             });
 
             case "Minecraft" -> {
-                event.context.drawText(mc.textRenderer, "io", 5, 5, color.getValue().getRGB(), false);
-                event.context.drawText(mc.textRenderer, "ware", 5 + mc.textRenderer.getWidth("io"), 5, -1, false);
+                event.context.drawText(mc.textRenderer, "att§fero", 5, 5, color.getValue().getRGB(), false);
             }
 
             case "Image" -> ImGuiImpl.draw(io -> {
