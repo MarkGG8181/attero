@@ -5,7 +5,6 @@ import io.github.client.event.impl.game.TickEvent;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.rotate.AbstractRotator;
-import io.github.client.module.data.setting.impl.GroupSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
@@ -17,13 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
-@SuppressWarnings("ALL")
 @ModuleInfo(name = "ScaffoldWalk", description = "Places blocks under you", category = ModuleCategory.PLAYER)
 public class ScaffoldWalkModule extends AbstractRotator {
-    private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
-    private final RangeNumberSetting speed = new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
+    private final RangeNumberSetting speed = new RangeNumberSetting("Speed", 10, 180, 10, 180);
 
-    private float[] rots;
     private BlockHitResult result;
 
     public ScaffoldWalkModule() {
@@ -40,7 +36,6 @@ public class ScaffoldWalkModule extends AbstractRotator {
             var belowPlayer = mc.player.getBlockPos().down();
 
             if (!mc.world.getBlockState(belowPlayer).isSolidBlock(mc.world, belowPlayer)) {
-
                 placeBlock(belowPlayer);
             }
         } else {
@@ -55,7 +50,7 @@ public class ScaffoldWalkModule extends AbstractRotator {
             return;
         }
 
-        if (rots != null && heldItemStack != null) {
+        if (shouldRotate() != null && heldItemStack != null) {
             result = findBlockPlaceResult(pos);
             if (result != null && mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, result).isAccepted()) {
                 mc.player.swingHand(Hand.MAIN_HAND);
@@ -102,23 +97,15 @@ public class ScaffoldWalkModule extends AbstractRotator {
 
         checkForBlocks();
         InventoryUtil.switchToBestSlotWithBlocks();
-
-        rots = new float[]{RotationUtil.getAdjustedYaw(), 85};
         result = null;
     }
 
     @Override
     public float[] shouldRotate() {
         if (result == null) {
-            rots = new float[]{mc.player.lastYaw, mc.player.lastPitch};
-            return rots;
+            return new float[]{mc.player.lastYaw, mc.player.lastPitch};
         }
 
-        Vec3d lookAt = result.getPos();
-
-        float[] targetRots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
-        this.rots = targetRots;
-
-        return rots;
+        return RotationUtil.toRotation(result.getPos(), speed.getMinAsFloat(), speed.getMaxAsFloat());
     }
 }
