@@ -35,7 +35,7 @@ public class CrystalAuraModule extends AbstractRotator {
     }
 
     @Subscribe
-    private void onTick(TickEvent event) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || !canPerform) return;
 
         if (target != null) {
@@ -93,7 +93,7 @@ public class CrystalAuraModule extends AbstractRotator {
     }
 
     @Subscribe
-    private void onRunLoop(RunLoopEvent event) {
+    private void onRunLoop(RunLoopEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null || !canPerform) return;
 
         if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble())) {

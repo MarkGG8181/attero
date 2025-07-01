@@ -10,7 +10,7 @@ import io.github.client.module.data.ModuleInfo;
 @ModuleInfo(name = "CounterStrafe", category = ModuleCategory.MOVEMENT, description = "CS:GO Counterstrafing")
 public class CounterStrafeModule extends AbstractModule {
     @Subscribe
-    private void Tick(TickEvent event) {
+    private void Tick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         if (mc.player.isOnGround() && !isMoving()) {

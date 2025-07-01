@@ -5,7 +5,6 @@ import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.interact.KeyEvent;
 import io.github.client.module.impl.render.ClickGUIModule;
 import io.github.client.screen.DropdownClickScreen;
-import io.github.client.screen.JelloClickScreen;
 import io.github.client.screen.LoginScreen;
 import io.github.client.screen.FrameClickScreen;
 import io.github.client.tracker.AbstractTracker;
@@ -19,8 +18,7 @@ public class ScreenTracker extends AbstractTracker<Screen> {
         return tracker;
     }
 
-    public ScreenTracker()
-    {
+    public ScreenTracker() {
         JvmArgsChecker.force();
     }
 
@@ -28,7 +26,6 @@ public class ScreenTracker extends AbstractTracker<Screen> {
     public void initialize() {
         super.initialize();
         list.add(new DropdownClickScreen());
-        list.add(new JelloClickScreen());
         list.add(new FrameClickScreen());
     }
 
@@ -44,12 +41,6 @@ public class ScreenTracker extends AbstractTracker<Screen> {
                 case "Dropdown" -> {
                     if (event.key == ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).getKeybinds().getFirst()) {
                         MinecraftClient.getInstance().setScreen(getByClass(DropdownClickScreen.class));
-                        ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).setEnabled(true);
-                    }
-                }
-                case "Jello" -> {
-                    if (event.key == ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).getKeybinds().getFirst()) {
-                        MinecraftClient.getInstance().setScreen(getByClass(JelloClickScreen.class));
                         ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).setEnabled(true);
                     }
                 }

@@ -23,7 +23,7 @@ public class MidClickPearlModule extends AbstractModule {
     private final Timer switchBackTimer = new Timer();
 
     @Subscribe
-    private void onTick(MiddleClickEvent event) {
+    private void onTick(MiddleClickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         if (delayTimer.hasElapsed(delay.toInt(), true)) {

@@ -7,7 +7,6 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.StringSetting;
 import io.github.client.screen.DropdownClickScreen;
-import io.github.client.screen.JelloClickScreen;
 import io.github.client.screen.FrameClickScreen;
 import org.lwjgl.glfw.GLFW;
 
@@ -28,7 +27,7 @@ public class ClickGUIModule extends AbstractModule {
     }
 
     public void onDisable() {
-        if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof FrameClickScreen) {
+        if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof FrameClickScreen) {
             mc.setScreen(null);
         }
     }

@@ -45,7 +45,7 @@ public class VelocityModule extends AbstractModule {
     }
 
     @Subscribe
-    private void onTick(TickEvent event) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         switch (mode.getValue()) {

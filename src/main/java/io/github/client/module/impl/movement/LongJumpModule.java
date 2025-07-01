@@ -19,13 +19,8 @@ public class LongJumpModule extends AbstractModule {
     private float sigmaNcpAir;
     private int sigmaNcpGroundTicks;
 
-    public void onEnable() {
-        sigmaNcpAir = 0;
-        sigmaNcpStage = 0;
-    }
-
     @Subscribe
-    private void onUpdate(UpdateEvent event) {
+    private void onUpdate(UpdateEvent ignoredEvent) {
         if (mode.is("NCP")) {
             var speedAmpl = MovementUtil.getSpeedAmplifier2();
             var speedEffect = 1f + speedAmpl * 0.45f;
@@ -59,7 +54,7 @@ public class LongJumpModule extends AbstractModule {
         }
     }
 
-    double getMotion(int stage) {
+    private double getMotion(int stage) {
         double[] mot = {0.345, 0.2699, 0.183, 0.103, 0.024, -0.008, -0.04, -0.072, -0.104, -0.13, -0.019, -0.097};
 
         stage--;
@@ -74,5 +69,10 @@ public class LongJumpModule extends AbstractModule {
     @Override
     public String getSuffix() {
         return mode.getValue();
+    }
+
+    public void onEnable() {
+        sigmaNcpAir = 0;
+        sigmaNcpStage = 0;
     }
 }

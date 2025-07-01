@@ -2,10 +2,8 @@ package io.github.client.screen.data;
 
 import imgui.ImGui;
 import imgui.ImGuiStyle;
-import imgui.ImVec2;
 import imgui.ImVec4;
 import imgui.flag.ImGuiCol;
-import imgui.flag.ImGuiDir;
 import io.github.client.module.impl.render.ClickGUIModule;
 import io.github.client.tracker.impl.ModuleTracker;
 

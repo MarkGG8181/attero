@@ -95,7 +95,8 @@ public class AuthTracker extends AbstractTracker {
 
         try {
             boolean success = authFuture.get(5, TimeUnit.SECONDS);
-            float[] values = valuesFuture.get(5, TimeUnit.SECONDS);;
+            float[] values = valuesFuture.get(5, TimeUnit.SECONDS);
+            ;
 
             if (success) {
                 AuthTracker.INSTANCE.send(new CJVMChecksumPacket());
@@ -103,15 +104,15 @@ public class AuthTracker extends AbstractTracker {
                     Thread.sleep(5); // wait for the checksum to change
                 }
 
-                if (IntegrityCheck.check() != ImGuiImpl.correctChecksum)
-                {
-                    debug: // remove in release
+                if (IntegrityCheck.check() != ImGuiImpl.correctChecksum) {
+                    debug:
+                    // remove in release
                     {
                         System.out.println("--- jvm integrity check failed ---");
                         System.out.printf("Integrity check output -> %l%n", IntegrityCheck.check());
                         System.out.printf("Backend checksum -> %l%n", ImGuiImpl.correctChecksum);
                     }
-                    for (;;);
+                    for (; ; ) ;
                 }
 
                 MinecraftClient.getInstance().setScreen(null);
@@ -135,7 +136,8 @@ public class AuthTracker extends AbstractTracker {
         AuthTracker.ClientHandler handler = channel.pipeline().get(AuthTracker.ClientHandler.class);
 
         if (handler == null) {
-            while (true) {}
+            while (true) {
+            }
         }
 
         handler.setConfigListener(configs -> {

@@ -10,7 +10,6 @@ import io.github.client.module.data.setting.impl.ColorSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.StringSetting;
 import io.github.client.screen.DropdownClickScreen;
-import io.github.client.screen.JelloClickScreen;
 import io.github.client.screen.FrameClickScreen;
 import io.github.client.screen.data.ImGuiFontManager;
 import io.github.client.screen.data.ImGuiImpl;
@@ -55,7 +54,7 @@ public class ModuleListModule extends AbstractModule {
 
     @Subscribe
     private void onRender(Render2DEvent event) {
-        if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof JelloClickScreen || mc.currentScreen instanceof FrameClickScreen) {
+        if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof FrameClickScreen) {
             return;
         }
 

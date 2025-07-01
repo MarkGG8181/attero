@@ -29,7 +29,7 @@ public class TriggerBotModule extends AbstractModule {
     private float ms;
 
     @Subscribe
-    private void onTick(TickEvent event) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || mc.player.isSpectator() || mc.currentScreen != null || mc.player.isBlocking())
             return;
 

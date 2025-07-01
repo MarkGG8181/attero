@@ -15,7 +15,7 @@ public class StringSetting extends AbstractSetting<String> {
         this.index = find(value);
     }
 
-    public StringSetting(String name, String value,  boolean noParent, String... values) {
+    public StringSetting(String name, String value, boolean noParent, String... values) {
         super(name, value, noParent);
         this.values = values;
         this.index = find(value);
@@ -50,7 +50,7 @@ public class StringSetting extends AbstractSetting<String> {
 
     public void setIndex(int index) {
         if (index >= 0 && index < values.length) {
-            setValue(values[index]); // this will call onChange
+            setValue(values[index]);
         }
     }
 

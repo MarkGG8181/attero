@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 public final class Attero implements ClientModInitializer {
-
     public static final String MOD_ID = "attero";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final Attero INSTANCE = new Attero();
@@ -32,7 +31,7 @@ public final class Attero implements ClientModInitializer {
 
     public void onEnd() {
         ImGuiImpl.dispose();
-        ModuleTracker.INSTANCE.modulesFile.save(); //default config
+        ModuleTracker.INSTANCE.modulesFile.save();
         FriendTracker.getInstance().friendsFile.save();
     }
 }

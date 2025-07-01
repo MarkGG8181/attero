@@ -8,14 +8,10 @@ import io.github.client.module.data.ModuleInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 
-@ModuleInfo(
-        name = "AntiTrap",
-        description = "Removes entities to prevent traps",
-        category = ModuleCategory.MISC
-)
+@ModuleInfo(name = "AntiTrap", description = "Removes entities to prevent traps", category = ModuleCategory.MISC)
 public class AntiTrapModule extends AbstractModule {
     @Subscribe
-    private void onTick(TickEvent event) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         for (var entities : mc.world.getEntities()) {

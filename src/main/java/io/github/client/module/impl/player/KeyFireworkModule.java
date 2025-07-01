@@ -26,7 +26,7 @@ public class KeyFireworkModule extends AbstractModule {
     private boolean fired = false;
 
     @Subscribe
-    private void onTick(TickEvent event) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         var hasElytra = mc.player.getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.ELYTRA;

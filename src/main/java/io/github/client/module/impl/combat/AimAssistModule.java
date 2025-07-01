@@ -14,11 +14,7 @@ import io.github.client.util.game.RotationUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.AxeItem;
 
-@ModuleInfo(
-        name = "AimAssist",
-        description = "Automatically aims for you",
-        category = ModuleCategory.COMBAT
-)
+@ModuleInfo(name = "AimAssist", description = "Automatically aims for you", category = ModuleCategory.COMBAT)
 public class AimAssistModule extends AbstractModule {
     private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting distance = new NumberSetting("Distance", 4.5, 1, 8);
@@ -27,7 +23,7 @@ public class AimAssistModule extends AbstractModule {
     private LivingEntity target;
 
     @Subscribe
-    private void onRender(TickEvent event) {
+    private void onRender(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
 
         var mainHandStack = mc.player.getMainHandStack();

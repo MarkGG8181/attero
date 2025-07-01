@@ -15,7 +15,7 @@ public class AutoRespawnModule extends AbstractModule {
     private final Timer timer = new Timer();
 
     @Subscribe
-    private void onTick(TickEvent event) {
+    private void onTick(TickEvent ignoredEvent) {
         if (mc.player == null || mc.world == null) return;
 
         if (mc.player.isDead() && timer.hasElapsed(delay.toInt(), true)) {

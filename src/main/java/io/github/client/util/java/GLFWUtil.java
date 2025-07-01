@@ -10,8 +10,9 @@ public class GLFWUtil {
 
     /**
      * Util method to check if a key is being held down at this moment
+     *
      * @param window The display handle
-     * @param key The glfw key code
+     * @param key    The glfw key code
      * @return Returns a boolean value if the specified key is held down
      */
     public static boolean isKeyDown(long window, int key) {
@@ -24,8 +25,9 @@ public class GLFWUtil {
 
     /**
      * Util method to check if a key was pressed down this frame
+     *
      * @param window The display handle
-     * @param key The glfw key code
+     * @param key    The glfw key code
      * @return Returns a boolean value if the specified key was pressed
      */
     public static boolean isKeyPressed(long window, int key) {

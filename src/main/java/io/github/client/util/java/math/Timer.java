@@ -6,6 +6,7 @@ public class Timer {
 
     /**
      * Returns the elapsed time in milliseconds since the timer was last reset.
+     *
      * @return elapsed time in milliseconds
      */
     public long getElapsedTime() {
@@ -21,8 +22,9 @@ public class Timer {
 
     /**
      * Checks if a specified time has elapsed and optionally resets the timer.
+     *
      * @param duration the duration to check in milliseconds
-     * @param reset whether to reset the timer if the duration has elapsed
+     * @param reset    whether to reset the timer if the duration has elapsed
      * @return true if the specified duration has elapsed, false otherwise
      */
     public boolean hasElapsed(long duration, boolean reset) {
@@ -38,6 +40,7 @@ public class Timer {
 
     /**
      * Checks if a specified time has elapsed without resetting the timer.
+     *
      * @param duration the duration to check in milliseconds
      * @return true if the specified duration has elapsed, false otherwise
      */

@@ -18,12 +18,12 @@ import org.lwjgl.glfw.GLFW;
 /**
  * @author Graph
  */
-// TODO: MAKE THIS BETTER QUALITY, ADD MORE SETTINGS.
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "AutoCrystal", description = "Places and breaks crystals hold RMB", category = ModuleCategory.COMBAT)
 public class AutoCrystalModule extends AbstractModule {
     private final NumberSetting breakDelay = new NumberSetting("Break delay", 250, 0, 750);
     private final NumberSetting placeDelay = new NumberSetting("Place delay", 250, 0, 750);
+
     private final Timer breakDelayTimer = new Timer();
     private final Timer placeDelayTimer = new Timer();
 
