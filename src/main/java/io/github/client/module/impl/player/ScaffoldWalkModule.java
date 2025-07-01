@@ -33,7 +33,7 @@ public class ScaffoldWalkModule extends AbstractRotator {
 
     @Subscribe
     private void onTick(TickEvent ignoredEvent) {
-        if (mc.player == null || mc.world == null) return;
+        if (mc.player == null || mc.world == null || !canPerform) return;
 
         checkForBlocks();
 

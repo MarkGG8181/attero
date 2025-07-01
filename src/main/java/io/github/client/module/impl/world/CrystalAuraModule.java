@@ -36,7 +36,7 @@ public class CrystalAuraModule extends AbstractRotator {
 
     @Subscribe
     private void onTick(TickEvent event) {
-        if (mc.player == null || mc.world == null) return;
+        if (mc.player == null || mc.world == null || !canPerform) return;
 
         if (target != null) {
             var foundNearbyEntity = nearbyEntityCheck.getValue() ? mc.world.getEntitiesByClass(
@@ -94,7 +94,7 @@ public class CrystalAuraModule extends AbstractRotator {
 
     @Subscribe
     private void onRunLoop(RunLoopEvent event) {
-        if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
+        if (mc.player == null || mc.world == null || mc.currentScreen != null || !canPerform) return;
 
         if (target != null && EntityUtil.isWithinRange(target, attackRange.toDouble())) {
             EntityUtil.attackEntity(target);

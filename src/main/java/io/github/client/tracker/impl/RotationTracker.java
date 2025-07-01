@@ -25,13 +25,17 @@ public class RotationTracker extends AbstractTracker<AbstractRotator> implements
                 return;
             }
 
-            AbstractRotator best = list.stream()
+            var best = list.stream()
                     .filter(AbstractRotator::isEnabled)
-                    .filter(r -> r.shouldRotate() != null)
                     .max(Comparator.comparingInt(a -> a.priority))
                     .orElse(null);
 
+            for (var rotator : list) {
+                rotator.canPerform = false;
+            }
+
             if (best != null) {
+                best.canPerform = true;
                 float[] target = best.shouldRotate();
                 if (target != null) {
                     rotating = true;

@@ -49,8 +49,8 @@ public class KillAuraModule extends AbstractRotator {
     }
 
     @Subscribe
-    public void onTick(TickEvent event) {
-        if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
+    private void onTick(TickEvent event) {
+        if (mc.player == null || mc.world == null || mc.currentScreen != null || !canPerform) return;
 
         target = EntityUtil.getTarget(target, aimRange.toDouble(), searchRange.toDouble(), sortBy.getValue(),
                 targets.enabled("Players"), targets.enabled("Animals"), targets.enabled("Monsters"), targets.enabled("Invisibles"));

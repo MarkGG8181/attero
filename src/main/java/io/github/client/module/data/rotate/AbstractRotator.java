@@ -5,6 +5,7 @@ import io.github.client.tracker.impl.RotationTracker;
 
 public abstract class AbstractRotator extends AbstractModule {
     public final int priority;
+    public boolean canPerform;
 
     public AbstractRotator(int priority) {
         this.priority = priority;
