@@ -235,7 +235,7 @@ public class DropdownClickScreen extends Screen {
                     ImGui.setNextItemWidth(fullWidth);
 
                     String popupId = "##popup_" + mSS.getName();
-                    if (ImGui.button(mSS.toString())) {
+                    if (ImGui.button(mSS + "##" + mSS.getName() + "_" + mSS.hashCode())) {
                         ImGui.openPopup(popupId);
                     }
 
@@ -257,6 +257,7 @@ public class DropdownClickScreen extends Screen {
                         }
                         ImGui.endPopup();
                     }
+
                     ImGui.setWindowFontScale(1f);
                 }
                 case ColorSetting cS -> {
