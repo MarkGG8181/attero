@@ -78,6 +78,14 @@ public final class FrameClickScreen extends Screen {
                             }
 
                             for (AbstractModule module : ModuleTracker.INSTANCE.getByCategory(value)) {
+                                ImGui.pushID(module.toString());
+                                ImBoolean enabledMod = new ImBoolean(module.isEnabled());
+
+                                if (ImGui.checkbox("##Enabled", enabledMod)) {
+                                    module.setEnabled(enabledMod.get());
+                                }
+
+                                ImGui.sameLine();
                                 boolean open = ImGui.collapsingHeader(module.toString());
 
                                 if (ImGui.isItemHovered()) {
@@ -100,14 +108,6 @@ public final class FrameClickScreen extends Screen {
                                 }
 
                                 if (open) {
-                                    ImBoolean enabledMod = new ImBoolean(module.isEnabled());
-
-                                    ImGui.pushID(module.toString());
-
-                                    if (ImGui.checkbox("enabled", enabledMod)) {
-                                        module.setEnabled(enabledMod.get());
-                                    }
-
                                     for (AbstractSetting<?> setting : module.getSettings()) {
                                         if (setting.getHidden().getAsBoolean() || (setting.getParentSetting() != null && !setting.getParentSetting().getValue())) {
                                             continue;
@@ -115,9 +115,8 @@ public final class FrameClickScreen extends Screen {
 
                                         FrameClickScreen.SettingRenderer.render(setting);
                                     }
-
-                                    ImGui.popID();
                                 }
+                                ImGui.popID();
                             }
 
                             endTabItem();
@@ -233,23 +232,15 @@ public final class FrameClickScreen extends Screen {
                             cS.getBlue() / 255f,
                             cS.getAlpha() / 255f
                     };
-                    int flags = ImGuiColorEditFlags.PickerHueBar
-                            | ImGuiColorEditFlags.AlphaBar
-                            | ImGuiColorEditFlags.NoSidePreview
-                            | ImGuiColorEditFlags.Float
-                            | ImGuiColorEditFlags.NoInputs;
 
-
-                    float fullWidth = ImGui.getContentRegionAvailX();
-                    ImGui.setNextItemWidth(fullWidth);
-
-                    if (ImGui.colorPicker4("##" + cS.getName(), value, flags)) {
+                    if (ImGui.colorEdit4("##" + cS.getName(), value, ImGuiColorEditFlags.NoDragDrop | ImGuiColorEditFlags.NoTooltip)) {
                         int r = clampColor(Math.round(value[0] * 255));
                         int g = clampColor(Math.round(value[1] * 255));
                         int b = clampColor(Math.round(value[2] * 255));
                         int a = clampColor(Math.round(value[3] * 255));
                         cS.setValue(new Color(r, g, b, a));
                     }
+
                     ImGui.setWindowFontScale(1f);
                 }
                 case GroupSetting gS -> {
