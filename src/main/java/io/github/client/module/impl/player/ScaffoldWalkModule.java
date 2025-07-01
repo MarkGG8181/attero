@@ -1,17 +1,16 @@
 package io.github.client.module.impl.player;
 
 import io.github.client.event.data.Subscribe;
-import io.github.client.event.impl.player.MotionEvent;
 import io.github.client.event.impl.game.TickEvent;
-import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.rotate.AbstractRotator;
+import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.GroupSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
-import io.github.client.tracker.impl.RotationTracker;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -23,9 +22,11 @@ import net.minecraft.util.math.Vec3d;
 @ModuleInfo(name = "ScaffoldWalk", description = "Places blocks under you", category = ModuleCategory.PLAYER)
 public class ScaffoldWalkModule extends AbstractRotator {
     private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
-    private final RangeNumberSetting speed = (RangeNumberSetting) new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
+    private final RangeNumberSetting speed = new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
+    private final BooleanSetting vulcan = new BooleanSetting("Vulcan", false);
 
     private float[] rots;
+    private BlockHitResult result;
 
     public ScaffoldWalkModule() {
         super(50);
@@ -41,6 +42,10 @@ public class ScaffoldWalkModule extends AbstractRotator {
             var belowPlayer = mc.player.getBlockPos().down();
 
             if (!mc.world.getBlockState(belowPlayer).isSolidBlock(mc.world, belowPlayer)) {
+                if (vulcan.getValue()) {
+
+                }
+
                 placeBlock(belowPlayer);
             }
         } else {
@@ -56,15 +61,38 @@ public class ScaffoldWalkModule extends AbstractRotator {
         }
 
         if (rots != null && heldItemStack != null) {
-            BlockHitResult result = findBlockPlaceResult(pos);
+            result = findBlockPlaceResult(pos);
             if (result != null && mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, result).isAccepted()) {
                 mc.player.swingHand(Hand.MAIN_HAND);
             }
         }
     }
 
-    private BlockHitResult findBlockPlaceResult(BlockPos pos) {
-        return new BlockHitResult(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), Direction.UP, pos, false);
+    private BlockHitResult findBlockPlaceResult(BlockPos targetPos) {
+        BlockPos blockBelowTarget = targetPos.down();
+        BlockState stateBelowTarget = mc.world.getBlockState(blockBelowTarget);
+
+        if (!stateBelowTarget.isAir() && !stateBelowTarget.isReplaceable()) {
+            Vec3d hitVec = Vec3d.ofCenter(blockBelowTarget).add(0.0, 0.5, 0.0);
+            return new BlockHitResult(hitVec, Direction.UP, blockBelowTarget, false);
+        }
+
+        for (Direction direction : Direction.values()) {
+            if (direction == Direction.UP || direction == Direction.DOWN) continue;
+
+            BlockPos neighborPos = targetPos.offset(direction.getOpposite());
+            BlockState neighborState = mc.world.getBlockState(neighborPos);
+
+            if (!neighborState.isAir() && !neighborState.isReplaceable()) {
+                Vec3d hitVec = Vec3d.ofCenter(neighborPos).add(
+                        direction.getOpposite().getOffsetX() * 0.5,
+                        direction.getOpposite().getOffsetY() * 0.5,
+                        direction.getOpposite().getOffsetZ() * 0.5
+                );
+                return new BlockHitResult(hitVec, direction, neighborPos, false);
+            }
+        }
+        return null;
     }
 
     private void checkForBlocks() {
@@ -81,22 +109,20 @@ public class ScaffoldWalkModule extends AbstractRotator {
         InventoryUtil.switchToBestSlotWithBlocks();
 
         rots = new float[]{RotationUtil.getAdjustedYaw(), 85};
+        result = null;
     }
 
     @Override
     public float[] shouldRotate() {
-        if (mc.player.getMainHandStack().getItem() instanceof BlockItem item && InventoryUtil.isGoodBlock(item)) {
-            var currentYaw = RotationTracker.yaw;
-
-            var belowPlayer = mc.player.getBlockPos().down();
-            var lookAt = new Vec3d(belowPlayer.getX() + 0.5, belowPlayer.getY() + 0.5, belowPlayer.getZ() + 0.5);
-
-            var targetRots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
-
-            rots = new float[]{currentYaw, targetRots[1]};
-        } else {
+        if (result == null) {
             rots = new float[]{mc.player.lastYaw, mc.player.lastPitch};
+            return rots;
         }
+
+        Vec3d lookAt = result.getPos();
+
+        float[] targetRots = RotationUtil.toRotation(lookAt, speed.getMinAsFloat(), speed.getMaxAsFloat());
+        this.rots = targetRots;
 
         return rots;
     }
