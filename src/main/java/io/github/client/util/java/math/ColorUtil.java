@@ -1,6 +1,5 @@
 package io.github.client.util.java.math;
 
-import imgui.ImVec4;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -10,7 +9,6 @@ import net.minecraft.util.math.MathHelper;
 import java.awt.*;
 
 public class ColorUtil {
-
     public static MutableText createGradientText(String text, Color startColor, Color endColor) {
         MutableText result = Text.empty();
         int length = text.length();
@@ -30,14 +28,5 @@ public class ColorUtil {
 
     public static int toImGuiColor(Color color) {
         return (color.getAlpha() << 24) | (color.getBlue() << 16) | (color.getGreen() << 8) | color.getRed();
-    }
-
-    public static ImVec4 brighten(float r, float g, float b, float a, float factor) {
-        return new ImVec4(
-                Math.min(r * factor, 1.0f),
-                Math.min(g * factor, 1.0f),
-                Math.min(b * factor, 1.0f),
-                a
-        );
     }
 }

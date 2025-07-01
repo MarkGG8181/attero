@@ -17,16 +17,14 @@ public final class Animation {
 
     public Animation(final float initialValue,
                      final EnumTransition transitionType,
-                     final float transitionSpeed)
-    {
+                     final float transitionSpeed) {
         this.value = initialValue;
         this.transitionType = transitionType;
         this.transitionSpeed = transitionSpeed;
         this.lastUpdateTime = System.nanoTime();
     }
 
-    public void update(final float target)
-    {
+    public void update(final float target) {
         final long currentTime = System.nanoTime();
         final float deltaTime = (currentTime - lastUpdateTime) / AuthTracker.INSTANCE.values[4]; // this is the right value. source: allah
         lastUpdateTime = currentTime;
