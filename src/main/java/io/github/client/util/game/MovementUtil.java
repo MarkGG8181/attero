@@ -5,12 +5,12 @@ import io.github.client.util.java.interfaces.IMinecraft;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 
-// Warnings pmo sm icl
 @SuppressWarnings("ALL")
 public class MovementUtil implements IMinecraft {
 
     /**
      * wtf even is this
+     *
      * @see MovementUtil#getActualSpeed()
      */
     @Deprecated
@@ -20,14 +20,14 @@ public class MovementUtil implements IMinecraft {
 
     /**
      * Checks if the player is moving on every axis except the vertical one.
+     *
      * @return Returns a boolean value if the player is moving horizontally or diagonally.
      */
     public static boolean isMoving() {
         return mc.player.input.getMovementInput().y != 0 || mc.player.input.getMovementInput().x != 0;
     }
 
-    public static double getActualSpeed()
-    {
+    public static double getActualSpeed() {
         return Math.sqrt(Math.pow(getMotionX(), 2) + Math.pow(getMotionZ(), 2));
     }
 
@@ -59,35 +59,23 @@ public class MovementUtil implements IMinecraft {
      * @Author Graph
      * Horrid code.
      */
-    public static void setMotionX(double motionX) {
-        mc.player.setVelocity(motionX, mc.player.getVelocity().y, mc.player.getVelocity().z);
-    }
-
     public static void setMotionY(double motionY) {
-        mc.player.setVelocity(mc.player.getVelocity().x, motionY, mc.player.getVelocity().z);
+        mc.player.setVelocity(getMotionX(), motionY, getMotionZ());
     }
 
-    public static void setMotionZ(double motionZ) {
-        mc.player.setVelocity(mc.player.getVelocity().x, mc.player.getVelocity().y, motionZ);
-    }
-
-    public static double getMotionX()
-    {
+    public static double getMotionX() {
         return mc.player.getVelocity().x;
     }
 
-    public static double getMotionY()
-    {
+    public static double getMotionY() {
         return mc.player.getVelocity().y;
     }
 
-    public static double getMotionZ()
-    {
+    public static double getMotionZ() {
         return mc.player.getVelocity().z;
     }
 
-    public static void multiplyMotion(double x, double y, double z)
-    {
+    public static void multiplyMotion(double x, double y, double z) {
         mc.player.setVelocity(
                 mc.player.getVelocity().x * x,
                 mc.player.getVelocity().y * y,
@@ -95,21 +83,16 @@ public class MovementUtil implements IMinecraft {
         );
     }
 
-    public static void offsetPosition(double x, double y, double z)
-    {
+    public static void offsetPosition(double x, double y, double z) {
         mc.player.setPosition(mc.player.getPos().add(x, y, z));
     }
 
-    public static int getSpeedAmplifier()
-    {
+    public static int getSpeedAmplifier() {
         final StatusEffectInstance speed = mc.player.getStatusEffect(StatusEffects.SPEED);
 
-        if (speed != null)
-        {
+        if (speed != null) {
             return speed.getAmplifier();
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
@@ -117,21 +100,18 @@ public class MovementUtil implements IMinecraft {
     /**
      * Adjusted with the way that sigma handles shit (sowwy for pasting
      */
-    public static int getSpeedAmplifier2()
-    {
+    public static int getSpeedAmplifier2() {
         int speed = getSpeedAmplifier();
         if (speed > 0) speed++;
 
         return speed;
     }
 
-    public static double defaultSpeed()
-    {
+    public static double defaultSpeed() {
         double baseSpeed = AuthTracker.INSTANCE.values[5];
         int speed = getSpeedAmplifier2();
 
-        if (speed != 0)
-        {
+        if (speed != 0) {
             baseSpeed *= (1.0D + 0.2D * speed);
         }
 
@@ -141,8 +121,7 @@ public class MovementUtil implements IMinecraft {
     /**
      * yes
      */
-    public static void strafe()
-    {
+    public static void strafe() {
         setSpeed(getActualSpeed());
     }
 }
