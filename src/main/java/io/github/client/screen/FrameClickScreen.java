@@ -44,39 +44,39 @@ public final class FrameClickScreen extends Screen {
             if (begin(Attero.MOD_ID + " panel")) {
                 if (beginTabBar("tabs")) {
                     for (ModuleCategory value : ModuleCategory.values()) {
-                        if (value.equals(ModuleCategory.CONFIGS)) {
-                            boolean openLC = ImGui.collapsingHeader("Local configs");
-                            if (openLC) {
-                                ImGui.setWindowFontScale(0.8f);
-                                for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
-                                    boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
-
-                                    if (ImGui.radioButton(config.name(), selected)) {
-                                        ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                        ModuleTracker.INSTANCE.activeIsCloud = false;
-                                        new ModulesFile(config.name()).load();
-                                    }
-                                }
-                                ImGui.setWindowFontScale(1.0f);
-                            }
-
-                            boolean openCC = ImGui.collapsingHeader("Cloud configs");
-                            if (openCC) {
-                                ImGui.setWindowFontScale(0.8f);
-                                for (ConfigEntry config : ModuleTracker.INSTANCE.cloudConfigs) {
-                                    boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
-
-                                    if (ImGui.radioButton(config.name(), selected)) {
-                                        ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                        ModuleTracker.INSTANCE.activeIsCloud = true;
-                                        AuthTracker.INSTANCE.send(new CLoadConfigPacket(config.name()));
-                                    }
-                                }
-                                ImGui.setWindowFontScale(1.0f);
-                            }
-                        }
-
                         if (beginTabItem(value.name().toLowerCase())) {
+                            if (value.equals(ModuleCategory.CONFIGS)) {
+                                boolean openLC = ImGui.collapsingHeader("Local configs");
+                                if (openLC) {
+                                    ImGui.setWindowFontScale(0.8f);
+                                    for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
+                                        boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
+
+                                        if (ImGui.radioButton(config.name(), selected)) {
+                                            ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                            ModuleTracker.INSTANCE.activeIsCloud = false;
+                                            new ModulesFile(config.name()).load();
+                                        }
+                                    }
+                                    ImGui.setWindowFontScale(1.0f);
+                                }
+
+                                boolean openCC = ImGui.collapsingHeader("Cloud configs");
+                                if (openCC) {
+                                    ImGui.setWindowFontScale(0.8f);
+                                    for (ConfigEntry config : ModuleTracker.INSTANCE.cloudConfigs) {
+                                        boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
+
+                                        if (ImGui.radioButton(config.name(), selected)) {
+                                            ModuleTracker.INSTANCE.activeConfigName = config.name();
+                                            ModuleTracker.INSTANCE.activeIsCloud = true;
+                                            AuthTracker.INSTANCE.send(new CLoadConfigPacket(config.name()));
+                                        }
+                                    }
+                                    ImGui.setWindowFontScale(1.0f);
+                                }
+                            }
+
                             for (AbstractModule module : ModuleTracker.INSTANCE.getByCategory(value)) {
                                 boolean open = ImGui.collapsingHeader(module.toString());
 
