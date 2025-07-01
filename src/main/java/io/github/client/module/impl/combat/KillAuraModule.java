@@ -1,7 +1,7 @@
 package io.github.client.module.impl.combat;
 
 import io.github.client.event.data.Subscribe;
-import io.github.client.event.impl.game.TickEvent;
+import io.github.client.event.impl.game.RunLoopEvent;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.rotate.AbstractRotator;
@@ -49,7 +49,7 @@ public class KillAuraModule extends AbstractRotator {
     }
 
     @Subscribe
-    private void onTick(TickEvent ignoredEvent) {
+    private void onLoop(RunLoopEvent ignoredEvent) {
         if (mc.player == null || mc.world == null || mc.currentScreen != null || !canPerform) return;
 
         target = EntityUtil.getTarget(target, aimRange.toDouble(), searchRange.toDouble(), sortBy.getValue(),
