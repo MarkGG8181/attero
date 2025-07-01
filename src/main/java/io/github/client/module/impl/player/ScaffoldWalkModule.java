@@ -5,7 +5,6 @@ import io.github.client.event.impl.game.TickEvent;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.rotate.AbstractRotator;
-import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.GroupSetting;
 import io.github.client.module.data.setting.impl.RangeNumberSetting;
 import io.github.client.util.game.InventoryUtil;
@@ -23,7 +22,6 @@ import net.minecraft.util.math.Vec3d;
 public class ScaffoldWalkModule extends AbstractRotator {
     private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
     private final RangeNumberSetting speed = new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
-    private final BooleanSetting vulcan = new BooleanSetting("Vulcan", false);
 
     private float[] rots;
     private BlockHitResult result;
@@ -42,9 +40,6 @@ public class ScaffoldWalkModule extends AbstractRotator {
             var belowPlayer = mc.player.getBlockPos().down();
 
             if (!mc.world.getBlockState(belowPlayer).isSolidBlock(mc.world, belowPlayer)) {
-                if (vulcan.getValue()) {
-
-                }
 
                 placeBlock(belowPlayer);
             }
