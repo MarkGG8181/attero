@@ -134,70 +134,35 @@ public class RotationUtil implements IMinecraft {
         return Math.toRadians(rotationYaw);
     }
 
-    public static void correctMovement(final MoveInputEvent event, final float yaw) {
-        final float forward = event.forward;
-        final float strafe = event.strafe;
+    public static void correctMovement(MoveInputEvent event, float yaw) {
+        float forward = event.forward;
+        float strafe = event.strafe;
 
-        // moveFlying method in Entity.java
-        float f = forward * forward + strafe * strafe;
-        if (f < 1.0E-4F) {
+        double angle = MathHelper.wrapDegrees(Math.toDegrees(direction(mc.player.getYaw(), forward, strafe)));
+
+        if (forward == 0 && strafe == 0) {
             return;
         }
 
-        f = MathHelper.sqrt(f);
-        if (f < 1.0F) {
-            f = 1.0F;
-        }
+        float closestForward = 0, closestStrafe = 0, closestDifference = Float.MAX_VALUE;
 
-        final float normalizedForward = forward / f;
-        final float normalizedStrafe = strafe / f;
-        final float realYaw = mc.player.getYaw();
+        for (float predictedForward = -1F; predictedForward <= 1F; predictedForward += 1F) {
+            for (float predictedStrafe = -1F; predictedStrafe <= 1F; predictedStrafe += 1F) {
+                if (predictedStrafe == 0 && predictedForward == 0) continue;
 
-        final float PI = (float) Math.PI;
+                double predictedAngle = MathHelper.wrapDegrees(Math.toDegrees(direction(yaw, predictedForward, predictedStrafe)));
+                double difference = Math.abs(angle - predictedAngle);
 
-        final float realSin = MathHelper.sin(realYaw * PI / 180.0F);
-        final float realCos = MathHelper.cos(realYaw * PI / 180.0F);
-        final float desiredX = normalizedStrafe * realCos - normalizedForward * realSin;
-        final float desiredZ = normalizedForward * realCos + normalizedStrafe * realSin;
-
-        final float targetSin = MathHelper.sin(yaw * PI / 180.0F);
-        final float targetCos = MathHelper.cos(yaw * PI / 180.0F);
-
-        float bestForward = 0.0F;
-        float bestStrafe = 0.0F;
-        float closestDistSq = Float.MAX_VALUE;
-
-        final float sprintFavorFactor = 1.05F; // basically so it always tries to sprint if it can
-
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) continue;
-
-                float candidateMag = MathHelper.sqrt((float) (i * i + j * j));
-                final float normI = i / candidateMag;
-                final float normJ = j / candidateMag;
-
-                final float resultX = normJ * targetCos - normI * targetSin;
-                final float resultZ = normI * targetCos + normJ * targetSin;
-
-                final float dX = desiredX - resultX;
-                final float dZ = desiredZ - resultZ;
-                float distSq = dX * dX + dZ * dZ;
-
-                if (forward > 0 && i <= 0) {
-                    distSq *= sprintFavorFactor;
-                }
-
-                if (distSq < closestDistSq) {
-                    closestDistSq = distSq;
-                    bestForward = i;
-                    bestStrafe = j;
+                if (difference < closestDifference) {
+                    closestDifference = (float) difference;
+                    closestForward = predictedForward;
+                    closestStrafe = predictedStrafe;
                 }
             }
-        }
 
-        event.forward = bestForward;
-        event.strafe = bestStrafe;
+            event.forward = closestForward;
+            event.strafe = closestStrafe;
+        }
     }
 
     public static float getMovementYaw() {
@@ -274,22 +239,5 @@ public class RotationUtil implements IMinecraft {
         pitch = MathUtil.wrap(lastRotations[1], pitch, 20);
 
         return new float[]{yaw, pitch};
-    }
-
-    public static float clampBodyYaw(LivingEntity entity, float degrees, float tickProgress) {
-        Entity var4 = entity.getVehicle();
-        if (var4 instanceof LivingEntity livingEntity) {
-            float f = MathHelper.lerpAngleDegrees(tickProgress, livingEntity.lastBodyYaw, livingEntity.bodyYaw);
-            float g = 85.0F;
-            float h = MathHelper.clamp(MathHelper.wrapDegrees(degrees - f), -85.0F, 85.0F);
-            f = degrees - h;
-            if (Math.abs(h) > 50.0F) {
-                f += h * 0.2F;
-            }
-
-            return f;
-        } else {
-            return MathHelper.lerpAngleDegrees(tickProgress, entity.lastBodyYaw, entity.bodyYaw);
-        }
     }
 }
