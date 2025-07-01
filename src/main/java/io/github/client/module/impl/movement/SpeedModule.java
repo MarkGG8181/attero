@@ -20,7 +20,7 @@ public class SpeedModule extends AbstractModule {
                 case "Strafe" -> {
                     mc.options.jumpKey.setPressed(MovementUtil.isMoving());
                     mc.options.sprintKey.setPressed(true);
-                    MovementUtil.setSpeed(0.27);
+                    MovementUtil.strafe();
                 }
 
                 case "Legit" -> {
