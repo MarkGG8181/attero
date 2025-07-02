@@ -10,7 +10,8 @@
     "LeavesBlockMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
-    "ModStatusMixin"
+    "ModStatusMixin",
+    "PlayerInteractEntityC2SPacketMixin"
   ],
   "injectors": {
     "defaultRequire": 1
