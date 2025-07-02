@@ -21,19 +21,18 @@ import java.awt.*;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-@SuppressWarnings("ALL")
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
-    private final StringSetting font = (StringSetting) new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
-    private final NumberSetting fontSize = (NumberSetting) new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
+    private final StringSetting font = new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
+    private final NumberSetting fontSize = new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
     private final BooleanSetting suffixes = new BooleanSetting("Suffixes", false);
-    private final StringSetting suffixChar = (StringSetting) new StringSetting("Suffix char", " - ", " - ", " ", " # ", " $ ", " @ ", " % ", " & ", " = ", " : ", " :: ", " ; ", " ;; ").hide(() -> !suffixes.getValue());
-    private final StringSetting suffixThing = (StringSetting) new StringSetting("Suffix thing", "none", "none", "[]", "()", "{}").hide(() -> !suffixes.getValue());
-    private final ColorSetting suffixColor = (ColorSetting) new ColorSetting("Suffix color", new Color(0xFFFFFF)).hide(() -> !suffixes.getValue());
+    private final StringSetting suffixChar = new StringSetting("Suffix char", " - ", " - ", " ", " # ", " $ ", " @ ", " % ", " & ", " = ", " : ", " :: ", " ; ", " ;; ").hide(() -> !suffixes.getValue());
+    private final StringSetting suffixThing = new StringSetting("Suffix thing", "none", "none", "[]", "()", "{}").hide(() -> !suffixes.getValue());
+    private final ColorSetting suffixColor = new ColorSetting("Suffix color", new Color(0xFFFFFF)).hide(() -> !suffixes.getValue());
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
     private final BooleanSetting animate = new BooleanSetting("Animate", true);
@@ -57,6 +56,8 @@ public class ModuleListModule extends AbstractModule {
         if (mc.currentScreen instanceof DropdownClickScreen || mc.currentScreen instanceof FrameClickScreen) {
             return;
         }
+
+        assert mc.player != null;
 
         final var shouldAnimate = animate.toBoolean();
 
@@ -92,7 +93,6 @@ public class ModuleListModule extends AbstractModule {
                     module.getY().update(alignment);
 
                     final var y = shouldAnimate ? module.getY().getValue() : alignment;
-                    if (module == null) continue;
 
                     var baseName = module.getInfo().name();
                     var thing1 = suffixThing.getValue().equals("none") ? "" : String.valueOf(suffixThing.getValue().charAt(0));
@@ -112,15 +112,20 @@ public class ModuleListModule extends AbstractModule {
                     var x = io.getDisplaySizeX() - progressiveWidth - xOffset.toFloat() + 10;
 
                     if (background.getValue()) {
-                        drawList.addRectFilled(x - 4, y - 1, x + textWidth + 2, y + ImGui.getFontSize() + 1, ImColor.rgba(0, 0, 0, 150));
+                        float rectX1 = x - 4;
+                        float rectY1 = y - 1;
+                        float rectX2 = x + textWidth + 2;
+                        float rectY2 = y + ImGui.getFontSize() + 1;
+
+                        drawList.addRectFilled(rectX1, rectY1, rectX2, rectY2, ImColor.rgba(0, 0, 0, 150));
                     }
 
                     var centeredY = y + ((ImGui.getFontSize() - ImGui.calcTextSize("A").y) / 2.0f);
 
                     if (fontShadow.getValue()) {
-                        drawList.addText(x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), baseName);
+                        drawList.addText(x + 1, centeredY + 1 + 0.5f, ImColor.rgba(0, 0, 0, 160), baseName);
                         if (suffix != null)
-                            drawList.addText(x + baseSize.x + 1, centeredY + 1, ImColor.rgba(0, 0, 0, 160), suffixChar.getValue() + suffix);
+                            drawList.addText(x + baseSize.x + 1, centeredY + 1 + 0.5f, ImColor.rgba(0, 0, 0, 160), suffixChar.getValue() + suffix);
                     }
 
                     drawList.addText(x, centeredY + 0.5f, textColor.toImGuiColor(), baseName);
