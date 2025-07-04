@@ -9,6 +9,7 @@
     "EntityVelocityUpdateS2CPacketMixin",
     "LeavesBlockMixin",
     "LivingEntityMixin",
+    "MinecraftDedicatedServerMixin",
     "MinecraftServerMixin",
     "ModStatusMixin",
     "PlayerInteractEntityC2SPacketMixin"
