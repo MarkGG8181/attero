@@ -7,7 +7,6 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.module.data.setting.impl.BooleanSetting;
-import io.github.client.module.data.setting.impl.RangeNumberSetting;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
 import net.minecraft.block.BlockState;
@@ -20,7 +19,6 @@ import net.minecraft.util.math.Vec3d;
 
 @ModuleInfo(name = "ScaffoldWalk", description = "Places blocks under you", category = ModuleCategory.PLAYER)
 public class ScaffoldWalkModule extends AbstractRotator {
-    private final RangeNumberSetting speed = new RangeNumberSetting("Speed", 10, 180, 10, 180);
     private final BooleanSetting vulcan = new BooleanSetting("Vulcan", false);
 
     private BlockHitResult result;
@@ -116,6 +114,6 @@ public class ScaffoldWalkModule extends AbstractRotator {
             return new float[]{mc.player.lastYaw, mc.player.lastPitch};
         }
 
-        return RotationUtil.toRotation(result.getPos(), speed.getMinAsFloat(), speed.getMaxAsFloat());
+        return RotationUtil.toRotation(result.getPos());
     }
 }

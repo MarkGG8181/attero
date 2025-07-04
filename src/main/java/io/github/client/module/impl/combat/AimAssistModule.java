@@ -7,7 +7,6 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
-import io.github.client.module.data.setting.impl.RangeNumberSetting;
 import io.github.client.util.game.EntityUtil;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.game.RotationUtil;
@@ -16,7 +15,6 @@ import net.minecraft.item.AxeItem;
 
 @ModuleInfo(name = "AimAssist", description = "Automatically aims for you", category = ModuleCategory.COMBAT)
 public class AimAssistModule extends AbstractModule {
-    private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting distance = new NumberSetting("Distance", 4.5, 1, 8);
     private final BooleanSetting onlyWeapon = new BooleanSetting("Only Weapon", false);
 
@@ -36,7 +34,7 @@ public class AimAssistModule extends AbstractModule {
         if (target != null
                 && EntityUtil.isWithinRange(target, distance.getValue().floatValue())) {
 
-            var rots = RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
+            var rots = RotationUtil.toRotation(target);
             mc.player.setPitch(rots[1]);
             mc.player.setYaw(rots[0]);
         }

@@ -9,8 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import java.security.SecureRandom;
-
 public class RotationUtil implements IMinecraft {
     private static final float sens = mc.options.getMouseSensitivity().getValue().floatValue();
     private static final FastNoiseLite noise = new FastNoiseLite();
@@ -30,7 +28,7 @@ public class RotationUtil implements IMinecraft {
         noiseZ.SetFrequency(0.05f);
     }
 
-    public static float[] toRotation(Entity entity, float minSpeed, float maxSpeed) {
+    public static float[] toRotation(Entity entity) {
         final float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
 
         final float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
@@ -45,28 +43,12 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        float currentYaw = RotationTracker.yaw;
-        float currentPitch = RotationTracker.pitch;
+        final float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
 
-        float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
-
-        SecureRandom random = new SecureRandom();
-        float yawSpeed = random.nextFloat(minSpeed, maxSpeed);
-        float pitchSpeed = random.nextFloat(minSpeed, maxSpeed);
-
-        float deltaYaw = MathHelper.wrapDegrees(rots[0] - currentYaw);
-        float deltaPitch = MathHelper.wrapDegrees(rots[1] - currentPitch);
-
-        deltaYaw = MathHelper.clamp(deltaYaw, -yawSpeed, yawSpeed);
-        deltaPitch = MathHelper.clamp(deltaPitch, -pitchSpeed, pitchSpeed);
-
-        rots[0] = currentYaw + deltaYaw;
-        rots[1] = currentPitch + deltaPitch;
-
-        return patchGCD(rots, new float[]{RotationTracker.yaw, RotationTracker.pitch});
+        return patchGCD(rots, new float[] {RotationTracker.yaw, RotationTracker.pitch});
     }
 
-    public static float[] toRotation(Vec3d target, float minSpeed, float maxSpeed) {
+    public static float[] toRotation(Vec3d target) {
         final float time = (float) (System.currentTimeMillis() % 10000) / 1000.0f;
 
         final float noiseValueX = noiseX.GetNoise(time, 0.0f) * 0.5f;
@@ -81,23 +63,7 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        float currentYaw = RotationTracker.yaw;
-        float currentPitch = RotationTracker.pitch;
-
         float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
-
-        SecureRandom random = new SecureRandom();
-        float yawSpeed = random.nextFloat(minSpeed, maxSpeed);
-        float pitchSpeed = random.nextFloat(minSpeed, maxSpeed);
-
-        float deltaYaw = MathHelper.wrapDegrees(rots[0] - currentYaw);
-        float deltaPitch = MathHelper.wrapDegrees(rots[1] - currentPitch);
-
-        deltaYaw = MathHelper.clamp(deltaYaw, -yawSpeed, yawSpeed);
-        deltaPitch = MathHelper.clamp(deltaPitch, -pitchSpeed, pitchSpeed);
-
-        rots[0] = currentYaw + deltaYaw;
-        rots[1] = currentPitch + deltaPitch;
 
         return patchGCD(rots, new float[]{RotationTracker.yaw, RotationTracker.pitch});
     }

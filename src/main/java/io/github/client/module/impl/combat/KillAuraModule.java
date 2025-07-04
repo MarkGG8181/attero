@@ -35,9 +35,6 @@ public class KillAuraModule extends AbstractRotator {
 
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6).setParent(clickGroup);
 
-    private final GroupSetting rotationGroup = new GroupSetting("Rotations", false);
-    private final RangeNumberSetting speed = new RangeNumberSetting("Speed", 10, 180, 10, 180).setParent(rotationGroup);
-
     public final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
     private final BooleanSetting raycast = new BooleanSetting("Raycast", true);
 
@@ -88,18 +85,8 @@ public class KillAuraModule extends AbstractRotator {
 
     @Override
     public float[] shouldRotate() {
-        if (target != null &&
-                (!raycast.getValue() || mc.player.canSee(target))) {
-
-            var minSpeed = speed.getMinAsFloat();
-            var maxSpeed = speed.getMaxAsFloat();
-
-            var rots = RotationUtil.toRotation(
-                    target,
-                    minSpeed,
-                    maxSpeed
-            );
-
+        if (target != null && (!raycast.getValue() || mc.player.canSee(target))) {
+            var rots = RotationUtil.toRotation(target);
             return rots;
         }
 

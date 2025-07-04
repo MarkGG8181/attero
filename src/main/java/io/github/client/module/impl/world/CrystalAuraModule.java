@@ -8,7 +8,6 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
-import io.github.client.module.data.setting.impl.RangeNumberSetting;
 import io.github.client.util.game.EntityUtil;
 import io.github.client.util.game.RotationUtil;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -19,7 +18,6 @@ import java.util.HashSet;
 @SuppressWarnings("ALL")
 @ModuleInfo(name = "CrystalAura", description = "Attacks nearby crystals", category = ModuleCategory.WORLD)
 public class CrystalAuraModule extends AbstractRotator {
-    private final RangeNumberSetting speed = new RangeNumberSetting("Speed Min/Max", 10, 180, 10, 180);
     private final NumberSetting searchRange = new NumberSetting("Search range", 5, 1, 10);
     private final NumberSetting attackRange = new NumberSetting("Attack range", 3, 1, 6);
     private final NumberSetting aimRange = new NumberSetting("Aim range", 4.5, 1, 6);
@@ -105,7 +103,7 @@ public class CrystalAuraModule extends AbstractRotator {
     @Override
     public float[] shouldRotate() {
         if (target != null && (raycast.getValue() && mc.player.canSee(target))) {
-            return RotationUtil.toRotation(target, speed.getMinAsFloat(), speed.getMaxAsFloat());
+            return RotationUtil.toRotation(target);
         }
 
         return null;
