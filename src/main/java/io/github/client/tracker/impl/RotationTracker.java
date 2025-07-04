@@ -6,6 +6,7 @@ import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.java.interfaces.IMinecraft;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Comparator;
 
@@ -31,6 +32,7 @@ public class RotationTracker extends AbstractTracker<AbstractRotator> implements
                     .orElse(null);
 
             for (var rotator : list) {
+                if (rotator == best) continue;
                 rotator.canPerform = false;
             }
 
@@ -43,7 +45,7 @@ public class RotationTracker extends AbstractTracker<AbstractRotator> implements
                     prevYaw = yaw;
                     prevPitch = pitch;
 
-                    yaw = target[0];
+                    yaw = MathHelper.wrapDegrees(target[0]);
                     pitch = target[1];
 
                     event.yaw = yaw;
