@@ -2,9 +2,11 @@ package io.github.client.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.client.Attero;
+import io.github.client.event.data.State;
 import io.github.client.event.impl.interact.MiddleClickEvent;
 import io.github.client.event.impl.game.RunLoopEvent;
 import io.github.client.event.impl.game.TickEvent;
+import io.github.client.event.impl.player.SprintEvent;
 import io.github.client.event.impl.render.HasOutlineEvent;
 import io.github.client.screen.data.ImGuiImpl;
 import net.minecraft.SharedConstants;
@@ -17,6 +19,7 @@ import net.minecraft.network.message.ChatVisibility;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -51,14 +54,27 @@ public class MinecraftClientMixin {
         }
     }
 
+    @Unique
+    private TickEvent cachedTickEvent = null;
+
     @Inject(method = "close", at = @At("RETURN"))
     public void onClose(CallbackInfo ci) {
         Attero.INSTANCE.onEnd();
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void onTick(CallbackInfo ci) {
-        new TickEvent().post();
+    public void onTickPre(CallbackInfo ci) {
+        cachedTickEvent = new TickEvent();
+        cachedTickEvent.state = State.PRE;
+        cachedTickEvent.post();
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    public void onTickPost(CallbackInfo ci) {
+        if (cachedTickEvent != null) {
+            cachedTickEvent.state = State.POST;
+            cachedTickEvent.post();
+        }
     }
 
     @Inject(

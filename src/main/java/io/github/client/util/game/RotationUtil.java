@@ -43,9 +43,7 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        final float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
-
-        return patchGCD(rots, new float[] {RotationTracker.yaw, RotationTracker.pitch});
+        return patchGCD(new float[]{yaw, pitch}, new float[] {RotationTracker.yaw, RotationTracker.pitch});
     }
 
     public static float[] toRotation(Vec3d target) {
@@ -63,24 +61,33 @@ public class RotationUtil implements IMinecraft {
         final float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
         final float pitch = (float) Math.toDegrees(-Math.atan2(y, theta));
 
-        float[] rots = new float[]{MathHelper.wrapDegrees(yaw), MathHelper.clamp(pitch, -90f, 90f)};
-
-        return patchGCD(rots, new float[]{RotationTracker.yaw, RotationTracker.pitch});
+        return patchGCD(new float[]{yaw, pitch}, new float[]{RotationTracker.yaw, RotationTracker.pitch});
     }
 
-    public static float[] patchGCD(final float[] currentRotation,
-                                   final float[] newRotation) {
-        final float f = sens * AuthTracker.INSTANCE.values[0] + AuthTracker.INSTANCE.values[1];
+    public static float getGCD() {
+        float sensitivity = mc.options.getMouseSensitivity().getValue().floatValue();
+        float f = sensitivity * 0.6f + 0.2f;
+        float gcd = f * f * f * 8.0f;
 
-        final float gcd = f * f * f * AuthTracker.INSTANCE.values[2] * AuthTracker.INSTANCE.values[3];
+        boolean spyglass = mc.options.getPerspective().isFirstPerson() && mc.player.isUsingSpyglass();
+        return spyglass ? (f * f * f) : gcd;
+    }
 
-        final float deltaYaw = currentRotation[0] - newRotation[0],
-                deltaPitch = currentRotation[1] - newRotation[1];
+    public static float[] snapRotation(float[] currentRotation, float[] targetRotation) {
+        float gcd = getGCD() * 0.15f;
 
-        final float yaw = newRotation[0] + Math.round(deltaYaw / gcd) * gcd,
-                pitch = newRotation[1] + Math.round(deltaPitch / gcd) * gcd;
+        float deltaYaw = MathHelper.wrapDegrees(targetRotation[0] - currentRotation[0]);
+        float deltaPitch = targetRotation[1] - currentRotation[1];
 
-        return new float[]{yaw, pitch};
+        float snappedYaw = currentRotation[0] + Math.round(deltaYaw / gcd) * gcd;
+        float snappedPitch = currentRotation[1] + Math.round(deltaPitch / gcd) * gcd;
+
+        snappedPitch = MathHelper.clamp(snappedPitch, -90f, 90f);
+        return new float[] {snappedYaw, snappedPitch};
+    }
+
+    public static float[] patchGCD(final float[] target, final float[] current) {
+        return snapRotation(current, target);
     }
 
     public static double direction(float rotationYaw, final double moveForward, final double moveStrafing) {
@@ -98,45 +105,33 @@ public class RotationUtil implements IMinecraft {
     }
 
     public static void correctMovement(MoveInputEvent event, float yaw) {
-        if (event.forward == 0F && event.strafe == 0F) {
+        float forward = event.forward;
+        float strafe = event.strafe;
+
+        double angle = MathHelper.wrapDegrees(Math.toDegrees(direction(mc.player.getYaw(), forward, strafe)));
+
+        if (forward == 0 && strafe == 0) {
             return;
         }
 
-        double realYaw = mc.player.getYaw();
+        float closestForward = 0, closestStrafe = 0, closestDifference = Float.MAX_VALUE;
 
-        double moveX = event.strafe * Math.cos(Math.toRadians(realYaw)) - event.forward * Math.sin(Math.toRadians(realYaw));
-        double moveZ = event.forward * Math.cos(Math.toRadians(realYaw)) + event.strafe * Math.sin(Math.toRadians(realYaw));
+        for (float predictedForward = -1F; predictedForward <= 1F; predictedForward += 1F) {
+            for (float predictedStrafe = -1F; predictedStrafe <= 1F; predictedStrafe += 1F) {
+                if (predictedStrafe == 0 && predictedForward == 0) continue;
 
-        double[] bestMovement = null;
+                double predictedAngle = MathHelper.wrapDegrees(Math.toDegrees(direction(yaw, predictedForward, predictedStrafe)));
+                double difference = Math.abs(angle - predictedAngle);
 
-        for (int forward = -1; forward <= 1; forward++) {
-            for (int strafe = -1; strafe <= 1; strafe++) {
-
-                double newMoveX = strafe * Math.cos(Math.toRadians(yaw)) - forward * Math.sin(Math.toRadians(yaw));
-                double newMoveZ = forward * Math.cos(Math.toRadians(yaw)) + strafe * Math.sin(Math.toRadians(yaw));
-
-                double deltaX = newMoveX - moveX;
-                double deltaZ = newMoveZ - moveZ;
-
-                double dist = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-
-                if (bestMovement == null || bestMovement[0] > dist) {
-                    bestMovement = new double[]{dist, (double) forward, (double) strafe};
+                if (difference < closestDifference) {
+                    closestDifference = (float) difference;
+                    closestForward = predictedForward;
+                    closestStrafe = predictedStrafe;
                 }
             }
+
+            event.forward = closestForward;
+            event.strafe = closestStrafe;
         }
-
-        event.forward = Math.round(bestMovement[1]);
-        event.strafe = Math.round(bestMovement[2]);
-    }
-
-    public static float getAdjustedYaw() {
-        return switch (mc.player.getHorizontalFacing()) {
-            case SOUTH -> -180;
-            case NORTH -> 0;
-            case EAST -> 90;
-            case WEST -> -90;
-            default -> mc.player.getYaw();
-        };
     }
 }

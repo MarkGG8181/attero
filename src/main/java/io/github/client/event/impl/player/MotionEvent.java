@@ -1,6 +1,7 @@
 package io.github.client.event.impl.player;
 
 import io.github.client.event.Event;
+import io.github.client.event.data.State;
 import net.minecraft.util.math.Vec3d;
 
 public class MotionEvent extends Event {
@@ -24,9 +25,5 @@ public class MotionEvent extends Event {
 
     public boolean isPre() {
         return state.equals(State.PRE);
-    }
-
-    public enum State {
-        PRE, POST;
     }
 }
