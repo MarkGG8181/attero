@@ -35,6 +35,7 @@
     "MinecraftClientMixin",
     "NarratorManagerMixin",
     "ParticleManagerMixin",
+    "RenderSystemMixin",
     "RenderTickCounterDynamicMixin",
     "StatusEffectFogModifierMixin",
     "TitleScreenMixin",
