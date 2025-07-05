@@ -1,6 +1,7 @@
 package io.github.client.mixin;
 
 import com.mojang.authlib.GameProfile;
+import io.github.client.event.data.State;
 import io.github.client.event.impl.player.MotionEvent;
 import io.github.client.event.impl.player.SprintEvent;
 import io.github.client.event.impl.player.UpdateEvent;
@@ -115,7 +116,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         ci.cancel();
 
         MotionEvent motionEvent = new MotionEvent(getX(), getY(), getZ(), getYaw(), getPitch(), isOnGround());
-        motionEvent.state = MotionEvent.State.PRE;
+        motionEvent.state = State.PRE;
         motionEvent.post();
 
         this.sendSprintingPacket();
@@ -158,7 +159,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             this.autoJumpEnabled = this.client.options.getAutoJump().getValue();
         }
 
-        motionEvent.state = MotionEvent.State.POST;
+        motionEvent.state = State.POST;
         motionEvent.post();
     }
 }
