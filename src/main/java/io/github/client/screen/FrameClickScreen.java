@@ -261,4 +261,7 @@ public final class FrameClickScreen extends Screen {
             return Math.max(0, Math.min(255, value));
         }
     }
+
+    @Override public void applyBlur(DrawContext dc) { }
+
 }

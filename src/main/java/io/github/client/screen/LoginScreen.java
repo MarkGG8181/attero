@@ -36,4 +36,6 @@ public class LoginScreen extends Screen {
             ImGui.end();
         });
     }
+
+    @Override public void applyBlur(DrawContext dc) { }
 }
