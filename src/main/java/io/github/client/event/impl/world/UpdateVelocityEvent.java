@@ -6,5 +6,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UpdateVelocityEvent extends Event {
     public float yaw;
-    public float strafe, forward, friction;
+    public double strafe, forward;
+    public float friction;
 }
