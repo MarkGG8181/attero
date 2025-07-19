@@ -30,10 +30,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     public ConfigEntry currentConfig;
 
     public final List<ConfigEntry> configs = new ArrayList<>();
-    public List<ConfigEntry> cloudConfigs = new ArrayList<>();
-
     public String activeConfigName = null;
-    public boolean activeIsCloud = false;
 
     @Override
     public void initialize() {

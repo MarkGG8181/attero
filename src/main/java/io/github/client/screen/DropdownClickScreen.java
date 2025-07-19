@@ -39,10 +39,8 @@ public class DropdownClickScreen extends Screen {
     protected void init() {
         super.init();
 
-        new Thread(() -> {
-            ModuleTracker.INSTANCE.configs.clear();
-            ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json"));
-        }).start();
+        ModuleTracker.INSTANCE.configs.clear();
+        ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json"));
     }
 
     private boolean initialised;
@@ -80,11 +78,10 @@ public class DropdownClickScreen extends Screen {
                         if (openLC) {
                             ImGui.setWindowFontScale(0.8f);
                             for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
-                                boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
+                                boolean selected = config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                 if (ImGui.radioButton(config.name(), selected)) {
                                     ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                    ModuleTracker.INSTANCE.activeIsCloud = false;
                                     new ModulesFile(config.name()).load();
                                 }
                             }

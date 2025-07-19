@@ -10,11 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
 public class ScreenTracker extends AbstractTracker<Screen> {
-    private static final ScreenTracker tracker = new ScreenTracker();
-
-    public static ScreenTracker getInstance() {
-        return tracker;
-    }
+    public static final ScreenTracker INSTANCE = new ScreenTracker();
 
     @Override
     public void initialize() {

@@ -48,11 +48,10 @@ public final class FrameClickScreen extends Screen {
                                 if (openLC) {
                                     ImGui.setWindowFontScale(0.8f);
                                     for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
-                                        boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
+                                        boolean selected = config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                         if (ImGui.radioButton(config.name(), selected)) {
                                             ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                            ModuleTracker.INSTANCE.activeIsCloud = false;
                                             new ModulesFile(config.name()).load();
                                         }
                                     }
