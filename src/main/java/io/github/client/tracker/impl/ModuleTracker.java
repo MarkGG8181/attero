@@ -7,7 +7,6 @@ import io.github.client.module.impl.player.*;
 import io.github.client.module.impl.render.*;
 import io.github.client.module.impl.world.CrystalAuraModule;
 import io.github.client.module.impl.world.TimerModule;
-import io.ml.security.JvmArgsChecker;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.interact.KeyEvent;
 import io.github.client.file.impl.ModulesFile;
@@ -92,7 +91,6 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         list.forEach(AbstractModule::onInit);
         modulesFile.load();
-        JvmArgsChecker.force();
     }
 
     @Subscribe

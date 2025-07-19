@@ -1,6 +1,5 @@
 package io.github.client.util.game;
 
-import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.util.java.interfaces.IMinecraft;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -108,7 +107,7 @@ public class MovementUtil implements IMinecraft {
     }
 
     public static double defaultSpeed() {
-        double baseSpeed = AuthTracker.INSTANCE.values[5];
+        double baseSpeed = 0.2873D;
         int speed = getSpeedAmplifier2();
 
         if (speed != 0) {

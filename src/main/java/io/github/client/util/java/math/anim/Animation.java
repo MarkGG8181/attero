@@ -1,6 +1,5 @@
 package io.github.client.util.java.math.anim;
 
-import io.github.client.tracker.impl.AuthTracker;
 import lombok.Getter;
 
 /**
@@ -26,7 +25,7 @@ public final class Animation {
 
     public void update(final float target) {
         final long currentTime = System.nanoTime();
-        final float deltaTime = (currentTime - lastUpdateTime) / AuthTracker.INSTANCE.values[4]; // this is the right value. source: allah
+        final float deltaTime = (currentTime - lastUpdateTime) / 1000000000f; // this is the right value. source: allah
         lastUpdateTime = currentTime;
 
         float progress = transitionSpeed * deltaTime;

@@ -1,11 +1,9 @@
 package io.github.client.command.impl;
 
-import io.ml.packet.impl.client.CLoadConfigPacket;
 import io.github.client.Attero;
 import io.github.client.command.AbstractCommand;
 import io.github.client.command.data.CommandInfo;
 import io.github.client.file.impl.ModulesFile;
-import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.util.java.FileUtil;
 import io.github.client.util.client.ConfigEntry;
 
@@ -15,13 +13,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @SuppressWarnings("ALL")
 @CommandInfo(name = "Config", description = "Manage your configs", aliases = {"config", "cfg", "conf"})
 public class ConfigCommand extends AbstractCommand {
-    private List<ConfigEntry> cloudConfigs = new ArrayList<>();
-
     @Override
     public List<String> getHelp() {
         List<String> lines = new ArrayList<>();
@@ -36,14 +31,6 @@ public class ConfigCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args) { // [config, load, test]
-        new Thread(() -> {
-            try {
-                cloudConfigs = AuthTracker.INSTANCE.fetchConfigList();
-            } catch (Exception e) {
-                Attero.LOGGER.error("Failed to fetch configs", e);
-            }
-        }).start();
-
         try {
             // ASS CODE ALERT
             switch (args[1].toLowerCase()) {
@@ -54,16 +41,6 @@ public class ConfigCommand extends AbstractCommand {
                     boolean foundLocal = local.stream().anyMatch(c -> c.name().equalsIgnoreCase(configName));
                     if (foundLocal) {
                         new ModulesFile(configName).load();
-                    } else {
-                        Optional<ConfigEntry> cloud = cloudConfigs.stream()
-                                .filter(c -> c.name().equalsIgnoreCase(configName))
-                                .findFirst();
-
-                        if (cloud.isPresent()) {
-                            AuthTracker.INSTANCE.send(new CLoadConfigPacket(configName));
-                        } else {
-                            sendError("Config " + configName + " not found.");
-                        }
                     }
                 }
 
@@ -78,13 +55,6 @@ public class ConfigCommand extends AbstractCommand {
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                         send("> §e" + cfg.name().replace(".json", "") + " §7(" + formattedTime + ")", false);
-                    }
-
-                    for (ConfigEntry cfg : cloudConfigs) {
-                        String formattedTime = Instant.ofEpochMilli(cfg.createdTime().toMillis())
-                                .atZone(ZoneId.systemDefault())
-                                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                        send("> §b" + cfg.name().replace(".json", "") + " §7(" + formattedTime + ")", false);
                     }
                 }
 

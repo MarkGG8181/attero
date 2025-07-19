@@ -1,7 +1,6 @@
 package io.github.client.util.game;
 
 import io.github.client.event.impl.interact.MoveInputEvent;
-import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.tracker.impl.RotationTracker;
 import io.github.client.util.java.interfaces.IMinecraft;
 import io.github.client.util.java.math.FastNoiseLite;

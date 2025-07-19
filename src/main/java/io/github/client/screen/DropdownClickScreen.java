@@ -1,7 +1,6 @@
 package io.github.client.screen;
 
 import io.github.client.module.data.setting.impl.*;
-import io.ml.packet.impl.client.CLoadConfigPacket;
 import io.github.client.Attero;
 import io.github.client.file.impl.ModulesFile;
 import io.github.client.module.AbstractModule;
@@ -9,7 +8,6 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.setting.AbstractSetting;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.screen.data.ImGuiThemes;
-import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.client.ConfigEntry;
 import io.github.client.util.java.FileUtil;
@@ -42,12 +40,6 @@ public class DropdownClickScreen extends Screen {
         super.init();
 
         new Thread(() -> {
-            try {
-                ModuleTracker.INSTANCE.cloudConfigs = AuthTracker.INSTANCE.fetchConfigList();
-            } catch (Exception e) {
-                Attero.LOGGER.error("Failed to fetch configs", e);
-            }
-
             ModuleTracker.INSTANCE.configs.clear();
             ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json"));
         }).start();
@@ -94,21 +86,6 @@ public class DropdownClickScreen extends Screen {
                                     ModuleTracker.INSTANCE.activeConfigName = config.name();
                                     ModuleTracker.INSTANCE.activeIsCloud = false;
                                     new ModulesFile(config.name()).load();
-                                }
-                            }
-                            ImGui.setWindowFontScale(1.0f);
-                        }
-
-                        boolean openCC = ImGui.collapsingHeader("Cloud configs");
-                        if (openCC) {
-                            ImGui.setWindowFontScale(0.8f);
-                            for (ConfigEntry config : ModuleTracker.INSTANCE.cloudConfigs) {
-                                boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
-
-                                if (ImGui.radioButton(config.name(), selected)) {
-                                    ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                    ModuleTracker.INSTANCE.activeIsCloud = true;
-                                    AuthTracker.INSTANCE.send(new CLoadConfigPacket(config.name()));
                                 }
                             }
                             ImGui.setWindowFontScale(1.0f);

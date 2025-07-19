@@ -27,6 +27,9 @@ public final class Attero implements ClientModInitializer {
         LOGGER.info("Starting {}", MOD_ID);
 
         ScreenTracker.getInstance().initialize();
+        ModuleTracker.INSTANCE.initialize();
+        CommandTracker.INSTANCE.initialize();
+        RotationTracker.INSTANCE.initialize();
     }
 
     public void onEnd() {
