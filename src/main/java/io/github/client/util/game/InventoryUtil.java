@@ -11,6 +11,7 @@ import net.minecraft.block.FallingBlock;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -25,24 +26,6 @@ import java.util.*;
 
 @SuppressWarnings("ALL")
 public class InventoryUtil implements IMinecraft {
-    public static final Set<Item> SWORDS = Set.of(
-            Items.WOODEN_SWORD,
-            Items.STONE_SWORD,
-            Items.GOLDEN_SWORD,
-            Items.IRON_SWORD,
-            Items.DIAMOND_SWORD,
-            Items.NETHERITE_SWORD
-    );
-
-    public static final Set<Item> PICKAXES = Set.of(
-            Items.WOODEN_PICKAXE,
-            Items.STONE_PICKAXE,
-            Items.GOLDEN_PICKAXE,
-            Items.IRON_PICKAXE,
-            Items.DIAMOND_PICKAXE,
-            Items.NETHERITE_PICKAXE
-    );
-
     public static String[] getAllItems() {
         List<String> names = new ArrayList<>();
 
@@ -183,10 +166,6 @@ public class InventoryUtil implements IMinecraft {
         }
     }
 
-    public static boolean isArmor(ItemStack itemStack) {
-        return itemStack.isIn(ItemTags.FOOT_ARMOR) || itemStack.isIn(ItemTags.LEG_ARMOR) || itemStack.isIn(ItemTags.CHEST_ARMOR) || itemStack.isIn(ItemTags.HEAD_ARMOR);
-    }
-
     public static ArmorType getArmorType(ItemStack stack) {
         if (stack.isIn(ItemTags.HEAD_ARMOR)) {
             return ArmorType.HEAD;
@@ -252,12 +231,33 @@ public class InventoryUtil implements IMinecraft {
                 .sum();
     }
 
-    public static boolean isSword(ItemStack stack) {
-        return SWORDS.contains(stack.getItem());
+    private static final Set<EquipmentSlot> ARMOR_EQUIPMENT_SLOTS = Set.of(
+            EquipmentSlot.HEAD, EquipmentSlot.BODY,
+            EquipmentSlot.LEGS, EquipmentSlot.FEET
+    );
+
+    public static boolean isArmor(Item item) {
+        var components = item.getComponents().get(DataComponentTypes.EQUIPPABLE);
+        if (components == null) return false;
+
+        return ARMOR_EQUIPMENT_SLOTS.contains(components.slot()) && components.allowedEntities().isEmpty();
     }
 
-    public static boolean isPickaxe(ItemStack stack) {
-        return SWORDS.contains(stack.getItem());
+    public static boolean isArmor(ItemStack stack) {
+        return isArmor(stack.getItem());
+    }
+
+    public static boolean isSword(ItemStack stack) {
+        return stack.isIn(ItemTags.SWORDS);
+    }
+    public static boolean isSword(Item item) {
+        return isSword(item.getDefaultStack());
+    }
+    public static boolean isAxe(ItemStack stack) {
+        return stack.isIn(ItemTags.AXES);
+    }
+    public static boolean isAxe(Item item) {
+        return isAxe(item.getDefaultStack());
     }
 
     public static int getFoodScore(ItemStack stack) {
