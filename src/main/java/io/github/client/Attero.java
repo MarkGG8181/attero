@@ -31,6 +31,7 @@ public final class Attero implements ClientModInitializer {
     }
 
     public void onEnd() {
+        LOGGER.info("Shutting down {}", MOD_ID);
         AuthTracker.INSTANCE.shutdown();
         ModuleTracker.INSTANCE.modulesFile.save();
         FriendTracker.INSTANCE.friendsFile.save();
