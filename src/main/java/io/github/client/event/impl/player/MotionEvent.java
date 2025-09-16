@@ -1,10 +1,10 @@
 package io.github.client.event.impl.player;
 
-import io.github.client.event.Event;
+import io.github.client.event.AbstractEvent;
 import io.github.client.event.data.State;
 import net.minecraft.util.math.Vec3d;
 
-public class MotionEvent extends Event {
+public class MotionEvent extends AbstractEvent {
     public double x, y, z;
     public float yaw, pitch;
     public boolean onGround;

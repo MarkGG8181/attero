@@ -23,7 +23,7 @@ public class PacketCancellerModule extends AbstractModule {
 
     @Subscribe
     private void onSendPacket(SendPacketEvent event) {
-        if (outgoing.enabled(event.getPacket().getClass().getSimpleName())) {
+        if (outgoing.enabled(event.packet.getClass().getSimpleName())) {
             event.cancelled = true;
         }
     }

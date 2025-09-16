@@ -1,6 +1,6 @@
 package io.github.client.event.impl.render;
 
-import io.github.client.event.CancellableEvent;
+import io.github.client.event.AbstractCancellableEvent;
 
-public class GetDarknessEvent extends CancellableEvent {
+public class GetDarknessEvent extends AbstractCancellableEvent {
 }

@@ -22,7 +22,7 @@ public class BlinkModule extends AbstractModule {
         }
 
         if (active) {
-            outPacketDeque.add(event.getPacket());
+            outPacketDeque.add(event.packet);
             event.cancelled = true;
         }
     }

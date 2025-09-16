@@ -104,7 +104,7 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
 
     @Subscribe
     private void onPacket(SendPacketEvent event) {
-        if (event.getPacket() instanceof ChatMessageC2SPacket packet) {
+        if (event.packet instanceof ChatMessageC2SPacket packet) {
             String message = packet.chatMessage();
 
             if (message.startsWith("#")) {

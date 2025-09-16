@@ -16,7 +16,7 @@ public class DisablerModule extends AbstractModule {
     private void onSendPacket(SendPacketEvent event) {
         switch (mode.getValue()) {
             case "Intave Cloud" -> {
-                if (event.getPacket() instanceof CommonPongC2SPacket) {
+                if (event.packet instanceof CommonPongC2SPacket) {
                     event.cancelled = true;
                 }
             }

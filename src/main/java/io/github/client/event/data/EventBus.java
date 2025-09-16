@@ -1,7 +1,7 @@
 package io.github.client.event.data;
 
 import io.github.client.Attero;
-import io.github.client.event.Event;
+import io.github.client.event.AbstractEvent;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -14,7 +14,7 @@ public class EventBus {
         for (Method method : obj.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(Subscribe.class)) {
                 Class<?>[] params = method.getParameterTypes();
-                if (params.length != 1 || !Event.class.isAssignableFrom(params[0])) continue;
+                if (params.length != 1 || !AbstractEvent.class.isAssignableFrom(params[0])) continue;
 
                 method.setAccessible(true);
 
@@ -38,15 +38,15 @@ public class EventBus {
         //Attero.LOGGER.info("Unregistered listener: {}", obj.getClass().getName());
     }
 
-    public void post(Event event) {
-        List<RegisteredListener> list = listeners.get(event.getClass());
+    public void post(AbstractEvent abstractEvent) {
+        List<RegisteredListener> list = listeners.get(abstractEvent.getClass());
         if (list == null) return;
 
         List<RegisteredListener> listenersCopy = new ArrayList<>(list);
 
         for (RegisteredListener listener : listenersCopy) {
             try {
-                listener.method.invoke(listener.owner, event);
+                listener.method.invoke(listener.owner, abstractEvent);
             } catch (Exception e) {
                 Attero.LOGGER.error("Error invoking event listener", e);
             }
