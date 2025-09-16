@@ -9,7 +9,7 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.GroupSetting;
 import io.github.client.module.data.setting.impl.MultiStringSetting;
-import io.github.client.util.java.SystemUtil;
+import io.github.client.util.java.ClassUtil;
 import io.github.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.StatusEffects;
@@ -152,7 +152,7 @@ public class NoRenderModule extends AbstractModule {
     private void onRenderEntity(RenderEntityEvent event) {
         if (event.entity != null) {
             var entityName = EntityType.getId(event.entity.getType()).getPath();
-            if (entities.enabled(SystemUtil.toClassName(entityName))) {
+            if (entities.enabled(ClassUtil.toClassName(entityName))) {
                 event.cancelled = true;
             }
         }

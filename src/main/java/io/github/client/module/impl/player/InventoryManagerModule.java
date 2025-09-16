@@ -8,7 +8,7 @@ import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.MultiStringSetting;
 import io.github.client.module.data.setting.impl.NumberSetting;
-import io.github.client.util.java.SystemUtil;
+import io.github.client.util.java.ClassUtil;
 import io.github.client.util.game.InventoryUtil;
 import io.github.client.util.java.math.Timer;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -151,7 +151,7 @@ public class InventoryManagerModule extends AbstractModule {
 
                 if (!stack.isEmpty()) {
                     var itemName = Registries.ITEM.getId(stack.getItem()).getPath();
-                    if (trashItems.enabled(SystemUtil.toClassName(itemName))) {
+                    if (trashItems.enabled(ClassUtil.toClassName(itemName))) {
                         trashSlotQueue.add(i);
                     }
                 }

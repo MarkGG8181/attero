@@ -27,7 +27,7 @@ public class ClientConnectionMixin {
         }
     }
 
-    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lio/netty/channel/ChannelFutureListener;Z)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "sendInternal", at = @At("HEAD"), cancellable = true)
     private void send(Packet<?> packet, @Nullable ChannelFutureListener channelFutureListener, boolean flush, CallbackInfo ci) {
         SendPacketEvent sendPacketEvent = new SendPacketEvent(packet);
         sendPacketEvent.post();

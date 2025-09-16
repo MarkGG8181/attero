@@ -1,7 +1,7 @@
 package io.github.client.util.game;
 
 import io.github.client.tracker.impl.FriendTracker;
-import io.github.client.util.java.SystemUtil;
+import io.github.client.util.java.ClassUtil;
 import io.github.client.util.java.interfaces.IMinecraft;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -34,7 +34,7 @@ public class EntityUtil implements IMinecraft {
 
         for (EntityType<?> type : Registries.ENTITY_TYPE) {
             Identifier id = Registries.ENTITY_TYPE.getId(type);
-            names.add(SystemUtil.toClassName(id.getPath()));
+            names.add(ClassUtil.toClassName(id.getPath()));
         }
 
         return names.toArray(new String[0]);

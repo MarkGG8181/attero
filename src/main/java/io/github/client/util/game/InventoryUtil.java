@@ -1,6 +1,6 @@
 package io.github.client.util.game;
 
-import io.github.client.util.java.SystemUtil;
+import io.github.client.util.java.ClassUtil;
 import io.github.client.util.java.interfaces.IMinecraft;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -31,7 +31,7 @@ public class InventoryUtil implements IMinecraft {
 
         for (var item : Registries.ITEM) {
             var id = Registries.ITEM.getId(item);
-            names.add(SystemUtil.toClassName(id.getPath()));
+            names.add(ClassUtil.toClassName(id.getPath()));
         }
 
         return names.toArray(new String[0]);
