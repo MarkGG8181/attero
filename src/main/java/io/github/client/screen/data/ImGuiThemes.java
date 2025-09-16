@@ -7,6 +7,10 @@ import imgui.flag.ImGuiCol;
 import io.github.client.module.impl.render.ClickGUIModule;
 import io.github.client.tracker.impl.ModuleTracker;
 
+/**
+ * @author markuss
+ * @since 22/05/2025
+ */
 public class ImGuiThemes {
     public static void applyTheme() {
         switch (ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).theme.getValue()) {

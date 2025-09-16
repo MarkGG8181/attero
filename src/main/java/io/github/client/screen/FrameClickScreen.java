@@ -23,6 +23,10 @@ import java.util.Arrays;
 
 import static imgui.ImGui.*;
 
+/**
+ * @author mainline
+ * @since 20/05/2025
+ */
 public final class FrameClickScreen extends Screen {
     public FrameClickScreen() {
         super(Text.of("Frame"));
@@ -37,7 +41,6 @@ public final class FrameClickScreen extends Screen {
 
         ImGuiImpl.draw(io -> {
             ImGuiThemes.applyTheme();
-            pushFont(ImGuiImpl.inter17);
 
             if (begin(Attero.MOD_ID + " panel")) {
                 if (beginTabBar("tabs")) {
@@ -111,7 +114,6 @@ public final class FrameClickScreen extends Screen {
             }
 
             end();
-            popFont();
         });
     }
 

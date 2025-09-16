@@ -4,7 +4,6 @@ import imgui.flag.ImGuiInputTextFlags;
 import io.github.client.Attero;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.tracker.impl.AuthTracker;
-import io.github.client.util.java.SystemUtil;
 import imgui.ImGui;
 import imgui.type.ImString;
 import net.minecraft.client.MinecraftClient;
@@ -12,12 +11,16 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
+/**
+ * @author markuss
+ * @since 16/09/2025
+ */
 public class LoginScreen extends Screen {
     public LoginScreen() {
         super(Text.of("Login"));
     }
 
-    private final ImString username = new ImString(System.getProperty("user.name"), 20);
+    private final ImString username = new ImString("", 20);
     private final ImString password = new ImString("", 128);
 
     @Override

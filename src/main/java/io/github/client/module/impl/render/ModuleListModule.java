@@ -11,7 +11,6 @@ import io.github.client.module.data.setting.impl.NumberSetting;
 import io.github.client.module.data.setting.impl.StringSetting;
 import io.github.client.screen.DropdownClickScreen;
 import io.github.client.screen.FrameClickScreen;
-import io.github.client.screen.data.ImGuiFontManager;
 import io.github.client.screen.data.ImGuiImpl;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.game.EntityUtil;
@@ -24,8 +23,6 @@ import java.util.LinkedList;
 @ModuleInfo(name = "ModuleList", category = ModuleCategory.RENDER, description = "Draws a list of enabled modules")
 public class ModuleListModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Design", "ImGui", "ImGui", "Minecraft");
-    private final StringSetting font = new StringSetting("Font", "Inter", "Inter", "Arial", "Comfortaa", "Sansation").hide(() -> !mode.getValue().equals("ImGui"));
-    private final NumberSetting fontSize = new NumberSetting("Font size", 21, 21, 30).hide(() -> !mode.is("ImGui"));
     private final ColorSetting textColor = new ColorSetting("Text color", new Color(0x26A07D));
     private final BooleanSetting background = new BooleanSetting("Background", true);
     private final BooleanSetting fontShadow = new BooleanSetting("Font shadow", false);
@@ -36,20 +33,6 @@ public class ModuleListModule extends AbstractModule {
     private final NumberSetting xOffset = new NumberSetting("X offset", 5, 0, 15);
     private final NumberSetting yOffset = new NumberSetting("Y offset", 5, 0, 15);
     private final BooleanSetting animate = new BooleanSetting("Animate", true);
-
-    private ImFont currentFont = ImGuiImpl.inter17;
-
-    public ModuleListModule() {
-        font.onChange(set -> {
-            var font = ImGuiFontManager.getFont(set, fontSize.toInt());
-            if (font != null) currentFont = font;
-        });
-
-        fontSize.onChange(set -> {
-            var font = ImGuiFontManager.getFont(this.font.getValue(), set.intValue());
-            if (font != null) currentFont = font;
-        });
-    }
 
     @Subscribe
     private void onRender(Render2DEvent event) {
@@ -78,12 +61,6 @@ public class ModuleListModule extends AbstractModule {
 
         switch (mode.getValue()) {
             case "ImGui" -> ImGuiImpl.draw(io -> {
-                if (currentFont == null) {
-                    currentFont = ImGuiFontManager.getFont(font.getValue(), fontSize.toInt());
-                    if (currentFont == null) currentFont = ImGuiImpl.inter17; // fallback
-                }
-
-                ImGui.pushFont(currentFont);
                 var drawList = ImGui.getForegroundDrawList();
 
                 modules.sort(Comparator.comparingDouble(module -> -ImGui.calcTextSize(getFormattedModuleName(module)).x));
@@ -139,8 +116,6 @@ public class ModuleListModule extends AbstractModule {
                         alignment += lineHeight + 2;
                     }
                 }
-
-                ImGui.popFont();
             });
             case "Minecraft" -> {
                 modules.sort(Comparator.comparingDouble(module -> -mc.textRenderer.getWidth(getFormattedModuleName(module))));

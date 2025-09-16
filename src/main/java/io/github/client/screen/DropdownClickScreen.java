@@ -27,6 +27,10 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 
+/**
+ * @author markuss
+ * @since 5/05/2025
+ */
 public class DropdownClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
     private final ImVec2 size = new ImVec2(230, 0);
@@ -64,8 +68,6 @@ public class DropdownClickScreen extends Screen {
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
-
-                ImGui.pushFont(ImGuiImpl.inter17);
                 ImGui.setNextWindowPos(position, ImGuiCond.Once);
                 ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
 
@@ -133,7 +135,6 @@ public class DropdownClickScreen extends Screen {
                 }
 
                 ImGui.end();
-                ImGui.popFont();
             }
         });
     }
