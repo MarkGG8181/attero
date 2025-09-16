@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version "${loom_version}"
     id 'maven-publish'
+    id 'com.gradleup.shadow' version '9.1.0'
 }
 
 version = project.mod_version
@@ -23,11 +24,15 @@ repositories {
     }
 }
 
+configurations {
+    library
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "maven.modrinth:sodium:${project.sodium_version}"
@@ -39,19 +44,28 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.38")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 
-    implementation name: 'grabber-1.0'
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
+    // For clovr.store
+    library name: 'grabber-1.0'
+    library 'org.bouncycastle:bcprov-jdk18on:1.80'
 
     // From https://github.com/FlorianMichael/fabric-imgui-example-mod
-    include implementation("io.github.spair:imgui-java-binding:${project.imgui_version}")
-    include implementation("io.github.spair:imgui-java-lwjgl3:${project.imgui_version}")
-    include implementation("io.github.spair:imgui-java-natives-windows:${project.imgui_version}")
-    include implementation("io.github.spair:imgui-java-natives-linux:${project.imgui_version}")
-    include implementation("io.github.spair:imgui-java-natives-macos:${project.imgui_version}")
+    library("io.github.spair:imgui-java-binding:${project.imgui_version}")
+    library("io.github.spair:imgui-java-lwjgl3:${project.imgui_version}")
+    library("io.github.spair:imgui-java-natives-windows:${project.imgui_version}")
+    library("io.github.spair:imgui-java-natives-linux:${project.imgui_version}")
+    library("io.github.spair:imgui-java-natives-macos:${project.imgui_version}")
+
+    configurations.implementation.extendsFrom(configurations.library)
 }
 
 loom {
     accessWidenerPath = file("src/main/resources/attero.accesswidener")
+}
+
+shadowJar {
+    configurations = [project.configurations.library]
+    archiveClassifier.set('')
+    mergeServiceFiles()
 }
 
 configurations.all {
@@ -89,14 +103,6 @@ jar {
     }
 }
 
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
-        }
-    }
-
-    repositories {
-    }
+build {
+    dependsOn shadowJar
 }
