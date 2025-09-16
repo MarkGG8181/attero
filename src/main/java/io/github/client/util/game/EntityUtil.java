@@ -97,7 +97,7 @@ public class EntityUtil implements IMinecraft {
                         && !entity.isDead()
                         && entity.isAlive()
                         && !entity.getName().getString().isBlank()
-                        && !FriendTracker.getInstance().list.contains(entity.getName().getString())
+                        && !FriendTracker.INSTANCE.list.contains(entity.getName().getString())
                         && isWithinRange(entity, searchRange)
         );
 

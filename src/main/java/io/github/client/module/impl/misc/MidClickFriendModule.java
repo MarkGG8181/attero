@@ -19,11 +19,11 @@ public class MidClickFriendModule extends AbstractModule {
             if (entityHitResult.getType().equals(HitResult.Type.ENTITY) && entityHitResult.getEntity() instanceof PlayerEntity plr) {
                 var name = plr.getName().getString();
 
-                if (FriendTracker.getInstance().list.contains(name)) {
-                    FriendTracker.getInstance().list.remove(name);
+                if (FriendTracker.INSTANCE.list.contains(name)) {
+                    FriendTracker.INSTANCE.list.remove(name);
                     send(String.format("Removed §e%s§r from friends", name));
                 } else {
-                    FriendTracker.getInstance().list.add(name);
+                    FriendTracker.INSTANCE.list.add(name);
                     send(String.format("Added §e%s§r to friends", name));
                 }
             }
