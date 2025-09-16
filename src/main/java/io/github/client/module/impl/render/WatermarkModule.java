@@ -63,7 +63,7 @@ public class WatermarkModule extends AbstractModule {
             try {
                 clientLogo = ImGuiImpl.fromBufferedImage(ImageIO.read(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Attero.MOD_ID + "/icon.png"))));
             } catch (IOException e) {
-                sendError("Failed to load client logo: " +  e.getMessage());
+                error("Failed to load client logo: " +  e.getMessage());
                 Attero.LOGGER.error("Failed to load client watermark png", e);
             }
         }

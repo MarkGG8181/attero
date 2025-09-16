@@ -89,7 +89,7 @@ public class ModulesFile extends AbstractFile {
             if (MinecraftClient.getInstance().player == null)
                 Attero.LOGGER.info("Config {} not found!", getFile().getAbsolutePath());
             else
-                ModuleTracker.INSTANCE.sendError(String.format("Config §e%s§r not found", getFile().getName().replaceAll(".json", "")));
+                ModuleTracker.INSTANCE.error(String.format("Config §e%s§r not found", getFile().getName().replaceAll(".json", "")));
 
             return;
         }

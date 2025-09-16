@@ -96,7 +96,7 @@ public class ScaffoldWalkModule extends AbstractRotator {
     private void checkForBlocks() {
         if (!InventoryUtil.checkHotbarForBlocks()) {
             toggle();
-            sendError("You have no valid blocks in your hotbar!");
+            error("You have no valid blocks in your hotbar!");
         }
     }
 

@@ -15,7 +15,7 @@ public class HelpCommand extends AbstractCommand {
                     command.getHelp().forEach(line -> send(line, line.contains("usage")));
                 }
             } else {
-                sendError(String.format("Command §e%s§r not found!", args[1]));
+                error(String.format("Command §e%s§r not found!", args[1]));
             }
         } catch (Throwable t) {
             CommandTracker.INSTANCE.list.forEach(cmd -> send(String.format("§6%s§e%s§r - %s", CommandTracker.COMMAND_PREFIX, cmd.getInfo().aliases()[0], cmd.getInfo().description())));

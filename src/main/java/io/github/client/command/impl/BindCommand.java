@@ -111,7 +111,7 @@ public class BindCommand extends AbstractCommand {
                 default -> throw new IllegalArgumentException("Invalid operation!");
             }
         } catch (Throwable t) {
-            sendError(t.getMessage()); // lol
+            error(t.getMessage()); // lol
         }
     }
 

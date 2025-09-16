@@ -1,50 +1,63 @@
 package io.github.client.util.java.interfaces;
 
-import io.github.client.util.java.math.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
 
 import java.awt.*;
 
 public interface IMinecraft {
     MinecraftClient mc = MinecraftClient.getInstance();
 
-    default void send(String message) {
-        send(message, true);
+    enum ChatMessageType {
+        INFO("§fao §f:: "),
+        ERROR("§fao §f:: §cerr :: §r"),
+        WARNING("§fao §f:: §ewarn :: §r"),
+        IRC("§fao §f:: §bIRC :: §r"),
+        BROADCAST("§fao §f:: §l§n§4BROADCAST :: §r");
+
+        public final String prefix;
+
+        ChatMessageType(String prefix) {
+            this.prefix = prefix;
+        }
     }
 
-    default void send(String message, boolean includePrefix) {
+    default void send(ChatMessageType type, boolean prefix, String message, Object... args) {
         if (mc.player != null) {
             MutableText finalText = Text.empty();
 
-            if (includePrefix) {
-                MutableText prefix = ColorUtil.createGradientText("ao", new Color(0x26A07D), Color.WHITE);
-                finalText.append(prefix);
-                finalText.append(Text.literal(" > "));
+            for (Object arg : args) {
+                String replacement = "§e" + (arg == null ? "null" : arg.toString()) + "§r";
+                message = message.replaceFirst("\\{\\}", replacement);
             }
 
-            finalText.append(Text.literal(message).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));
-
+            if (prefix) message = type.prefix + message;
+            finalText.append(message);
             mc.player.sendMessage(finalText, false);
         }
     }
 
-    default void sendError(String message) {
-        if (mc.player != null) {
-            MutableText finalText = Text.empty();
+    default void error(String message, Object... args) {
+        send(ChatMessageType.ERROR, true, message, args);
+    }
 
-            MutableText prefix = ColorUtil.createGradientText("ae", new Color(0xFA003F), Color.WHITE);
-            finalText.append(prefix);
+    default void warn(String message, Object... args) {
+        send(ChatMessageType.WARNING, true, message, args);
+    }
 
-            finalText.append(Text.literal(" > " + message).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFFFF))));
+    default void send(boolean prefix, String message, Object... args) {
+        send(ChatMessageType.INFO, prefix, message, args);
+    }
 
-            mc.player.sendMessage(finalText, false);
-        }
+    default void send(String message, Object... args) {
+        send(true, message, args);
+    }
+
+    default void send(String message) {
+        send(message, true);
     }
 
     default void setTimer(float speed) {

@@ -54,9 +54,9 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
                     command.execute(parts);
                 } else {
                     if (commandName.isBlank()) {
-                        sendError("Missing arguments!");
+                        error("Missing arguments!");
                     } else {
-                        sendError(String.format("Command §e%s§r not found!", commandName));
+                        error("Command §e{}§r not found!", commandName);
                     }
                 }
             }

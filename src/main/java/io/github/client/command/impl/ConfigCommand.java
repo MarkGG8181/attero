@@ -74,7 +74,7 @@ public class ConfigCommand extends AbstractCommand {
                 default -> new ModulesFile(args[1].toLowerCase()).load();
             }
         } catch (Throwable t) {
-            sendError(t.getMessage());
+            error(t.getMessage());
         }
     }
 }
