@@ -7,15 +7,20 @@ import imgui.extension.implot.ImPlot;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
+import io.github.client.Attero;
 import io.github.client.util.java.FileUtil;
 import io.github.client.util.interfaces.IRender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlBackend;
 import net.minecraft.client.texture.GlTexture;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -25,15 +30,43 @@ public class ImGuiImpl {
     private final static ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
     private final static ImGuiImplGl3 imGuiImplGl3 = new ImGuiImplGl3();
 
+    public static ImFont mainFont;
+
     public static void create(long handle) throws IOException {
         ImGui.createContext();
         ImPlot.createContext();
 
-        final ImGuiIO data = ImGui.getIO();
-        data.setIniFilename(FileUtil.CLIENT_DIR.resolve("imgui.ini").toString());
-        data.setFontGlobalScale(1F);
+        final ImGuiIO io = ImGui.getIO();
+        final ImFontAtlas atlas = io.getFonts();
+        io.setIniFilename(FileUtil.CLIENT_DIR.resolve("imgui.ini").toString());
+        io.setFontGlobalScale(1F);
 
-        data.setConfigFlags(ImGuiConfigFlags.DockingEnable);
+        {
+            final ImFontAtlas fonts = io.getFonts();
+            final ImFontGlyphRangesBuilder rangesBuilder = new ImFontGlyphRangesBuilder();
+
+            rangesBuilder.addRanges(io.getFonts().getGlyphRangesDefault());
+            rangesBuilder.addRanges(io.getFonts().getGlyphRangesCyrillic());
+            rangesBuilder.addRanges(io.getFonts().getGlyphRangesJapanese());
+
+            final short[] glyphRanges = rangesBuilder.buildRanges();
+
+            final ImFontConfig basicConfig = new ImFontConfig();
+            basicConfig.setGlyphRanges(io.getFonts().getGlyphRangesCyrillic());
+
+            List<ImFont> generatedFonts = new ArrayList<>();
+            for (int i = 5 /* MINIMUM_FONT_SIZE */; i <= 50 /* MAXIMUM_FONT_SIZE */; i++) {
+                basicConfig.setName("Inter Regular " + i + "px");
+                generatedFonts.add(fonts.addFontFromMemoryTTF(IOUtils.toByteArray(Objects.requireNonNull(ImGuiImpl.class.getResourceAsStream("/assets/" + Attero.MOD_ID + "/fonts/Inter_Regular.ttf"))), i, basicConfig, glyphRanges));
+            }
+            fonts.build();
+            basicConfig.destroy();
+
+            mainFont = generatedFonts.get(17);
+            io.setFontDefault(mainFont); //bypasses the mainframe so we can inject into the cpu
+        }
+
+        io.setConfigFlags(ImGuiConfigFlags.DockingEnable);
 
         imGuiImplGlfw.init(handle, true);
         imGuiImplGl3.init();
