@@ -13,6 +13,7 @@ import io.github.client.module.data.setting.impl.BooleanSetting;
 import io.github.client.module.data.setting.impl.StringSetting;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.game.MovementUtil;
+import io.github.client.util.interfaces.IVec3d;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -20,6 +21,7 @@ import net.minecraft.entity.vehicle.AbstractBoatEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -44,6 +46,8 @@ public class JesusModule extends AbstractModule {
     private final BlockPos.Mutable blockPos = new BlockPos.Mutable();
     private boolean water;
     private int packetTimer = 0;
+    private int tickTimer = 10;
+    public boolean isInBubbleColumn = false;
 
     @Subscribe
     private void onComputeCollision(ComputeNextCollisionEvent event) {
@@ -93,6 +97,39 @@ public class JesusModule extends AbstractModule {
                             water = false;
                         }
                     }
+                }
+
+                case "Collision" -> {
+                    boolean bubbleColumn = isInBubbleColumn;
+                    isInBubbleColumn = false;
+                    if (mc.player.isTouchingWater() && !waterShouldBeSolid()) return;
+                    if (mc.player.isInSwimmingPose()) return;
+
+                    // Move up in bubble columns
+                    if (bubbleColumn) {
+                        if (mc.options.jumpKey.isPressed() && mc.player.getVelocity().getY() < 0.11) ((IVec3d) mc.player.getVelocity()).setY(0.11);
+                        return;
+                    }
+
+                    // Move up
+                    if (mc.player.isTouchingWater() || mc.player.isInLava()) {
+                        ((IVec3d) mc.player.getVelocity()).setY(0.11);
+                        tickTimer = 0;
+                        return;
+                    }
+
+                    BlockState blockBelowState = mc.world.getBlockState(mc.player.getBlockPos().down());
+                    boolean waterLogger = false;
+                    try {
+                        waterLogger = blockBelowState.get(Properties.WATERLOGGED);
+                    } catch (Exception ignored) {}
+
+                    // Simulate jumping out of water
+                    if (tickTimer == 0) ((IVec3d) mc.player.getVelocity()).setY(0.30);
+                    else if (tickTimer == 1 && (blockBelowState == Blocks.WATER.getDefaultState() || blockBelowState == Blocks.LAVA.getDefaultState() || waterLogger))
+                        ((IVec3d) mc.player.getVelocity()).setY(0);
+
+                    tickTimer++;
                 }
             }
         }

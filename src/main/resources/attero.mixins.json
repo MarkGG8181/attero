@@ -12,7 +12,8 @@
     "MinecraftDedicatedServerMixin",
     "MinecraftServerMixin",
     "ModStatusMixin",
-    "PlayerInteractEntityC2SPacketMixin"
+    "PlayerInteractEntityC2SPacketMixin",
+    "Vec3dMixin"
   ],
   "injectors": {
     "defaultRequire": 1
