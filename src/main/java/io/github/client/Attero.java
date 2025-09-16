@@ -1,15 +1,13 @@
 package io.github.client;
 
 import io.github.client.event.data.EventBus;
-import io.github.client.screen.data.ImGuiImpl;
+import io.github.client.imgui.ImGuiImpl;
 import io.github.client.tracker.impl.*;
 import io.github.client.util.java.FileUtil;
 import net.fabricmc.api.ClientModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 
 /**
  * @author markuss
@@ -23,8 +21,7 @@ public final class Attero implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        FileUtil.createDir(MOD_ID);
-        FileUtil.createDir(MOD_ID + File.separator + "configs");
+        FileUtil.createDir("configs");
     }
 
     public void onStartup() {
@@ -34,9 +31,9 @@ public final class Attero implements ClientModInitializer {
     }
 
     public void onEnd() {
-        ImGuiImpl.dispose();
         AuthTracker.INSTANCE.shutdown();
         ModuleTracker.INSTANCE.modulesFile.save();
         FriendTracker.INSTANCE.friendsFile.save();
+        ImGuiImpl.dispose();
     }
 }

@@ -1,4 +1,4 @@
-package io.github.client.util.java.interfaces;
+package io.github.client.util.interfaces;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
@@ -13,8 +13,8 @@ public interface IMinecraft {
         INFO("§aao §f:: "),
         ERROR("§cerr :: §r"),
         WARNING("§ewarn :: §r"),
-        IRC("§bIRC :: §r"),
-        BROADCAST("§l§n§4BROADCAST :: §r");
+        IRC("§birc :: §r"),
+        BROADCAST("§l§n§4broadcast :: §r");
 
         public final String prefix;
 

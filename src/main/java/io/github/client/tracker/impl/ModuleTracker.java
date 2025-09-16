@@ -14,7 +14,7 @@ import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.client.ConfigEntry;
-import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.interfaces.IMinecraft;
 
 import java.util.ArrayList;
 import java.util.List;

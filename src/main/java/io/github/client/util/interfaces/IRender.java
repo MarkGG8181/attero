@@ -1,4 +1,4 @@
-package io.github.client.util.java.interfaces;
+package io.github.client.util.interfaces;
 
 import imgui.ImGuiIO;
 

@@ -2,7 +2,7 @@ package io.github.client.screen;
 
 import imgui.flag.ImGuiInputTextFlags;
 import io.github.client.Attero;
-import io.github.client.screen.data.ImGuiImpl;
+import io.github.client.imgui.ImGuiImpl;
 import io.github.client.tracker.impl.AuthTracker;
 import imgui.ImGui;
 import imgui.type.ImString;

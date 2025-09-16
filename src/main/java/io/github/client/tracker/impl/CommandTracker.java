@@ -6,7 +6,7 @@ import io.github.client.command.impl.*;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.player.SendPacketEvent;
 import io.github.client.tracker.AbstractTracker;
-import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.interfaces.IMinecraft;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
 /**
@@ -24,7 +24,6 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
         list.add(new HelpCommand());
         list.add(new ConfigCommand());
         list.add(new BindCommand());
-        list.add(new GarbageCollectorCommand());
         list.add(new FriendCommand());
     }
 

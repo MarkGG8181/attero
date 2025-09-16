@@ -2,7 +2,7 @@ package io.github.client.util.game;
 
 import io.github.client.event.impl.interact.MoveInputEvent;
 import io.github.client.tracker.impl.RotationTracker;
-import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.interfaces.IMinecraft;
 import io.github.client.util.java.math.FastNoiseLite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;

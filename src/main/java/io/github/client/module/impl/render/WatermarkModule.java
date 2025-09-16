@@ -11,7 +11,7 @@ import io.github.client.module.data.setting.impl.ColorSetting;
 import io.github.client.module.data.setting.impl.StringSetting;
 import io.github.client.screen.DropdownClickScreen;
 import io.github.client.screen.FrameClickScreen;
-import io.github.client.screen.data.ImGuiImpl;
+import io.github.client.imgui.ImGuiImpl;
 import io.github.client.util.java.math.ColorUtil;
 import imgui.ImGui;
 

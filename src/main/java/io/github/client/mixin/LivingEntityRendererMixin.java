@@ -9,7 +9,7 @@ import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import static io.github.client.util.java.interfaces.IMinecraft.mc;
+import static io.github.client.util.interfaces.IMinecraft.mc;
 
 /**
  * @author markuss

@@ -1,21 +1,20 @@
-package io.github.client.screen.data;
+package io.github.client.imgui;
 
 import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.client.Attero;
 import imgui.*;
 import imgui.extension.implot.ImPlot;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
-import io.github.client.util.java.interfaces.IRender;
+import io.github.client.util.java.FileUtil;
+import io.github.client.util.interfaces.IRender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlBackend;
 import net.minecraft.client.texture.GlTexture;
 import org.lwjgl.opengl.*;
 
-import java.io.File;
 import java.io.IOException;
 
 
@@ -31,7 +30,7 @@ public class ImGuiImpl {
         ImPlot.createContext();
 
         final ImGuiIO data = ImGui.getIO();
-        data.setIniFilename(Attero.MOD_ID + File.separator + Attero.MOD_ID + ".ini");
+        data.setIniFilename(FileUtil.CLIENT_DIR.resolve("imgui.ini").toString());
         data.setFontGlobalScale(1F);
 
         data.setConfigFlags(ImGuiConfigFlags.DockingEnable);

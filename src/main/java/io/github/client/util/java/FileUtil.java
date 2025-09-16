@@ -21,20 +21,22 @@ import java.util.stream.Stream;
 public class FileUtil {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
+    public static final Path CLIENT_DIR = Path.of(System.getProperty("user.home") + File.separator + Attero.MOD_ID);
+
     public static void createDir(String path) {
         try {
-            Files.createDirectories(Path.of(path)); // doesn't throw if already exists
+            Files.createDirectories(CLIENT_DIR.resolve(path)); // doesn't throw if already exists
         } catch (IOException e) {
             Attero.LOGGER.error("Failed to create directory {}", path, e);
         }
     }
 
     public static Set<ConfigEntry> listConfigFiles() {
-        return listFiles(Attero.MOD_ID + File.separator + "configs", ".json");
+        return listFiles(File.separator + "configs", ".json");
     }
 
     public static Set<ConfigEntry> listFiles(String dir, String fileSuffix) {
-        File folder = new File(dir);
+        File folder = CLIENT_DIR.resolve(dir).toFile();
         File[] files = folder.listFiles();
         if (files == null) return Collections.emptySet();
 

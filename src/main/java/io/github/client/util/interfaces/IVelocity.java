@@ -1,4 +1,4 @@
-package io.github.client.util.java.interfaces;
+package io.github.client.util.interfaces;
 
 public interface IVelocity {
     void setVelocityX(int x);

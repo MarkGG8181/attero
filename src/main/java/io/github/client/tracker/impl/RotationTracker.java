@@ -6,7 +6,7 @@ import io.github.client.event.impl.player.ReceivePacketEvent;
 import io.github.client.event.impl.render.FlipFrameEvent;
 import io.github.client.module.data.rotate.AbstractRotator;
 import io.github.client.tracker.AbstractTracker;
-import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.interfaces.IMinecraft;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityS2CPacket;

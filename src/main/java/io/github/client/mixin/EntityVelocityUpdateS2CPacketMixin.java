@@ -1,6 +1,6 @@
 package io.github.client.mixin;
 
-import io.github.client.util.java.interfaces.IVelocity;
+import io.github.client.util.interfaces.IVelocity;
 import lombok.Setter;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;

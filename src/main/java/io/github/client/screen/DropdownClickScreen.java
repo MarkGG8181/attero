@@ -1,13 +1,12 @@
 package io.github.client.screen;
 
 import io.github.client.module.data.setting.impl.*;
-import io.github.client.Attero;
 import io.github.client.file.impl.ModulesFile;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.setting.AbstractSetting;
-import io.github.client.screen.data.ImGuiImpl;
-import io.github.client.screen.data.ImGuiThemes;
+import io.github.client.imgui.ImGuiImpl;
+import io.github.client.imgui.ImGuiThemes;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.client.ConfigEntry;
 import io.github.client.util.java.FileUtil;
@@ -24,7 +23,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.awt.*;
-import java.io.File;
 import java.util.*;
 
 /**
@@ -44,7 +42,7 @@ public class DropdownClickScreen extends Screen {
         super.init();
 
         ModuleTracker.INSTANCE.configs.clear();
-        ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json"));
+        ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles("configs", ".json"));
     }
 
     private boolean initialised;

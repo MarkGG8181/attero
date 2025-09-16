@@ -1,4 +1,4 @@
-package io.github.client.screen.data;
+package io.github.client.imgui;
 
 import imgui.ImGui;
 import imgui.ImGuiStyle;

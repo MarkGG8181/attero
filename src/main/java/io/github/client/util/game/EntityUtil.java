@@ -2,7 +2,7 @@ package io.github.client.util.game;
 
 import io.github.client.tracker.impl.FriendTracker;
 import io.github.client.util.java.ClassUtil;
-import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.interfaces.IMinecraft;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

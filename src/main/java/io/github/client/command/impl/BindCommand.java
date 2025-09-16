@@ -30,27 +30,31 @@ public class BindCommand extends AbstractCommand {
         try {
             switch (args[1].toLowerCase()) {
                 case "add" -> {
-                    if (args.length != 4) throw new IllegalArgumentException("Expected 2 args to a \"add\" operation!");
+                    if (args.length != 4) error("Expected 2 args to a \"add\" operation!");
                     AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
                     int key = getKeyBind(args, 3);
 
-                    if (byName == null)
-                        throw new IllegalArgumentException(String.format("Module \"%s\" does not exist!", args[2]));
+                    if (byName == null) {
+                        error("Module \"{}\" does not exist!", args[2]);
+                        return;
+                    }
                     byName.getKeybinds().add(key);
 
-                    send(String.format("Bound %s to %c", byName.getInfo().name(), (char) key));
+                    send("Bound {} to {}", byName.getInfo().name(), (char) key);
                 }
                 case "remove" -> {
                     if (args.length != 4)
-                        throw new IllegalArgumentException("Expected 2 args to a \"remove\" operation!");
+                        error("Expected 2 args to a \"remove\" operation!");
                     AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
                     int key = getKeyBind(args, 3);
 
-                    if (byName == null)
-                        throw new IllegalArgumentException(String.format("Module \"%s\" does not exist!", args[2]));
+                    if (byName == null) {
+                        error("Module \"{}\" does not exist!", args[2]);
+                        return;
+                    }
                     byName.getKeybinds().remove((Integer) key);
 
-                    send(String.format("Unbound %s from %c", byName.getInfo().name(), (char) key));
+                    send("Unbound {} from {}", byName.getInfo().name(), (char) key);
                 }
                 case "list" -> {
                     if (args.length == 2) {
@@ -65,7 +69,7 @@ public class BindCommand extends AbstractCommand {
 
                             sb.delete(sb.length() - 2, sb.length());
 
-                            send(String.format("%s -> %s", m.getInfo().name(), sb));
+                            send("{} -> {}", m.getInfo().name(), sb);
                         });
                     } else if (args.length == 3) {
                         AbstractModule byName = ModuleTracker.INSTANCE.getByName(args[2]);
@@ -79,7 +83,7 @@ public class BindCommand extends AbstractCommand {
 
                             sb.delete(sb.length() - 2, sb.length());
 
-                            send(String.format("%s -> %s", byName.getInfo().name(), sb));
+                            send("{} -> {}", byName.getInfo().name(), sb);
                         } else {
                             int keyBind = getKeyBind(args, 2);
 
@@ -89,7 +93,7 @@ public class BindCommand extends AbstractCommand {
                                 }
                             }
                         }
-                    } else throw new IllegalArgumentException("Expected 1 or 0 args to a \"list\" operation!");
+                    } else error("Expected 1 or 0 args to a \"list\" operation!");
                 }
                 case "clear" -> {
                     if (args.length == 2) {
@@ -103,12 +107,11 @@ public class BindCommand extends AbstractCommand {
                             send(String.format("Cleared all for module %s!", byName.getInfo().name()));
                         } else {
                             int keyBind = getKeyBind(args, 2);
-
                             ModuleTracker.INSTANCE.list.forEach(m -> m.getKeybinds().remove((Integer) keyBind));
                         }
-                    } else throw new IllegalArgumentException("Expected 1 or 0 args to a \"clear\" operation!");
+                    } else error("Expected 1 or 0 args to a \"clear\" operation!");
                 }
-                default -> throw new IllegalArgumentException("Invalid operation!");
+                default -> error("Invalid operation!");
             }
         } catch (Throwable t) {
             error(t.getMessage()); // lol

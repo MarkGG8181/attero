@@ -3,7 +3,7 @@ package io.github.client.module.impl.combat;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.player.ReceivePacketEvent;
 import io.github.client.event.impl.game.TickEvent;
-import io.github.client.util.java.interfaces.IVelocity;
+import io.github.client.util.interfaces.IVelocity;
 import io.github.client.module.AbstractModule;
 import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;

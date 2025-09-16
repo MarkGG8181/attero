@@ -27,12 +27,12 @@ public class FriendCommand extends AbstractCommand {
                 case "add" -> {
                     String friendName = args[2];
                     FriendTracker.INSTANCE.list.add(friendName);
-                    send(String.format("Added §e%s§r to friends", friendName));
+                    send("Added {} to friends", friendName);
                 }
                 case "remove" -> {
                     String friendName = args[2];
                     FriendTracker.INSTANCE.list.remove(friendName);
-                    send(String.format("Removed §e%s§r from friends", friendName));
+                    send("Removed {} from friends", friendName);
                 }
 
                 case "list" -> {
@@ -40,14 +40,14 @@ public class FriendCommand extends AbstractCommand {
                         send("You have no friends :(");
                     else {
                         send("Your friends: ");
-                        send("> " + String.join(", ", FriendTracker.INSTANCE.list), false);
+                        send(false, "> {}", String.join(", ", FriendTracker.INSTANCE.list));
                     }
                 }
 
                 default -> {
                     String friendName = args[1];
                     FriendTracker.INSTANCE.list.add(friendName);
-                    send(String.format("Added §e%s§r to friends", friendName));
+                    send("Added {} to friends", friendName);
                 }
             }
         } catch (Throwable t) {

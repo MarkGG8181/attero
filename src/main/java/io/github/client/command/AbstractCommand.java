@@ -1,7 +1,7 @@
 package io.github.client.command;
 
 import io.github.client.command.data.CommandInfo;
-import io.github.client.util.java.interfaces.IMinecraft;
+import io.github.client.util.interfaces.IMinecraft;
 import lombok.Getter;
 import lombok.Setter;
 

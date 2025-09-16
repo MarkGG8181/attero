@@ -1,6 +1,5 @@
 package io.github.client.command.impl;
 
-import io.github.client.Attero;
 import io.github.client.command.AbstractCommand;
 import io.github.client.command.data.CommandInfo;
 import io.github.client.file.impl.ModulesFile;
@@ -36,7 +35,7 @@ public class ConfigCommand extends AbstractCommand {
             switch (args[1].toLowerCase()) {
                 case "load" -> {
                     String configName = args[2].toLowerCase() + (args[2].endsWith(".json") ? "" : ".json");
-                    List<ConfigEntry> local = FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json").stream().toList();
+                    List<ConfigEntry> local = FileUtil.listFiles("configs", ".json").stream().toList();
 
                     boolean foundLocal = local.stream().anyMatch(c -> c.name().equalsIgnoreCase(configName));
                     if (foundLocal) {
@@ -49,17 +48,17 @@ public class ConfigCommand extends AbstractCommand {
                 case "list" -> {
                     send("Available configs:");
 
-                    List<ConfigEntry> local = FileUtil.listFiles(Attero.MOD_ID + File.separator + "configs", ".json").stream().toList();
+                    List<ConfigEntry> local = FileUtil.listFiles("configs", ".json").stream().toList();
                     for (ConfigEntry cfg : local) {
                         String formattedTime = Instant.ofEpochMilli(cfg.createdTime().toMillis())
                                 .atZone(ZoneId.systemDefault())
                                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                        send("> §e" + cfg.name().replace(".json", "") + " §7(" + formattedTime + ")", false);
+                        send(false, "> {} ({})", cfg.name().replace(".json", ""), formattedTime);
                     }
                 }
 
                 case "folder" -> {
-                    File folder = new File(Attero.MOD_ID + File.separator + "configs");
+                    File folder = FileUtil.CLIENT_DIR.resolve("configs").toFile();
                     if (!folder.exists()) folder.mkdirs();
 
                     if (System.getProperty("os.name").toLowerCase().contains("win")) {

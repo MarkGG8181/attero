@@ -22,7 +22,7 @@ public abstract class AbstractFile {
     public AbstractFile(String fileName) {
         fileName += (fileName.endsWith(".json") ? "" : ".json");
 
-        this.file = new File(Attero.MOD_ID + File.separator + fileName);
+        this.file = FileUtil.CLIENT_DIR.resolve(File.separator + fileName).toFile();
         this.fileName = fileName;
     }
 
