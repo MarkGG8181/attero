@@ -97,7 +97,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
     }
 
     @Subscribe
-    public void onKey(KeyEvent event) {
+    private void onKey(KeyEvent event) {
         if (mc.currentScreen == null)
             list.forEach(mod -> {
                 if (mod.getKeybinds().contains(event.key)) {

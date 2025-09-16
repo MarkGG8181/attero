@@ -42,7 +42,7 @@ public class CommandTracker extends AbstractTracker<AbstractCommand> implements 
     }
 
     @Subscribe
-    public void onPacket(SendPacketEvent event) {
+    private void onPacket(SendPacketEvent event) {
         if (event.getPacket() instanceof ChatMessageC2SPacket packet) {
             String message = packet.chatMessage();
 

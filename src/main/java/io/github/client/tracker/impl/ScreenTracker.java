@@ -25,7 +25,7 @@ public class ScreenTracker extends AbstractTracker<Screen> {
     }
 
     @Subscribe
-    public void onKey(KeyEvent event) {
+    private void onKey(KeyEvent event) {
         if (!AuthTracker.INSTANCE.connected && !(MinecraftClient.getInstance().currentScreen instanceof LoginScreen)) {
             MinecraftClient.getInstance().setScreen(new LoginScreen());
             return;
