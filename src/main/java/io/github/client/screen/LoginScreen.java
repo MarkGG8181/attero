@@ -25,10 +25,12 @@ public class LoginScreen extends Screen {
 
     @Override
     protected void init() {
-        AuthTracker.INSTANCE.loginFile.load();
-        if (AuthTracker.INSTANCE.loginFile.username != null) {
-            username.set(AuthTracker.INSTANCE.loginFile.username);
-            password.set(AuthTracker.INSTANCE.loginFile.password);
+        if (AuthTracker.INSTANCE.loginFile.username == null) {
+            AuthTracker.INSTANCE.loginFile.load();
+            if (AuthTracker.INSTANCE.loginFile.username != null) {
+                username.set(AuthTracker.INSTANCE.loginFile.username);
+                password.set(AuthTracker.INSTANCE.loginFile.password);
+            }
         }
     }
 
