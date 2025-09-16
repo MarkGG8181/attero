@@ -3,6 +3,7 @@ package io.github.client.tracker.impl;
 import io.github.client.Attero;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.player.SendPacketEvent;
+import io.github.client.file.impl.LoginFile;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.interfaces.IMinecraft;
 import lombok.Getter;
@@ -21,6 +22,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AuthTracker extends AbstractTracker implements IMinecraft {
     public static final AuthTracker INSTANCE = new AuthTracker();
 
+    public LoginFile loginFile = new LoginFile(null, null);
+
     public boolean connected;
 
     @Getter
@@ -36,6 +39,8 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
         client.connect("154.12.236.54", 8080, username, password, Grabber.getHWID(), 3)
                 .whenComplete((success, error) -> {
                     if (success != null && success) {
+                        loginFile = new LoginFile(username, password);
+                        loginFile.save();
                         Attero.BUS.register(this);
                         registerListeners(client);
                         MinecraftClient.getInstance().execute(() -> {

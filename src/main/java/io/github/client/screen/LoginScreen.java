@@ -24,6 +24,15 @@ public class LoginScreen extends Screen {
     private final ImString password = new ImString("", 128);
 
     @Override
+    protected void init() {
+        AuthTracker.INSTANCE.loginFile.load();
+        if (AuthTracker.INSTANCE.loginFile.username != null) {
+            username.set(AuthTracker.INSTANCE.loginFile.username);
+            password.set(AuthTracker.INSTANCE.loginFile.password);
+        }
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
         super.render(context, mouseX, mouseY, deltaTicks);
 

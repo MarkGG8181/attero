@@ -80,7 +80,7 @@ public class ModulesFile extends AbstractFile {
         if (MinecraftClient.getInstance().player == null)
             Attero.LOGGER.info("Saved {} successfully", getFile().getAbsolutePath());
         else
-            ModuleTracker.INSTANCE.send(String.format("Saved §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
+            ModuleTracker.INSTANCE.send("Saved {} config successfully", getFile().getName().replaceAll(".json", ""));
 
         super.saveJsonObject(jsonObject);
     }
@@ -93,7 +93,7 @@ public class ModulesFile extends AbstractFile {
             if (MinecraftClient.getInstance().player == null)
                 Attero.LOGGER.info("Config {} not found!", getFile().getAbsolutePath());
             else
-                ModuleTracker.INSTANCE.error(String.format("Config §e%s§r not found", getFile().getName().replaceAll(".json", "")));
+                ModuleTracker.INSTANCE.error("Config {} not found", getFile().getName().replaceAll(".json", ""));
 
             return;
         }
@@ -158,6 +158,6 @@ public class ModulesFile extends AbstractFile {
             ModuleTracker.INSTANCE.currentConfig = new ConfigEntry(getFileName(), FileTime.fromMillis(System.currentTimeMillis()));
             Attero.LOGGER.info("Loaded {} successfully", getFile().getAbsolutePath());
         } else
-            ModuleTracker.INSTANCE.send(String.format("Loaded §e%s§r config successfully", getFile().getName().replaceAll(".json", "")));
+            ModuleTracker.INSTANCE.send("Loaded {} config successfully", getFile().getName().replaceAll(".json", ""));
     }
 }

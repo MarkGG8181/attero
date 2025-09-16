@@ -22,7 +22,7 @@ public abstract class AbstractFile {
     public AbstractFile(String fileName) {
         fileName += (fileName.endsWith(".json") ? "" : ".json");
 
-        this.file = FileUtil.CLIENT_DIR.resolve(File.separator + fileName).toFile();
+        this.file = FileUtil.CLIENT_DIR.resolve(fileName).toFile();
         this.fileName = fileName;
     }
 
