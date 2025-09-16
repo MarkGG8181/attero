@@ -3,6 +3,10 @@ package io.github.client.module.data.setting.impl;
 import io.github.client.module.data.setting.AbstractSetting;
 import lombok.Getter;
 
+/**
+ * @author markuss
+ * @since 05/05/2025
+ */
 public class StringSetting extends AbstractSetting<String> {
     public final String[] values;
 

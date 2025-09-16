@@ -2,6 +2,10 @@ package io.github.client.module.data;
 
 import lombok.Getter;
 
+/**
+ * @author markuss
+ * @since 04/05/2025
+ */
 @Getter
 public enum ModuleCategory {
     COMBAT("Combat"),

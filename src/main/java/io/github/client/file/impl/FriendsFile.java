@@ -5,6 +5,10 @@ import com.google.gson.JsonElement;
 import io.github.client.file.AbstractFile;
 import io.github.client.tracker.impl.FriendTracker;
 
+/**
+ * @author markuss
+ * @since 23/05/2025
+ */
 public class FriendsFile extends AbstractFile {
     public FriendsFile() {
         super("friends.json");

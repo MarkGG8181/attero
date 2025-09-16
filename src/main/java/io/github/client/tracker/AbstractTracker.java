@@ -5,6 +5,10 @@ import io.github.client.Attero;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author markuss
+ * @since 4/05/2025
+ */
 public abstract class AbstractTracker<T> {
     public final List<T> list = new ArrayList<>();
 

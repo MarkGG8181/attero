@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * @author markuss
+ * @since 4/05/2025
+ */
 public final class Attero implements ClientModInitializer {
     public static final String MOD_ID = "attero";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);

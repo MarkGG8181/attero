@@ -9,6 +9,10 @@ import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.java.interfaces.IMinecraft;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
+/**
+ * @author markuss
+ * @since 13/05/2025
+ */
 public class CommandTracker extends AbstractTracker<AbstractCommand> implements IMinecraft {
     public static final String COMMAND_PREFIX = ".";
 

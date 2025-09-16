@@ -18,6 +18,10 @@ import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author markuss
+ * @since 22/05/2025
+ */
 public class ModulesFile extends AbstractFile {
     public ModulesFile(String configName) {
         super("configs" + File.separator + configName);

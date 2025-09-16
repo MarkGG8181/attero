@@ -15,6 +15,10 @@ import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import java.util.Comparator;
 
 @SuppressWarnings("ALL")
+/**
+ * @author markuss
+ * @since 30/06/2025
+ */
 public class RotationTracker extends AbstractTracker<AbstractRotator> implements IMinecraft {
     public static final RotationTracker INSTANCE = new RotationTracker();
 

@@ -10,6 +10,10 @@ import io.github.client.tracker.AbstractTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
+/**
+ * @author markuss
+ * @since 4/05/2025
+ */
 public class ScreenTracker extends AbstractTracker<Screen> {
     public static final ScreenTracker INSTANCE = new ScreenTracker();
 

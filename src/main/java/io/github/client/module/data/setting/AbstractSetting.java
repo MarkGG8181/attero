@@ -9,6 +9,10 @@ import lombok.Setter;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
+/**
+ * @author markuss
+ * @since 05/05/2025
+ */
 @Getter
 @Setter
 public abstract class AbstractSetting<T> {

@@ -2,6 +2,10 @@ package io.github.client.module.data.setting.impl;
 
 import io.github.client.module.data.setting.AbstractSetting;
 
+/**
+ * @author markuss
+ * @since 05/05/2025
+ */
 public class NumberSetting extends AbstractSetting<Number> {
     public final Number min, max;
 

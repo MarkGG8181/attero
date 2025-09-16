@@ -4,6 +4,10 @@ import io.github.client.module.data.setting.AbstractSetting;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * @author markuss
+ * @since 15/05/2025
+ */
 @Getter
 @Setter
 public class MultiStringSetting extends AbstractSetting<String[]> {

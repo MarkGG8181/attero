@@ -13,6 +13,10 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author markuss
+ * @since 04/05/2025
+ */
 @Getter
 @Setter
 public abstract class AbstractModule implements IMinecraft {

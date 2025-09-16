@@ -10,6 +10,10 @@ import lombok.Getter;
 
 import java.io.*;
 
+/**
+ * @author markuss
+ * @since 22/05/2025
+ */
 @Getter
 public abstract class AbstractFile {
     private final File file;

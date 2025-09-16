@@ -4,6 +4,10 @@ import io.github.client.module.data.setting.AbstractSetting;
 
 import java.awt.*;
 
+/**
+ * @author markuss
+ * @since 05/05/2025
+ */
 public class ColorSetting extends AbstractSetting<Color> {
     public ColorSetting(String name, Color value) {
         super(name, value);

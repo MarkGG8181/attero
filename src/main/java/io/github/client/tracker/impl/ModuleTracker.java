@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author markuss
+ * @since 04/05/2025
+ */
 public class ModuleTracker extends AbstractTracker<AbstractModule> implements IMinecraft {
     public AbstractModule lastModule;
     public final ModulesFile modulesFile = new ModulesFile("default");

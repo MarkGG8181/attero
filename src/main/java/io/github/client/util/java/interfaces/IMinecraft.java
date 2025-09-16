@@ -6,17 +6,15 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.awt.*;
-
 public interface IMinecraft {
     MinecraftClient mc = MinecraftClient.getInstance();
 
     enum ChatMessageType {
-        INFO("§fao §f:: "),
-        ERROR("§fao §f:: §cerr :: §r"),
-        WARNING("§fao §f:: §ewarn :: §r"),
-        IRC("§fao §f:: §bIRC :: §r"),
-        BROADCAST("§fao §f:: §l§n§4BROADCAST :: §r");
+        INFO("§aao §f:: "),
+        ERROR("§cerr :: §r"),
+        WARNING("§ewarn :: §r"),
+        IRC("§bIRC :: §r"),
+        BROADCAST("§l§n§4BROADCAST :: §r");
 
         public final String prefix;
 
@@ -63,7 +61,7 @@ public interface IMinecraft {
     default void setTimer(float speed) {
         RenderTickCounter counter = mc.getRenderTickCounter();
 
-        if (counter instanceof ITimerAccessor accessor) {
+        if (counter instanceof ITimer accessor) {
             accessor.setTimerSpeed(speed);
         }
     }
