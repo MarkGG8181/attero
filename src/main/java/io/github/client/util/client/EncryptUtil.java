@@ -12,12 +12,11 @@ import java.util.Base64;
 
 public class EncryptUtil {
     private static SecretKeySpec secretKey;
-    private static byte[] key;
 
     public static void prepareKey(String myKey) {
         MessageDigest digest;
         try {
-            key = myKey.getBytes(StandardCharsets.UTF_8);
+            byte[] key = myKey.getBytes(StandardCharsets.UTF_8);
             digest = MessageDigest.getInstance("SHA-1");
             key = digest.digest(key);
             key = Arrays.copyOf(key, 16);
@@ -34,7 +33,7 @@ public class EncryptUtil {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e.toString());
+            Attero.LOGGER.error("Failed to encrypt", e);
         }
         return null;
     }
@@ -46,7 +45,7 @@ public class EncryptUtil {
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
         } catch (Exception e) {
-            Attero.LOGGER.error("Failed to decrypt using secret key {}", secret, e);
+            Attero.LOGGER.error("Failed to decrypt", e);
         }
         return null;
     }

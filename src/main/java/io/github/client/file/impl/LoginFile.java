@@ -29,9 +29,6 @@ public class LoginFile extends AbstractFile {
         if (!json.isEmpty()) {
             username = EncryptUtil.decrypt(json.get("Username").getAsString(), "niggabuttdigger30");
             password = EncryptUtil.decrypt(json.get("Password").getAsString(), "niggabuttdigger31");
-
-            System.out.println("user; " + username);
-            System.out.println("pass; " + password);
         }
     }
 }
