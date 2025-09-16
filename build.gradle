@@ -64,7 +64,7 @@ loom {
 
 shadowJar {
     configurations = [project.configurations.library]
-    archiveClassifier.set('')
+    archiveClassifier.set("shadow")
     mergeServiceFiles()
 }
 
@@ -105,4 +105,8 @@ jar {
 
 build {
     dependsOn shadowJar
+}
+
+remapJar {
+    input.set(shadowJar.archiveFile)
 }
