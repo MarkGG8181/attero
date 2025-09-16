@@ -39,13 +39,12 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.38")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 
-    // From https://github.com/FlorianMichael/fabric-imgui-example-mod
-    include implementation("io.github.spair:imgui-java-binding:${project.imgui_version}")
-    include implementation("io.github.spair:imgui-java-lwjgl3:${project.imgui_version}")
-
     implementation name: 'grabber-1.0'
     implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
 
+    // From https://github.com/FlorianMichael/fabric-imgui-example-mod
+    include implementation("io.github.spair:imgui-java-binding:${project.imgui_version}")
+    include implementation("io.github.spair:imgui-java-lwjgl3:${project.imgui_version}")
     include implementation("io.github.spair:imgui-java-natives-windows:${project.imgui_version}")
     include implementation("io.github.spair:imgui-java-natives-linux:${project.imgui_version}")
     include implementation("io.github.spair:imgui-java-natives-macos:${project.imgui_version}")
