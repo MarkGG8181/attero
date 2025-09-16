@@ -8,7 +8,7 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.ModuleInfo;
 import io.github.client.module.data.setting.impl.ColorSetting;
 import io.github.client.module.data.setting.impl.MultiStringSetting;
-import io.github.client.util.java.SystemUtil;
+import io.github.client.util.java.ClassUtil;
 import io.github.client.util.game.EntityUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +28,7 @@ public class ESPModule extends AbstractModule {
     private void hasOutline(HasOutlineEvent event) {
         if (event.entity != null) {
             var entityName = EntityType.getId(event.entity.getType()).getPath();
-            if (entities.enabled(SystemUtil.toClassName(entityName))) {
+            if (entities.enabled(ClassUtil.toClassName(entityName))) {
                 event.cancelled = true;
             }
         }
@@ -38,7 +38,7 @@ public class ESPModule extends AbstractModule {
     private void renderEntitiesGlowColor(RenderEntitiesGlowColorEvent event) {
         if (event.entity != null) {
             var entityName = EntityType.getId(event.entity.getType()).getPath();
-            if (entities.enabled(SystemUtil.toClassName(entityName))) {
+            if (entities.enabled(ClassUtil.toClassName(entityName))) {
                 event.cancelled = true;;
             }
 

@@ -106,7 +106,7 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
             if (message.startsWith("#")) {
                 event.cancelled = true;
                 System.out.println("sending c2s");
-                client.sendPacket(new C2SChatMessagePacket(ChatChannel.GLOBAL, message.replace("#", "")));
+                //client.sendPacket(new C2SChatMessagePacket(ChatChannel.GLOBAL, message.replace("#", "")));
             }
         }
     }
