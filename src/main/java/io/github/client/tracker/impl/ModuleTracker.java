@@ -88,6 +88,8 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         list.forEach(AbstractModule::onInit);
         modulesFile.load();
+
+        AuthTracker.INSTANCE.connected = true;
     }
 
     @Subscribe

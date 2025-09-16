@@ -36,12 +36,14 @@ public class ImGuiImpl {
     public static ImFont comfortaa17;
     public static ImFont arial17;
 
+    public static long correctChecksum = -1L;
+
     public static void create(long handle) throws IOException {
         ImGui.createContext();
         ImPlot.createContext();
 
         ImGuiIO data = ImGui.getIO();
-        data.setIniFilename(Attero.MOD_ID + File.separator + "imgui.ini");
+        data.setIniFilename(Attero.MOD_ID + File.separator + Attero.MOD_ID + ".ini");
         data.setFontGlobalScale(1F);
 
         ImFontAtlas fonts = data.getFonts();
@@ -124,6 +126,10 @@ public class ImGuiImpl {
     }
 
     public static void draw(IRenderInterface runnable) {
+        if (MinecraftClient.getInstance().getWindow().isMinimized()) {
+            return;
+        }
+
         Framebuffer framebuffer = MinecraftClient.getInstance().getFramebuffer();
         var previousFramebuffer = ((GlTexture) framebuffer.getColorAttachment()).getOrCreateFramebuffer(((GlBackend) RenderSystem.getDevice()).getBufferManager(), null);
         GlStateManager._glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);

@@ -27,14 +27,12 @@ public final class Attero implements ClientModInitializer {
         LOGGER.info("Starting {}", MOD_ID);
 
         ScreenTracker.INSTANCE.initialize();
-        ModuleTracker.INSTANCE.initialize();
-        CommandTracker.INSTANCE.initialize();
-        RotationTracker.INSTANCE.initialize();
     }
 
     public void onEnd() {
         ImGuiImpl.dispose();
+        AuthTracker.INSTANCE.shutdown();
         ModuleTracker.INSTANCE.modulesFile.save();
-        FriendTracker.getInstance().friendsFile.save();
+        FriendTracker.INSTANCE.friendsFile.save();
     }
 }
