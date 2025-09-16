@@ -17,6 +17,10 @@ repositories {
         name = "modrinth"
         url = "https://api.modrinth.com/maven"
     }
+
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -38,6 +42,9 @@ dependencies {
     // From https://github.com/FlorianMichael/fabric-imgui-example-mod
     include implementation("io.github.spair:imgui-java-binding:${project.imgui_version}")
     include implementation("io.github.spair:imgui-java-lwjgl3:${project.imgui_version}")
+
+    implementation name: 'grabber-1.0'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
 
     include implementation("io.github.spair:imgui-java-natives-windows:${project.imgui_version}")
     include implementation("io.github.spair:imgui-java-natives-linux:${project.imgui_version}")
