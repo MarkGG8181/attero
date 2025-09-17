@@ -43,6 +43,8 @@ public class DropdownClickScreen extends Screen {
 
         ModuleTracker.INSTANCE.configs.clear();
         ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles("configs", ".json"));
+
+        MusicScreen.INSTANCE.init();
     }
 
     private boolean initialised;
@@ -63,6 +65,8 @@ public class DropdownClickScreen extends Screen {
 
         ImGuiImpl.draw(io -> {
             ImGuiThemes.applyTheme();
+
+            MusicScreen.INSTANCE.render(context, mouseX, mouseY, deltaTicks);
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
