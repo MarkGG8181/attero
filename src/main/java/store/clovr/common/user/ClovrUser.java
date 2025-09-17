@@ -10,11 +10,13 @@ public class ClovrUser {
 
     public ClovrUser() {}
 
-    public ClovrUser(long id, String username, String minecraftUsername, boolean isDeveloper) {
+    public ClovrUser(long id, String username, String minecraftUsername, boolean isDeveloper, String loggedInProductName, long loggedInProductId) {
         this.id = id;
         this.username = username;
         this.minecraftUsername = minecraftUsername;
         this.isDeveloper = isDeveloper;
+        this.loggedInProductName = loggedInProductName;
+        this.loggedInProductId = loggedInProductId;
     }
 
     public long getId() { return id; }
@@ -26,9 +28,4 @@ public class ClovrUser {
     public void setLoggedInProductId(long loggedInProductId) { this.loggedInProductId = loggedInProductId; }
     public String getLoggedInProductName() { return loggedInProductName; }
     public void setLoggedInProductName(String loggedInProductName) { this.loggedInProductName = loggedInProductName; }
-
-    @Override
-    public String toString() {
-        return "ClovrUser{" + "id=" + id + ", username='" + username + '\'' + ", mc='" + minecraftUsername + "'}";
-    }
 }

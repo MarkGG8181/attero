@@ -18,13 +18,16 @@ public class S2CUserJoinPacket implements Packet {
     public void write(ByteBuf buf) {
         buf.writeLong(user.getId());
         writeString(buf, user.getUsername());
+        writeString(buf, user.getUsername());
         writeString(buf, user.getMinecraftUsername());
         buf.writeBoolean(user.isDeveloper());
+        writeString(buf, user.getLoggedInProductName());
+        buf.writeLong(user.getLoggedInProductId());
     }
 
     @Override
     public void read(ByteBuf buf) {
-        this.user = new ClovrUser(buf.readLong(), readString(buf), readString(buf), buf.readBoolean());
+        this.user = new ClovrUser(buf.readLong(), readString(buf), readString(buf), buf.readBoolean(), readString(buf), buf.readLong());
     }
 
     public ClovrUser getUser() {

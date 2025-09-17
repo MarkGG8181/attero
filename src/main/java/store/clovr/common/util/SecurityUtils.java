@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.params.HKDFParameters;
 import org.bouncycastle.crypto.params.X25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.X25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.X25519PublicKeyParameters;
+import org.bouncycastle.jcajce.provider.digest.SHA256;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.SecureRandom;

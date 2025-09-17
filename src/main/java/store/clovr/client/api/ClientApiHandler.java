@@ -7,10 +7,10 @@ import org.bouncycastle.crypto.params.X25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.X25519PublicKeyParameters;
 import store.clovr.common.auth.AuthenticatedCryptor;
 import store.clovr.common.protocol.*;
-import store.clovr.common.protocol.client.C2SLoginPacket;
-import store.clovr.common.protocol.server.S2CLoginResponsePacket;
+import store.clovr.common.protocol.server.*;
+import store.clovr.common.protocol.client.*;
+import store.clovr.common.user.ClovrUser;
 import store.clovr.common.util.SecurityUtils;
-
 import java.util.concurrent.CompletableFuture;
 
 public class ClientApiHandler extends SimpleChannelInboundHandler<Object> {
@@ -24,6 +24,9 @@ public class ClientApiHandler extends SimpleChannelInboundHandler<Object> {
 
     private boolean handshakeComplete = false;
     private X25519PrivateKeyParameters clientPrivateKey;
+
+    private ClovrUser localUser;
+
 
     public ClientApiHandler(ClovrClient client, CompletableFuture<Boolean> loginFuture, String username, String password, String hwid, long clientId) {
         this.client = client;
@@ -53,6 +56,7 @@ public class ClientApiHandler extends SimpleChannelInboundHandler<Object> {
             if (!loginFuture.isDone()) {
                 if (msg instanceof S2CLoginResponsePacket) {
                     S2CLoginResponsePacket response = (S2CLoginResponsePacket) msg;
+                    this.localUser = response.getUser();
                     loginFuture.complete(response.isSuccess());
                 } else {
                     loginFuture.complete(false);
@@ -89,5 +93,9 @@ public class ClientApiHandler extends SimpleChannelInboundHandler<Object> {
         }
         cause.printStackTrace();
         ctx.close();
+    }
+
+    public ClovrUser getLocalUser() {
+        return localUser;
     }
 }

@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import store.clovr.common.auth.AuthenticatedCryptor;
-
 import java.util.List;
 
 public class SecurePacketDecoder extends MessageToMessageDecoder<ByteBuf> {

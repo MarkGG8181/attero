@@ -1,6 +1,8 @@
 package store.clovr.common.protocol;
 
 import store.clovr.common.protocol.client.*;
+import store.clovr.common.protocol.config.*;
+import store.clovr.common.protocol.launcher.*; // Make sure this import exists
 import store.clovr.common.protocol.server.*;
 
 import java.util.HashMap;

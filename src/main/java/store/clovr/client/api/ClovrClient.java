@@ -1,10 +1,7 @@
 package store.clovr.client.api;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -12,6 +9,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import store.clovr.client.api.listeners.PacketListener;
 import store.clovr.common.protocol.Packet;
+import store.clovr.common.user.ClovrUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +21,7 @@ public class ClovrClient {
     private final Map<Class<? extends Packet>, List<PacketListener>> packetListeners = new ConcurrentHashMap<>();
     private final EventLoopGroup workerGroup;
     private Channel channel;
+    private ClientApiHandler clientApiHandler;
 
     public ClovrClient() {
         this.workerGroup = new NioEventLoopGroup();
@@ -40,7 +39,7 @@ public class ClovrClient {
                             ch.pipeline().addLast(
                                     new LengthFieldPrepender(4),
                                     new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4),
-                                    new ClientApiHandler(ClovrClient.this, loginFuture, username, password, hwid, clientId)
+                                    clientApiHandler = new ClientApiHandler(ClovrClient.this, loginFuture, username, password, hwid, clientId)
                             );
                         }
                     });
@@ -83,5 +82,9 @@ public class ClovrClient {
             channel.close();
         }
         workerGroup.shutdownGracefully();
+    }
+
+    public ClovrUser getLocalUser() {
+        return this.clientApiHandler.getLocalUser();
     }
 }

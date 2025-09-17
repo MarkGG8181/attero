@@ -1,7 +1,6 @@
 package store.clovr.common.protocol;
 
 import io.netty.buffer.ByteBuf;
-
 import java.nio.charset.StandardCharsets;
 
 public interface Packet {
