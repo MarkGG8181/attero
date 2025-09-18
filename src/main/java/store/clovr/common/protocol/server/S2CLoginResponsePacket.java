@@ -40,7 +40,7 @@ public class S2CLoginResponsePacket implements Packet {
     public void read(ByteBuf buf) {
         this.success = buf.readBoolean();
 
-        if (!buf.isReadable(8)) {
+        if (!buf.isReadable(8)) { // check before reading long
             throw new IllegalStateException("Not enough bytes to read user ID");
         }
 

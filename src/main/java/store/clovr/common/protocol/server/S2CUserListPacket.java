@@ -19,13 +19,21 @@ public class S2CUserListPacket implements Packet {
     public void write(ByteBuf buf) {
         buf.writeInt(users.size());
         for (ClovrUser user : users) {
-            buf.writeLong(user.getId());
-            writeString(buf, user.getUsername());
-            writeString(buf, user.getUsername());
-            writeString(buf, user.getMinecraftUsername());
-            buf.writeBoolean(user.isDeveloper());
-            writeString(buf, user.getLoggedInProductName());
-            buf.writeLong(user.getLoggedInProductId());
+            if (user != null) {
+                buf.writeLong(user.getId());
+                writeString(buf, user.getUsername());
+                writeString(buf, user.getMinecraftUsername());
+                buf.writeBoolean(user.isDeveloper());
+                writeString(buf, user.getLoggedInProductName());
+                buf.writeLong(user.getLoggedInProductId());
+            } else {
+                buf.writeLong(0L);
+                writeString(buf, "");
+                writeString(buf, "");
+                buf.writeBoolean(false);
+                writeString(buf, "");
+                buf.writeLong(0L);
+            }
         }
     }
 
@@ -34,7 +42,14 @@ public class S2CUserListPacket implements Packet {
         int size = buf.readInt();
         this.users = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            this.users.add(new ClovrUser(buf.readLong(), readString(buf), readString(buf), buf.readBoolean(), readString(buf), buf.readLong()));
+            long id = buf.readLong();
+            String username = readString(buf);
+            String minecraftUsername = readString(buf);
+            boolean developer = buf.readBoolean();
+            String loggedInProductName = readString(buf);
+            long loggedInProductId = buf.readLong();
+
+            this.users.add(new ClovrUser(id, username, minecraftUsername, developer, loggedInProductName, loggedInProductId));
         }
     }
 

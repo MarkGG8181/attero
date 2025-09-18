@@ -1,6 +1,7 @@
 package store.clovr.common.protocol.launcher;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class OwnedProductInfo implements Serializable {
     public final long productId;

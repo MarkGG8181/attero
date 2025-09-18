@@ -16,18 +16,37 @@ public class S2CUserJoinPacket implements Packet {
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeLong(user.getId());
-        writeString(buf, user.getUsername());
-        writeString(buf, user.getUsername());
-        writeString(buf, user.getMinecraftUsername());
-        buf.writeBoolean(user.isDeveloper());
-        writeString(buf, user.getLoggedInProductName());
-        buf.writeLong(user.getLoggedInProductId());
+        if (user != null) {
+            buf.writeLong(user.getId());
+            writeString(buf, user.getUsername());
+            writeString(buf, user.getMinecraftUsername());
+            buf.writeBoolean(user.isDeveloper());
+            writeString(buf, user.getLoggedInProductName());
+            buf.writeLong(user.getLoggedInProductId());
+        } else {
+            buf.writeLong(0L);
+            writeString(buf, "");
+            writeString(buf, "");
+            buf.writeBoolean(false);
+            writeString(buf, "");
+            buf.writeLong(0L);
+        }
     }
 
     @Override
     public void read(ByteBuf buf) {
-        this.user = new ClovrUser(buf.readLong(), readString(buf), readString(buf), buf.readBoolean(), readString(buf), buf.readLong());
+        if (!buf.isReadable(8)) { // check before reading long
+            throw new IllegalStateException("Not enough bytes to read user ID");
+        }
+
+        long id = buf.readLong();
+        String username = readString(buf);
+        String minecraftUsername = readString(buf);
+        boolean developer = buf.readBoolean();
+        String loggedInProductName = readString(buf);
+        long loggedInProductId = buf.readLong();
+
+        this.user = new ClovrUser(id, username, minecraftUsername, developer, loggedInProductName, loggedInProductId);
     }
 
     public ClovrUser getUser() {
