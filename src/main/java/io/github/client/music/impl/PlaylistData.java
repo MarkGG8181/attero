@@ -22,9 +22,12 @@ public class PlaylistData extends AbstractData {
 
     public static final Map<String, String> PLAYLISTS = Map.of(
             "NCS", "https://music.youtube.com/playlist?list=PLRBp0Fe2Gpgn8Y9qI-p0aTxVtw8onBSFj",
-            "CloudKid", "https://music.youtube.com/playlist?list=PLM2V-zC1RSte9rMMAN_GxAf_6JNjVfp7B",
+            "EDM", "https://music.youtube.com/playlist?list=PLM2V-zC1RSte9rMMAN_GxAf_6JNjVfp7B",
             "VEVO", "https://music.youtube.com/playlist?list=PLesm76O8GFZOpPPwQtFA5X5Q-Q694_DNU",
-            "LyricalLemonade", "https://music.youtube.com/playlist?list=PLYRb7SBNlT3aVKHWdoymWKx9js3hdvVhQ"
+            "Pop", "https://music.youtube.com/playlist?list=PLYRb7SBNlT3aVKHWdoymWKx9js3hdvVhQ",
+            "Emo", "https://music.youtube.com/playlist?list=PLYdzwhiBcly38vwunWGC2LqKcs4gvMyg9",
+            "Rock", "https://music.youtube.com/playlist?list=PLOoXD-Y3d6-ymC_4tZbKxzpyPyZtW9mnc",
+            "Alternative", "https://music.youtube.com/playlist?list=PLDwYaoLoi7Sq_4kZgE4v_c3vQYte-1reM"
     );
 
     private static final String api = "https://wonderland.sigmaclient.cloud/clientbackend/attero/music/yt.php?name=";
