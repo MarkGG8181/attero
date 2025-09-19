@@ -1,9 +1,9 @@
 package io.github.client.music;
 
-import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public abstract class AbstractData {
-    public JsonArray jsonArray;
+    public JsonObject jsonObject;
 }

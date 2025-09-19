@@ -46,6 +46,7 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
                         MinecraftClient.getInstance().execute(() -> {
                             MinecraftClient.getInstance().setScreen(null);
 
+                            MusicTracker.INSTANCE.initialize();
                             ModuleTracker.INSTANCE.initialize();
                             CommandTracker.INSTANCE.initialize();
                             RotationTracker.INSTANCE.initialize();

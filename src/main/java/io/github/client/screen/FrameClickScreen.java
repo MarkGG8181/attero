@@ -47,7 +47,7 @@ public final class FrameClickScreen extends Screen {
         ImGuiImpl.draw(io -> {
             ImGuiThemes.applyTheme();
 
-            MusicScreen.INSTANCE.render(context, mouseX, mouseY, deltaTicks);
+            MusicScreen.INSTANCE.render(mouseX, mouseY, deltaTicks);
 
             if (begin(Attero.MOD_ID + " panel")) {
                 if (beginTabBar("tabs")) {

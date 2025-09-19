@@ -1,7 +1,9 @@
 package io.github.client.music.impl;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.client.Attero;
 import io.github.client.music.AbstractData;
 
 import java.util.ArrayList;
@@ -12,8 +14,8 @@ public class SongData extends AbstractData {
     public final String songArtwork;
     public final String publishDate;
 
-    public SongData(JsonArray jsonArray, String songName, String songArtwork, String publishDate) {
-        super(jsonArray);
+    public SongData(JsonObject jsonObject, String songName, String songArtwork, String publishDate) {
+        super(jsonObject);
         this.songName = songName;
         this.songArtwork = songArtwork;
         this.publishDate = publishDate;
@@ -22,19 +24,50 @@ public class SongData extends AbstractData {
     public static List<SongData> fetch(PlaylistData playlist) {
         List<SongData> songs = new ArrayList<>();
 
-        JsonArray allSongs = playlist.jsonArray;
+        if (playlist.jsonObject == null) {
+            return songs;
+        }
 
-        allSongs.forEach(songElement -> {
-            JsonObject song = songElement.getAsJsonObject();
+        try {
+            JsonArray items = playlist.jsonObject.getAsJsonArray("items");
 
-            if (song != null) {
-                String name = song.get("title").getAsString();
-                String artwork = song.get("artwork_url").getAsString();
-                String date = song.get("display_date").getAsString();
+            for (JsonElement item : items) {
+                if (!item.isJsonObject()) continue;
 
-                songs.add(new SongData(null, name, artwork, date));
+                JsonObject itemObj = item.getAsJsonObject();
+                JsonObject snippet = itemObj.getAsJsonObject("snippet");
+
+                String title = snippet.getAsJsonPrimitive("title").getAsString();
+
+                // Remove bracketed content: [ ... ] and ( ... )
+                title = title.replaceAll("\\s*\\[[^\\]]*\\]", "")
+                        .replaceAll("\\s*\\([^)]*\\)", "");
+
+                // Remove featuring/ft/feat phrases (case-insensitive)
+                title = title.replaceAll("(?i)\\s*(ft\\.?|feat\\.?|featuring)\\s+[^-–—|]+", "");
+
+                title = title.replaceAll("(?i)Official Music Video", "").trim();
+
+                // Trim whitespace
+                title = title.trim();
+                //chatgpt genned these btw ^^^
+
+                String publishedAt = snippet.getAsJsonPrimitive("publishedAt").getAsString();
+
+                String artwork = "";
+                JsonObject thumbnails = snippet.getAsJsonObject("thumbnails");
+
+                if (thumbnails != null && thumbnails.has("default")) {
+                    artwork = thumbnails.getAsJsonObject("default")
+                            .getAsJsonPrimitive("url")
+                            .getAsString();
+                }
+
+                songs.add(new SongData(itemObj, title, artwork, publishedAt));
             }
-        });
+        } catch (Exception e) {
+            Attero.LOGGER.error("Failed to fetch songs from {}", playlist.playlistName, e);
+        }
 
         return songs;
     }

@@ -66,7 +66,7 @@ public class DropdownClickScreen extends Screen {
         ImGuiImpl.draw(io -> {
             ImGuiThemes.applyTheme();
 
-            MusicScreen.INSTANCE.render(context, mouseX, mouseY, deltaTicks);
+            MusicScreen.INSTANCE.render(mouseX, mouseY, deltaTicks);
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
