@@ -4,6 +4,7 @@ import io.github.client.event.data.EventBus;
 import io.github.client.imgui.ImGuiImpl;
 import io.github.client.tracker.impl.*;
 import io.github.client.util.java.FileUtil;
+import io.github.client.util.java.GLFWUtil;
 import net.fabricmc.api.ClientModInitializer;
 
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public final class Attero implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FileUtil.createDir("configs");
+        FileUtil.createDir("music");
+        FileUtil.createDir("fonts");
     }
 
     public void onStartup() {
@@ -36,5 +39,6 @@ public final class Attero implements ClientModInitializer {
         ModuleTracker.INSTANCE.modulesFile.save();
         FriendTracker.INSTANCE.friendsFile.save();
         ImGuiImpl.dispose();
+        GLFWUtil.clearCache();
     }
 }
