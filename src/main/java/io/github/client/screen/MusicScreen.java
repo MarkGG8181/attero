@@ -31,6 +31,9 @@ public class MusicScreen {
                     for (PlaylistData playlist : PlaylistData.fetch()) {
                         playlists.put(playlist, SongData.fetch(playlist));
                     }
+                    final PlaylistData firstPlaylist = playlists.keySet().iterator().next();
+                    currentPlaylist = firstPlaylist;
+                    currentSong = playlists.get(firstPlaylist).getFirst();
                 }
             } catch (Exception e) {
                 Attero.LOGGER.error("Failed to initialize playlists", e);
@@ -45,7 +48,7 @@ public class MusicScreen {
         ImGui.setNextWindowSize(600, 500);
 
         if (ImGui.begin("Music", ImGuiWindowFlags.NoResize)) {
-            if (ImGui.beginChild("Sidebar", sidebarWidth, 350, true)) {
+            if (!playlists.isEmpty() && ImGui.beginChild("Sidebar", sidebarWidth, 350, true)) {
                 for (var entry : playlists.entrySet()) {
                     PlaylistData playlist = entry.getKey();
 
