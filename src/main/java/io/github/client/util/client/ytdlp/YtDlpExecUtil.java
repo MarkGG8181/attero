@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+@SuppressWarnings("all")
 public class YtDlpExecUtil {
     public static final String OS_NAME = System.getProperty("os.name").toLowerCase();
 
