@@ -39,6 +39,10 @@ public class SongData extends AbstractData {
 
                 String title = snippet.getAsJsonPrimitive("title").getAsString();
 
+                if (title.equalsIgnoreCase("Deleted video") || title.equalsIgnoreCase("Private video")) {
+                    continue;
+                }
+
                 // Remove bracketed content: [ ... ] and ( ... )
                 title = title.replaceAll("\\s*\\[[^\\]]*\\]", "")
                         .replaceAll("\\s*\\([^)]*\\)", "");
@@ -47,6 +51,8 @@ public class SongData extends AbstractData {
                 title = title.replaceAll("(?i)\\s*(ft\\.?|feat\\.?|featuring)\\s+[^-–—|]+", "");
 
                 title = title.replaceAll("(?i)Official Music Video", "").trim();
+                title = title.replaceAll("(?i)Official Video", "").trim();
+                title = title.replaceAll("(?i)Lyrics", "").trim();
 
                 // Trim whitespace
                 title = title.trim();
