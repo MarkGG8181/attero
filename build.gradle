@@ -19,9 +19,7 @@ repositories {
         url = "https://api.modrinth.com/maven"
     }
 
-    flatDir {
-        dirs 'libs'
-    }
+    maven { url "https://raw.githubusercontent.com/WonderlandCentral/wonderland-repository/main" }
 }
 
 configurations {
@@ -45,8 +43,10 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 
     // For clovr.store
-    library name: 'grabber-1.0'
+    library ("clovr.store:grabber:1.0")
     library 'org.bouncycastle:bcprov-jdk18on:1.80'
+
+    library ("com.jfposton.ytdlp:yt-dlp-java:1.0")
 
     // From https://github.com/FlorianMichael/fabric-imgui-example-mod
     library("io.github.spair:imgui-java-binding:${project.imgui_version}")
