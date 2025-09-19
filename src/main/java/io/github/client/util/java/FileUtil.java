@@ -11,8 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,5 +55,34 @@ public class FileUtil {
                     }
                 })
                 .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public static String[] readAllLines(Path filePath) {
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            return lines.toArray(new String[0]);
+        } catch (IOException e) {
+            Attero.LOGGER.error("Failed to read lines of {}", filePath.getFileName(), e);
+        }
+
+        return new String[]{}; //just so there's no nullptr
+    }
+
+    public static String getSHA256(Path filePath) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            byte[] fileBytes = Files.readAllBytes(filePath);
+            byte[] hashBytes = digest.digest(fileBytes);
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();
+        } catch (Exception e) {
+            return "-1";
+        }
     }
 }
