@@ -13,15 +13,20 @@ public class SongData extends AbstractData {
     public final String songName;
     public final String songArtwork;
     public final String publishDate;
+    public final String youtubeUrl;
 
     public int texId = 3;
+    public String url;
 
-    public SongData(JsonObject jsonObject, String songName, String songArtwork, String publishDate) {
+    public SongData(JsonObject jsonObject, String songName, String songArtwork, String publishDate, String youtubeUrl) {
         super(jsonObject);
         this.songName = songName;
         this.songArtwork = songArtwork;
         this.publishDate = publishDate;
+        this.youtubeUrl = youtubeUrl;
     }
+
+    public static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
     public static List<SongData> fetch(PlaylistData playlist) {
         List<SongData> songs = new ArrayList<>();
@@ -60,10 +65,10 @@ public class SongData extends AbstractData {
                 title = title.trim();
                 //chatgpt genned these btw ^^^
 
-                String publishedAt = snippet.getAsJsonPrimitive("publishedAt").getAsString();
+                String date = snippet.getAsJsonPrimitive("publishedAt").getAsString();
 
-                String artwork = "";
                 JsonObject thumbnails = snippet.getAsJsonObject("thumbnails");
+                String artwork = "";
 
                 if (thumbnails != null && thumbnails.has("default")) {
                     artwork = thumbnails.getAsJsonObject("default")
@@ -71,7 +76,14 @@ public class SongData extends AbstractData {
                             .getAsString();
                 }
 
-                songs.add(new SongData(itemObj, title, artwork, publishedAt));
+                JsonObject resourceId = snippet.getAsJsonObject("resourceId");
+                String id = "";
+
+                if (resourceId != null && resourceId.has("videoId")) {
+                    id = resourceId.get("videoId").getAsString();
+                }
+
+                songs.add(new SongData(itemObj, title, artwork, date, YOUTUBE_URL + id));
             }
         } catch (Exception e) {
             Attero.LOGGER.error("Failed to fetch songs from {}", playlist.playlistName, e);
