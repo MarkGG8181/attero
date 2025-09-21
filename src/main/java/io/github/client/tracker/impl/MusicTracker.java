@@ -3,16 +3,17 @@ package io.github.client.tracker.impl;
 import io.github.client.Attero;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.client.ytdlp.YtDlpExecUtil;
+import io.github.client.util.java.FileUtil;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.file.Path;
 
 public class MusicTracker extends AbstractTracker {
     public static final MusicTracker INSTANCE = new MusicTracker();
+    public static final Path MUSIC_CACHE_DIR = FileUtil.CLIENT_DIR.resolve("music").resolve("cache");
 
     private MediaPlayer player;
 
@@ -24,19 +25,14 @@ public class MusicTracker extends AbstractTracker {
 
     public void play(String url) {
         Platform.runLater(() -> {
-            try {
-                if (player != null) {
-                    player.stop();
-                }
-                URI safeUri = new URI(url);
-                Media media = new Media(safeUri.toASCIIString());
-                player = new MediaPlayer(media);
-                player.setOnError(() -> Attero.LOGGER.error("Error: {}", String.valueOf(player.getError())));
-                player.play();
-                Attero.LOGGER.info("Playing: {}", url);
-            } catch (URISyntaxException e) {
-                Attero.LOGGER.error("Invalid media URL: {}", url, e);
+            if (player != null) {
+                player.stop();
             }
+            Media media = new Media(url);
+            player = new MediaPlayer(media);
+            player.setOnError(() -> Attero.LOGGER.error("Error: {}", String.valueOf(player.getError())));
+            player.play();
+            Attero.LOGGER.info("Playing: {}", url);
         });
     }
 

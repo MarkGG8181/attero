@@ -23,8 +23,9 @@ public final class Attero implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FileUtil.createDir("configs");
-        FileUtil.createDir("music");
         FileUtil.createDir("fonts");
+        FileUtil.createDir("music");
+        FileUtil.createDir("music/cache");
     }
 
     public void onStartup() {
