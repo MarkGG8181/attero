@@ -1,11 +1,14 @@
 package io.github.client.screen;
 
 import imgui.ImGui;
+import imgui.ImVec2;
 import imgui.flag.ImGuiWindowFlags;
 import io.github.client.Attero;
 import io.github.client.music.impl.PlaylistData;
 import io.github.client.music.impl.SongData;
+import io.github.client.util.java.GLFWUtil;
 import io.github.client.util.java.math.MathUtil;
+import net.minecraft.client.MinecraftClient;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -33,7 +36,7 @@ public class MusicScreen {
                     }
                     final PlaylistData firstPlaylist = playlists.keySet().iterator().next();
                     currentPlaylist = firstPlaylist;
-                    currentSong = playlists.get(firstPlaylist).getFirst();
+                    update(playlists.get(firstPlaylist).getFirst());
                 }
             } catch (Exception e) {
                 Attero.LOGGER.error("Failed to initialize playlists", e);
@@ -72,7 +75,7 @@ public class MusicScreen {
 
                 for (var song : playlists.get(currentPlaylist)) {
                     if (ImGui.button(song.songName, availWidth, 0)) {
-                        currentSong = song;
+                        update(song);
                     }
                 }
 
@@ -80,12 +83,19 @@ public class MusicScreen {
             }
 
             if (currentSong != null && ImGui.beginChild("Currently playing", 0, 100f, true, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)) {
-                ImGui.image(3, 85, 85);
+                ImGui.image(currentSong.texId, new ImVec2(85, 85));
                 ImGui.sameLine();
                 ImGui.text(currentSong.songName + "\nReleased " + MathUtil.formatTime(currentSong.publishDate));
                 ImGui.endChild();
             }
         }
         ImGui.end();
+    }
+
+    private void update(SongData song) {
+        MinecraftClient.getInstance().execute(() -> {
+            this.currentSong = song;
+            this.currentSong.texId = GLFWUtil.loadTextureFromUrl(song.songArtwork);
+        });
     }
 }

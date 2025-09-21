@@ -14,6 +14,8 @@ public class SongData extends AbstractData {
     public final String songArtwork;
     public final String publishDate;
 
+    public int texId = 3;
+
     public SongData(JsonObject jsonObject, String songName, String songArtwork, String publishDate) {
         super(jsonObject);
         this.songName = songName;
