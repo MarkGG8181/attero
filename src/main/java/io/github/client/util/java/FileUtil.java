@@ -45,14 +45,8 @@ public class FileUtil {
         return Stream.of(files)
                 .filter(file -> !file.isDirectory() && file.getName().endsWith(fileSuffix))
                 .map(file -> {
-                    try {
-                        Path path = file.toPath();
-                        FileTime creationTime = Files.readAttributes(path, BasicFileAttributes.class).creationTime();
-                        return new ConfigEntry(file.getName(), creationTime);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return new ConfigEntry(file.getName(), FileTime.fromMillis(0)); // fallback
-                    }
+                    Path path = file.toPath();
+                    return new ConfigEntry(file.getName(), 0);
                 })
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }

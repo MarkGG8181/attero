@@ -1,20 +1,27 @@
 package io.github.client.tracker.impl;
 
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import io.github.client.Attero;
 import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.player.SendPacketEvent;
 import io.github.client.file.impl.LoginFile;
+import io.github.client.file.impl.ModulesFile;
 import io.github.client.tracker.AbstractTracker;
+import io.github.client.util.client.ConfigEntry;
 import io.github.client.util.interfaces.IMinecraft;
 import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import store.clovr.client.api.ClovrClient;
 import store.clovr.common.protocol.ChatChannel;
+import store.clovr.common.protocol.client.C2SChatMessagePacket;
 import store.clovr.common.protocol.server.*;
 import store.clovr.common.user.ClovrUser;
 import clovr.store.Grabber;
 
+import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,9 +33,9 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
 
     public boolean connected;
 
-    @Getter
-    private List<ClovrUser> onlineUsers = new CopyOnWriteArrayList<>();
-    private ClovrClient client;
+    public List<ConfigEntry> cloudConfigs = new ArrayList<>();
+    public List<ClovrUser> onlineUsers = new CopyOnWriteArrayList<>();
+    public ClovrClient client;
 
     public void shutdown() {
         client.disconnect();
@@ -84,22 +91,26 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
         });
 
         client.addPacketListener(S2CConfigListPacket.class, packet -> {
-            /*System.out.println("\n--- Available Product Configs ---");
-            if (packet.configs.isEmpty()) {
-                System.out.println("No configs found for this product.");
-            } else {
-                packet.configs.forEach(System.out::println);
-                long firstConfigId = packet.configs.get(0).id;
-                System.out.println("\nRequesting download for config ID: " + firstConfigId);
-                client.sendPacket(new C2SRequestConfigDownloadPacket(firstConfigId));
-            }
-            System.out.println("---------------------------------");*/
+            cloudConfigs.clear();
+
+            packet.configs.forEach(info -> {
+                cloudConfigs.add(new ConfigEntry(info.name.toLowerCase().replace(" ", ""), info.id));
+            });
         });
 
         client.addPacketListener(S2CConfigDataPacket.class, packet -> {
-            /*System.out.println("\n--- Downloaded Config (ID: " + packet.configId + ") ---");
-            System.out.println(packet.fileContent);
-            System.out.println("------------------------------------");*/
+            try {
+                ModulesFile tempFile = new ModulesFile("online-temp");
+                tempFile.json = new JsonParser().parse(packet.fileContent).getAsJsonObject();
+                tempFile.load();
+                send("Successfully loaded online config with ID §e" + packet.configId + "§a.");
+            } catch (JsonSyntaxException e) {
+                send("§cFailed to load online config: Invalid format.");
+                Attero.LOGGER.error("Failed to parse online config JSON", e);
+            } catch (Exception e) {
+                send("§cAn unexpected error occurred while loading the online config.");
+                Attero.LOGGER.error("Failed to apply online config", e);
+            }
         });
     }
 
@@ -109,9 +120,8 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
             String message = packet.chatMessage();
 
             if (message.startsWith("#")) {
+                client.sendPacket(new C2SChatMessagePacket(ChatChannel.GLOBAL, message.replace("#", "")));
                 event.cancelled = true;
-                System.out.println("sending c2s");
-                //client.sendPacket(new C2SChatMessagePacket(ChatChannel.GLOBAL, message.replace("#", "")));
             }
         }
     }

@@ -23,6 +23,8 @@ import java.util.List;
  * @since 22/05/2025
  */
 public class ModulesFile extends AbstractFile {
+    public JsonObject json;
+
     public ModulesFile(String configName) {
         super("configs" + File.separator + configName);
     }
@@ -87,7 +89,11 @@ public class ModulesFile extends AbstractFile {
 
     @Override
     public void load() {
-        JsonObject json = loadJsonObject();
+        if (json == null)
+            return;
+
+        if (json.isEmpty())
+            json = loadJsonObject();
 
         if (json == null || json.isEmpty()) {
             if (MinecraftClient.getInstance().player == null)
@@ -155,7 +161,7 @@ public class ModulesFile extends AbstractFile {
         }
 
         if (MinecraftClient.getInstance().player == null) {
-            ModuleTracker.INSTANCE.currentConfig = new ConfigEntry(getFileName(), FileTime.fromMillis(System.currentTimeMillis()));
+            ModuleTracker.INSTANCE.currentConfig = new ConfigEntry(getFileName(), 0);
             Attero.LOGGER.info("Loaded {} successfully", getFile().getAbsolutePath());
         } else
             ModuleTracker.INSTANCE.send("Loaded {} config successfully", getFile().getName().replaceAll(".json", ""));
