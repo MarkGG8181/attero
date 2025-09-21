@@ -48,21 +48,45 @@ public class ConfigCommand extends AbstractCommand {
             // ASS CODE ALERT
             switch (args[1].toLowerCase()) {
                 case "load" -> {
-                    String configName = args[2].toLowerCase() + (args[2].endsWith(".json") ? "" : ".json");
-                    List<ConfigEntry> local = FileUtil.listFiles("configs", ".json").stream().toList();
+                    String input = args[2];
+                    String configName = input.toLowerCase() + (input.endsWith(".json") ? "" : ".json");
 
-                    boolean foundLocal = local.stream().anyMatch(c -> c.name().equalsIgnoreCase(configName));
-                    if (foundLocal) {
-                        new ModulesFile(configName).load();
-                    } else {
-                        Optional<ConfigEntry> cloud = AuthTracker.INSTANCE.cloudConfigs.stream()
-                                .filter(c -> c.name().equalsIgnoreCase(configName.split(".json")[0]))
+                    boolean isId;
+                    long id = -1;
+                    try {
+                        id = Long.parseLong(input);
+                        isId = true;
+                    } catch (NumberFormatException e) {
+                        isId = false;
+                    }
+
+                    if (isId) {
+                        long finalId = id;
+                        Optional<ConfigEntry> cloudById = AuthTracker.INSTANCE.cloudConfigs.stream()
+                                .filter(c -> c.id() == finalId)
                                 .findFirst();
 
-                        if (cloud.isPresent()) {
-                            AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigDownloadPacket(cloud.get().id()));
+                        if (cloudById.isPresent()) {
+                            AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigDownloadPacket(cloudById.get().id()));
                         } else {
-                            error("Config {} not found.", configName);
+                            error("No cloud config found with ID: {}", id);
+                        }
+                    } else {
+                        List<ConfigEntry> local = FileUtil.listFiles("configs", ".json").stream().toList();
+                        boolean foundLocal = local.stream().anyMatch(c -> c.name().equalsIgnoreCase(configName));
+
+                        if (foundLocal) {
+                            new ModulesFile(configName).load();
+                        } else {
+                            Optional<ConfigEntry> cloudByName = AuthTracker.INSTANCE.cloudConfigs.stream()
+                                    .filter(c -> c.name().equalsIgnoreCase(configName.replace(".json", "")))
+                                    .findFirst();
+
+                            if (cloudByName.isPresent()) {
+                                AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigDownloadPacket(cloudByName.get().id()));
+                            } else {
+                                error("Config {} not found locally or in cloud.", configName);
+                            }
                         }
                     }
                 }

@@ -103,12 +103,12 @@ public class AuthTracker extends AbstractTracker implements IMinecraft {
                 ModulesFile tempFile = new ModulesFile("online-temp");
                 tempFile.json = new JsonParser().parse(packet.fileContent).getAsJsonObject();
                 tempFile.load();
-                send("Successfully loaded online config with ID §e" + packet.configId + "§a.");
+                send("Successfully loaded online config with ID §e" + packet.configId + "§a");
             } catch (JsonSyntaxException e) {
-                send("§cFailed to load online config: Invalid format.");
+                send("§cFailed to load online config: Invalid format");
                 Attero.LOGGER.error("Failed to parse online config JSON", e);
             } catch (Exception e) {
-                send("§cAn unexpected error occurred while loading the online config.");
+                send("§cAn unexpected error occurred while loading the online config");
                 Attero.LOGGER.error("Failed to apply online config", e);
             }
         });

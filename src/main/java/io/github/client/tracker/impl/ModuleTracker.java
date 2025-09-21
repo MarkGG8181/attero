@@ -15,6 +15,7 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.client.ConfigEntry;
 import io.github.client.util.interfaces.IMinecraft;
+import store.clovr.common.protocol.client.C2SRequestConfigListPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +94,7 @@ public class ModuleTracker extends AbstractTracker<AbstractModule> implements IM
 
         list.forEach(AbstractModule::onInit);
         modulesFile.load();
+        AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigListPacket());
 
         AuthTracker.INSTANCE.connected = true;
     }
