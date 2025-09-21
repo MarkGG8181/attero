@@ -55,12 +55,7 @@ public abstract class EntityMixin {
             UpdateVelocityEvent updateVeloEvent = new UpdateVelocityEvent(this.getYaw(), (float) movementInput.x, (float) movementInput.z, speed);
             updateVeloEvent.post();
 
-            float yaw = updateVeloEvent.yaw;
-            double strafe = updateVeloEvent.strafe;
-            double forward = updateVeloEvent.forward;
-            float friction = updateVeloEvent.friction;
-
-            Vec3d vec3d = movementInputToVelocity(new Vec3d(strafe, movementInput.y, forward), friction, yaw);
+            Vec3d vec3d = movementInputToVelocity(new Vec3d(updateVeloEvent.strafe, movementInput.y, updateVeloEvent.forward), updateVeloEvent.friction, updateVeloEvent.yaw);
             this.setVelocity(this.getVelocity().add(vec3d));
         } else {
             Vec3d vec3d = movementInputToVelocity(movementInput, speed, this.getYaw());

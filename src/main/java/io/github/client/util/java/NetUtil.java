@@ -54,7 +54,6 @@ public class NetUtil {
     public static JsonElement fetchJson(String query) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(sanitise(query))
-                .timeout(Duration.ofSeconds(15))
                 .header("Accept", "application/json")
                 .header("User-Agent", "NetUtil/1.0")
                 .build();
