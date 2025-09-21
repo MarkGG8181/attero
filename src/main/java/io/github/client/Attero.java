@@ -38,6 +38,7 @@ public final class Attero implements ClientModInitializer {
         AuthTracker.INSTANCE.shutdown();
         ModuleTracker.INSTANCE.modulesFile.save();
         FriendTracker.INSTANCE.friendsFile.save();
+        MusicTracker.INSTANCE.stop();
         ImGuiImpl.dispose();
         GLFWUtil.clearCache();
     }
