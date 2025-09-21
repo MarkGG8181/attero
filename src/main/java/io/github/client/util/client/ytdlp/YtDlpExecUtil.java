@@ -45,12 +45,30 @@ public class YtDlpExecUtil {
                 Attero.LOGGER.info("No yt-dlp update required.");
             }
         }
+
+        if (!Files.isExecutable(executable)) {
+            Attero.LOGGER.warn("yt-dlp is not executable! Attempting to fix...");
+            executable.toFile().setExecutable(true);
+        }
     }
 
     private static void downloadYtDLP() {
-        NetUtil.download("https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + executable.getFileName(), Path.of(YtDlp.getExecutablePath()))
+        Path downloadPath = Path.of(YtDlp.getExecutablePath());
+
+        NetUtil.download("https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + executable.getFileName(), downloadPath)
                 .thenApply(v -> {
                     Attero.LOGGER.debug("Downloaded yt-dlp successfully.");
+
+                    if (!OS_NAME.contains("win")) {
+                        try {
+                            downloadPath.toFile().setExecutable(true);
+                            Runtime.getRuntime().exec(new String[]{"chmod", "+x", downloadPath.toString()});
+                            Attero.LOGGER.info("Set yt-dlp as executable.");
+                        } catch (Exception e) {
+                            Attero.LOGGER.error("Failed to set yt-dlp executable permission", e);
+                        }
+                    }
+
                     return null;
                 });
     }
