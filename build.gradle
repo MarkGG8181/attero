@@ -41,7 +41,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
 
     // For clovr.store
-    library 'clovr.store:grabber:1.0'
+    library 'clovr.store:grabber:1.1'
     library 'org.bouncycastle:bcprov-jdk18on:1.80'
 
     // From https://github.com/FlorianMichael/fabric-imgui-example-mod

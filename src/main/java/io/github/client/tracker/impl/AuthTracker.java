@@ -10,7 +10,6 @@ import io.github.client.file.impl.ModulesFile;
 import io.github.client.tracker.AbstractTracker;
 import io.github.client.util.client.ConfigEntry;
 import io.github.client.util.interfaces.IMinecraft;
-import lombok.Getter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import store.clovr.client.api.ClovrClient;
@@ -20,7 +19,6 @@ import store.clovr.common.protocol.server.*;
 import store.clovr.common.user.ClovrUser;
 import clovr.store.Grabber;
 
-import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
