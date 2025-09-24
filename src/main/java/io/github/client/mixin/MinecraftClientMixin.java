@@ -41,16 +41,13 @@ public class MinecraftClientMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void onInit(RunArgs args, CallbackInfo ci) {
-        Attero.INSTANCE.onStartup();
-    }
-
-    @Inject(method = "<init>", at = @At("RETURN"))
-    public void initImGui(RunArgs args, CallbackInfo ci) {
         try {
             ImGuiImpl.create(window.getHandle());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        Attero.INSTANCE.onStartup();
     }
 
     @Unique
