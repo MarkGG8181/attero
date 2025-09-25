@@ -83,8 +83,8 @@ public class DropdownClickScreen extends Screen {
 
             for (ModuleCategory category : ModuleCategory.values()) {
                 ImVec2 position = positions.get(category);
-                ImGui.setNextWindowPos(position, ImGuiCond.Once);
-                ImGui.setNextWindowSize(size); //once not here to prevent from resizing the windows
+                ImGui.setNextWindowPos(position, ImGuiCond.Once); //once not here to prevent from resizing the windows
+                ImGui.setNextWindowSize(size);
 
                 if (ImGui.begin(category.getName(), ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoScrollbar)) {
                     ImVec2 newPosition = ImGui.getWindowPos();

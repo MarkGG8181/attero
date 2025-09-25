@@ -10,10 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RenderSystem.class)
 public class RenderSystemMixin {
-
     @Inject(method = "flipFrame", at = @At("HEAD"))
     private static void onFlipFrame(final CallbackInfo ci) {
         Attero.BUS.post(new FlipFrameEvent());
     }
-
 }

@@ -50,13 +50,13 @@ public class MinecraftClientMixin {
         Attero.INSTANCE.onStartup();
     }
 
-    @Unique
-    private TickEvent cachedTickEvent = null;
-
     @Inject(method = "close", at = @At("RETURN"))
     public void onClose(CallbackInfo ci) {
         Attero.INSTANCE.onEnd();
     }
+
+    @Unique
+    private TickEvent cachedTickEvent = null;
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void onTickPre(CallbackInfo ci) {
