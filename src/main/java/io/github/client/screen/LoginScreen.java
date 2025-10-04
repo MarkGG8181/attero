@@ -3,6 +3,7 @@ package io.github.client.screen;
 import imgui.flag.ImGuiInputTextFlags;
 import io.github.client.Attero;
 import io.github.client.imgui.ImGuiImpl;
+import io.github.client.imgui.ImGuiScreen;
 import io.github.client.tracker.impl.AuthTracker;
 import imgui.ImGui;
 import imgui.type.ImString;
@@ -15,6 +16,7 @@ import net.minecraft.text.Text;
  * @author markuss
  * @since 16/09/2025
  */
+@ImGuiScreen
 public class LoginScreen extends Screen {
     public LoginScreen() {
         super(Text.of("Login"));

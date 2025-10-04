@@ -1,6 +1,7 @@
 package io.github.client.screen;
 
 import io.github.client.Attero;
+import io.github.client.imgui.ImGuiScreen;
 import io.github.client.module.data.setting.impl.*;
 import io.github.client.file.impl.ModulesFile;
 import io.github.client.module.AbstractModule;
@@ -29,6 +30,7 @@ import static imgui.ImGui.*;
  * @author mainline
  * @since 20/05/2025
  */
+@ImGuiScreen
 public final class FrameClickScreen extends Screen {
     public FrameClickScreen() {
         super(Text.of("Frame"));

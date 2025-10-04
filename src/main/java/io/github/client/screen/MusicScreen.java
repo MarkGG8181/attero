@@ -16,9 +16,6 @@ import io.github.client.util.java.GLFWUtil;
 import io.github.client.util.java.math.MathUtil;
 import net.minecraft.client.MinecraftClient;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;

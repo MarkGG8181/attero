@@ -1,6 +1,7 @@
 package io.github.client.screen;
 
 import io.github.client.Attero;
+import io.github.client.imgui.ImGuiScreen;
 import io.github.client.module.data.setting.impl.*;
 import io.github.client.file.impl.ModulesFile;
 import io.github.client.module.AbstractModule;
@@ -33,6 +34,7 @@ import java.util.*;
  * @author markuss
  * @since 5/05/2025
  */
+@ImGuiScreen
 public class DropdownClickScreen extends Screen {
     private final Map<ModuleCategory, ImVec2> positions = new HashMap<>();
     private final ImVec2 size = new ImVec2(230, 0);
