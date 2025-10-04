@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * @author <a href="https://github.com/FlorianMichael/fabric-imgui-example-mod">fabric imgui example mod</a>
@@ -69,6 +70,17 @@ public class ImGuiImpl {
 
         imGuiImplGlfw.init(handle, true);
         imGuiImplGl3.init();
+    }
+
+    public static void render(Consumer<IImWrapper> consumer) {
+        MinecraftClient mc = MinecraftClient.getInstance();
+
+        if (mc.player != null
+                && consumer != null
+                && (mc.currentScreen == null || !mc.currentScreen.getClass().isAnnotationPresent(ImGuiScreen.class))) {
+
+            draw(io -> consumer.accept(new ImWrapper()));
+        }
     }
 
     public static void draw(final IRender renderInterface) {
