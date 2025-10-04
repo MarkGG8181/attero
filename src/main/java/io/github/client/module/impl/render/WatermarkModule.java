@@ -12,7 +12,6 @@ import io.github.client.module.data.setting.impl.StringSetting;
 import io.github.client.screen.DropdownClickScreen;
 import io.github.client.screen.FrameClickScreen;
 import io.github.client.imgui.ImGuiImpl;
-import io.github.client.util.java.math.ColorUtil;
 import imgui.ImGui;
 
 import java.awt.*;
@@ -34,32 +33,34 @@ public class WatermarkModule extends AbstractModule {
         }
 
         switch (mode.getValue()) {
-            case "ImGui" -> ImGuiImpl.draw(io -> {
-                var drawList = ImGui.getForegroundDrawList();
+            case "ImGui" -> {
+                ImGuiImpl.render(wrapper -> {
+                    var username = hideName.getValue() ? "Player" : mc.getSession().getUsername();
+                    var watermarkText = Attero.MOD_ID;
+                    var userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
 
-                var username = hideName.getValue() ? "Player" : mc.getSession().getUsername();
-                var watermarkText = Attero.MOD_ID;
-                var userInfoText = "| " + username + " | " + mc.getCurrentFps() + " fps";
+                    var watermarkTextSize = ImGui.calcTextSizeX(watermarkText);
+                    var userInfoTextSize = ImGui.calcTextSizeX(userInfoText);
 
-                var watermarkTextSize = ImGui.calcTextSize(watermarkText);
-                var userInfoTextSize = ImGui.calcTextSize(userInfoText);
+                    var x = 10;
+                    var y = 10;
 
-                var x = 10;
-                var y = 10;
+                    var width = watermarkTextSize + userInfoTextSize + 25;
+                    var height = 30;
 
-                var width = watermarkTextSize.x + userInfoTextSize.x + 25;
-                var height = 30;
+                    var textY = y + (height - ImGui.calcTextSize("A").y) / 2.0f;
 
-                drawList.addRectFilled(x, y, x + width, y + height, ColorUtil.toImGuiColor(new Color(0, 0, 0, 150)), 6.0f);
+                    wrapper.drawRoundedRect(x, y, width, height, 6f, new Color(0, 0, 0, 150));
 
-                var textY = y + (height - ImGui.calcTextSize("A").y) / 2.0f;
+                    wrapper.drawString(watermarkText.substring(0, 3), x + 10, textY, color.getValue());
 
-                drawList.addText(x + 10, textY, color.toImGuiColor(), watermarkText.substring(0, 3));
-                drawList.addText(x + 10 + ImGui.calcTextSize(watermarkText.substring(0, 3)).x, textY, ColorUtil.toImGuiColor(Color.WHITE), watermarkText.substring(3));
-                drawList.addText(x + 5 + watermarkTextSize.x + 10, textY, ColorUtil.toImGuiColor(Color.WHITE), userInfoText);
-            });
+                    wrapper.drawString(watermarkText.substring(3), x + 10 + ImGui.calcTextSizeX(watermarkText.substring(0, 3)), textY, Color.WHITE);
+                    wrapper.drawString(userInfoText, x + 5 + watermarkTextSize + 10, textY, Color.WHITE);
+                });
+            }
 
-            case "Minecraft" -> event.context.drawText(mc.textRenderer, "att§fero", 5, 5, color.getValue().getRGB(), false);
+            case "Minecraft" ->
+                    event.context.drawText(mc.textRenderer, "att§fero", 5, 5, color.getValue().getRGB(), false);
         }
     }
 
