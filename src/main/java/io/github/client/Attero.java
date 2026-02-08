@@ -32,7 +32,6 @@ public final class Attero implements ClientModInitializer {
         LOGGER.info("Starting {}", MOD_ID);
 
         ScreenTracker.INSTANCE.initialize();
-        MusicTracker.INSTANCE.initialize();
         ModuleTracker.INSTANCE.initialize();
         CommandTracker.INSTANCE.initialize();
         RotationTracker.INSTANCE.initialize();
@@ -42,7 +41,6 @@ public final class Attero implements ClientModInitializer {
         LOGGER.info("Shutting down {}", MOD_ID);
         ModuleTracker.INSTANCE.modulesFile.save();
         FriendTracker.INSTANCE.friendsFile.save();
-        MusicTracker.INSTANCE.stop();
         ImGuiImpl.dispose();
         GLFWUtil.clearCache();
     }
