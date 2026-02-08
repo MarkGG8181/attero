@@ -41,7 +41,6 @@ import java.util.stream.Collectors;
 @ModuleInfo(name = "Jesus", description = "Allows you traverse water", category = ModuleCategory.MOVEMENT)
 public class JesusModule extends AbstractModule {
     private final StringSetting mode = new StringSetting("Mode", "Verus", "Verus", "Collision");
-    private final BooleanSetting boost = new BooleanSetting("Speed boost", false).hide(() -> !mode.is("Verus"));
 
     private final BlockPos.Mutable blockPos = new BlockPos.Mutable();
     private boolean water;
@@ -87,7 +86,7 @@ public class JesusModule extends AbstractModule {
                         mc.player.setVelocity(mc.player.getVelocity().x, 0.0d, mc.player.getVelocity().z);
 
                         if (MovementUtil.isMoving()) {
-                            MovementUtil.setSpeed(boost.getValue() ? 2 : 0.5);
+                            MovementUtil.setSpeed(0.5);
                         } else {
                             mc.player.setVelocity(0, mc.player.getVelocity().y, 0);
                         }
