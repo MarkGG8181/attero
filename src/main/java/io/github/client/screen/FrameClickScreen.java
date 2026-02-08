@@ -35,11 +35,6 @@ public final class FrameClickScreen extends Screen {
     }
 
     @Override
-    protected void init() {
-        MusicScreen.INSTANCE.init();
-    }
-
-    @Override
     public void render(DrawContext context,
                        int mouseX,
                        int mouseY,
@@ -48,8 +43,6 @@ public final class FrameClickScreen extends Screen {
 
         ImGuiImpl.draw(io -> {
             ImGuiThemes.applyTheme();
-
-            MusicScreen.INSTANCE.render(mouseX, mouseY, deltaTicks);
 
             if (begin(Attero.MOD_ID + " panel")) {
                 if (beginTabBar("tabs")) {

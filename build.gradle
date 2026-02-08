@@ -31,8 +31,6 @@ dependencies {
 
     modImplementation "maven.modrinth:sodium:${project.sodium_version}"
 
-    library 'com.jfposton.ytdlp:yt-dlp-java:1.0'
-
     // From https://projectlombok.org/setup/gradle
     compileOnly 'org.projectlombok:lombok:1.18.38'
     annotationProcessor 'org.projectlombok:lombok:1.18.38'
