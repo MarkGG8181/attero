@@ -4,7 +4,6 @@ import io.github.client.event.data.Subscribe;
 import io.github.client.event.impl.interact.KeyEvent;
 import io.github.client.module.impl.render.ClickGUIModule;
 import io.github.client.screen.DropdownClickScreen;
-import io.github.client.screen.LoginScreen;
 import io.github.client.screen.FrameClickScreen;
 import io.github.client.tracker.AbstractTracker;
 import net.minecraft.client.MinecraftClient;
@@ -26,15 +25,6 @@ public class ScreenTracker extends AbstractTracker<Screen> {
 
     @Subscribe
     private void onKey(KeyEvent event) {
-        if (!AuthTracker.INSTANCE.connected && !(MinecraftClient.getInstance().currentScreen instanceof LoginScreen)) {
-            MinecraftClient.getInstance().setScreen(new LoginScreen());
-            return;
-        }
-
-        if (MinecraftClient.getInstance().currentScreen instanceof LoginScreen) {
-            return;
-        }
-
         list.forEach(s -> {
             switch (ModuleTracker.INSTANCE.getByClass(ClickGUIModule.class).mode.getValue()) {
                 case "Dropdown" -> {

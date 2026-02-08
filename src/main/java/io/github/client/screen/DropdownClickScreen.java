@@ -1,6 +1,5 @@
 package io.github.client.screen;
 
-import io.github.client.Attero;
 import io.github.client.imgui.ImGuiScreen;
 import io.github.client.module.data.setting.impl.*;
 import io.github.client.file.impl.ModulesFile;
@@ -9,7 +8,6 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.setting.AbstractSetting;
 import io.github.client.imgui.ImGuiImpl;
 import io.github.client.imgui.ImGuiThemes;
-import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.client.ConfigEntry;
 import io.github.client.util.java.FileUtil;
@@ -24,8 +22,6 @@ import imgui.type.ImInt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import store.clovr.common.protocol.client.C2SRequestConfigDownloadPacket;
-import store.clovr.common.protocol.client.C2SRequestConfigListPacket;
 
 import java.awt.*;
 import java.util.*;
@@ -51,12 +47,6 @@ public class DropdownClickScreen extends Screen {
         MusicScreen.INSTANCE.init();
 
         new Thread(() -> {
-            try {
-                AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigListPacket());
-            } catch (Exception e) {
-                Attero.LOGGER.error("Failed to fetch configs", e);
-            }
-
             ModuleTracker.INSTANCE.configs.clear();
             ModuleTracker.INSTANCE.configs.addAll(FileUtil.listFiles("configs", ".json"));
         }).start();
@@ -97,26 +87,11 @@ public class DropdownClickScreen extends Screen {
                         if (openLC) {
                             ImGui.setWindowFontScale(0.8f);
                             for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
-                                boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
+                                boolean selected = config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                 if (ImGui.radioButton(config.name(), selected)) {
                                     ModuleTracker.INSTANCE.activeConfigName = config.name();
                                     new ModulesFile(config.name()).load();
-                                }
-                            }
-                            ImGui.setWindowFontScale(1.0f);
-                        }
-
-                        boolean openCC = ImGui.collapsingHeader("Cloud configs");
-                        if (openCC) {
-                            ImGui.setWindowFontScale(0.8f);
-                            for (ConfigEntry config : AuthTracker.INSTANCE.cloudConfigs) {
-                                boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
-
-                                if (ImGui.radioButton(config.name(), selected)) {
-                                    ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                    ModuleTracker.INSTANCE.activeIsCloud = true;
-                                    AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigDownloadPacket(config.id()));
                                 }
                             }
                             ImGui.setWindowFontScale(1.0f);

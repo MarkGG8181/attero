@@ -9,7 +9,6 @@ import io.github.client.module.data.ModuleCategory;
 import io.github.client.module.data.setting.AbstractSetting;
 import io.github.client.imgui.ImGuiImpl;
 import io.github.client.imgui.ImGuiThemes;
-import io.github.client.tracker.impl.AuthTracker;
 import io.github.client.tracker.impl.ModuleTracker;
 import io.github.client.util.client.ConfigEntry;
 import imgui.ImGui;
@@ -19,7 +18,6 @@ import imgui.type.ImInt;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import store.clovr.common.protocol.client.C2SRequestConfigDownloadPacket;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -62,26 +60,11 @@ public final class FrameClickScreen extends Screen {
                                 if (openLC) {
                                     ImGui.setWindowFontScale(0.8f);
                                     for (ConfigEntry config : ModuleTracker.INSTANCE.configs) {
-                                        boolean selected = !ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
+                                        boolean selected = config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
 
                                         if (ImGui.radioButton(config.name(), selected)) {
                                             ModuleTracker.INSTANCE.activeConfigName = config.name();
                                             new ModulesFile(config.name()).load();
-                                        }
-                                    }
-                                    ImGui.setWindowFontScale(1.0f);
-                                }
-
-                                boolean openCC = ImGui.collapsingHeader("Cloud configs");
-                                if (openCC) {
-                                    ImGui.setWindowFontScale(0.8f);
-                                    for (ConfigEntry config : AuthTracker.INSTANCE.cloudConfigs) {
-                                        boolean selected = ModuleTracker.INSTANCE.activeIsCloud && config.name().equals(ModuleTracker.INSTANCE.activeConfigName);
-
-                                        if (ImGui.radioButton(config.name(), selected)) {
-                                            ModuleTracker.INSTANCE.activeConfigName = config.name();
-                                            ModuleTracker.INSTANCE.activeIsCloud = true;
-                                            AuthTracker.INSTANCE.client.sendPacket(new C2SRequestConfigDownloadPacket(config.id()));
                                         }
                                     }
                                     ImGui.setWindowFontScale(1.0f);

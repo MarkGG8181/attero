@@ -1,8 +1,6 @@
 package io.github.client.mixin;
 
 import io.github.client.Attero;
-import io.github.client.screen.LoginScreen;
-import io.github.client.tracker.impl.AuthTracker;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.fabricmc.loader.api.metadata.Person;
@@ -23,13 +21,6 @@ public abstract class TitleScreenMixin {
             .getModContainer(Attero.MOD_ID)
             .orElseThrow()
             .getMetadata();
-
-    @Inject(method = "init", at = @At("HEAD"))
-    private void onInit(CallbackInfo ci) {
-        if (!AuthTracker.INSTANCE.connected) {
-            MinecraftClient.getInstance().setScreen(new LoginScreen());
-        }
-    }
 
     @Inject(method = "render", at = @At("HEAD"))
     private void onRender(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
